@@ -48,11 +48,11 @@ dir_out <- paste0("./output/", Sys.Date(),"/")
 # Run Analysis -----------------------------------------------------------------
 
 
-if (FALSE) {
+if (TRUE) {
   source('./code/data.R')
   source('./code/analysis.R')
 } else {
-  d2021_new <- readr::read_csv(file = paste0(dir_out, "cpue_biomass_station.csv"))
+  data_new <- readr::read_csv(file = paste0(dir_out, "cpue_biomass_station.csv"))
 }
 
 # Check work -------------------------------------------------------------------

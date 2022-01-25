@@ -194,7 +194,7 @@ files_to_save <- list("cpue_biomass_station" = cpue_biomass_station#,
                       )
 
 save(cpue_biomass_station,# cpue_biomass_stratum, cpue_biomass_total, 
-     file = paste0(dir_out,"everything.rdata"))
+     file = paste0(dir_out,"cpue_biomass_station"))
 
 for (i in 1:length(files_to_save)) {
   readr::write_csv(
@@ -203,4 +203,4 @@ for (i in 1:length(files_to_save)) {
     col_names = TRUE)
 }
 
-d2021_new <- cpue_biomass_station
+data_new <- cpue_biomass_station

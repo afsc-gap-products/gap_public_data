@@ -71,7 +71,7 @@ wheres_trouble <- function(dat, col, trouble) {
               how_many = table(temp[,c("year", "srvy")])#, 
               # data_subset = temp1
               )
-    names(out) <- paste0("Yes, '", trouble, "' occured ",nrow(temp)," times in the column ", col, ".")
+    names(out) <- paste0("Yes, '", trouble, "' occured ",nrow(temp)," times in the column '", col, "'.")
     
   }
   return(out)
@@ -100,13 +100,17 @@ gg <- ggplot(data = dat0,
   ggplot2::ylim(range(dat0$latitude_dd)) + 
   ggplot2::xlim(range(dat0$longitude_dd)) 
 
-# if (length(unique(dat0$year))>10) {
+if (length(unique(dat0$year))>20) {
 gg <- gg + 
   facet_wrap("year", ncol = 4) 
+} else {
+# } else if (length(unique(dat0$year))>7) {
+  gg <- gg +
+  facet_wrap("year", ncol = 2)
 # } else {
-#   gg <- gg + 
-#   facet_wrap("year") 
-# }s
+#   gg <- gg +
+#   facet_wrap("year", ncol = 1)
+}
 gg <- gg +
   ggtitle(paste0(srvy0)) +
   theme(panel.grid.major = element_line(colour = "grey90"), 
@@ -226,7 +230,7 @@ dat <- dplyr::full_join(
                   cpue_kgha = ifelse(cpue_kgha == -9999, NA, cpue_kgha), 
                   cpue_noha = ifelse(cpue_noha == -9999, NA, cpue_noha)),
   by = c("year", "vessel_id", "stratum", "station", "species_code", "haul", "cruise",  "srvy"))
-head(dat)
+dat
 ```
 
 ## What observations are in new and not in old, visa versa
@@ -318,7 +322,7 @@ col <- col[-length(col)]
 for(i in 1:length(col)) {
   a <- aa(dat = dat, colx = paste0(col[i], ".x"), coly = paste0(col[i], ".y"))
   if (class(a) == "table") {
-     print(paste0("------------- Differences between ", col[i], ".x and ", col[i], ".y -------------"))
+     print(paste0("------------- Differences between '", col[i], ".x' and '", col[i], ".y' -------------"))
      print(aa(dat = dat, colx = paste0(col[i], ".x"), coly = paste0(col[i], ".y")))  
   }
 }
@@ -336,11 +340,11 @@ cols <- names(data_new)
 cols <- cols[cols != "date"]
 
 for (i in 1:length(trouble)){
-  print(paste0("------------- Are there any ", trouble[i], " in these columns? -------------"))
+  print(paste0("------------- Are there any '", trouble[i], "' in these columns? -------------"))
   for (ii in 1:length(cols)) {
      a <- wheres_trouble(dat = data_new, col = cols[ii], trouble = trouble[i])
-      if (class(a) == "table") {
-    print(a) 
+      if (class(a) == "list") {
+        print(a) 
       }
   }
 }
