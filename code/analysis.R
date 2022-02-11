@@ -143,14 +143,14 @@ cpue_biomass_station <-
   dplyr::left_join(
     x = ., 
     y = spp_info %>% 
-      dplyr::select(species_code, report_name_scientific, common_name) %>% 
-      dplyr::rename(scientific_name = report_name_scientific), 
+      dplyr::select(species_code, species_name, common_name) %>% 
+      dplyr::rename(scientific_name = species_name), 
     by = "species_code"
   ) %>%
   dplyr::select(-hauljoin, -distance_fished) %>% 
   dplyr::rename(station = "stationid", 
-                taxon_weight_kg = "wt_kg_summed_by_station", 
-                taxon_count = "num_summed_by_station", 
+                weight_kg = "wt_kg_summed_by_station", 
+                count = "num_summed_by_station", 
                 vessel_id = vessel, 
                 srvy = SRVY,
                 survey = survey_name,
@@ -176,7 +176,7 @@ cpue_biomass_station <-
     haul, vessel_name, vessel_id, # survey data
     date, latitude_dd, longitude_dd, # universal when/where
     species_code, taxon_confidence, common_name, scientific_name,  # species info
-    cpue_kgha, cpue_kgkm2, cpue_noha, cpue_nokm2, taxon_weight_kg, taxon_count, # catch data
+    cpue_kgha, cpue_kgkm2, cpue_noha, cpue_nokm2, weight_kg, count, # catch data
     depth_m, bottom_temperature_c, surface_temperature_c) %>% #environmental data
   dplyr::arrange(srvy, date, cpue_kgha) %>% 
   dplyr::mutate(common_name = gsub(pattern = "  ", replacement = " ", 

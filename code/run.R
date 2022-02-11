@@ -48,7 +48,7 @@ dir_out <- paste0("./output/", Sys.Date(),"/")
 # Run Analysis -----------------------------------------------------------------
 
 
-if (TRUE) {
+if (FALSE) {
   source('./code/data.R')
   source('./code/analysis.R')
 } else {

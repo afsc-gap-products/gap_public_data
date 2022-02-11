@@ -85,11 +85,12 @@ tax_conf <- SameColNames(df.ls) %>%
 # Wrangle Data -----------------------------------------------------------------
 
 ## Species info ----------------------------------------------------------------
-spp_info <- dplyr::left_join(
-  x = species_classification0, 
-  y = species0 %>% 
-    dplyr::select(species_code, common_name), 
-  by = "species_code")
+spp_info <- #dplyr::left_join(
+  # x = species_classification0, 
+  # y =
+  species0 %>% 
+    dplyr::select(species_code, common_name, species_name)#, 
+  # by = "species_code")
 
 ## cruises + maxyr  + compareyr ------------------------------------------------
 cruises <- v_cruises0 %>% 
