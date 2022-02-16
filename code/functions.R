@@ -9,21 +9,11 @@
 # Here we list all the packages we will need for this whole process
 # We'll also use this in our works cited page!!!
 PKG <- c(
-  # Keeping Organized
-  "devtools", # Package development tools for R; used here for downloading packages from GitHub
-  # "renv", # saves the packages in the R environment
-  
-  "akgfmaps",
-  
-  "kableExtra",
-
   # other tidyverse
+  "tidyr",
   "dplyr",
-  "googledrive",
   "magrittr",
   "readr",
-  "readxl", 
-  "tidyr",
   
   # Text Management
   "stringr")

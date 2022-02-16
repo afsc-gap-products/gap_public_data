@@ -8,8 +8,8 @@
 ## Calculate Biomass and CPUE --------------------------------------------------
 
 cpue_biomass_station <- data.frame()
-cpue_biomass_stratum <- data.frame()
-cpue_biomass_total <- data.frame()
+# cpue_biomass_stratum <- data.frame()
+# cpue_biomass_total <- data.frame()
 
 for (i in 1:length(survey_data$SRVY)) {
   print(survey_data$SRVY[i])
@@ -47,12 +47,7 @@ for (i in 1:length(survey_data$SRVY)) {
     mutate(cpue_noha = ifelse(wt_kg_summed_by_station > 0 & num_summed_by_station == 0, NA,
                               (cpue_no = num_summed_by_station/effort))) %>%
     #### this is to check CPUEs by group, station and year against the SQL code
-    ## add area to CPUE table
     dplyr::ungroup() %>% 
-    dplyr::left_join(x = .,
-                     y = stratum_info %>%
-                       dplyr::select(stratum, area),
-                     by = 'stratum')  %>% 
     dplyr::left_join(x = ., 
                      y = station_info, 
                      by = c("stationid", "SRVY", "stratum")) %>% 
@@ -65,56 +60,6 @@ for (i in 1:length(survey_data$SRVY)) {
     cpue_biomass_station)
   remove(cpue_biomass_station0)
   
-  # ### Stratum-level ------------------------------------------------------------
-  # cpue_biomass_stratum0 <- cpue_biomass_station0 %>%
-  #   ## calculates mean CPUE (weight) by year, group, stratum, and area
-  #   dplyr::ungroup() %>%
-  #   dplyr::group_by(year, scientific_name, common_name, species_code, #group, taxon, species_name1, print_name, 
-  #                   stratum, area, SRVY) %>%
-  #   dplyr::summarise(cpue_by_group_stratum = mean(cpue_kgha, na.rm = TRUE)) %>% # TOLEDO - na.rm = T?
-  #   ## creates column for meanCPUE per group/stratum/year*area of stratum
-  #   dplyr::mutate(mean_cpue_times_area = (cpue_by_group_stratum * area)) %>%
-  #   ## calculates sum of mean CPUE*area (over the 3 strata)
-  #   dplyr::ungroup() 
-  # 
-  # cpue_biomass_stratum <- dplyr::bind_rows(
-  #   cpue_biomass_stratum0, 
-  #   cpue_biomass_stratum)
-  # remove(cpue_biomass_stratum0)
-  # 
-  # cpue_biomass_total0 <- cpue_biomass_stratum0 %>%
-  #   dplyr::group_by(year, SRVY, scientific_name, common_name, species_code #species_name, species_name1, print_name, taxon
-  #   ) %>%
-  #   dplyr::summarise(mean_CPUE_all_strata_times_area =
-  #                      sum(mean_cpue_times_area, na.rm = TRUE)) %>% # TOLEDO - na.rm = T?
-  #   
-  #   # calculates total area by adding up the unique area values (each strata has a different value)
-  #   dplyr::left_join(
-  #     x = ., 
-  #     y = cpue_biomass_station %>% 
-  #       dplyr::ungroup() %>%
-  #       dplyr::select(area, SRVY) %>% 
-  #       dplyr::distinct() %>%
-  #       dplyr::group_by(SRVY) %>% 
-  #       dplyr::summarise(total_area = sum(area, na.rm = TRUE)), 
-  #     by = "SRVY") %>%
-  #   
-  #   ## creates column with weighted CPUEs
-  #   dplyr::mutate(weighted_CPUE = (mean_CPUE_all_strata_times_area / total_area)) %>%
-  #   ### uses WEIGHTED CPUEs to calculate biomass
-  #   ## includes empty shells and debris
-  #   dplyr::group_by(year, SRVY, scientific_name, common_name, species_code) %>%
-  #   dplyr::mutate(biomass_mt = weighted_CPUE*(total_area*.1)) %>%
-  #   # total biomass excluding empty shells and debris for each year
-  #   dplyr::filter(common_name != 'empty shells and debris')  %>%
-  #   dplyr::ungroup()
-  # 
-  # ### Survey-level ------------------------------------------------------------
-  # cpue_biomass_total <- dplyr::bind_rows(
-  #   cpue_biomass_total0, 
-  #   cpue_biomass_total)
-  # remove(cpue_biomass_total0)
-  
   gc()
   
 }
@@ -123,7 +68,7 @@ cpue_biomass_station0 <- cpue_biomass_station
 cpue_biomass_station <- 
   dplyr::left_join(
     x = cpue_biomass_station %>% 
-      dplyr::select(-effort, -area, -net_width, -latitude, -longitude, 
+      dplyr::select(-effort, -net_width, -latitude, -longitude, 
                     -scientific_name, -common_name) %>% # 
       dplyr::filter(!(num_summed_by_station == 0 & 
                         wt_kg_summed_by_station == 0)), # remove empty data 

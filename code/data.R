@@ -117,7 +117,8 @@ haul <- dplyr::left_join(
     y = cruises %>% 
       dplyr::select(cruisejoin, survey_definition_id, SRVY, SRVY_long), 
     by = "cruisejoin") %>%  
-  dplyr::mutate(year = as.numeric(substr(x = start_time, 1,4))) %>% 
+  dplyr::mutate(year = as.numeric(format(as.Date(haul0$start_time, 
+                                                 format="%m/%d/%Y"),"%Y"))) %>%
   dplyr::filter(year <= maxyr &
                   abundance_haul == "Y" &
                   haul_type == 3 &
@@ -128,74 +129,41 @@ haul <- dplyr::left_join(
 
 ## stratum_info (survey area) --------------------------------------------------
 
-stratum_info <- stratum0 %>%
-  dplyr::mutate(region = dplyr::case_when(
-    stratum %in% 
-      akgfmaps::get_base_layers(select.region = "nbs")$survey.strata$Stratum & 
-      region == "BS" ~ "NBS",  
-    region == "BS" & 
-      grepl(pattern = "Bering Sea Slope Survey", 
-            x = description, ignore.case = TRUE) ~ "BSSlope",  
-    # region == "BS" & grepl(pattern = "Slope", x = description, ignore.case = TRUE) ~ "BSSlope", 
-    region == "BS" & grepl(pattern = "EBS Slope Survey", 
-                           x = description, ignore.case = TRUE) ~ "BSSlope",  
-    region == "BS" ~ "EBS", 
-    TRUE ~ region)) %>% 
-  dplyr::select(region, year, stratum, area) %>% 
-  dplyr::group_by(region) %>% 
-  dplyr::filter(year == max(year)) %>%
-  dplyr::bind_rows(., 
-                   data.frame(region = "AI", year = NA, 
-                              stratum = unique(akgfmaps::get_base_layers(select.region = "ai")$survey.strata$STRATUM))) %>% 
-  dplyr::ungroup() %>% 
-  dplyr::rename(SRVY = region)
-  
-# strat_yr0 <- strat_yr %>% 
+# stratum_info <- stratum0 %>%
+#   dplyr::mutate(region = dplyr::case_when(
+#     stratum %in% 
+#       akgfmaps::get_base_layers(select.region = "nbs")$survey.strata$Stratum & 
+#       region == "BS" ~ "NBS",  
+#     stratum %in% 
+#       akgfmaps::get_base_layers(select.region = "ebs")$survey.strata$Stratum & 
+#       region == "BS" ~ "EBS", 
+#      region == "BS" & 
+#       grepl(pattern = "Bering Sea Slope Survey", 
+#             x = description, ignore.case = TRUE) ~ "BSSlope",  
+#     # region == "BS" & grepl(pattern = "Slope", x = description, ignore.case = TRUE) ~ "BSSlope", 
+#     region == "BS" & grepl(pattern = "EBS Slope Survey", 
+#                            x = description, ignore.case = TRUE) ~ "BSSlope",  
+#     TRUE ~ region)) %>% 
+#   dplyr::select(region, year, stratum, area) %>% 
 #   dplyr::group_by(region) %>% 
-#   dplyr::summarise(most_recent_strat_yr = max(year, na.rm = TRUE)) %>% 
-#   dplyr::left_join(x = survey_data, 
-#                    y = ., 
-#                    by = c("SRVY" = "region")) 
-
-# temp <- function(yr) {
-#   stratum_info <- stratum0 %>% 
-#     dplyr::filter(
-#       stratum %in% reg_dat$survey.strata$Stratum &
-#         year == strat_yr) %>%
-# 
-#     dplyr::select(-auditjoin, -portion) %>%
-#     dplyr::mutate(SRVY = dplyr::case_when(
-#       stratum %in% as.numeric(report_types$EBS$reg_dat$survey.strata$Stratum) ~ "EBS", 
-#       stratum %in% as.numeric(report_types$NBS$reg_dat$survey.strata$Stratum) ~ "NBS" 
-#     )) %>% 
-#     dplyr::filter(SRVY %in% SRVY1) %>% 
-#     dplyr::mutate(type = dplyr::case_when( 
-#       SRVY == "NBS" ~ "Shelf",
-#       depth %in% "<50" ~ "Inner Shelf", 
-#       depth %in% c("50-100", ">50") ~ "Middle Shelf", 
-#       depth %in% c("100-200", ">100") ~ "Outer Shelf"
-#     )) %>% 
-#     dplyr::mutate(area_km2 = area, 
-#                   area_ha = area/divkm2forha, 
-#                   area_nmi2 = area/divkm2fornmi2)
-#   
-#   return(stratum_info)
-#   
-# }
-# 
-# stratum_info <- temp(yr = maxyr)
+#   dplyr::filter(year == max(year)) %>%
+#   dplyr::bind_rows(., 
+#                    data.frame(region = "AI", year = NA, 
+#                               stratum = unique(akgfmaps::get_base_layers(select.region = "ai")$survey.strata$STRATUM))) %>% 
+#   dplyr::ungroup() %>% 
+#   dplyr::rename(SRVY = region)
 
 ## station_info ----------------------------------------------------------------
 
-station_info <- haul %>% #
+station_info <- haul %>% 
   dplyr::select(stationid, stratum, start_latitude, start_longitude, SRVY) %>%
   dplyr::group_by(stationid, stratum, SRVY) %>%
   dplyr::summarise(start_latitude = mean(start_latitude, na.rm = TRUE),
-                   start_longitude = mean(start_longitude, na.rm = TRUE)) %>%
-  dplyr::left_join(y = .,
-                   x = stratum_info %>%
-                     dplyr::select(stratum, SRVY),
-                   by = c("stratum", "SRVY")) 
+                   start_longitude = mean(start_longitude, na.rm = TRUE)) #%>%
+  # dplyr::left_join(y = .,
+  #                  x = stratum_info %>%
+  #                    dplyr::select(stratum, SRVY),
+  #                  by = c("stratum", "SRVY")) 
 
 
 ## haul_cruises_vess_ + _maxyr + _compareyr ------------------------------------
@@ -294,19 +262,19 @@ haul_cruises <- temp(haul_cruises_vess_ = haul_cruises_vess)
 ## 2 "other crab" groups because species codes 69010: 69200 are hermit crabs
 catch <- catch0 
 
-# *** catch_haul_cruises_maxyr + maxyr-1-----------------------------------------------
+# *** catch_haul_cruises + _maxyr + maxyr-1-----------------------------------------------
 
-temp <- function(cruises_, haul_, catch, tax_conf){
+# temp <- function(cruises_, haul_, catch, tax_conf){
   # This year's data
-  catch_haul_cruises_<-
+  catch_haul_cruises<-
     dplyr::left_join(
-      x = haul_ %>% 
+      x = haul %>% 
         dplyr::select(cruisejoin, hauljoin, stationid, stratum, haul, start_time, 
                       start_latitude, start_longitude, 
                       end_latitude, end_longitude, 
                       bottom_depth, gear_temperature, surface_temperature, performance, 
                       "duration", "distance_fished" ,"net_width" ,"net_measured", "net_height"), 
-      y = cruises_ %>% 
+      y = cruises %>% 
         dplyr::select(cruisejoin, survey_name, SRVY, year, cruise),  
       by = c("cruisejoin")) %>% 
     dplyr::left_join(
@@ -319,8 +287,8 @@ temp <- function(cruises_, haul_, catch, tax_conf){
     dplyr::left_join(x = ., 
                      y = tax_conf, 
                      by = c("species_code", "SRVY", "year")) 
-}
+# }
 
-catch_haul_cruises <- temp(cruises, haul, catch, tax_conf)
+# catch_haul_cruises <- temp(cruises, haul, catch, tax_conf)
 
 

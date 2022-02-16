@@ -2,12 +2,11 @@
 #' title: Create public data 
 #' author: EH Markowitz (emily.markowitz AT noaa.gov)
 #' start date: 2022-01-01
-#' last modified: 2022-01-20
+#' last modified: 2022-03-01
 #' Notes: 
 #' ---------------------------------------------
 
 # ISSUES
-# No stratum listed for AI in racebase.stratum???
 # where do I get YYY/MM/DD HH:MM? I have YYY/MM/DD
 # do I need to group any species?
 # unid. vs undent. in the racebase.species_classification oracle table
