@@ -196,8 +196,8 @@ data_old <- data %>%
     srvy == "BSSLOPE" ~ "Bering Sea Slope", 
     srvy == "GOA" ~ "Gulf of Alaska", 
     srvy == "AI" ~ "Aleutian Islands")) %>% 
-  dplyr::mutate(
-    date = format(as.Date(date, format = "%m/%d/%Y"), "%Y-%m-%d"), 
+  dplyr::mutate(date = 
+                  as.character(format(as.Date(date, format="%m/%d/%Y"),"%m/%d/%Y")), 
     common_name = gsub(pattern = "  ", replacement = " ", 
                        x = trimws(common_name), fixed = TRUE), 
     scientific_name = gsub(pattern = "  ", replacement = " ", 
@@ -220,14 +220,16 @@ data_old %>%
 if (FALSE){
   data_new <- readr::read_csv(file = paste0(".", dir_out, "cpue_biomass_station.csv"))
 }
+data_new <- data_new %>% 
+  dplyr::mutate(date = as.character(format(as.Date(date,
+                                      format="%m/%d/%Y"),"%m/%d/%Y")))
 data_new %>% 
   dplyr::mutate(srvy = as.factor(srvy), 
                 survey = as.factor(survey), 
                 common_name = as.factor(common_name), 
                 scientific_name = as.factor(scientific_name) ,
                 station = as.factor(station), 
-                # vessel_name = as.factor(vessel_name), 
-                date = as.factor(date)) %>%
+                date = as.factor(date)) %>% 
   summary()
 ```
 
