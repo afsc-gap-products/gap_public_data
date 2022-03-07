@@ -1,7 +1,7 @@
 ---
 title: "Compare new and old 2021 data Public Data runs"
 output: pdf_document
-author: Emily Markowitz (emily.markowitz@noaa.gov)
+author: Emily Markowitz (emily.markowitz@nodiff_between_cols.gov)
 ---
 
 ```{r setup, include=FALSE}
@@ -40,8 +40,11 @@ for (p in PKG) {
 
 
 # Where/What are differences between columns
-aa <- function(dat, colx, coly) {
-  a <- dat[which(!(dat[,colx] == dat[,coly])),c(ifelse(colx != "common_name.x", "common_name.x", "scientific_name.x"), "species_code", "year", "srvy", colx, coly)] #%>% 
+diff_between_cols <- function(dat, colx, coly, 
+                              id_cols = c("species_code", "year", "srvy", "station", "stratum", "cruise")) {
+  a <- dat[which(!(dat[,colx] == dat[,coly])),
+           c(ifelse(colx != "common_name.x", "common_name.x", "scientific_name.x"),
+             id_cols, colx, coly)] #%>% 
     # dplyr::rename(paste0(colx, ' | ', coly) = compare)
  if (nrow(a)>0) {
   if (is.character(unlist(dat[,colx])[1][[1]])) {
@@ -169,10 +172,10 @@ data <- SameColNames(df.ls) %>%
   dplyr::mutate(srvy = toupper(str_extract(string = file, pattern = "[a-zA-Z]+"))) %>% 
   dplyr::filter(!is.na(year))
 
-dataa<-data %>% 
+datdiff_between_cols<-data %>% 
   dplyr::select(-file)
 
-write_csv(x = dataa, file = here::here("output", Sys.Date(),  "ak_gf_survey_public_2021.csv"))
+write_csv(x = datdiff_between_cols, file = here::here("output", Sys.Date(),  "ak_gf_survey_public_2021.csv"))
 
 } else {
   data <- readr::read_csv(file = paste0("../data/publicdata/ak_gf_survey_public_2021.csv"))
@@ -339,15 +342,126 @@ col <- gsub(pattern = ".x", replacement = "",
 col <- col[-length(col)] 
 # # Compare x to y
 for(i in 1:length(col)) {
-  a <- aa(dat = dat, colx = paste0(col[i], ".x"), coly = paste0(col[i], ".y"))
+  a <- diff_between_cols(dat = dat, colx = paste0(col[i], ".x"), coly = paste0(col[i], ".y"))
   if (class(a) == "table") {
      print(paste0("------------- Differences between '", col[i], ".x' and '", col[i], ".y' -------------"))
-     print(aa(dat = dat, colx = paste0(col[i], ".x"), coly = paste0(col[i], ".y")))  
+     print(diff_between_cols(dat = dat, colx = paste0(col[i], ".x"), coly = paste0(col[i], ".y")))  
   }
 }
 ```
+# How do CPUE values compare with our design-based CPUE estimates?
 
-# What did the new 2021 data look like?
+Here I am compiling the EBS, NBS, GOA, AI verified, design-based datasets
+
+```{r format_design_based}
+design_based1 <- dplyr::bind_rows(
+  readr::read_csv(file = "../data/oracle/cpue_ai.csv"), 
+  readr::read_csv(file = "../data/oracle/cpue_goa.csv")) %>% 
+  janitor::clean_names() %>% 
+    dplyr::left_join(
+      x = ., 
+      y = haul %>% 
+        dplyr::select(hauljoin, stationid, start_latitude, start_longitude), 
+      by = "hauljoin")  %>% 
+    dplyr::left_join(
+      x = ., 
+      y = spp_info %>% 
+        dplyr::select(common_name, species_name, species_code), 
+      by = "species_code") %>% 
+  dplyr::select(-x1, -catchjoin) %>% 
+  dplyr::rename(latitude = start_latitude, 
+                longitude = start_longitude, 
+                cpue_kgha = wgtcpue, 
+                cpue_noha = numcpue, 
+                area_swept_ha = effort, 
+                weight_kg = weight, 
+                count = number_fish) 
+
+design_based2 <- dplyr::bind_rows(
+    readr::read_csv(file = "../data/oracle/cpue_ebs_plusnw.csv") %>% 
+      dplyr::mutate(survey = "EBS"), 
+    readr::read_csv(file = "../data/oracle/cpue_nbs.csv") %>% 
+      dplyr::mutate(survey = "NBS")) %>% 
+  janitor::clean_names() %>% 
+  dplyr::select(-x1)  %>% 
+  dplyr::left_join(
+      x = ., 
+      y = haul %>% 
+        dplyr::select(hauljoin, cruise, distance_fished, net_width), 
+      by = "hauljoin") %>% 
+  dplyr::mutate(weight_kg = NA, 
+                count = NA) %>% 
+  dplyr::rename(area_swept_ha = area_fished_ha)
+
+design_based <- dplyr::bind_rows(design_based1, design_based2) %>% 
+  dplyr::rename(srvy = survey, 
+                vessel_id = vessel, 
+                scientific_name = species_name, 
+                distance_fished_km = distance_fished, 
+                net_width_m = net_width, 
+                station = stationid, 
+                latitude_dd = latitude, 
+                longitude_dd = longitude)
+
+
+```
+
+And now I am joining the new data and the designed based data together to see where differences arise. 
+
+```{r join_diff_designbased_new}
+
+dat <- dplyr::full_join(
+  x = data_new %>% 
+    dplyr::select(common_name, species_code, scientific_name, 
+                  cpue_kgha, cpue_noha, 
+                  area_swept_ha, distance_fished_km, net_width_m, 
+                  haul, cruise, station, stratum, srvy, 
+                  count, weight_kg,
+                  vessel_id, latitude_dd, longitude_dd, year) %>% 
+    dplyr::mutate(cpue_kgha = cpue_kgha*1e4),
+  y = design_based %>% 
+    dplyr::select(common_name, species_code, scientific_name, 
+                  cpue_kgha, cpue_noha, 
+                  area_swept_ha, distance_fished_km, net_width_m, 
+                  haul, cruise, station, stratum, srvy, 
+                  count, weight_kg,
+                  vessel_id, latitude_dd, longitude_dd, year), 
+  by = c("year", "haul", "cruise", "srvy", "species_code", "vessel_id", "stratum", "station")) %>%
+  dplyr::mutate(dplyr::across(dplyr::starts_with("cpue_"), round, digits = 2)) 
+ 
+col <- gsub(pattern = ".x", replacement = "", 
+            x = names(dat)[grep(pattern = ".x", x = names(dat), fixed = TRUE)])
+
+# # Compare x to y
+for(i in 1:length(col)) {
+  a <- diff_between_cols(dat = dat, 
+                         colx = paste0(col[i], ".x"), 
+                         coly = paste0(col[i], ".y"))
+  if (class(a) == "table") {
+     print(paste0("------------- Differences between '", col[i], ".x' and '", col[i], ".y' -------------"))
+     print(diff_between_cols(dat = dat, colx = paste0(col[i], ".x"), coly = paste0(col[i], ".y")))  
+  }
+}
+
+```
+
+```{r}
+dat0 <-dat %>% 
+  dplyr::mutate(
+    cpue_kgha_diff = cpue_kgha.x-cpue_kgha.y, 
+    cpue_noha_diff = cpue_noha.x-cpue_noha.y, 
+    area_swept_ha_diff = area_swept_ha.x-area_swept_ha.y) %>% 
+  dplyr::select(-distance_fished_km.x, -net_width_m.x, -latitude_dd.x, -longitude_dd.x, 
+                -distance_fished_km.y, -net_width_m.y, -latitude_dd.y, -longitude_dd.y, 
+                -common_name.y, -scientific_name.y) %>% 
+  dplyr::filter(cpue_kgha_diff != 0 & cpue_noha_diff != 0 & area_swept_ha_diff != 0)
+
+dat0[,order(colnames(dat0))]
+
+```
+
+
+# What does the new 2021 data look like?
 
 ## Look through new 2021 data and see if there were any -9999, NA, "", or 0's
 
@@ -369,12 +483,11 @@ for (i in 1:length(trouble)){
 }
 ```
 
-## What stations for each year and survey look like
+# What stations for each year and survey look like
 
 ```{r station_map, fig.height = 10, fig.width = 7}
 for (i in 1:length(unique(data_new$srvy))) {
   print(plot_stations(dat = data_new, srvy0 = unique(data_new$srvy)[i]))
 }
 ```
-
 

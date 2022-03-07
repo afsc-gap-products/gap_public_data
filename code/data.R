@@ -8,7 +8,9 @@
 # Load Data ----------------------------------------------------
 
 ## Oracle Data -------------------------------------------------------------
-a<-list.files(path = here::here("data", "oracle"))
+a <- list.files(path = here::here("data", "oracle"))
+a <- a[!grepl(pattern = "cpue_", x = a)]
+a <- a[!grepl(pattern = "empty", x = a)]
 for (i in 1:length(a)){
   print(a[i])
   b <- readr::read_csv(file = paste0(here::here("data", "oracle", a[i]))) %>% 

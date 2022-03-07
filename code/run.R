@@ -7,9 +7,6 @@
 #' ---------------------------------------------
 
 # ISSUES
-# where do I get YYY/MM/DD HH:MM? I have YYY/MM/DD
-# do I need to group any species?
-# unid. vs undent. in the racebase.species_classification oracle table
 # is the final _startum data 0 filled? Should it be zero filled? e.g., an entry of 0 for stations/hauls where a spp wasnt found
 # round cpue to .0001 and if positivie but less than 0.0001 = 0.0001?
 
@@ -38,9 +35,9 @@ survey_data <-
 
 # *** SOURCE SUPPORT SCRIPTS ---------------------------------------------------
 
-source('./code/functions.R')
-
 # source('./code/dataDL.R')
+source('./code/functions.R')
+source('./code/data.R')
 
 dir_out <- paste0("./output/", Sys.Date(),"/")
 
@@ -48,7 +45,6 @@ dir_out <- paste0("./output/", Sys.Date(),"/")
 
 
 if (FALSE) {
-  source('./code/data.R')
   source('./code/analysis.R')
 } else {
   data_new <- readr::read_csv(file = paste0(dir_out, "cpue_biomass_station.csv"))
