@@ -68,6 +68,16 @@ for (i in 1:length(a)){
   names(df.ls)[i]<-a[i]
 }
 
+# any duplicates in any taxon confidence tables?
+# SameColNames(df.ls) %>% 
+#        dplyr::group_by(srvy) %>%
+#        dplyr::filter(year == min(year)) %>%
+#        dplyr::ungroup() %>%
+#        dplyr::select(species_code, srvy) %>% 
+#        table() %>% # sets up frequency table
+#        data.frame() %>% 
+#        dplyr::filter(Freq > 1)
+
 tax_conf <- SameColNames(df.ls) %>% 
   dplyr::rename(SRVY = srvy) %>%
   # dplyr::mutate(#tax_conf = as.character(tax_conf), 

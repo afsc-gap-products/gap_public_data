@@ -41,8 +41,8 @@ for (i in 1:length(survey_data$SRVY)) {
       num_summed_by_station = sum(number_fish, na.rm = TRUE)) %>% # overwrite NAs in
     
     ## calculates CPUE for each species group by station
-    # mutate(effort = distance_fished * net_width/10) %>%
-    dplyr::mutate(effort = distance_fished * (0.001 * net_width)) %>% # bc distance in km and width in m
+    dplyr::mutate(effort = distance_fished * net_width/10) %>%
+    # dplyr::mutate(effort = distance_fished * (0.001 * net_width)) %>% # bc distance in km and width in m
     dplyr::mutate(cpue_kgha = (wt_kg_summed_by_station/effort)) %>% # *1e4
     dplyr::mutate(cpue_noha = ifelse(wt_kg_summed_by_station > 0 & num_summed_by_station == 0, NA,
                               (cpue_no = num_summed_by_station/effort))) %>%
@@ -117,8 +117,8 @@ cpue_biomass_station <-
                 area_swept_ha = effort, 
                 depth_m = "bottom_depth", 
                 bottom_temperature_c = "gear_temperature") %>% 
-  dplyr::mutate(cpue_kgkm2 = cpue_kgha/100, 
-                cpue_nokm2 = cpue_noha/100, 
+  dplyr::mutate(cpue_kgkm2 = cpue_kgha * 100, 
+                cpue_nokm2 = cpue_noha * 100, 
                 cpue_kg1000km2 = round(x = cpue_kgkm2*1000, digits = 6), 
                 dplyr::across(dplyr::starts_with("cpue_"), round, digits = 6), 
                 common_name = ifelse(is.na(common_name), "", common_name), 

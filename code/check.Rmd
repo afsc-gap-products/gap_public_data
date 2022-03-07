@@ -371,11 +371,14 @@ design_based1 <- dplyr::bind_rows(
   dplyr::select(-x1, -catchjoin) %>% 
   dplyr::rename(latitude = start_latitude, 
                 longitude = start_longitude, 
-                cpue_kgha = wgtcpue, 
-                cpue_noha = numcpue, 
-                area_swept_ha = effort, 
+                # cpue_kgkm2 = wgtcpue, 
+                # cpue_noha = numcpue, 
+                # area_swept_ha = effort, 
                 weight_kg = weight, 
-                count = number_fish) 
+                count = number_fish) %>% 
+  dplyr::mutate(cpue_kgha = wgtcpue/100, # denominator in km2
+                cpue_noha = numcpue/100, # denominator in km2
+                area_swept_ha = effort/100) # denominator in km2
 
 design_based2 <- dplyr::bind_rows(
     readr::read_csv(file = "../data/oracle/cpue_ebs_plusnw.csv") %>% 
@@ -403,7 +406,6 @@ design_based <- dplyr::bind_rows(design_based1, design_based2) %>%
                 latitude_dd = latitude, 
                 longitude_dd = longitude)
 
-
 ```
 
 And now I am joining the new data and the designed based data together to see where differences arise. 
@@ -417,8 +419,8 @@ dat <- dplyr::full_join(
                   area_swept_ha, distance_fished_km, net_width_m, 
                   haul, cruise, station, stratum, srvy, 
                   count, weight_kg,
-                  vessel_id, latitude_dd, longitude_dd, year) %>% 
-    dplyr::mutate(cpue_kgha = cpue_kgha*1e4),
+                  vessel_id, latitude_dd, longitude_dd, year),# %>% 
+    # dplyr::mutate(cpue_kgha = cpue_kgha*1e4),
   y = design_based %>% 
     dplyr::select(common_name, species_code, scientific_name, 
                   cpue_kgha, cpue_noha, 
@@ -454,10 +456,14 @@ dat0 <-dat %>%
   dplyr::select(-distance_fished_km.x, -net_width_m.x, -latitude_dd.x, -longitude_dd.x, 
                 -distance_fished_km.y, -net_width_m.y, -latitude_dd.y, -longitude_dd.y, 
                 -common_name.y, -scientific_name.y) %>% 
-  dplyr::filter(cpue_kgha_diff != 0 & cpue_noha_diff != 0 & area_swept_ha_diff != 0)
+  dplyr::filter(cpue_kgha_diff != 0 | cpue_noha_diff != 0 | area_swept_ha_diff != 0)
 
-dat0[,order(colnames(dat0))]
+diff_xnew_ydesign <- dat0[,order(colnames(dat0))]
 
+readr::write_csv(diff_xnew_ydesign, 
+  file = here::here("output", Sys.Date(), "diff_xnew_ydesign.csv"))
+
+diff_xnew_ydesign
 ```
 
 
