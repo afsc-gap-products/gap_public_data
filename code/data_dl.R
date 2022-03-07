@@ -38,7 +38,13 @@ locations<-c(
   "RACE_DATA.V_CRUISES",
   # "RACEBASE.SPECIES_CLASSIFICATION", 
   "RACEBASE.SPECIES", 
-  "RACE_DATA.VESSELS"
+  "RACE_DATA.VESSELS", 
+  
+  "GOA.CPUE", 
+  "AI.CPUE", 
+  "HAEHNR.cpue_nbs", 
+  "HAEHNR.cpue_ebs_plusnw", 
+  "HAEHNR.cpue_ebs_plusnw_grouped"
 )
 
 #sinks the data into connection as text file
