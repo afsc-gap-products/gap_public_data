@@ -92,7 +92,8 @@ cpue_biomass_station <-
       dplyr::rename(scientific_name = species_name), 
     by = "species_code"
   ) %>%
-  dplyr::select(-hauljoin, -distance_fished) %>% 
+  dplyr::select(-hauljoin#, -distance_fished
+                ) %>%
   dplyr::rename(station = "stationid", 
                 weight_kg = "wt_kg_summed_by_station", 
                 count = "num_summed_by_station", 
@@ -111,18 +112,25 @@ cpue_biomass_station <-
                 surface_temperature_c = "surface_temperature",
                 # "survey_name", 
                 # "cruise", 
+                distance_fished_km = distance_fished, 
+                net_width_m = net_width,
                 depth_m = "bottom_depth", 
                 bottom_temperature_c = "gear_temperature") %>% 
-  dplyr::mutate(cpue_kgkm2 = cpue_kgha/100, 
-                cpue_nokm2 = cpue_noha/100, 
-                cpue_kg1000km2 = round(x = (cpue_kgha/100)*1000, digits = 6)) %>% 
+  dplyr::mutate(cpue_kgkm2 = round(x = cpue_kgha/100, digits = 6), 
+                cpue_nokm2 = round(x = cpue_noha/100, digits = 6), 
+                cpue_kg1000km2 = round(x = (cpue_kgha/100)*1000, digits = 6), 
+                cpue_kgha = round(x = cpue_kgha/100, digits = 6), 
+                common_name = ifelse(is.na(common_name), "", common_name), 
+                scientific_name = ifelse(is.na(scientific_name), "", scientific_name)) %>% 
   dplyr::relocate(
     year, srvy, survey, survey_id, cruise, stratum, station, 
     haul, vessel_name, vessel_id, # survey data
     date, latitude_dd, longitude_dd, # universal when/where
     species_code, taxon_confidence, common_name, scientific_name,  # species info
-    cpue_kgha, cpue_kgkm2, cpue_noha, cpue_nokm2, weight_kg, count, # catch data
-    depth_m, bottom_temperature_c, surface_temperature_c) %>% #environmental data
+    cpue_kgha, cpue_kgkm2, cpue_kg1000km2, cpue_noha, cpue_nokm2, weight_kg, count, # catch data
+    depth_m, bottom_temperature_c, surface_temperature_c, #environmental data
+    distance_fished_km, net_width_m # gear data
+    ) %>% 
   dplyr::arrange(srvy, date, cpue_kgha) %>% 
   dplyr::mutate(common_name = gsub(pattern = "  ", replacement = " ", 
                                    x = trimws(common_name), fixed = TRUE), 
