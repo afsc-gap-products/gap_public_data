@@ -7,116 +7,110 @@
 
 ## Calculate Biomass and CPUE --------------------------------------------------
 
-cpue_biomass_station <- data.frame()
+cpue_biomass_station0 <- data.frame()
 # cpue_biomass_stratum <- data.frame()
 # cpue_biomass_total <- data.frame()
 
-for (i in 1:length(survey_data$SRVY)) {
-  print(survey_data$SRVY[i])
+for (i in 1:length(surveys$SRVY)) {
+  print(surveys$SRVY[i])
   
   ### Station-level ------------------------------------------------------------
   
   temp <- catch_haul_cruises %>% 
-    dplyr::filter(SRVY == survey_data$SRVY[i])
+    dplyr::filter(SRVY == surveys$SRVY[i]) %>% 
+    dplyr::filter(!is.na(stationid))
   
-  cpue_biomass_station0 <- tidyr::crossing(
-    temp %>% dplyr::select(SRVY, year, hauljoin, cruisejoin) %>% #stationid, stratum, 
+  temp1 <- tidyr::crossing(
+    temp %>% 
+      dplyr::select(year, hauljoin, cruisejoin) %>% 
       dplyr::distinct(),
-    dplyr::distinct(
-      temp %>%
-        dplyr::filter(SRVY %in% unique(survey_data$SRVY)),
-      species_code)) %>% 
+    temp %>%
+      dplyr::distinct(. ,species_code)) %>% 
     dplyr::left_join(
       x = .,
       y = temp %>%
-        dplyr::select("cruisejoin", "hauljoin", "cruisejoin", "species_code",
-                      "weight", "number_fish", "SRVY", common_name, scientific_name, 
-                      stationid, stratum, distance_fished, net_width),
-      by = c("species_code", "hauljoin", "cruisejoin", "SRVY")) %>%
+        dplyr::select(SRVY, cruisejoin, hauljoin,  
+                      stationid, stratum, distance_fished, net_width, 
+                      species_code, common_name, scientific_name,
+                      weight, number_fish),
+      by = c("species_code", "hauljoin", "cruisejoin")) %>%
     #### a check for species with weights greater then 0
     ## sum catch weight (by groups) by station and join to haul table (again) to add on relevent haul data
-    dplyr::group_by(SRVY, year, stationid, species_code, common_name, scientific_name, hauljoin, stratum, distance_fished, net_width) %>%
+    dplyr::group_by(year, SRVY, hauljoin, cruisejoin, stationid, stratum, 
+                    species_code, #common_name, scientific_name, 
+                    distance_fished, net_width) %>%
     dplyr::summarise(
       wt_kg_summed_by_station = sum(weight, na.rm = TRUE), # overwrite NAs in assign_group_zeros where data exists
-      num_summed_by_station = sum(number_fish, na.rm = TRUE)) %>% # overwrite NAs in
-    
-    ## calculates CPUE for each species group by station
-    dplyr::mutate(effort = distance_fished * net_width/10) %>%
-    # dplyr::mutate(effort = distance_fished * (0.001 * net_width)) %>% # bc distance in km and width in m
-    dplyr::mutate(cpue_kgha = (wt_kg_summed_by_station/effort)) %>% # *1e4
-    dplyr::mutate(cpue_noha = ifelse(wt_kg_summed_by_station > 0 & num_summed_by_station == 0, NA,
-                              (cpue_no = num_summed_by_station/effort))) %>%
+      num_summed_by_station = sum(number_fish, na.rm = TRUE)) %>%  # overwrite NAs in
     dplyr::ungroup() %>% 
-    dplyr::left_join(x = ., 
-                     y = station_info, 
-                     by = c("stationid", "SRVY", "stratum")) %>% 
-    dplyr::rename(latitude = start_latitude, 
-                  longitude = start_longitude) %>% 
+    dplyr::mutate(
+      area_swept_ha = (distance_fished * net_width/10), ## calculates CPUE for each species group by station
+      cpue_kgha = (wt_kg_summed_by_station/area_swept_ha), 
+      cpue_noha = ifelse(wt_kg_summed_by_station > 0 & num_summed_by_station == 0, NA,
+                              (cpue_no = num_summed_by_station/area_swept_ha))) %>%
+    # dplyr::left_join(x = ., 
+    #                  y = station_info, 
+    #                  by = c("stationid", "SRVY", "stratum")) %>% 
+    # dplyr::rename(latitude_dd = start_latitude, 
+    #               longitude_dd = start_longitude) %>% 
     dplyr::filter(!is.na(stationid))
   
-  cpue_biomass_station <- dplyr::bind_rows(
+  cpue_biomass_station0 <- dplyr::bind_rows(
     cpue_biomass_station0, 
-    cpue_biomass_station)
-  remove(cpue_biomass_station0)
+    temp1)
+  remove(temp1)
   
   gc()
   
 }
 
-cpue_biomass_station0 <- cpue_biomass_station
-cpue_biomass_station <- 
+cpue_biomass_station0 <- cpue_biomass_station0 %>%
+      dplyr::filter(!(num_summed_by_station == 0 &
+                        wt_kg_summed_by_station == 0))
+
+cpue_biomass_station <- #cpue_biomass_station0 %>% 
   dplyr::left_join(
-    x = cpue_biomass_station %>% 
-      dplyr::select(#-effort, -net_width, 
-                    -latitude, -longitude, 
-                    -scientific_name, -common_name) %>% # 
-      dplyr::filter(!(num_summed_by_station == 0 & 
-                        wt_kg_summed_by_station == 0)), # remove empty data 
-    y = catch_haul_cruises %>% 
-      dplyr::select(#cruisejoin, 
-        hauljoin, stationid, stratum, #survey_definition_id, 
-        haul, start_time, start_latitude, start_longitude, 
-        bottom_depth, gear_temperature, surface_temperature, 
-        survey_name, SRVY, year, cruise, species_code, tax_conf), 
-    by = c("SRVY", "year", "stationid", "hauljoin", "stratum", "species_code")) %>% 
+    x = cpue_biomass_station0, # remove empty data
+    y = catch_haul_cruises  %>% 
+      dplyr::filter(!is.na(stationid))%>%
+      dplyr::select(
+        year, SRVY, hauljoin, cruisejoin, cruise, haul, stationid, stratum, species_code, 
+        survey_name, tax_conf, 
+        start_latitude, start_longitude, 
+        start_time, bottom_depth, gear_temperature, surface_temperature) %>% 
+      dplyr::distinct(),
+    by = c("year", "SRVY", "hauljoin", "cruisejoin", "stationid", 
+           "stratum", "species_code")) %>%
   dplyr::left_join(
     x = ., 
     y = haul_cruises_vess %>% 
-      dplyr::select(hauljoin, vessel_name, vessel, survey_definition_id) %>% 
+      dplyr::select(year, SRVY, hauljoin, cruisejoin, stationid, stratum, 
+                    vessel_name, vessel, survey_definition_id) %>% 
       distinct(), 
-    by = c("hauljoin")) %>%
+    by = c("year", "SRVY", "hauljoin", "cruisejoin", "stationid", "stratum")) %>%
   dplyr::left_join(
-    x = ., 
-    y = spp_info %>% 
-      dplyr::select(species_code, species_name, common_name) %>% 
-      dplyr::rename(scientific_name = species_name), 
-    by = "species_code"
-  ) %>%
-  dplyr::select(-hauljoin#, -distance_fished
-                ) %>%
-  dplyr::rename(station = "stationid", 
-                weight_kg = "wt_kg_summed_by_station", 
-                count = "num_summed_by_station", 
+    x = .,
+    y = spp_info %>%
+      dplyr::select(species_code, scientific_name, common_name),
+    by = "species_code") %>%
+  dplyr::rename(station = stationid, 
+                weight_kg = wt_kg_summed_by_station, 
+                count = num_summed_by_station, 
                 vessel_id = vessel, 
                 srvy = SRVY,
                 survey = survey_name,
                 survey_id = survey_definition_id, 
-                # species_common = common_name,  #dream
-                # species_scientific = scientific_name, #dream
-                # "cpue_kgha", 
-                # "cpue_noha", 
+                latitude_dd = start_latitude, 
+                longitude_dd = start_longitude, 
                 taxon_confidence = tax_conf, 
-                date = "start_time", # where would I get time from? 
-                latitude_dd = "start_latitude", 
-                longitude_dd ="start_longitude", 
-                surface_temperature_c = "surface_temperature",
-                # "survey_name", 
-                # "cruise", 
+                date = start_time, 
+                latitude_dd = start_latitude, 
+                longitude_dd = start_longitude, 
+                bottom_temperature_c = gear_temperature, 
+                surface_temperature_c = surface_temperature,
                 distance_fished_km = distance_fished, 
                 net_width_m = net_width,
-                area_swept_ha = effort, 
-                depth_m = "bottom_depth", 
-                bottom_temperature_c = "gear_temperature") %>% 
+                depth_m = bottom_depth) %>% 
   dplyr::mutate(cpue_kgkm2 = cpue_kgha * 100, 
                 cpue_nokm2 = cpue_noha * 100, 
                 cpue_kg1000km2 = round(x = cpue_kgkm2*1000, digits = 6), 
@@ -132,11 +126,7 @@ cpue_biomass_station <-
     depth_m, bottom_temperature_c, surface_temperature_c, #environmental data
     distance_fished_km, net_width_m, area_swept_ha # gear data
     ) %>% 
-  dplyr::arrange(srvy, date, cpue_kgha) %>% 
-  dplyr::mutate(common_name = gsub(pattern = "  ", replacement = " ", 
-                                   x = trimws(common_name), fixed = TRUE), 
-                scientific_name = gsub(pattern = "  ", replacement = " ", 
-                                   x = trimws(scientific_name), fixed = TRUE))
+  dplyr::arrange(srvy, date, cpue_kgha)
 
 # Save Public data output ------------------------------------------------------
 

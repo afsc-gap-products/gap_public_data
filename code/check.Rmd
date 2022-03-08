@@ -217,6 +217,19 @@ data_old %>%
   summary()
 ```
 
+Are there duplicates/unsummarized data in the dataset?
+
+```{r}
+data_old %>% 
+  dplyr::mutate(id = paste0(srvy,"-",cruise,"-",stratum,"-",station,"-",vessel_id)) %>%
+  dplyr::select(id, species_code) %>% 
+  table() %>% 
+  data.frame() %>% 
+  dplyr::filter(Freq > 1)
+```
+
+
+
 # 2021 new public data: Load and compile data
 
 ```{r load_new, echo = FALSE}
@@ -236,6 +249,19 @@ data_new %>%
   summary()
 ```
 
+
+Are there duplicates/unsummarized data in the dataset?
+
+```{r}
+data_new %>% 
+  dplyr::mutate(id = paste0(srvy,"-",cruise,"-",stratum,"-",station,"-",vessel_id)) %>%
+  dplyr::select(id, species_code) %>% 
+  table() %>% 
+  data.frame() %>% 
+  dplyr::filter(Freq > 1)
+```
+
+
 # Bind new and old 2021 data to see where differences are
 
  - -9999 --> NA from cpue_noha and cpue_kgha in the old data so we can compare new and old more easily
@@ -252,6 +278,7 @@ dat <- dplyr::full_join(
                   cpue_kgha = ifelse(cpue_kgha == -9999, NA, cpue_kgha), 
                   cpue_noha = ifelse(cpue_noha == -9999, NA, cpue_noha)),
   by = c("year", "vessel_id", "stratum", "station", "species_code", "haul", "cruise",  "srvy"))
+
 dat
 ```
 
@@ -344,16 +371,38 @@ col <- col[-length(col)]
 for(i in 1:length(col)) {
   a <- diff_between_cols(dat = dat, colx = paste0(col[i], ".x"), coly = paste0(col[i], ".y"))
   if (class(a) == "table") {
-     print(paste0("------------- Differences between '", col[i], ".x' and '", col[i], ".y' -------------"))
+     print(paste0("----- Differences between '", col[i], ".x' (new) and '", col[i], ".y' (old) -----"))
      print(diff_between_cols(dat = dat, colx = paste0(col[i], ".x"), coly = paste0(col[i], ".y")))  
   }
 }
 ```
+
+
+```{r diff_xnew_yold}
+dat0 <- dat %>% 
+  dplyr::mutate(
+    dplyr::across(dplyr::starts_with("cpue_"), round, digits = 2), 
+    cpue_kgha_diff = cpue_kgha.x-cpue_kgha.y, 
+    cpue_noha_diff = cpue_noha.x-cpue_noha.y) %>% 
+  dplyr::select(year, srvy, cruise, stratum, station, haul, vessel_id, 
+                species_code, common_name.x, scientific_name.x, 
+                cpue_kgha.x, cpue_kgha.y, cpue_kgha_diff, 
+                cpue_noha.x, cpue_noha.y, cpue_noha_diff) %>% 
+  dplyr::filter(cpue_kgha_diff >= 0.01 | cpue_noha_diff >= 0.01) %>% 
+  dplyr::arrange(-cpue_kgha_diff, -cpue_noha_diff)
+
+readr::write_csv(dat0, 
+  file = here::here("output", Sys.Date(), "diff_xnew_yold.csv"))
+
+summary(dat0)
+```
+
 # How do CPUE values compare with our design-based CPUE estimates?
 
 Here I am compiling the EBS, NBS, GOA, AI verified, design-based datasets
 
 ```{r format_design_based}
+
 design_based1 <- dplyr::bind_rows(
   readr::read_csv(file = "../data/oracle/cpue_ai.csv"), 
   readr::read_csv(file = "../data/oracle/cpue_goa.csv")) %>% 
@@ -366,19 +415,16 @@ design_based1 <- dplyr::bind_rows(
     dplyr::left_join(
       x = ., 
       y = spp_info %>% 
-        dplyr::select(common_name, species_name, species_code), 
+        dplyr::select(common_name, scientific_name, species_code), 
       by = "species_code") %>% 
   dplyr::select(-x1, -catchjoin) %>% 
   dplyr::rename(latitude = start_latitude, 
                 longitude = start_longitude, 
-                # cpue_kgkm2 = wgtcpue, 
-                # cpue_noha = numcpue, 
-                # area_swept_ha = effort, 
                 weight_kg = weight, 
                 count = number_fish) %>% 
-  dplyr::mutate(cpue_kgha = wgtcpue/100, # denominator in km2
-                cpue_noha = numcpue/100, # denominator in km2
-                area_swept_ha = effort/100) # denominator in km2
+  dplyr::mutate(cpue_kgha = wgtcpue/100, # denominator orig in km2
+                cpue_noha = numcpue/100, # denominator orig in km2
+                area_swept_ha = effort*100) # denominator orig in km2
 
 design_based2 <- dplyr::bind_rows(
     readr::read_csv(file = "../data/oracle/cpue_ebs_plusnw.csv") %>% 
@@ -394,17 +440,51 @@ design_based2 <- dplyr::bind_rows(
       by = "hauljoin") %>% 
   dplyr::mutate(weight_kg = NA, 
                 count = NA) %>% 
-  dplyr::rename(area_swept_ha = area_fished_ha)
+  dplyr::rename(area_swept_ha = area_fished_ha, 
+                scientific_name = species_name)
 
 design_based <- dplyr::bind_rows(design_based1, design_based2) %>% 
   dplyr::rename(srvy = survey, 
                 vessel_id = vessel, 
-                scientific_name = species_name, 
                 distance_fished_km = distance_fished, 
                 net_width_m = net_width, 
                 station = stationid, 
                 latitude_dd = latitude, 
-                longitude_dd = longitude)
+                longitude_dd = longitude) 
+dim(design_based) # before summary
+summary(design_based)
+
+```
+
+
+```{r}
+# Are there duplicates/unsummarized data in the dataset?
+design_based %>% 
+  dplyr::mutate(id = paste0(srvy,"-",cruise,"-",stratum,"-",station,"-",vessel_id)) %>%
+  dplyr::select(id, species_code) %>% 
+  table() %>% 
+  data.frame() %>% 
+  dplyr::filter(Freq > 1)
+```
+
+```{r}
+# summarising bc there are duplicates in some of the AI and GOA(?) design based indicies
+design_based <- design_based %>% 
+  dplyr::group_by(srvy, year, hauljoin, vessel_id, cruise, haul, stratum, station, 
+                  common_name, scientific_name, species_code) %>% 
+  dplyr::summarise(distance_fished_km = mean(distance_fished_km, na.rm = TRUE), 
+                   net_width_m = mean(net_width_m, na.rm = TRUE), 
+                   weight_kg = sum(weight_kg, na.rm = TRUE), 
+                   count = sum(count, na.rm = TRUE),  
+                  latitude_dd = mean(latitude_dd, na.rm = TRUE), 
+                  longitude_dd = mean(longitude_dd, na.rm = TRUE), 
+                  cpue_kgha = sum(cpue_kgha, na.rm = TRUE), 
+                  cpue_noha = sum(cpue_noha, na.rm = TRUE), 
+                  area_swept_ha = sum(area_swept_ha, na.rm = TRUE))
+
+dim(design_based) # after summary
+
+summary(design_based)
 
 ```
 
@@ -419,8 +499,7 @@ dat <- dplyr::full_join(
                   area_swept_ha, distance_fished_km, net_width_m, 
                   haul, cruise, station, stratum, srvy, 
                   count, weight_kg,
-                  vessel_id, latitude_dd, longitude_dd, year),# %>% 
-    # dplyr::mutate(cpue_kgha = cpue_kgha*1e4),
+                  vessel_id, latitude_dd, longitude_dd, year),
   y = design_based %>% 
     dplyr::select(common_name, species_code, scientific_name, 
                   cpue_kgha, cpue_noha, 
@@ -429,26 +508,27 @@ dat <- dplyr::full_join(
                   count, weight_kg,
                   vessel_id, latitude_dd, longitude_dd, year), 
   by = c("year", "haul", "cruise", "srvy", "species_code", "vessel_id", "stratum", "station")) %>%
-  dplyr::mutate(dplyr::across(dplyr::starts_with("cpue_"), round, digits = 2)) 
+  dplyr::mutate(dplyr::across(dplyr::starts_with("cpue_"), round, digits = 2), 
+                dplyr::across(dplyr::starts_with("area_swept_"), round, digits = 4)) 
  
 col <- gsub(pattern = ".x", replacement = "", 
             x = names(dat)[grep(pattern = ".x", x = names(dat), fixed = TRUE)])
 
-# # Compare x to y
+## Compare x to y
 for(i in 1:length(col)) {
   a <- diff_between_cols(dat = dat, 
                          colx = paste0(col[i], ".x"), 
                          coly = paste0(col[i], ".y"))
   if (class(a) == "table") {
-     print(paste0("------------- Differences between '", col[i], ".x' and '", col[i], ".y' -------------"))
+     print(paste0("----- Differences between '", col[i], ".x' (public) and '", col[i], ".y' (design) -----"))
      print(diff_between_cols(dat = dat, colx = paste0(col[i], ".x"), coly = paste0(col[i], ".y")))  
   }
 }
 
 ```
 
-```{r}
-dat0 <-dat %>% 
+```{r diff_xnew_ydesign}
+dat0 <- dat %>% 
   dplyr::mutate(
     cpue_kgha_diff = cpue_kgha.x-cpue_kgha.y, 
     cpue_noha_diff = cpue_noha.x-cpue_noha.y, 
@@ -456,14 +536,29 @@ dat0 <-dat %>%
   dplyr::select(-distance_fished_km.x, -net_width_m.x, -latitude_dd.x, -longitude_dd.x, 
                 -distance_fished_km.y, -net_width_m.y, -latitude_dd.y, -longitude_dd.y, 
                 -common_name.y, -scientific_name.y) %>% 
-  dplyr::filter(cpue_kgha_diff != 0 | cpue_noha_diff != 0 | area_swept_ha_diff != 0)
+  dplyr::filter(cpue_kgha_diff >= 0.01 | 
+                  # ((is.na(cpue_kgha_diff) & !is.na(cpue_kgha.x)) | 
+                  #    (is.na(cpue_kgha_diff) & !is.na(cpue_kgha.y))) | 
+                  cpue_noha_diff >= 0.01 | #is.na(cpue_noha_diff) | 
+                  # ((is.na(cpue_noha_diff) & !is.na(cpue_noha.x)) | 
+                  #    (is.na(cpue_noha_diff) & !is.na(cpue_noha.y))) | 
+                  area_swept_ha_diff >= 0.01 # | 
+                  # ((is.na(area_swept_ha_diff) & !is.na(area_swept_ha.x)) | 
+                  #    (is.na(area_swept_ha_diff) & !is.na(area_swept_ha.y)))                  
+                ) %>% 
+  dplyr::arrange(-cpue_kgha_diff, -cpue_noha_diff, -area_swept_ha_diff) %>% 
+  dplyr::relocate(year, srvy, cruise, haul, station, stratum, vessel_id, 
+                  species_code, common_name.x, 
+                  area_swept_ha.x, area_swept_ha.y, area_swept_ha_diff, 
+                  weight_kg.x, weight_kg.y, cpue_kgha.x, cpue_kgha.y, cpue_kgha_diff, 
+                  count.x, count.y, cpue_kgha.x, cpue_kgha.y, cpue_kgha_diff)
 
-diff_xnew_ydesign <- dat0[,order(colnames(dat0))]
+# dat0 <- dat0[,order(colnames(dat0))]
 
-readr::write_csv(diff_xnew_ydesign, 
+readr::write_csv(dat0, 
   file = here::here("output", Sys.Date(), "diff_xnew_ydesign.csv"))
 
-diff_xnew_ydesign
+summary(dat0)
 ```
 
 

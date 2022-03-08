@@ -32,7 +32,7 @@ a<-list.files(path = here::here("data", "taxon_confidence"))
 for (i in 1:length(a)){
   print(a[i])
   b <- readxl::read_xlsx(path = paste0(here::here("data", "taxon_confidence", a[i])), 
-                         skip = 1) %>% 
+                         skip = 1, col_names = TRUE) %>% 
     dplyr::select(where(~!all(is.na(.x)))) %>% # remove empty columns
     janitor::clean_names() %>% 
     dplyr::rename(species_code = code)
@@ -91,18 +91,19 @@ tax_conf <- SameColNames(df.ls) %>%
     TRUE ~ "Unassessed"))
   # dplyr::left_join(
   #   x = ., 
-  #   y = survey_data, 
+  #   y = surveys, 
   #   by = "SRVY")
 
 # Wrangle Data -----------------------------------------------------------------
 
 ## Species info ----------------------------------------------------------------
-spp_info <- #dplyr::left_join(
-  # x = species_classification0, 
-  # y =
-  species0 %>% 
-    dplyr::select(species_code, common_name, species_name)#, 
-  # by = "species_code")
+spp_info <- species0 %>% 
+  dplyr::select(species_code, common_name, species_name) %>% 
+  dplyr::rename(scientific_name = species_name) %>%
+  dplyr::mutate(common_name = gsub(pattern = "  ", replacement = " ", 
+                                   x = trimws(common_name), fixed = TRUE), 
+                scientific_name = gsub(pattern = "  ", replacement = " ", 
+                                       x = trimws(scientific_name), fixed = TRUE))
 
 ## cruises + maxyr  + compareyr ------------------------------------------------
 cruises <- v_cruises0 %>% 
@@ -111,7 +112,7 @@ cruises <- v_cruises0 %>%
   dplyr::filter(year != 2020 & # no surveys happened this year that I care about
                   year >= 1982 &
                   year <= maxyr &
-                  survey_definition_id %in% survey_data$survey_definition_id) %>% 
+                  survey_definition_id %in% surveys$survey_definition_id) %>% 
   dplyr::mutate(vess_shape = substr(x = vessel_name, 1,1)) %>%
   dplyr::mutate(vessel_ital = paste0("F/V *", 
                                      stringr::str_to_title(vessel_name), "*")) %>%
@@ -119,7 +120,7 @@ cruises <- v_cruises0 %>%
                                      stringr::str_to_title(vessel_name))) %>%
   dplyr::left_join(
     x = ., 
-    y = survey_data, 
+    y = surveys, 
     by  = "survey_definition_id") %>% 
   dplyr::rename(vessel = "vessel_id")
 
@@ -136,7 +137,7 @@ haul <- dplyr::left_join(
                   haul_type == 3 &
                   performance >= 0 &
                   !(is.null(stationid)) &
-                  survey_definition_id %in% survey_data$survey_definition_id) %>% 
+                  survey_definition_id %in% surveys$survey_definition_id) %>% 
   dplyr::select(-auditjoin) 
 
 ## stratum_info (survey area) --------------------------------------------------

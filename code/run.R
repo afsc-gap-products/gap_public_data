@@ -19,7 +19,7 @@
 maxyr <- 2021 
 
 # The surveys we will consider covering
-survey_data <- 
+surveys <- 
   data.frame(survey_definition_id = c(143, 98, 47, 52, 78), 
              SRVY = c("NBS", "EBS", "GOA", "AI", "BSSlope"), 
              SRVY_long = c("northern Bering Sea", 
@@ -47,7 +47,8 @@ dir_out <- paste0("./output/", Sys.Date(),"/")
 if (FALSE) {
   source('./code/analysis.R')
 } else {
-  data_new <- readr::read_csv(file = paste0(dir_out, "cpue_biomass_station.csv"))
+  data_new <- readr::read_csv(
+    file = paste0(dir_out, "cpue_biomass_station.csv"))
 }
 
 # Check work -------------------------------------------------------------------
