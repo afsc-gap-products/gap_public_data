@@ -1,0 +1,184 @@
+---
+title: "Compare new and old 2021 data Public Data runs"
+output: pdf_document
+author: Emily Markowitz (emily.markowitz@nodiff_between_cols.gov)
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, comment=FALSE)
+```
+
+
+```{r load_functions, echo = FALSE}
+# Load libraries, establish functions, and load external data
+PKG <- c(
+  # Keeping Organized
+  "here",
+  # "arsenal",
+  
+  # plotting
+  "ggplot2",
+  "rnaturalearth",
+  "rnaturalearthdata",
+
+  # other tidyverse
+  "tidyr",
+  "dplyr",
+  "magrittr",
+  "readr",
+  
+  # Text Management
+  "stringr")
+
+
+PKG <- unique(PKG)
+for (p in PKG) {
+  if(!require(p,character.only = TRUE)) {
+    install.packages(p)
+    require(p,character.only = TRUE)}
+}
+
+```
+
+# 2021 old public data: Load and compile data
+
+column names have been changed to match with the new data column names
+
+```{r load_old, echo = FALSE}
+
+if (FALSE) {
+# This year's data: 
+a<-list.files(path = here::here("data", "publicdata", "2021"))
+df.ls <- list()
+for (i in 1:length(a)){
+  b <- read_csv(file = paste0(here::here("data", "publicdata", "2021", a[i])))
+  b$file <- a[i]
+  df.ls[[i]]<-b
+  names(df.ls)[i]<-a[i]
+}
+
+# 2021 old public data: Basic data clean
+
+data <- SameColNames(df.ls) %>% 
+  dplyr::mutate(srvy = toupper(str_extract(string = file, pattern = "[a-zA-Z]+"))) %>% 
+  dplyr::filter(!is.na(year))
+
+datdiff_between_cols<-data %>% 
+  dplyr::select(-file)
+
+write_csv(x = datdiff_between_cols, file = here::here("output", Sys.Date(),  "ak_gf_survey_public_2021.csv"))
+
+} else {
+  data <- readr::read_csv(file = paste0("../data/publicdata/ak_gf_survey_public_2021.csv"))
+}
+
+data_old <- data %>% 
+  dplyr::rename(surface_temperature_c = surf_temp, 
+                bottom_temperature_c = bot_temp, 
+                longitude_dd = longitude, 
+                latitude_dd = latitude, 
+                depth_m = bot_depth, 
+                date = datetime, 
+                cpue_kgha = wtcpue, 
+                cpue_noha = numcpue, 
+                species_code = sid, 
+                common_name = common, 
+                scientific_name = scientific) %>%
+  dplyr::mutate(survey = case_when(
+    srvy == "NBS" ~ "Northern Bering Sea", 
+    srvy == "EBS" ~ "Southeastern Bering Sea", 
+    srvy == "BSSLOPE" ~ "Bering Sea Slope", 
+    srvy == "GOA" ~ "Gulf of Alaska", 
+    srvy == "AI" ~ "Aleutian Islands")) %>% 
+  dplyr::mutate(date = 
+                  as.character(format(as.Date(date, format="%m/%d/%Y"),"%m/%d/%Y")), 
+    common_name = gsub(pattern = "  ", replacement = " ", 
+                       x = trimws(common_name), fixed = TRUE), 
+    scientific_name = gsub(pattern = "  ", replacement = " ", 
+                           x = trimws(scientific_name), fixed = TRUE)) #%>%
+  # dplyr::filter(!is.na(station)) # TESTING
+
+data_old %>% 
+  dplyr::mutate(srvy = as.factor(srvy), 
+                survey = as.factor(survey), 
+                common_name = as.factor(common_name), 
+                scientific_name = as.factor(scientific_name) ,
+                station = as.factor(station), 
+                # vessel_name = as.factor(vessel_name), 
+                date = as.factor(date)) %>%
+    summary()
+```
+
+are there NAs in the station column? why?
+
+```{r}
+data_old %>% 
+  dplyr::filter(is.na(station)) %>% 
+  dplyr::select(cruise, srvy) %>% 
+  table()
+```
+
+Are there duplicates/unsummarized data in the dataset?
+
+```{r}
+a <- data_old %>% 
+  dplyr::mutate(#id = paste0(srvy,"-",cruise,"-",stratum,"-",station,"-",vessel_id), 
+                id1 = paste0(srvy,"-",cruise,"-",stratum,"-",station,"-",vessel_id,"-",species_code) ) %>%
+  # dplyr::select(id, species_code) %>% 
+  dplyr::select(id1) %>%
+  table() %>% 
+  data.frame() %>% 
+  dplyr::filter(Freq > 1)
+a
+```
+
+```{r}
+b <- data_old %>% 
+  dplyr::mutate(#id = paste0(srvy,"-",cruise,"-",stratum,"-",station,"-",vessel_id), 
+                id1 = paste0(srvy,"-",cruise,"-",stratum,"-",station,"-",vessel_id,"-",species_code) ) %>%
+  dplyr::filter(id1 %in% paste0(a$id,"-",a$species_code)) %>% 
+  dplyr::select(id1, species_code, dplyr::starts_with("cpue"))
+b
+```
+
+# 2021 new public data: Load and compile data
+
+```{r load_new, echo = FALSE}
+if (FALSE){
+  data_new <- readr::read_csv(file = paste0(".", dir_out, "cpue_biomass_station.csv"))
+}
+data_new <- data_new %>% 
+  dplyr::mutate(date = as.character(format(as.Date(date,
+                                      format="%m/%d/%Y"),"%m/%d/%Y"))) %>%
+  dplyr::filter(!is.na(station)) # TESTING
+
+data_new %>% 
+  dplyr::mutate(srvy = as.factor(srvy), 
+                survey = as.factor(survey), 
+                common_name = as.factor(common_name), 
+                scientific_name = as.factor(scientific_name) ,
+                station = as.factor(station), 
+                date = as.factor(date)) %>% 
+  summary()
+```
+
+are there NAs in the station column? why?
+
+```{r}
+data_new %>% 
+  dplyr::filter(is.na(station)) %>% 
+  dplyr::select(cruise, srvy) %>% 
+  table()
+```
+
+Are there duplicates/unsummarized data in the dataset?
+
+```{r}
+data_new %>% 
+  dplyr::mutate(id = paste0(srvy,"-",cruise,"-",stratum,"-",station,"-",vessel_id)) %>%
+  dplyr::select(id, species_code) %>% 
+  table() %>% 
+  data.frame() %>% 
+  dplyr::filter(Freq > 1)
+```
+

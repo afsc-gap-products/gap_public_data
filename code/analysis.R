@@ -17,8 +17,8 @@ for (i in 1:length(surveys$SRVY)) {
   ### Station-level ------------------------------------------------------------
   
   temp <- catch_haul_cruises %>% 
-    dplyr::filter(SRVY == surveys$SRVY[i]) %>% 
-    dplyr::filter(!is.na(stationid))
+    dplyr::filter(SRVY == surveys$SRVY[i]) #%>% 
+    # dplyr::filter(!is.na(stationid))
   
   temp1 <- tidyr::crossing(
     temp %>% 
@@ -47,13 +47,13 @@ for (i in 1:length(surveys$SRVY)) {
       area_swept_ha = (distance_fished * net_width/10), ## calculates CPUE for each species group by station
       cpue_kgha = (wt_kg_summed_by_station/area_swept_ha), 
       cpue_noha = ifelse(wt_kg_summed_by_station > 0 & num_summed_by_station == 0, NA,
-                              (cpue_no = num_summed_by_station/area_swept_ha))) %>%
+                              (cpue_no = num_summed_by_station/area_swept_ha))) #%>%
     # dplyr::left_join(x = ., 
     #                  y = station_info, 
     #                  by = c("stationid", "SRVY", "stratum")) %>% 
     # dplyr::rename(latitude_dd = start_latitude, 
     #               longitude_dd = start_longitude) %>% 
-    dplyr::filter(!is.na(stationid))
+    # dplyr::filter(!is.na(year))
   
   cpue_biomass_station0 <- dplyr::bind_rows(
     cpue_biomass_station0, 

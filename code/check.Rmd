@@ -204,7 +204,8 @@ data_old <- data %>%
     common_name = gsub(pattern = "  ", replacement = " ", 
                        x = trimws(common_name), fixed = TRUE), 
     scientific_name = gsub(pattern = "  ", replacement = " ", 
-                           x = trimws(scientific_name), fixed = TRUE))
+                           x = trimws(scientific_name), fixed = TRUE)) %>%
+  dplyr::filter(!is.na(station)) # TESTING
 
 data_old %>% 
   dplyr::mutate(srvy = as.factor(srvy), 
@@ -214,7 +215,16 @@ data_old %>%
                 station = as.factor(station), 
                 # vessel_name = as.factor(vessel_name), 
                 date = as.factor(date)) %>%
-  summary()
+    summary()
+```
+
+are there NAs in the station column? why?
+
+```{r}
+data_old %>% 
+  dplyr::filter(is.na(station)) %>% 
+  dplyr::select(cruise, srvy) %>% 
+  table()
 ```
 
 Are there duplicates/unsummarized data in the dataset?
@@ -238,7 +248,9 @@ if (FALSE){
 }
 data_new <- data_new %>% 
   dplyr::mutate(date = as.character(format(as.Date(date,
-                                      format="%m/%d/%Y"),"%m/%d/%Y")))
+                                      format="%m/%d/%Y"),"%m/%d/%Y"))) %>%
+  dplyr::filter(!is.na(station)) # TESTING
+
 data_new %>% 
   dplyr::mutate(srvy = as.factor(srvy), 
                 survey = as.factor(survey), 
@@ -249,6 +261,14 @@ data_new %>%
   summary()
 ```
 
+are there NAs in the station column? why?
+
+```{r}
+data_new %>% 
+  dplyr::filter(is.na(station)) %>% 
+  dplyr::select(cruise, srvy) %>% 
+  table()
+```
 
 Are there duplicates/unsummarized data in the dataset?
 
@@ -450,7 +470,9 @@ design_based <- dplyr::bind_rows(design_based1, design_based2) %>%
                 net_width_m = net_width, 
                 station = stationid, 
                 latitude_dd = latitude, 
-                longitude_dd = longitude) 
+                longitude_dd = longitude)  #%>%
+  # dplyr::filter(!is.na(station)) # TESTING
+
 dim(design_based) # before summary
 summary(design_based)
 
@@ -459,12 +481,20 @@ summary(design_based)
 
 ```{r}
 # Are there duplicates/unsummarized data in the dataset?
-design_based %>% 
+a<-design_based %>% 
   dplyr::mutate(id = paste0(srvy,"-",cruise,"-",stratum,"-",station,"-",vessel_id)) %>%
   dplyr::select(id, species_code) %>% 
   table() %>% 
   data.frame() %>% 
   dplyr::filter(Freq > 1)
+
+b<-design_based %>% 
+  dplyr::mutate(id = paste0(cruise,"-",stratum,"-",station,"-",vessel_id)) %>%
+  dplyr::select(srvy, id, species_code) %>% 
+  table() %>% 
+  data.frame() %>% 
+  dplyr::filter(Freq > 1)
+summary(b)
 ```
 
 ```{r}
@@ -480,7 +510,7 @@ design_based <- design_based %>%
                   longitude_dd = mean(longitude_dd, na.rm = TRUE), 
                   cpue_kgha = sum(cpue_kgha, na.rm = TRUE), 
                   cpue_noha = sum(cpue_noha, na.rm = TRUE), 
-                  area_swept_ha = sum(area_swept_ha, na.rm = TRUE))
+                  area_swept_ha = sum(area_swept_ha, na.rm = TRUE)) 
 
 dim(design_based) # after summary
 
@@ -546,7 +576,7 @@ dat0 <- dat %>%
                   # ((is.na(area_swept_ha_diff) & !is.na(area_swept_ha.x)) | 
                   #    (is.na(area_swept_ha_diff) & !is.na(area_swept_ha.y)))                  
                 ) %>% 
-  dplyr::arrange(-cpue_kgha_diff, -cpue_noha_diff, -area_swept_ha_diff) %>% 
+  dplyr::arrange(srvy, cruise, haul, vessel_id, -cpue_kgha_diff, -cpue_noha_diff, -area_swept_ha_diff) %>% 
   dplyr::relocate(year, srvy, cruise, haul, station, stratum, vessel_id, 
                   species_code, common_name.x, 
                   area_swept_ha.x, area_swept_ha.y, area_swept_ha_diff, 
