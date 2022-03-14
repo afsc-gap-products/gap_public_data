@@ -10,143 +10,7 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, comment=FALSE)
 
 
 ```{r load_functions, echo = FALSE}
-# Load libraries, establish functions, and load external data
-PKG <- c(
-  # Keeping Organized
-  "here",
-  # "arsenal",
-  
-  # plotting
-  "ggplot2",
-  "rnaturalearth",
-  "rnaturalearthdata",
-
-  # other tidyverse
-  "tidyr",
-  "dplyr",
-  "magrittr",
-  "readr",
-  
-  # Text Management
-  "stringr")
-
-
-PKG <- unique(PKG)
-for (p in PKG) {
-  if(!require(p,character.only = TRUE)) {
-    install.packages(p)
-    require(p,character.only = TRUE)}
-}
-
-
-# Where/What are differences between columns
-diff_between_cols <- function(dat, colx, coly, 
-                              id_cols = c("species_code", "year", "srvy", "station", "stratum", "cruise")) {
-  a <- dat[which(!(dat[,colx] == dat[,coly])),
-           c(ifelse(colx != "common_name.x", "common_name.x", "scientific_name.x"),
-             id_cols, colx, coly)] #%>% 
-    # dplyr::rename(paste0(colx, ' | ', coly) = compare)
- if (nrow(a)>0) {
-  if (is.character(unlist(dat[,colx])[1][[1]])) {
-    a <- a %>%
-      dplyr::mutate(compare = paste0(get(colx), " | ", get(coly)))
-    out <- table(a$compare)
-  } else if (is.numeric(unlist(dat[,colx])[1][[1]])) {
-    out <- a %>%
-      dplyr::mutate(difference = get(colx) - get(coly)) # %>% 
-      # dplyr::select(species_code, difference)
-    if (nrow(out)>100) {
-      out$srvy <- as.factor(out$srvy)
-      out$common_name.x <- as.factor(out$common_name.x)
-      out$species_code <- as.factor(out$species_code)
-      out <- summary(out)
-    }
-  }
- } else {
-   out <- ""#paste0("No differences between ", colx, " and ", coly, ".")
- }
-  return(out)
-}
-
-# find how prevelant issues in data are
-wheres_trouble <- function(dat, col, trouble) {
-  
-  temp <- dat %>% 
-    dplyr::rename(col = all_of(col)) #%>% 
-    # dplyr::select(col)
-  
-  if (is.na(trouble)) {
-  temp <- temp %>% 
-    dplyr::filter(is.na(col))
-  } else {
-      temp <- temp %>% 
-    dplyr::filter(col == trouble)
-  }
-  
-  if (nrow(temp) == 0) {
-    out <- ""#paste0("No '", trouble, "' were found in the column ", col, ".")
-  } else {
-    temp1 <- temp
-    out <- list(#condition = paste0("Searching for '", trouble, "' in the column ", col, "."), 
-              how_many = table(temp[,c("year", "srvy")])#, 
-              # data_subset = temp1
-              )
-    names(out) <- paste0("Yes, '", trouble, "' occured ",nrow(temp)," times in the column '", col, "'.")
-    
-  }
-  return(out)
-}
-
-
-plot_stations <- function(dat, srvy0) {
-  world <- map_data("world2")
-
-  dat0 <- dat %>% 
-               dplyr::filter(srvy == srvy0) %>% 
-               dplyr::mutate(longitude_dd = 
-                               ifelse(longitude_dd>0, 
-                                      abs(longitude_dd-360), 
-                                      abs(longitude_dd+360))) %>%
-               dplyr::select(year, longitude_dd, latitude_dd) %>% 
-               unique()
-  
-gg <- ggplot(data = dat0,
-             mapping = aes(x = longitude_dd, y = latitude_dd, group = factor(year))) +
-  coord_fixed(1.3) + 
-  geom_polygon(data = world,
-               mapping=aes(x=long, y=lat, group=group), 
-               color=NA, fill="lightgreen") +
-  geom_point(size = .05) +
-  ggplot2::ylim(range(dat0$latitude_dd)) + 
-  ggplot2::xlim(range(dat0$longitude_dd)) 
-
-if (length(unique(dat0$year))>20) {
-gg <- gg + 
-  facet_wrap("year", ncol = 4) 
-} else {
-# } else if (length(unique(dat0$year))>7) {
-  gg <- gg +
-  facet_wrap("year", ncol = 2)
-# } else {
-#   gg <- gg +
-#   facet_wrap("year", ncol = 1)
-}
-gg <- gg +
-  ggtitle(paste0(srvy0)) +
-  theme(panel.grid.major = element_line(colour = "grey90"), 
-        panel.background = element_rect(fill = NA,
-                                      colour = NA),
-        panel.border = element_rect(fill = NA,
-                                  colour = "grey20"),
-        strip.background = element_blank(), 
-        strip.text = element_text(size = 5, face = "bold"),
-        axis.text = element_blank(), 
-        axis.title = element_blank(), 
-        axis.ticks = element_blank())
-
-return(gg)
-}
-
+source("../code/check_functions.R")
 ```
 
 # 2021 old public data: Load and compile data
@@ -156,27 +20,27 @@ column names have been changed to match with the new data column names
 ```{r load_old, echo = FALSE}
 
 if (FALSE) {
-# This year's data: 
-a<-list.files(path = here::here("data", "publicdata", "2021"))
-df.ls <- list()
-for (i in 1:length(a)){
-  b <- read_csv(file = paste0(here::here("data", "publicdata", "2021", a[i])))
-  b$file <- a[i]
-  df.ls[[i]]<-b
-  names(df.ls)[i]<-a[i]
-}
-
-# 2021 old public data: Basic data clean
-
-data <- SameColNames(df.ls) %>% 
-  dplyr::mutate(srvy = toupper(str_extract(string = file, pattern = "[a-zA-Z]+"))) %>% 
-  dplyr::filter(!is.na(year))
-
-datdiff_between_cols<-data %>% 
-  dplyr::select(-file)
-
-write_csv(x = datdiff_between_cols, file = here::here("output", Sys.Date(),  "ak_gf_survey_public_2021.csv"))
-
+  # This year's data: 
+  a<-list.files(path = here::here("data", "publicdata", "2021"))
+  df.ls <- list()
+  for (i in 1:length(a)){
+    b <- read_csv(file = paste0(here::here("data", "publicdata", "2021", a[i])))
+    b$file <- a[i]
+    df.ls[[i]]<-b
+    names(df.ls)[i]<-a[i]
+  }
+  
+  # 2021 old public data: Basic data clean
+  
+  data <- SameColNames(df.ls) %>% 
+    dplyr::mutate(srvy = toupper(str_extract(string = file, pattern = "[a-zA-Z]+"))) %>% 
+    dplyr::filter(!is.na(year))
+  
+  datdiff_between_cols<-data %>% 
+    dplyr::select(-file)
+  
+  write_csv(x = datdiff_between_cols, file = paste0("../data/publicdata/ak_gf_survey_public_2021.csv"))
+  
 } else {
   data <- readr::read_csv(file = paste0("../data/publicdata/ak_gf_survey_public_2021.csv"))
 }
@@ -184,10 +48,11 @@ write_csv(x = datdiff_between_cols, file = here::here("output", Sys.Date(),  "ak
 data_old <- data %>% 
   dplyr::rename(surface_temperature_c = surf_temp, 
                 bottom_temperature_c = bot_temp, 
+                vessel_name = vessel, 
                 longitude_dd = longitude, 
                 latitude_dd = latitude, 
                 depth_m = bot_depth, 
-                date = datetime, 
+                date_time = datetime, 
                 cpue_kgha = wtcpue, 
                 cpue_noha = numcpue, 
                 species_code = sid, 
@@ -199,13 +64,15 @@ data_old <- data %>%
     srvy == "BSSLOPE" ~ "Bering Sea Slope", 
     srvy == "GOA" ~ "Gulf of Alaska", 
     srvy == "AI" ~ "Aleutian Islands")) %>% 
-  dplyr::mutate(date = 
-                  as.character(format(as.Date(date, format="%m/%d/%Y"),"%m/%d/%Y")), 
-    common_name = gsub(pattern = "  ", replacement = " ", 
-                       x = trimws(common_name), fixed = TRUE), 
-    scientific_name = gsub(pattern = "  ", replacement = " ", 
-                           x = trimws(scientific_name), fixed = TRUE)) %>%
-  dplyr::filter(!is.na(station)) # TESTING
+  dplyr::mutate(date_time = 
+                  as.character(format(as.Date(date_time, format="%m/%d/%Y"),"%m/%d/%Y")), 
+                common_name = gsub(pattern = "  ", replacement = " ", 
+                                   x = trimws(common_name), fixed = TRUE), 
+                scientific_name = gsub(pattern = "  ", replacement = " ", 
+                                       x = trimws(scientific_name), fixed = TRUE), 
+                area_swept_ha = NA, 
+                count = NA, 
+                weight_kg = NA) 
 
 data_old %>% 
   dplyr::mutate(srvy = as.factor(srvy), 
@@ -214,30 +81,24 @@ data_old %>%
                 scientific_name = as.factor(scientific_name) ,
                 station = as.factor(station), 
                 # vessel_name = as.factor(vessel_name), 
-                date = as.factor(date)) %>%
-    summary()
+                date_time = as.factor(date_time)) %>%
+  summary()
 ```
 
-are there NAs in the station column? why?
+## Check data_old for overarching structure and summarization issues
 
-```{r}
-data_old %>% 
-  dplyr::filter(is.na(station)) %>% 
-  dplyr::select(cruise, srvy) %>% 
-  table()
+```{r old_data_check}
+data_old0<-data_old # the OG data
+
+data_old<-data_check(data_old0) # run checks
 ```
 
-Are there duplicates/unsummarized data in the dataset?
+how many rows were removed using the data_check()
 
-```{r}
-data_old %>% 
-  dplyr::mutate(id = paste0(srvy,"-",cruise,"-",stratum,"-",station,"-",vessel_id)) %>%
-  dplyr::select(id, species_code) %>% 
-  table() %>% 
-  data.frame() %>% 
-  dplyr::filter(Freq > 1)
+```{r old_data_check_summary}
+print(paste0("how many rows were removed using the data_check()?: ", nrow(data_old0)-nrow(data_old) ))
+summary(data_old)
 ```
-
 
 
 # 2021 new public data: Load and compile data
@@ -247,9 +108,8 @@ if (FALSE){
   data_new <- readr::read_csv(file = paste0(".", dir_out, "cpue_biomass_station.csv"))
 }
 data_new <- data_new %>% 
-  dplyr::mutate(date = as.character(format(as.Date(date,
-                                      format="%m/%d/%Y"),"%m/%d/%Y"))) %>%
-  dplyr::filter(!is.na(station)) # TESTING
+  dplyr::mutate(date_time = as.character(format(as.Date(date_time,
+                                                   format="%m/%d/%Y"),"%m/%d/%Y")))
 
 data_new %>% 
   dplyr::mutate(srvy = as.factor(srvy), 
@@ -257,35 +117,52 @@ data_new %>%
                 common_name = as.factor(common_name), 
                 scientific_name = as.factor(scientific_name) ,
                 station = as.factor(station), 
-                date = as.factor(date)) %>% 
+                date_time = as.factor(date_time)) %>% 
   summary()
 ```
 
-are there NAs in the station column? why?
+## Check data_new for overarching structure and summarization issues
 
-```{r}
-data_new %>% 
-  dplyr::filter(is.na(station)) %>% 
-  dplyr::select(cruise, srvy) %>% 
-  table()
+```{r new_data_check}
+data_new0<-data_new # the OG data
+
+data_new<-data_check(data_new0) # run checks
 ```
 
-Are there duplicates/unsummarized data in the dataset?
+how many rows were removed using the data_check()
 
-```{r}
-data_new %>% 
-  dplyr::mutate(id = paste0(srvy,"-",cruise,"-",stratum,"-",station,"-",vessel_id)) %>%
-  dplyr::select(id, species_code) %>% 
-  table() %>% 
-  data.frame() %>% 
-  dplyr::filter(Freq > 1)
+```{r new_data_check_summary}
+print(paste0("how many rows were removed using the data_check()?: ", nrow(data_new0)-nrow(data_new) ))
+summary(data_new)
 ```
 
+
+## What does the new 2021 data look like?
+
+Look through new 2021 data and see if there were any -9999, NA, "", or 0's
+
+Note that this will only print where these trouble makers occurred if they occurred. 
+
+```{r trouble_makers}
+trouble <- c(-9999, NA, "", 0)
+cols <- names(data_new) 
+cols <- cols[cols != "date_time"]
+
+for (i in 1:length(trouble)){
+  print(paste0("------------- Are there any '", trouble[i], "' in these columns? -------------"))
+  for (ii in 1:length(cols)) {
+    a <- wheres_trouble(dat = data_new, col = cols[ii], trouble = trouble[i])
+    if (class(a) == "list") {
+      print(a) 
+    }
+  }
+}
+```
 
 # Bind new and old 2021 data to see where differences are
 
- - -9999 --> NA from cpue_noha and cpue_kgha in the old data so we can compare new and old more easily
- - commas (",") removed from old data (e.g., commas in "Clark, 2006" vs "Clark 2006") because I bet it doesn't matter. **Should the comma stay for the final product?**
+- -9999 --> NA from cpue_noha and cpue_kgha in the old data so we can compare new and old more easily
+- commas (",") removed from old data (e.g., commas in "Clark, 2006" vs "Clark 2006") because I bet it doesn't matter. **Should the comma stay for the final product?**
 
 ```{r bind_new_old}
 dat <- dplyr::full_join(
@@ -297,7 +174,13 @@ dat <- dplyr::full_join(
     dplyr::mutate(dataset = "old", 
                   cpue_kgha = ifelse(cpue_kgha == -9999, NA, cpue_kgha), 
                   cpue_noha = ifelse(cpue_noha == -9999, NA, cpue_noha)),
-  by = c("year", "vessel_id", "stratum", "station", "species_code", "haul", "cruise",  "srvy"))
+  by = c("year", "vessel_id", "stratum", "station", "species_code", "haul", "cruise",  "srvy")) %>% 
+  dplyr::mutate(dataset = dplyr::case_when(
+    (dataset.x == "new" & dataset.y == "old") ~ "both", 
+    dataset.y == "old" ~ "old", 
+    dataset.x == "new" ~ "new", 
+    TRUE ~ "neither")) %>% 
+  dplyr::select(-dataset.y, -dataset.x, -starts_with("survey."))
 
 dat
 ```
@@ -305,17 +188,12 @@ dat
 ## What observations are in new and not in old, visa versa
 
 column dataset = 
- - both = observations are in both new and old datasets
- - old = observations are only in the old dataset
- - new = observations are only in the new dataset
+- both = observations are in both new and old datasets
+- old = observations are only in the old dataset
+- new = observations are only in the new dataset
 
 ```{r id_dataset_origin}
-dat0 <- dat %>% 
-  dplyr::mutate(dataset = dplyr::case_when(
-    (dataset.x == "new" & dataset.y == "old") ~ "both", 
-    dataset.y == "old" ~ "old", 
-    dataset.x == "new" ~ "new", 
-    TRUE ~ "neither"))
+dat0 <- dat
 dat0 %>% 
   dplyr::select(dataset) %>% 
   table()
@@ -335,10 +213,10 @@ dat0 %>%
 ### species_code by survey
 
 ```{r new_spp_srvy}
-dat0 %>% 
-  dplyr::filter(dataset == "new") %>% # data only in new data, not in old data
-  dplyr::select(species_code, srvy) %>% 
-  table()
+# dat0 %>% 
+#   dplyr::filter(dataset == "new") %>% # data only in new data, not in old data
+#   dplyr::select(species_code, srvy) %>% 
+#   table()
 ```
 
 ## datasets only in the old data
@@ -355,10 +233,10 @@ dat0 %>%
 ### species_code by survey
 
 ```{r old_spp_srvy}
-dat0 %>% 
-  dplyr::filter(dataset == "old") %>% # data only in old data, not in new data
-  dplyr::select(species_code, srvy) %>% 
-  table() 
+# dat0 %>% 
+#   dplyr::filter(dataset == "old") %>% # data only in old data, not in new data
+#   dplyr::select(species_code, srvy) %>% 
+#   table() 
 ```
 
 ## Look through new and old 2021 data and note where differences are
@@ -367,21 +245,21 @@ Please let me know if there are any differences between these datasets that are 
 
 Note that this will only print where these trouble makers occurred if they occurred. 
 
- - characters: x = new; y = old; new | old
- - numbers: a summary table of where these differences occurred with additional columns for context (common_name, species_code, year, and srvy)
+- characters: x = new; y = old; new | old
+- numbers: a summary table of where these differences occurred with additional columns for context (common_name, species_code, year, and srvy)
 
 
 **Things to look out for in scientific names** (that we might want to make formative changes in "RACEBASE.SPECIES_CLASSIFICATION$report_name_scientific"): 
 
- - NOTE I already removed commas (see note above; bet it doesn't matter) from old data
- - "unid." and "uid" in new data vs [nothing] in old data
- - where "egg"/"egg case" is included in scientific names of old data and if it should be included in the new data. Should these "egg"/"egg case" notes only be included in the common name? 
- - ownership dispute between McLean and Clark (e.g., "Neptunea sp. E (McLean and Clark)" and "Neptunea sp. E (Clark and McLean)" and ..."(McLean & Clark))
+- NOTE I already removed commas (see note above; bet it doesn't matter) from old data
+- "unid." and "uid" in new data vs [nothing] in old data
+- where "egg"/"egg case" is included in scientific names of old data and if it should be included in the new data. Should these "egg"/"egg case" notes only be included in the common name? 
+- ownership dispute between McLean and Clark (e.g., "Neptunea sp. E (McLean and Clark)" and "Neptunea sp. E (Clark and McLean)" and ..."(McLean & Clark))
 
 
 **Other notes**
 
- - -9999 --> NA from cpue_noha and cpue_kgha in the old data so we can compare new and old more easily
+- -9999 --> NA from cpue_noha and cpue_kgha in the old data so we can compare new and old more easily
 
 ```{r differences_new_old}
 col <- gsub(pattern = ".x", replacement = "", 
@@ -391,8 +269,8 @@ col <- col[-length(col)]
 for(i in 1:length(col)) {
   a <- diff_between_cols(dat = dat, colx = paste0(col[i], ".x"), coly = paste0(col[i], ".y"))
   if (class(a) == "table") {
-     print(paste0("----- Differences between '", col[i], ".x' (new) and '", col[i], ".y' (old) -----"))
-     print(diff_between_cols(dat = dat, colx = paste0(col[i], ".x"), coly = paste0(col[i], ".y")))  
+    print(paste0("----- Differences between '", col[i], ".x' (new) and '", col[i], ".y' (old) -----"))
+    print(diff_between_cols(dat = dat, colx = paste0(col[i], ".x"), coly = paste0(col[i], ".y")))  
   }
 }
 ```
@@ -412,12 +290,12 @@ dat0 <- dat %>%
   dplyr::arrange(-cpue_kgha_diff, -cpue_noha_diff)
 
 readr::write_csv(dat0, 
-  file = here::here("output", Sys.Date(), "diff_xnew_yold.csv"))
+                 file = paste0(".", dir_out, "diff_xnew_yold.csv"))
 
 summary(dat0)
 ```
 
-# How do CPUE values compare with our design-based CPUE estimates?
+# Compare with our design-based CPUE estimates?
 
 Here I am compiling the EBS, NBS, GOA, AI verified, design-based datasets
 
@@ -427,16 +305,16 @@ design_based1 <- dplyr::bind_rows(
   readr::read_csv(file = "../data/oracle/cpue_ai.csv"), 
   readr::read_csv(file = "../data/oracle/cpue_goa.csv")) %>% 
   janitor::clean_names() %>% 
-    dplyr::left_join(
-      x = ., 
-      y = haul %>% 
-        dplyr::select(hauljoin, stationid, start_latitude, start_longitude), 
-      by = "hauljoin")  %>% 
-    dplyr::left_join(
-      x = ., 
-      y = spp_info %>% 
-        dplyr::select(common_name, scientific_name, species_code), 
-      by = "species_code") %>% 
+  dplyr::left_join(
+    x = ., 
+    y = haul0 %>% 
+      dplyr::select(hauljoin, stationid, start_latitude, start_longitude), 
+    by = "hauljoin")  %>% 
+  dplyr::left_join(
+    x = ., 
+    y = spp_info %>% 
+      dplyr::select(common_name, scientific_name, species_code), 
+    by = "species_code") %>% 
   dplyr::select(-x1, -catchjoin) %>% 
   dplyr::rename(latitude = start_latitude, 
                 longitude = start_longitude, 
@@ -447,17 +325,17 @@ design_based1 <- dplyr::bind_rows(
                 area_swept_ha = effort*100) # denominator orig in km2
 
 design_based2 <- dplyr::bind_rows(
-    readr::read_csv(file = "../data/oracle/cpue_ebs_plusnw.csv") %>% 
-      dplyr::mutate(survey = "EBS"), 
-    readr::read_csv(file = "../data/oracle/cpue_nbs.csv") %>% 
-      dplyr::mutate(survey = "NBS")) %>% 
+  readr::read_csv(file = "../data/oracle/cpue_ebs_plusnw.csv") %>% 
+    dplyr::mutate(survey = "EBS"), 
+  readr::read_csv(file = "../data/oracle/cpue_nbs.csv") %>% 
+    dplyr::mutate(survey = "NBS")) %>% 
   janitor::clean_names() %>% 
   dplyr::select(-x1)  %>% 
   dplyr::left_join(
-      x = ., 
-      y = haul %>% 
-        dplyr::select(hauljoin, cruise, distance_fished, net_width), 
-      by = "hauljoin") %>% 
+    x = ., 
+    y = haul %>% 
+      dplyr::select(hauljoin, cruise, distance_fished, net_width), 
+    by = "hauljoin") %>% 
   dplyr::mutate(weight_kg = NA, 
                 count = NA) %>% 
   dplyr::rename(area_swept_ha = area_fished_ha, 
@@ -470,53 +348,29 @@ design_based <- dplyr::bind_rows(design_based1, design_based2) %>%
                 net_width_m = net_width, 
                 station = stationid, 
                 latitude_dd = latitude, 
-                longitude_dd = longitude)  #%>%
-  # dplyr::filter(!is.na(station)) # TESTING
+                longitude_dd = longitude)
 
-dim(design_based) # before summary
+dim(design_based) # before summarizing
 summary(design_based)
-
+design_based0<-design_based
 ```
 
+## Check design_based for overarching structure and summarization issues
 
-```{r}
-# Are there duplicates/unsummarized data in the dataset?
-a<-design_based %>% 
-  dplyr::mutate(id = paste0(srvy,"-",cruise,"-",stratum,"-",station,"-",vessel_id)) %>%
-  dplyr::select(id, species_code) %>% 
-  table() %>% 
-  data.frame() %>% 
-  dplyr::filter(Freq > 1)
+```{r design_based_check}
+design_based0<-design_based # the OG data
 
-b<-design_based %>% 
-  dplyr::mutate(id = paste0(cruise,"-",stratum,"-",station,"-",vessel_id)) %>%
-  dplyr::select(srvy, id, species_code) %>% 
-  table() %>% 
-  data.frame() %>% 
-  dplyr::filter(Freq > 1)
-summary(b)
+design_based<-data_check(dat = design_based0) # run checks
 ```
 
-```{r}
-# summarising bc there are duplicates in some of the AI and GOA(?) design based indicies
-design_based <- design_based %>% 
-  dplyr::group_by(srvy, year, hauljoin, vessel_id, cruise, haul, stratum, station, 
-                  common_name, scientific_name, species_code) %>% 
-  dplyr::summarise(distance_fished_km = mean(distance_fished_km, na.rm = TRUE), 
-                   net_width_m = mean(net_width_m, na.rm = TRUE), 
-                   weight_kg = sum(weight_kg, na.rm = TRUE), 
-                   count = sum(count, na.rm = TRUE),  
-                  latitude_dd = mean(latitude_dd, na.rm = TRUE), 
-                  longitude_dd = mean(longitude_dd, na.rm = TRUE), 
-                  cpue_kgha = sum(cpue_kgha, na.rm = TRUE), 
-                  cpue_noha = sum(cpue_noha, na.rm = TRUE), 
-                  area_swept_ha = sum(area_swept_ha, na.rm = TRUE)) 
+how many rows were removed using the data_check()
 
-dim(design_based) # after summary
-
+```{r design_based_check_summary}
+print(paste0("how many rows were removed using the data_check()?: ", nrow(design_based0)-nrow(design_based) ))
 summary(design_based)
-
 ```
+
+## Compare data_new to design_based data
 
 And now I am joining the new data and the designed based data together to see where differences arise. 
 
@@ -526,21 +380,21 @@ dat <- dplyr::full_join(
   x = data_new %>% 
     dplyr::select(common_name, species_code, scientific_name, 
                   cpue_kgha, cpue_noha, 
-                  area_swept_ha, distance_fished_km, net_width_m, 
+                  area_swept_ha, #distance_fished_km, net_width_m, 
                   haul, cruise, station, stratum, srvy, 
                   count, weight_kg,
                   vessel_id, latitude_dd, longitude_dd, year),
   y = design_based %>% 
     dplyr::select(common_name, species_code, scientific_name, 
                   cpue_kgha, cpue_noha, 
-                  area_swept_ha, distance_fished_km, net_width_m, 
+                  area_swept_ha, #distance_fished_km, net_width_m, 
                   haul, cruise, station, stratum, srvy, 
                   count, weight_kg,
                   vessel_id, latitude_dd, longitude_dd, year), 
   by = c("year", "haul", "cruise", "srvy", "species_code", "vessel_id", "stratum", "station")) %>%
   dplyr::mutate(dplyr::across(dplyr::starts_with("cpue_"), round, digits = 2), 
                 dplyr::across(dplyr::starts_with("area_swept_"), round, digits = 4)) 
- 
+
 col <- gsub(pattern = ".x", replacement = "", 
             x = names(dat)[grep(pattern = ".x", x = names(dat), fixed = TRUE)])
 
@@ -550,8 +404,8 @@ for(i in 1:length(col)) {
                          colx = paste0(col[i], ".x"), 
                          coly = paste0(col[i], ".y"))
   if (class(a) == "table") {
-     print(paste0("----- Differences between '", col[i], ".x' (public) and '", col[i], ".y' (design) -----"))
-     print(diff_between_cols(dat = dat, colx = paste0(col[i], ".x"), coly = paste0(col[i], ".y")))  
+    print(paste0("----- Differences between '", col[i], ".x' (new public) and '", col[i], ".y' (design) -----"))
+    print(diff_between_cols(dat = dat, colx = paste0(col[i], ".x"), coly = paste0(col[i], ".y")))  
   }
 }
 
@@ -563,19 +417,12 @@ dat0 <- dat %>%
     cpue_kgha_diff = cpue_kgha.x-cpue_kgha.y, 
     cpue_noha_diff = cpue_noha.x-cpue_noha.y, 
     area_swept_ha_diff = area_swept_ha.x-area_swept_ha.y) %>% 
-  dplyr::select(-distance_fished_km.x, -net_width_m.x, -latitude_dd.x, -longitude_dd.x, 
-                -distance_fished_km.y, -net_width_m.y, -latitude_dd.y, -longitude_dd.y, 
+  dplyr::select(#-distance_fished_km.x, -net_width_m.x, -latitude_dd.x, -longitude_dd.x, 
+                #-distance_fished_km.y, -net_width_m.y, -latitude_dd.y, -longitude_dd.y, 
                 -common_name.y, -scientific_name.y) %>% 
   dplyr::filter(cpue_kgha_diff >= 0.01 | 
-                  # ((is.na(cpue_kgha_diff) & !is.na(cpue_kgha.x)) | 
-                  #    (is.na(cpue_kgha_diff) & !is.na(cpue_kgha.y))) | 
-                  cpue_noha_diff >= 0.01 | #is.na(cpue_noha_diff) | 
-                  # ((is.na(cpue_noha_diff) & !is.na(cpue_noha.x)) | 
-                  #    (is.na(cpue_noha_diff) & !is.na(cpue_noha.y))) | 
-                  area_swept_ha_diff >= 0.01 # | 
-                  # ((is.na(area_swept_ha_diff) & !is.na(area_swept_ha.x)) | 
-                  #    (is.na(area_swept_ha_diff) & !is.na(area_swept_ha.y)))                  
-                ) %>% 
+                  cpue_noha_diff >= 0.01 | 
+                  area_swept_ha_diff >= 0.01 ) %>% 
   dplyr::arrange(srvy, cruise, haul, vessel_id, -cpue_kgha_diff, -cpue_noha_diff, -area_swept_ha_diff) %>% 
   dplyr::relocate(year, srvy, cruise, haul, station, stratum, vessel_id, 
                   species_code, common_name.x, 
@@ -583,38 +430,14 @@ dat0 <- dat %>%
                   weight_kg.x, weight_kg.y, cpue_kgha.x, cpue_kgha.y, cpue_kgha_diff, 
                   count.x, count.y, cpue_kgha.x, cpue_kgha.y, cpue_kgha_diff)
 
-# dat0 <- dat0[,order(colnames(dat0))]
-
 readr::write_csv(dat0, 
-  file = here::here("output", Sys.Date(), "diff_xnew_ydesign.csv"))
+                 file = paste0("./", dir_out, "diff_xnew_ydesign.csv"))
 
 summary(dat0)
 ```
 
 
-# What does the new 2021 data look like?
-
-## Look through new 2021 data and see if there were any -9999, NA, "", or 0's
-
-Note that this will only print where these trouble makers occurred if they occurred. 
-
-```{r trouble_makers}
-trouble <- c(-9999, NA, "", 0)
-cols <- names(data_new) 
-cols <- cols[cols != "date"]
-
-for (i in 1:length(trouble)){
-  print(paste0("------------- Are there any '", trouble[i], "' in these columns? -------------"))
-  for (ii in 1:length(cols)) {
-     a <- wheres_trouble(dat = data_new, col = cols[ii], trouble = trouble[i])
-      if (class(a) == "list") {
-        print(a) 
-      }
-  }
-}
-```
-
-# What stations for each year and survey look like
+# What stations for each year and survey look like in the new public data
 
 ```{r station_map, fig.height = 10, fig.width = 7}
 for (i in 1:length(unique(data_new$srvy))) {

@@ -6,17 +6,20 @@
 #' Notes: 
 #' ---------------------------------------------
 
-# ISSUES
-# is the final _startum data 0 filled? Should it be zero filled? e.g., an entry of 0 for stations/hauls where a spp wasnt found
-# round cpue to .0001 and if positivie but less than 0.0001 = 0.0001?
+# ISSUES ----------------------------------------------------------------------
 
+# round cpue to .0001 and if positivie but less than 0.0001 = 0.0001?
 # remove data observations where spp count and weight are 0
+# including Mike Litzow and SAP into process - should we use retow data to replace data where retows were done??
+# summarize data in RACEBASE.HAUL by species_code or keep catchjoin? What does catchjoin mean?
+# why are there NAs in the old public data stations? What use does that serve?
+# Here I summarize by srvy, cruise, stratum, station, haul, and vessel_id - why are there stations in the same survey year with different haul numbers?
 
 # START ------------------------------------------------------------------------
 
 # *** REPORT KNOWNS ------------------------------------------------------------
 
-maxyr <- 2021 
+maxyr <- 2021
 
 # The surveys we will consider covering
 surveys <- 
@@ -26,26 +29,28 @@ surveys <-
                            "eastern Bering Sea", 
                            "Gulf of Alaska", 
                            "Aleutian Islands", 
-                           "Bering Sea Slope"))
+                           "Bering Sea Slope") )
 
-# for (i in 1:) {
-# a <- paste0(akgfmaps::get_base_layers(select.region = "ebs")$survey.strata$Stratum, ", ", collapse = "")
-# # a<-a[1:(nchar(a)-2)]
-# }
+use_catchjoin <- FALSE
+if (use_catchjoin) {
+  dir_out <- paste0("./output/", Sys.Date(),"_catchjoin/")
+} else {
+  dir_out <- paste0("./output/", Sys.Date(),"/")
+}
 
 # *** SOURCE SUPPORT SCRIPTS ---------------------------------------------------
 
 # source('./code/dataDL.R')
 source('./code/functions.R')
 source('./code/data.R')
-
-dir_out <- paste0("./output/", Sys.Date(),"/")
+# source('./code/data_catchjoin.R')
 
 # Run Analysis -----------------------------------------------------------------
 
 
 if (FALSE) {
   source('./code/analysis.R')
+  # source('./code/analysis_catchjoin.R')
 } else {
   data_new <- readr::read_csv(
     file = paste0(dir_out, "cpue_biomass_station.csv"))
@@ -55,6 +60,6 @@ if (FALSE) {
 
 rmarkdown::render(paste0("./code/check.Rmd"),
                   output_dir = dir_out,
-                  output_file = paste0("check.pdf"))
+                  output_file = paste0("check",ifelse(use_catchjoin, "_catchjoin", ""),".pdf"))
 
 

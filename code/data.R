@@ -18,7 +18,7 @@ for (i in 1:length(a)){
   if (names(b)[1] %in% "x1"){
     b$x1<-NULL
   }
-  assign(x = gsub(pattern = "\\.csv", replacement = "", x = paste0(a[i], "0")), value = b)
+  assign(x = gsub(pattern = "\\.csv", replacement = "", x = paste0(a[i], "0")), value = b) # 0 at the end of the name indicates that it is the orig unmodified file
 }
 
 ## Taxonomic confidence data ---------------------------------------------------
@@ -69,19 +69,18 @@ for (i in 1:length(a)){
 }
 
 # any duplicates in any taxon confidence tables?
-# SameColNames(df.ls) %>% 
+# SameColNames(df.ls) %>%
 #        dplyr::group_by(srvy) %>%
 #        dplyr::filter(year == min(year)) %>%
 #        dplyr::ungroup() %>%
-#        dplyr::select(species_code, srvy) %>% 
+#        dplyr::select(species_code, srvy) %>%
 #        table() %>% # sets up frequency table
-#        data.frame() %>% 
+#        data.frame() %>%
 #        dplyr::filter(Freq > 1)
 
 tax_conf <- SameColNames(df.ls) %>% 
   dplyr::rename(SRVY = srvy) %>%
-  dplyr::mutate(
-                tax_conf = dplyr::case_when(
+  dplyr::mutate(tax_conf = dplyr::case_when(
     tax_conf == 1 ~ "High",
     tax_conf == 2 ~ "Moderate",
     tax_conf == 3 ~ "Low", 
@@ -98,13 +97,14 @@ spp_info <- species0 %>%
                 scientific_name = gsub(pattern = "  ", replacement = " ", 
                                        x = trimws(scientific_name), fixed = TRUE))
 
-## cruises + maxyr  + compareyr ------------------------------------------------
+## cruises ------------------------------------------------
+
 cruises <-  
   dplyr::left_join(
-    y = surveys, 
+    x = surveys, 
     y = v_cruises0, 
-    by  = "survey_definition_id") %>% 
-  dplyr::select(cruise_id,  year, survey_name, vessel_id, cruise, survey_definition_id, 
+    by  = c("survey_definition_id")) %>% 
+  dplyr::select(SRVY, SRVY_long, region, cruise_id,  year, survey_name, vessel_id, cruise, survey_definition_id, 
                 vessel_name, start_date, end_date, cruisejoin) %>% 
   dplyr::filter(year != 2020 & # no surveys happened this year that I care about
                   year >= 1982 &
@@ -112,57 +112,135 @@ cruises <-
                   survey_definition_id %in% surveys$survey_definition_id) %>% 
   dplyr::rename(vessel = "vessel_id")
 
-## haul + maxyr ----------------------------------------------------------------
-haul <- dplyr::left_join(
-    x = haul0, 
-    y = cruises %>% 
-      dplyr::select(cruisejoin, survey_definition_id, SRVY, SRVY_long), 
-    by = "cruisejoin") %>%  
-  dplyr::mutate(year = as.numeric(format(as.Date(haul0$start_time, 
-                                                 format="%m/%d/%Y"),"%Y"))) %>%
-  dplyr::filter(year <= maxyr &
-                  abundance_haul == "Y" &
-                  haul_type == 3 &
-                  performance >= 0 &
-                  !(is.null(stationid)) &
-                  survey_definition_id %in% surveys$survey_definition_id) %>% 
-  dplyr::select(-auditjoin) 
+## haul ----------------------------------------------------------------
 
+haul <- haul0 %>%
+  # dplyr::mutate(year = as.numeric(format(as.Date(haul0$start_time, 
+  #                                                format="%m/%d/%Y"),"%Y"))) %>%
+  dplyr::filter(
+    abundance_haul == "Y" &
+    haul_type == 3 &
+    performance >= 0 &
+    !(is.null(stationid)) &
+    !(is.na(stationid)) ) %>% 
+  dplyr::select(-auditjoin, -net_measured) 
+
+# > dim(haul)
+# [1] 33909    29
 
 ## station_info ----------------------------------------------------------------
 
-station_info <- haul %>% 
-  dplyr::select(stationid, stratum, start_latitude, start_longitude, SRVY) %>%
-  dplyr::group_by(stationid, stratum, SRVY) %>%
-  dplyr::summarise(start_latitude = mean(start_latitude, na.rm = TRUE),
-                   start_longitude = mean(start_longitude, na.rm = TRUE)) 
+# station_info <- haul %>% 
+#   dplyr::select(stationid, stratum, stasrt_latitude, start_longitude, SRVY) %>%
+#   dplyr::group_by(stationid, stratum, SRVY) %>%
+#   dplyr::summarise(start_latitude = mean(start_latitude, na.rm = TRUE),
+#                    start_longitude = mean(start_longitude, na.rm = TRUE)) 
 
-# *** catch --------------------------------------------------------------------
+## catch --------------------------------------------------------------------
 
-catch <- catch0 
+catch <- catch0 %>% 
+  dplyr::select(-subsample_code, -voucher, -auditjoin)
 
-# *** catch_haul_cruises + _maxyr + maxyr-1-----------------------------------------------
+# dim(catch) # 2021
+# [1] 1613690      10
 
-  catch_haul_cruises<-
-    dplyr::left_join(
-      x = haul %>% 
-        dplyr::select(cruisejoin, hauljoin, stationid, stratum, haul, start_time, 
-                      start_latitude, start_longitude, 
-                      end_latitude, end_longitude, 
-                      bottom_depth, gear_temperature, surface_temperature, performance, 
-                      "duration", "distance_fished" ,"net_width" ,"net_measured", "net_height"), 
-      y = cruises %>% 
-        dplyr::select(cruisejoin, survey_name, SRVY, year, cruise),  
-      by = c("cruisejoin")) %>% 
-    dplyr::left_join(
-      x= ., 
-      y = catch %>% 
-        dplyr::select(cruisejoin, hauljoin,
-                      species_code, weight,
-                      number_fish, subsample_code), 
-      by = c("hauljoin", "cruisejoin")) %>% 
-    dplyr::left_join(x = ., 
-                     y = tax_conf, 
-                     by = c("species_code", "SRVY", "year")) 
+if (use_catchjoin) {
+  
+# ## weight and number_fish mismatch when summarized by species_code
+# catch %>% 
+#   dplyr::mutate(id = paste0(region, "_", cruisejoin, "_", hauljoin, "_", species_code)) %>%
+#   dplyr::select(id) %>%
+#   table() %>%
+#   data.frame() %>%
+#   dplyr::rename("id" = ".") %>% 
+#   dplyr::filter(Freq > 1)
+# 
+# ## no weight and number_fish mismatch when summarized by catchjoin - WHY? Do we need that specificity? assuming not...?
+# catch %>% 
+#   dplyr::mutate(id = paste0(region, "_", cruisejoin, "_", hauljoin, "_", catchjoin)) %>% # how is species_code not redundnat to catchjoin?
+#   dplyr::select(id) %>%
+#   table() %>%
+#   data.frame() %>%
+#   dplyr::rename("id" = ".") %>% 
+#   dplyr::filter(Freq > 1)
+# 
+# catch_haul_cruises %>%
+#   dplyr::filter(SRVY == "AI" &
+#                   cruisejoin == 1138955 &
+#                   hauljoin == 1139161 &
+#                   species_code == 91030)
+# 
+# catch %>%
+#   dplyr::filter(region == "AI" &
+#                   cruisejoin == 1138955 &
+#                   hauljoin == 1139161 &
+#                   species_code == 91030)
+# 
+# catch %>%
+#   dplyr::filter(region == "AI" &
+#                   cruisejoin == 327 &
+#                   hauljoin == 32854 &
+#                   species_code == 21341)
+# 
+# catch %>%
+#   dplyr::filter(region == "GOA" &
+#                   cruisejoin == 881074 &
+#                   hauljoin == 881110 &
+#                   species_code == 91030)
+# 
+# catch %>%
+#   dplyr::filter(region == "GOA" &
+#                   cruisejoin == 881074 &
+#                   hauljoin == 881111 &
+#                   species_code == 91030)
 
+# if we don't use catchjoin, we need to summarize by species_code... right?
 
+catch <- catch %>% 
+  dplyr::group_by(region, cruisejoin, hauljoin, vessel, haul, species_code) %>% 
+  dplyr::summarise(weight = sum(weight, na.rm = TRUE), 
+                   number_fish = sum(number_fish, na.rm = TRUE))
+
+# dim(catch) # 2021
+# [1] 1613668       7
+
+}
+## catch_haul_cruises + _maxyr + maxyr-1-----------------------------------------------
+
+catch_haul_cruises <-
+  dplyr::inner_join(
+    x = cruises %>% 
+      dplyr::select(cruisejoin, vessel, region,  
+                    survey_definition_id, SRVY, SRVY_long, survey_name, year, cruise),  
+    y = haul %>% 
+      dplyr::select(cruisejoin, vessel, region, 
+                    hauljoin, stationid, stratum, haul, start_time, 
+                    start_latitude, start_longitude, end_latitude, end_longitude, 
+                    bottom_depth, gear_temperature, surface_temperature, performance, 
+                    duration, distance_fished, net_width, net_height), 
+    by = c("cruisejoin", "vessel", "region")) %>% 
+  dplyr::left_join(
+    x= ., 
+    y = catch %>% 
+      dplyr::select(cruisejoin, hauljoin, region, vessel, haul, if(use_catchjoin){all_vars("catchjoin")}, 
+                    species_code, weight, number_fish), 
+    by = c("hauljoin", "cruisejoin", "region", "vessel", "haul")) %>% 
+  dplyr::left_join(x = ., 
+                   y = tax_conf %>% 
+                     dplyr::select(year, tax_conf, SRVY, species_code), 
+                   by = c("species_code", "SRVY", "year"))  %>%
+  dplyr::left_join(
+    x = .,
+    y = vessels0 %>%
+      dplyr::select(vessel_id, name) %>%
+      dplyr::rename(vessel_name = name) %>% 
+      dplyr::mutate(vessel_name = stringr::str_to_title(vessel_name)), 
+    by = c("vessel" = "vessel_id")) %>%
+  dplyr::left_join(
+    x = .,
+    y = spp_info %>%
+      dplyr::select(species_code, scientific_name, common_name),
+    by = "species_code")
+
+# dim(catch_haul_cruises) # 2021
+# [1] 922757     33
