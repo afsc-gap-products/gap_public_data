@@ -32,11 +32,7 @@ surveys <-
                            "Bering Sea Slope") )
 
 use_catchjoin <- FALSE
-if (use_catchjoin) {
-  dir_out <- paste0("./output/", Sys.Date(),"_catchjoin/")
-} else {
-  dir_out <- paste0("./output/", Sys.Date(),"/")
-}
+dir_out <- paste0("./output/", Sys.Date(),"/")
 
 # *** SOURCE SUPPORT SCRIPTS ---------------------------------------------------
 
@@ -51,15 +47,14 @@ source('./code/data.R')
 if (FALSE) {
   source('./code/analysis.R')
   # source('./code/analysis_catchjoin.R')
-} else {
-  data_new <- readr::read_csv(
-    file = paste0(dir_out, "cpue_biomass_station.csv"))
+# } else {
+#   data_new <- readr::read_csv(
+#     file = paste0(dir_out, "cpue_biomass_station.csv"))
 }
 
 # Check work -------------------------------------------------------------------
 
 rmarkdown::render(paste0("./code/check.Rmd"),
                   output_dir = dir_out,
-                  output_file = paste0("check",ifelse(use_catchjoin, "_catchjoin", ""),".pdf"))
-
+                  output_file = paste0("check.docx"))
 

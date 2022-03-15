@@ -142,29 +142,92 @@ data_check <- function(dat) {
   
   data <- data0 <- data1 <- dat
   
-  print("------------ Are there NAs in the station column? ...why? ------------")
+  print("------------ Are there NAs or 0s in the station column? ...why? ------------")
   
   temp <- data0 %>% 
-    dplyr::filter(is.na(station)) %>% 
-    dplyr::select(cruise, srvy) %>% 
+    dplyr::filter(station %in% c(0, NA)) %>% 
+    dplyr::mutate(id = paste0(srvy,"_",cruise)) %>%
+    dplyr::select(id) %>% 
     table() %>% 
-    data.frame() 
+    data.frame()
   
   if (nrow(temp)>0) {
-    temp <- temp %>% 
-      dplyr::filter(Freq > 1)
-  }
-  
-  if (nrow(temp)>0){
     
     data <- data %>%
-      dplyr::filter(!is.na(station))  
+      dplyr::filter(!(station %in% c(0, NA)))  
     
     data1 <- data0 %>%
-      dplyr::filter(!is.na(station)) 
+      dplyr::filter(!(station %in% c(0, NA))) 
     
-    print(paste0("Yes, there are ", nrow(temp),
-                 " unique instances where there were NAs in the station names. This removed ",
+    print(paste0("Yes, there were ",nrow(temp)," survey-cruise combinations where there were NAs or 0s in the station names."))
+    print(paste0("This removed ",
+                 nrow(data0)-nrow(data1),
+                 " rows from the initial dataset."))
+    
+    if (nrow(temp)<20) {
+      print(temp)
+    } else {
+      print("here are the first 6 rows:")
+      print(head(temp))
+    }
+    
+  } else {
+    print("Nope! No rows were removed from the dataset for this issue. ")
+  }
+  
+  print("------------ Are there NAs or 0s in the stratum column? ...why? ------------")
+  
+  temp <- data0 %>% 
+    dplyr::filter((stratum %in% c(0, NA))) %>% 
+    dplyr::mutate(id = paste0(srvy,"_",cruise)) %>%
+    dplyr::select(id) %>% 
+    table() %>% 
+    data.frame()
+  
+  if (nrow(temp)>0) {
+    
+    data <- data %>%
+      dplyr::filter(!(stratum %in% c(0, NA)))  
+    
+    data1 <- data0 %>%
+      dplyr::filter(!(stratum %in% c(0, NA))) 
+    
+    print(paste0("Yes, there were ",nrow(temp)," survey-cruise combinations where there were NAs or 0s in the stratum names."))
+    print(paste0("This removed ",
+                 nrow(data0)-nrow(data1),
+                 " rows from the initial dataset."))
+    
+    if (nrow(temp)<20) {
+      print(temp)
+    } else {
+      print("here are the first 6 rows:")
+      print(head(temp))
+    }
+    
+  } else {
+    print("Nope! No rows were removed from the dataset for this issue. ")
+  }
+  
+  
+  print("------------ Are there NAs or 0s in the species_code column? ...why? ------------")
+  
+  temp <- data0 %>% 
+    dplyr::filter((species_code %in% c(0, NA))) %>% 
+    dplyr::mutate(id = paste0(srvy,"_",cruise)) %>%
+    dplyr::select(id) %>% 
+    table() %>% 
+    data.frame()
+  
+  if (nrow(temp)>0) {
+    
+    data <- data %>%
+      dplyr::filter(!(species_code %in% c(0, NA)))  
+    
+    data1 <- data0 %>%
+      dplyr::filter(!(species_code %in% c(0, NA))) 
+    
+    print(paste0("Yes, there were ",nrow(temp)," survey-cruise combinations where there were NAs or 0s in the species_code names."))
+    print(paste0("This removed ",
                  nrow(data0)-nrow(data1),
                  " rows from the initial dataset."))
     
@@ -195,8 +258,8 @@ data_check <- function(dat) {
       dplyr::filter( # this will remove usless 0-cpue values, which shouldn't happen, but good to double check
         !(cpue_kgha %in% c(NA, 0) & cpue_noha %in% c(NA, 0)) ) # !(cpue_kgha == 0 & cpue_noha == 0)
     
-    print(paste0("Yes, there are ", nrow(temp),
-                 " unique instances with 0s ro NAs in both the cpue_kgha and cpue_noha columns. This removed ",
+    print(paste0("Yes, there are 0s ro NAs in both the cpue_kgha and cpue_noha columns."))
+    print(paste0("This removed ",
                  nrow(data0)-nrow(data1),
                  " rows from the initial dataset.")) 
     
@@ -213,103 +276,111 @@ data_check <- function(dat) {
   
   
   
-  if (sum(names(data0) %in% c("count", "weight_kg"))>0) {
-    
-    
-    print("------------ Are there rows with 0s in the count and weight_kg columns? ------------")
-    
-    temp <- data0 %>%
-      dplyr::filter( # this will remove usless 0-cpue values, which shouldn't happen, but good to double check
-        (count %in% c(NA, 0) & weight_kg %in% c(NA, 0)) ) 
-    
-    if (nrow(temp)>0){
-      
-      data <- data %>%
-        dplyr::filter( # this will remove usless 0-cpue values, which shouldn't happen, but good to double check
-          !(count %in% c(NA, 0) & weight_kg %in% c(NA, 0)) ) 
-      
-      data1 <- data0 %>%
-        dplyr::filter( # this will remove usless 0-cpue values, which shouldn't happen, but good to double check
-          !(count %in% c(NA, 0) & weight_kg %in% c(NA, 0)) ) 
-      
-      print(paste0("Yes, there are ", nrow(temp),
-                   " unique instances with 0s or NAs in both the count and weight_kg columns. This removed ",
-                   nrow(data0)-nrow(data1),
-                   " rows from the initial dataset.")) 
-      
-      if (nrow(temp)<20) {
-        print(temp)
-      } else {
-        print("here are the first 6 rows:")
-        print(head(temp))
-      }
-      
-    } else {
-      print("Nope! No rows were removed from the dataset for this issue. ")
-    }
-    
-  }
+  # if (sum(names(data0) %in% c("count", "weight_kg"))>0) {
+  # 
+  #   print("------------ Are there rows with 0s in the count and weight_kg columns? ------------")
+  #   
+  #   temp <- data0 %>%
+  #     dplyr::filter( # this will remove usless 0-cpue values, which shouldn't happen, but good to double check
+  #       (count %in% c(NA, 0) & weight_kg %in% c(NA, 0)) ) 
+  #   
+  #   if (nrow(temp)>0){
+  #     
+  #     data <- data %>%
+  #       dplyr::filter( # this will remove usless 0-cpue values, which shouldn't happen, but good to double check
+  #         !(count %in% c(NA, 0) & weight_kg %in% c(NA, 0)) ) 
+  #     
+  #     data1 <- data0 %>%
+  #       dplyr::filter( # this will remove usless 0-cpue values, which shouldn't happen, but good to double check
+  #         !(count %in% c(NA, 0) & weight_kg %in% c(NA, 0)) ) 
+  #     
+  #     print(paste0("Yes, there are 0s or NAs in both the count and weight_kg columns."))
+  #     print(paste0("This removed ",
+  #                  nrow(data0)-nrow(data1),
+  #                  " rows from the initial dataset.")) 
+  #     
+  #     if (nrow(temp)<20) {
+  #       print(temp)
+  #     } else {
+  #       print("here are the first 6 rows:")
+  #       print(head(temp))
+  #     }
+  #     
+  #   } else {
+  #     print("Nope! No rows were removed from the dataset for this issue. ")
+  #   }
+  #   
+  # }
   
   print("------------ Are there duplicates/unsummarized data in the dataset? ------------")
   
   
-  # To be able to match my data, we'll need to summarize the data so there is one spp observation per haul. For this example, I will summarize on srvy, cruise, stratum, station, haul, and vessel_id
-  
-  # I have no way of knowing if/how catchjoin or other *join columns were used to create the OG data
-  
-  
+  # # To be able to match my data, we'll need to summarize the data so there is one spp observation per haul. For this example, I will summarize on srvy, cruise, stratum, station, haul, and vessel_id
+  # 
+  # # I have no way of knowing if/how catchjoin or other *join columns were used to create the OG data
+  # 
+  # 
   # print("******* Test1: group_by: srvy, cruise, stratum, station, and vessel_id")
   # 
-  # temp <- data0 %>% 
+  # temp <- data %>%
   #   dplyr::mutate(id = paste0(srvy,"_",cruise,"_",stratum,"_",station,"_",vessel_id)) %>%
   #   dplyr::select(id, species_code) %>%
-  #   table() %>% 
-  #   data.frame() %>% 
-  #   dplyr::filter(Freq > 1) %>% 
+  #   table() %>%
+  #   data.frame() %>%
+  #   dplyr::filter(Freq > 1) %>%
   #   dplyr::arrange(-Freq, id)
   # 
   # 
+  # data0 %>%
+  #   dplyr::filter(srvy == "AI" &
+  #                   cruise == 199401 &
+  #                   stratum == 322 &
+  #                   station == "112-22" &
+  #                   vessel_id == 94 &
+  #                   species_code == 21720)
+  # 
+  # 
   # if (nrow(temp)>0){
-  #   
+  # 
   #   # data <- data %>%
-  #   #   dplyr::group_by(srvy, cruise, stratum, station, vessel_id, # haul, 
-  #   #                   year, survey, common_name, species_code, scientific_name, 
-  #   #                   longitude_dd, latitude_dd, date_time, 
-  #   #                   surface_temperature_c, bottom_temperature_c, depth_m) %>% 
-  #   #   dplyr::summarise(cpue_kgha = sum(cpue_kgha, na.rm = TRUE), 
+  #   #   dplyr::group_by(srvy, cruise, stratum, station, vessel_id, # haul,
+  #   #                   year, survey, common_name, species_code, scientific_name,
+  #   #                   longitude_dd, latitude_dd, date_time,
+  #   #                   surface_temperature_c, bottom_temperature_c, depth_m) %>%
+  #   #   dplyr::summarise(cpue_kgha = sum(cpue_kgha, na.rm = TRUE), # THIS IS WRONG
   #   #                    cpue_noha = sum(cpue_noha, na.rm = TRUE))
-  #   
+  # 
   #   data1 <- data0 %>%
   #     dplyr::group_by(srvy, cruise, stratum, station, vessel_id, # haul,
   #                     year, survey, common_name, species_code, scientific_name,
-  #                     longitude_dd, latitude_dd, date_time, 
+  #                     longitude_dd, latitude_dd, date_time,
   #                     surface_temperature_c, bottom_temperature_c, depth_m) %>%
   #     dplyr::summarise(cpue_kgha = sum(cpue_kgha, na.rm = TRUE),
   #                      cpue_noha = sum(cpue_noha, na.rm = TRUE))
-  #   
+  # 
   #   data1 <- data0 %>%
   #     dplyr::group_by(srvy, cruise, stratum, station, vessel_id # haul
   #                     ) %>%
   #     dplyr::summarise(cpue_kgha = sum(cpue_kgha, na.rm = TRUE),
   #                      cpue_noha = sum(cpue_noha, na.rm = TRUE))
-  #   
+  # 
   #   print(paste0("Yes, there are ", nrow(temp),
   #                " unique instances when srvy, cruise, stratum, station, and vessel_id were not summarized to one observation per haul event. ",
   #                "This could remove ",
   #                nrow(data0)-nrow(data1),
-  #                " rows from the initial dataset... but I'll remove them in test 2")) 
-  #   
+  #                " rows from the initial dataset... but I'll remove them in test 2"))
+  # 
   #   if (nrow(temp)<20) {
   #     print(temp)
   #   } else {
   #     print("here are the first 6 rows:")
   #     print(head(temp))
   #   }
-  #   
+  # 
   # } else {
   #   print("Nope! No rows were removed from the dataset for this issue. ")
   # }
-  
+  # 
   
   # print("******* Test2: group_by: srvy, cruise, stratum, station, vessel_id, and haul")
   print("group_by: srvy, cruise, stratum, station, vessel_id, and haul")
@@ -325,6 +396,15 @@ data_check <- function(dat) {
   
   if (nrow(temp)>0) {
     
+    if (sum(names(data) %in% "weight_kg")==0) {
+      data <- data %>%
+        dplyr::mutate(weight_kg = NA, 
+                      count = NA)
+      
+      data0 <- data0 %>%
+        dplyr::mutate(weight_kg = NA, 
+                      count = NA)
+    }
     
     if (sum(names(data) %in% "surface_temperature_c")>0) {
       data <- data %>%
@@ -370,9 +450,8 @@ data_check <- function(dat) {
                          area_swept_ha = mean(area_swept_ha, na.rm = TRUE)) 
     }
     
-    print(paste0("Yes, there are ", nrow(temp),
-                 " unique instances when srvy, cruise, stratum, station, and vessel_id were not summarized to one observation per haul event. ",
-                 "This removed ",
+    print(paste0("Yes, there are instances when these vars were not summarized to one observation per haul event. "))
+    print(paste0("This removed ",
                  nrow(data0)-nrow(data1),
                  " rows from the initial dataset.")) 
     

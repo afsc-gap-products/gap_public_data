@@ -147,21 +147,21 @@ catch <- catch0 %>%
 if (use_catchjoin) {
   
 # ## weight and number_fish mismatch when summarized by species_code
-# catch %>% 
+# catch0 %>%
 #   dplyr::mutate(id = paste0(region, "_", cruisejoin, "_", hauljoin, "_", species_code)) %>%
 #   dplyr::select(id) %>%
 #   table() %>%
 #   data.frame() %>%
-#   dplyr::rename("id" = ".") %>% 
+#   dplyr::rename("id" = ".") %>%
 #   dplyr::filter(Freq > 1)
 # 
 # ## no weight and number_fish mismatch when summarized by catchjoin - WHY? Do we need that specificity? assuming not...?
-# catch %>% 
+# catch0 %>%
 #   dplyr::mutate(id = paste0(region, "_", cruisejoin, "_", hauljoin, "_", catchjoin)) %>% # how is species_code not redundnat to catchjoin?
 #   dplyr::select(id) %>%
 #   table() %>%
 #   data.frame() %>%
-#   dplyr::rename("id" = ".") %>% 
+#   dplyr::rename("id" = ".") %>%
 #   dplyr::filter(Freq > 1)
 # 
 # catch_haul_cruises %>%
@@ -170,25 +170,25 @@ if (use_catchjoin) {
 #                   hauljoin == 1139161 &
 #                   species_code == 91030)
 # 
-# catch %>%
+# catch0 %>%
 #   dplyr::filter(region == "AI" &
 #                   cruisejoin == 1138955 &
 #                   hauljoin == 1139161 &
 #                   species_code == 91030)
 # 
-# catch %>%
+# catch0 %>%
 #   dplyr::filter(region == "AI" &
 #                   cruisejoin == 327 &
 #                   hauljoin == 32854 &
 #                   species_code == 21341)
 # 
-# catch %>%
+# catch0 %>%
 #   dplyr::filter(region == "GOA" &
 #                   cruisejoin == 881074 &
 #                   hauljoin == 881110 &
 #                   species_code == 91030)
 # 
-# catch %>%
+# catch0 %>%
 #   dplyr::filter(region == "GOA" &
 #                   cruisejoin == 881074 &
 #                   hauljoin == 881111 &
