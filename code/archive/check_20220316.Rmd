@@ -6,6 +6,9 @@ output:
 author: Emily Markowitz (emily.markowitz@noaa.gov)
 ---
 
+# THIS REPORT HELPED SOLVE SOME DATA QUESTIONS ON 3/16/2022 THAT ARE NOW RESOLVED AND WONT BE REVIEWED AGAIN
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, comment=FALSE)
 # options(width = 80)
@@ -33,7 +36,6 @@ column names have been changed to match with the new data column names
 ```{r load_old, echo = FALSE}
 
 if (FALSE) {
-  
   # This year's data: 
   a<-list.files(path = here::here("data", "publicdata", "2021"))
   df.ls <- list()
@@ -45,17 +47,21 @@ if (FALSE) {
   }
   
   # 2021 old public data: Basic data clean
-  data_old <- SameColNames(df.ls) %>% 
-    dplyr::mutate(srvy = toupper(str_extract(string = file, pattern = "[a-zA-Z]+"))) %>% 
-    dplyr::filter(!is.na(year)) 
   
-  write_csv(x = data_old, file = here::here("data", "publicdata", "ak_gf_survey_public_2021.csv"))
+  data <- SameColNames(df.ls) %>% 
+    dplyr::mutate(srvy = toupper(str_extract(string = file, pattern = "[a-zA-Z]+"))) %>% 
+    dplyr::filter(!is.na(year))
+  
+  datdiff_between_cols<-data %>% 
+    dplyr::select(-file)
+  
+  write_csv(x = datdiff_between_cols, file = paste0("../data/publicdata/ak_gf_survey_public_2021.csv"))
   
 } else {
-  data_old <- readr::read_csv(file = here::here("data", "publicdata", "ak_gf_survey_public_2021.csv"))
+  data <- readr::read_csv(file = paste0("../data/publicdata/ak_gf_survey_public_2021.csv"))
 }
 
-data_old <- data_old0 <- data_old %>%
+data_old <- data %>% 
   dplyr::rename(surface_temperature_c = surf_temp, 
                 bottom_temperature_c = bot_temp, 
                 vessel_id = vessel, 
@@ -68,18 +74,12 @@ data_old <- data_old0 <- data_old %>%
                 species_code = sid, 
                 common_name = common, 
                 scientific_name = scientific) %>%
-  dplyr::mutate(srvy = ifelse(srvy == "BSSLOPE", "BSS", srvy)) %>%
   dplyr::mutate(survey = case_when(
     srvy == "NBS" ~ "Northern Bering Sea", 
     srvy == "EBS" ~ "Southeastern Bering Sea", 
-    srvy == "BSS" ~ "Bering Sea Slope", 
+    srvy == "BSSLOPE" ~ "Bering Sea Slope", 
     srvy == "GOA" ~ "Gulf of Alaska", 
     srvy == "AI" ~ "Aleutian Islands")) %>% 
-  dplyr::filter(# to match the data_new
-    year != 2020 & # no surveys happened this year because of COVID
-      (year >= 1982 & srvy %in% c("EBS", "NBS") | # 1982 BS inclusive - much more standardized after this year
-         srvy %in% "BSS" | # keep all years of the BSS
-         year >= 1991 & srvy %in% c("AI", "GOA")) ) %>%  # 1991 AI and GOA (1993) inclusive - much more standardized after this year
   dplyr::mutate(date_time = 
                   as.character(format(as.Date(date_time, format="%m/%d/%Y"),"%m/%d/%Y")), 
                 common_name = gsub(pattern = "  ", replacement = " ", 
@@ -111,15 +111,16 @@ readr::write_csv(x = data_old, file = paste0(".", dir_out, "data_old.csv"))
 ## Check data_old for overarching structure and summarization issues
 
 ```{r old_data_check}
+data_old0<-data_old # the OG data
 
-# data_check(dat = data_old0) # run checks to see how the data looks, but don't implement it
+data_old<-data_check(dat = data_old0) # run checks
+```
 
-data_old <- data_old %>%
-  dplyr::filter(
-    cpue_kgha != 0 & # removed because doesnt exist in the data_new
-      stratum != 0 & # removed because doesnt exist in the data_new
-      !is.na(species_code)) # removed because doesnt exist in the data_new
 
+Cleaned data! How many rows were removed using the data_check()
+
+```{r old_data_check_summary, echo = FALSE}
+print(paste0("how many rows were removed using the data_check()?: ", nrow(data_old0)-nrow(data_old) ))
 data_old %>% 
   dplyr::mutate(srvy = as.factor(srvy), 
                 survey = as.factor(survey), 
@@ -132,28 +133,12 @@ data_old %>%
 ```
 
 
-Cleaned data! How many rows were removed using the data_check()
-
-```{r old_data_check_summary, echo = FALSE}
-# print(paste0("how many rows were removed using the data_check()?: ", nrow(data_old0)-nrow(data_old) ))
-# data_old %>% 
-#   dplyr::mutate(srvy = as.factor(srvy), 
-#                 survey = as.factor(survey), 
-#                 common_name = as.factor(common_name), 
-#                 scientific_name = as.factor(scientific_name) ,
-#                 station = as.factor(station), 
-#                 # vessel_name = as.factor(vessel_name), 
-#                 date_time = as.factor(date_time)) %>%
-#   summary()
-```
-
-
 # 2021 new public data: Load and compile data
 
 ```{r load_new, echo = FALSE}
-
-data_new <- readr::read_csv(file = paste0(".", dir_out, "cpue_station.csv"))
-
+# if (FALSE){
+  data_new <- readr::read_csv(file = paste0(".", dir_out, "cpue_biomass_station.csv"))
+# }
 data_new <- data_new %>% 
   dplyr::mutate(date_time = as.character(format(as.Date(date_time,
                                                         format="%m/%d/%Y"),"%m/%d/%Y")))
@@ -173,22 +158,22 @@ data_new %>%
 ```{r new_data_check}
 data_new0<-data_new # the OG data
 
-# data_check(data_new0) # run checks to see how the data looks, but don't implement it
+data_new<-data_check(data_new0) # run checks
 ```
 
 Cleaned data! How many rows were removed using the data_check()
 
 ```{r new_data_check_summary, echo = FALSE}
-# print(paste0("how many rows were removed using the data_check()?: ", nrow(data_new0)-nrow(data_new) ))
-# data_new %>% 
-#   dplyr::mutate(srvy = as.factor(srvy), 
-#                 survey = as.factor(survey), 
-#                 common_name = as.factor(common_name), 
-#                 scientific_name = as.factor(scientific_name) ,
-#                 station = as.factor(station), 
-#                 # vessel_name = as.factor(vessel_name), 
-#                 date_time = as.factor(date_time)) %>%
-#   summary()
+print(paste0("how many rows were removed using the data_check()?: ", nrow(data_new0)-nrow(data_new) ))
+data_new %>% 
+  dplyr::mutate(srvy = as.factor(srvy), 
+                survey = as.factor(survey), 
+                common_name = as.factor(common_name), 
+                scientific_name = as.factor(scientific_name) ,
+                station = as.factor(station), 
+                # vessel_name = as.factor(vessel_name), 
+                date_time = as.factor(date_time)) %>%
+  summary()
 ```
 
 
@@ -200,9 +185,8 @@ Note that this will only print where these trouble makers occurred if they occur
 
 ```{r trouble_makers}
 trouble <- c(-9999, NA, "", 0)
-cols <- c("stratum", "station", "species_code", 
-          "cpue_kgha", "cpue_noha", "weight_kg", "count", 
-          "bottom_temperature_c", "surface_temperature_c", "depth_m")
+cols <- names(data_new) 
+cols <- cols[cols != "date_time"]
 
 for (i in 1:length(trouble)){
   print(paste0("------------- Are there any '", trouble[i], "' in these columns? -------------"))
@@ -214,6 +198,162 @@ for (i in 1:length(trouble)){
   }
 }
 ```
+
+### Seperate question - how to use catchjoin
+
+In the data_new I did not group by catchjoin... but it might be that I should have
+
+Here I'll use catch0 (the OG catch data from oracle, untouhed) to illustrate where a haul event have more than one species observation. Can these number_fish and weight be summed? Or is catchjoin important for grouping by? (I did the former for this data)
+
+FYI: auditjoin are unique to each row. I assume that it doesn't mean anything?
+
+```{r data_new_catch}
+# more than one weight and number_fish observation for a species_code in a haul event. 
+# weight and number_fish are unique (not duplicated)
+dat <- catch0 %>%
+  dplyr::filter(region != "WC" & # we just don't use that data here
+                  !(number_fish %in% c(NA, 0) & weight %in% c(NA, 0))) %>% # not worth troubling us with
+  dplyr::mutate(id = paste0(region, "_", cruise, "_", hauljoin, "_", species_code)) %>%
+  dplyr::select(id) %>%
+  table() %>%
+  data.frame() %>%
+  dplyr::rename("id" = ".") %>%
+  dplyr::filter(Freq > 1)
+
+dat
+
+# no weight and number_fish observation for a species_code in a haul event when grouped by catchjoin
+# WHY? Do we need that specificity? assuming not...? subsample is also NA for all instances
+catch0 %>%
+  dplyr::filter(region != "WC" & # we just don't use that data here
+                  !(number_fish %in% c(NA, 0) & weight %in% c(NA, 0))) %>% # not worth troubling us with
+  dplyr::mutate(id = paste0(region, "_", cruise, "_", hauljoin, "_", catchjoin)) %>% # how is species_code not redundnat to catchjoin?
+  dplyr::select(id) %>%
+  table() %>%
+  data.frame() %>%
+  dplyr::rename("id" = ".") %>%
+  dplyr::filter(Freq > 1)
+
+### Examples from the data ###
+
+# Besides catchjoin, number_fish, and weight numbers being different, not much else
+# Once the voucher number is different, too
+
+dplyr::left_join(
+  x = dat %>% 
+    tidyr::separate(col = id, into = c("region", "cruise", "hauljoin", "species_code"), remove = TRUE) %>% 
+    dplyr::mutate(cruise = as.numeric(cruise), 
+                  hauljoin = as.numeric(hauljoin), 
+                  species_code = as.numeric(species_code)) %>% 
+    dplyr::select(-Freq), 
+  y = catch0, 
+  by = c("region", "cruise", "hauljoin", "species_code") ) %>% 
+  dplyr::arrange(region, cruise, hauljoin) %>% 
+  dplyr::left_join(
+    x = ., 
+    y = spp_info %>% 
+      dplyr::select(species_code, common_name), 
+    by = "species_code" )
+  
+
+# if we don't use catchjoin, we need to summarize by species_code... right?
+# it would look like this:
+
+# catch <- catch0 %>% 
+#   dplyr::group_by(region, cruisejoin, hauljoin, vessel, haul, species_code) %>% 
+#   dplyr::summarise(weight = sum(weight, na.rm = TRUE), 
+#                    number_fish = sum(number_fish, na.rm = TRUE))
+
+```
+
+
+### Seperate question - redone stations
+
+These stations are all abundance_haul = TRUE, good performance, haul_type=3, etc. 
+
+If you group the data by with `srvy`, `cruise`, `stratum`, `station`, and `vessel_id` (NOT `haul`, as done above) you find that there were several stations that were resampled right after the initial haul. 
+
+Should I include both hauls, or only use one of the hauls (i.e., last?) or should I average across? If this is our "fool-proof" data, and to make sure that people do not sum-summarize across the data, should we really be including all hauls? Were some of these data supposed to be poor performance or abundance_haul=FALSE?
+
+These redone stations also exist in the data_old and design_based data
+
+```{r data_new_extra_tows}
+dat <- data_new %>% 
+  dplyr::filter(!is.na(station) & 
+                  !is.na(stratum) &
+                  # !(srvy == "NBS" & year < 1990) & 
+                  !(cpue_kgha %in% c(NA, 0) & cpue_noha %in% c(NA, 0)) )
+
+# doubled species by station-stratum event
+temp <- dat %>% 
+  dplyr::mutate(id = paste0(srvy,"_",cruise,"_",stratum,"_",station,"_",vessel_id)) %>%
+  dplyr::select(id, species_code) %>%
+  table() %>% 
+  data.frame() %>% 
+  dplyr::filter(Freq > 1) %>% 
+  dplyr::arrange(-Freq, id)
+
+temp
+
+# how many of each station-stratum event were there
+table(temp$id) %>% 
+  data.frame() %>% 
+  dplyr::filter(Freq > 1)
+
+### A few examples from the data ###
+  
+# consecutive hauls - should only one of these be used?
+dat %>%
+  dplyr::filter(srvy == "AI" &
+                  cruise == 199401 &
+                  stratum == 322 &
+                  station == "112-22" &
+                  vessel_id == 94 &
+                  species_code == 21720) %>% 
+  dplyr::select(date_time, haul, longitude_dd, latitude_dd, 
+                surface_temperature_c, bottom_temperature_c, depth_m, 
+                cpue_kgha, cpue_noha)
+
+# consecutive hauls - should only one of these be used?
+dat %>%
+  dplyr::filter(srvy == "AI" &
+                  cruise == 200401 &
+                  stratum == 322 &
+                  station == "112-22" &
+                  vessel_id == 143 &
+                  species_code == 21720) %>% 
+  dplyr::select(date_time, haul, longitude_dd, latitude_dd, 
+                surface_temperature_c, bottom_temperature_c, depth_m, 
+                cpue_kgha, cpue_noha)
+
+
+# 3 nearly consecutive hauls - should only one of these be used? and CPUE is very different!
+dat %>%
+  dplyr::filter(srvy == "GOA" &
+                  cruise == 198403 &
+                  stratum == 250 &
+                  station == "425-91" &
+                  vessel_id == 21 &
+                  species_code == 10120) %>% 
+  dplyr::select(date_time, haul, longitude_dd, latitude_dd, 
+                surface_temperature_c, bottom_temperature_c, depth_m, 
+                cpue_kgha, cpue_noha)
+
+# 2 nearly consecutive hauls - should only one of these be used? and CPUE is very different!
+dat %>%
+  dplyr::filter(srvy == "GOA" &
+                  cruise == 200101 &
+                  stratum == 22 &
+                  station == "179-104" &
+                  vessel_id == 94 &
+                  species_code == 440) %>% 
+  dplyr::select(date_time, haul, longitude_dd, latitude_dd, 
+                surface_temperature_c, bottom_temperature_c, depth_m, 
+                cpue_kgha, cpue_noha)
+
+```
+
+
 
 # Bind new and old 2021 data to see where differences are
 
@@ -406,17 +546,12 @@ design_based <- dplyr::bind_rows(design_based1, design_based2) %>%
                 latitude_dd = latitude, 
                 longitude_dd = longitude)
 
+dim(design_based) # before summarizing
+summary(design_based)
 design_based0<-design_based
+
 readr::write_csv(x = design_based, file = paste0(".", dir_out, "design_based.csv"))
 
-dim(design_based) # before summarizing
-design_based %>% 
-  dplyr::mutate(srvy = as.factor(srvy), 
-                year = as.factor(year),
-                common_name = as.factor(common_name), 
-                scientific_name = as.factor(scientific_name) ,
-                station = as.factor(station)) %>% 
-  summary()
 ```
 
 ## Check design_based for overarching structure and summarization issues
@@ -424,25 +559,25 @@ design_based %>%
 ```{r design_based_check}
 design_based0<-design_based # the OG data
 
-# data_check(
-#   dat = design_based0 %>% 
-#     dplyr::select(-weight_kg, -count)) # run checks to see how the data looks, but don't implement it
+design_based<-data_check(
+  dat = design_based0 %>% 
+    dplyr::select(-weight_kg, -count)) # run checks
 ```
 
 how many rows were removed using the data_check()
 
 ```{r design_based_check_summary, echo = FALSE}
-# print(paste0("how many rows were removed using the data_check()?: ", nrow(design_based0)-nrow(design_based) ))
-# design_based %>% 
-#   dplyr::mutate(srvy = as.factor(srvy), 
-#                 # survey = as.factor(survey),
-#                 common_name = as.factor(common_name), 
-#                 scientific_name = as.factor(scientific_name) ,
-#                 station = as.factor(station)#, 
-#                 # vessel_name = as.factor(vessel_name), 
-#                 # date_time = as.factor(date_time)
-#   ) %>%
-#   summary()
+print(paste0("how many rows were removed using the data_check()?: ", nrow(design_based0)-nrow(design_based) ))
+design_based %>% 
+  dplyr::mutate(srvy = as.factor(srvy), 
+                # survey = as.factor(survey),
+                common_name = as.factor(common_name), 
+                scientific_name = as.factor(scientific_name) ,
+                station = as.factor(station)#, 
+                # vessel_name = as.factor(vessel_name), 
+                # date_time = as.factor(date_time)
+  ) %>%
+  summary()
 ```
 
 ## Compare data_new to design_based data

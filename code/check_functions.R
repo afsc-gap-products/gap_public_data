@@ -79,7 +79,7 @@ wheres_trouble <- function(dat, col, trouble) {
       how_many = table(temp[,c("year", "srvy")])#, 
       # data_subset = temp1
     )
-    names(out) <- paste0("Yes, '", trouble, "' occured ",nrow(temp)," times in the column '", col, "'.")
+    names(out) <- paste0("Yes, '", trouble, "' occurred ",nrow(temp)," times in the column '", col, "'.")
     
   }
   return(out)

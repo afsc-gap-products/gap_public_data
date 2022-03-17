@@ -1,13 +1,13 @@
-#' ---------------------------------------------
+#' -----------------------------------------------------------------------------
 #' title: Create public data 
 #' author: EH Markowitz
 #' start date: 2022-01-01
 #' Notes: 
-#' ---------------------------------------------
+#' -----------------------------------------------------------------------------
 
-# Load Data ----------------------------------------------------
+# Load Data --------------------------------------------------------------------
 
-## Oracle Data -------------------------------------------------------------
+## Oracle Data -----------------------------------------------------------------
 a <- list.files(path = here::here("data", "oracle"))
 a <- a[!grepl(pattern = "cpue_", x = a)]
 a <- a[!grepl(pattern = "empty", x = a)]
@@ -23,10 +23,6 @@ for (i in 1:length(a)){
 
 ## Taxonomic confidence data ---------------------------------------------------
 
-# Quality Codes
-# 1 – High confidence and consistency.  Taxonomy is stable and reliable at this level, and field identification characteristics are well known and reliable.
-# 2 – Moderate confidence.  Taxonomy may be questionable at this level, or field identification characteristics may be variable and difficult to assess consistently.
-# 3 – Low confidence.  Taxonomy is incompletely known, or reliable field identification characteristics are unknown.
 df.ls <- list()
 a<-list.files(path = here::here("data", "taxon_confidence"))
 for (i in 1:length(a)){
@@ -62,8 +58,6 @@ for (i in 1:length(a)){
     }
     b<-bb
   }
-  
-  # assign(x = gsub(pattern = "\\.xlsx", replacement = "", x = paste0(a[i], "0")), value = b)
   df.ls[[i]]<-b
   names(df.ls)[i]<-a[i]
 }
@@ -77,6 +71,14 @@ for (i in 1:length(a)){
 #        table() %>% # sets up frequency table
 #        data.frame() %>%
 #        dplyr::filter(Freq > 1)
+
+# Quality Codes
+# 1 – High confidence and consistency.  Taxonomy is stable and reliable at this 
+#     level, and field identification characteristics are well known and reliable.
+# 2 – Moderate confidence.  Taxonomy may be questionable at this level, or field  
+#     identification characteristics may be variable and difficult to assess consistently.
+# 3 – Low confidence.  Taxonomy is incompletely known, or reliable field  
+#     identification characteristics are unknown.
 
 tax_conf <- SameColNames(df.ls) %>% 
   dplyr::rename(SRVY = srvy) %>%
@@ -92,120 +94,109 @@ tax_conf <- SameColNames(df.ls) %>%
 spp_info <- species0 %>% 
   dplyr::select(species_code, common_name, species_name) %>% 
   dplyr::rename(scientific_name = species_name) %>%
-  dplyr::mutate(common_name = gsub(pattern = "  ", replacement = " ", 
-                                   x = trimws(common_name), fixed = TRUE), 
-                scientific_name = gsub(pattern = "  ", replacement = " ", 
-                                       x = trimws(scientific_name), fixed = TRUE))
+  dplyr::mutate( # fix rouge spaces in species names
+    common_name = ifelse(is.na(common_name), "", common_name), 
+    common_name = gsub(pattern = "  ", replacement = " ", 
+                       x = trimws(common_name), fixed = TRUE), 
+    scientific_name = ifelse(is.na(scientific_name), "", scientific_name), 
+    scientific_name = gsub(pattern = "  ", replacement = " ", 
+                           x = trimws(scientific_name), fixed = TRUE))
 
-## cruises ------------------------------------------------
+## cruises ---------------------------------------------------------------------
 
 cruises <-  
   dplyr::left_join(
-    x = surveys, 
+    x = surveys, # a data frame of all surveys and survey_definition_ids we want included in the public data, created in the run.R script
     y = v_cruises0, 
     by  = c("survey_definition_id")) %>% 
-  dplyr::select(SRVY, SRVY_long, region, cruise_id,  year, survey_name, vessel_id, cruise, survey_definition_id, 
+  dplyr::select(SRVY, SRVY_long, region, cruise_id,  year, survey_name, 
+                vessel_id, cruise, survey_definition_id, 
                 vessel_name, start_date, end_date, cruisejoin) %>% 
-  dplyr::filter(year != 2020 & # no surveys happened this year that I care about
-                  year >= 1982 &
-                  year <= maxyr &
+  dplyr::filter(year != 2020 & # no surveys happened this year because of COVID
+                  (year >= 1982 & SRVY %in% c("EBS", "NBS") | # 1982 BS inclusive - much more standardized after this year
+                     SRVY %in% "BSS" | # keep all years of the BSS
+                     year >= 1991 & SRVY %in% c("AI", "GOA")) & # 1991 AI and GOA (1993) inclusive - much more standardized after this year
                   survey_definition_id %in% surveys$survey_definition_id) %>% 
   dplyr::rename(vessel = "vessel_id")
 
-## haul ----------------------------------------------------------------
+# # Looking for 0s in years we dont want data to make sure the years we want removed are gone 
+# table(cruises[,c("SRVY", "year")]) # 2021
+# # year
+# # SRVY  1982 1983 1984 1985 1986 1987 1988 1989 1990 1991 1992 1993 1994 ...
+# # AI     0    0    0    0    0    0    0    0    0    2    0    0    2   ... 
+# # EBS    2    3    2    2    2    2    2    2    2    2    2    2    2   ...
+# # GOA    0    0    0    0    0    0    0    0    0    0    0    4    0   ...
+# # NBS    0    0    0    0    0    0    0    0    0    0    0    0    0   ...
+# 
+# dim(cruises)
+# # > dim(cruises)
+# # [1] 156  13
+
+## haul ------------------------------------------------------------------------
+
+# If you group the data by with `srvy`, `cruise`, `stratum`, `station`, and `vessel_id` (NOT `hauljoin` or `haul`, as done below) you find that there were several stratum-stations appear to be sampled right after the initial haul. This is because the stations in the GOA/AI surveys were regridded. These stations are in fact legit and will be kept in the data. 
+# 
+# # don't include haul/hauljoin
+# haul0 %>% 
+#   dplyr::filter(abundance_haul == "Y" & 
+#                   haul_type == 3 & 
+#                   performance >= 0) %>% 
+#   dplyr::mutate(id = paste0(region,"_",cruise,"_",stratum,"_",stationid,"_",vessel)) %>%
+#   dplyr::select(id) %>%
+#   table() %>% 
+#   data.frame() %>% 
+#   dplyr::filter(Freq > 1) 
+# 
+# # include haul/hauljoin
+# haul0 %>% 
+#   dplyr::filter(abundance_haul == "Y" & 
+#                   haul_type == 3 & 
+#                   performance >= 0) %>% 
+#   dplyr::mutate(id = paste0(region,"_",cruise,"_",stratum,"_",stationid,"_",vessel,"_",haul)) %>%
+#   dplyr::select(id) %>%
+#   table() %>% 
+#   data.frame() %>% 
+#   dplyr::filter(Freq > 1) 
 
 haul <- haul0 %>%
-  # dplyr::mutate(year = as.numeric(format(as.Date(haul0$start_time, 
-  #                                                format="%m/%d/%Y"),"%Y"))) %>%
   dplyr::filter(
-    abundance_haul == "Y" &
-    haul_type == 3 &
-    performance >= 0 &
-    !(is.null(stationid)) &
-    !(is.na(stationid)) ) %>% 
-  dplyr::select(-auditjoin, -net_measured) 
+    abundance_haul == "Y" & # defined historically as being good tows for abundance estimates
+      haul_type == 3 & # standard non-retow or special proj tows
+      performance >= 0 # &
+    # curious, but not removing, keeping in line with where abundance_haul = Y
+    # !(is.null(stationid)) & 
+    # !(is.na(stationid)) 
+  ) %>% 
+  dplyr::select(-auditjoin, -net_measured) # not valuable to us, here
 
-# > dim(haul)
-# [1] 33909    29
+# > dim(haul) # 2021
+# [1] 34231    29
 
-## station_info ----------------------------------------------------------------
+## catch -----------------------------------------------------------------------
 
-# station_info <- haul %>% 
-#   dplyr::select(stationid, stratum, stasrt_latitude, start_longitude, SRVY) %>%
-#   dplyr::group_by(stationid, stratum, SRVY) %>%
-#   dplyr::summarise(start_latitude = mean(start_latitude, na.rm = TRUE),
-#                    start_longitude = mean(start_longitude, na.rm = TRUE)) 
-
-## catch --------------------------------------------------------------------
-
-catch <- catch0 %>% 
-  dplyr::select(-subsample_code, -voucher, -auditjoin)
-
-# dim(catch) # 2021
-# [1] 1613690      10
-
-if (use_catchjoin) {
-  
-# ## weight and number_fish mismatch when summarized by species_code
+# ## there should only be one species_code observation per haul event, however
+# ## there are occassionally multiple (with unique catchjoins). 
+# ## I suspect that this is because a species_code was updated or changed, 
+# ## so we will need to sum those counts and weights
+# 
 # catch0 %>%
+#     dplyr::filter(region != "WC") %>% 
 #   dplyr::mutate(id = paste0(region, "_", cruisejoin, "_", hauljoin, "_", species_code)) %>%
 #   dplyr::select(id) %>%
 #   table() %>%
 #   data.frame() %>%
 #   dplyr::rename("id" = ".") %>%
 #   dplyr::filter(Freq > 1)
-# 
-# ## no weight and number_fish mismatch when summarized by catchjoin - WHY? Do we need that specificity? assuming not...?
-# catch0 %>%
-#   dplyr::mutate(id = paste0(region, "_", cruisejoin, "_", hauljoin, "_", catchjoin)) %>% # how is species_code not redundnat to catchjoin?
-#   dplyr::select(id) %>%
-#   table() %>%
-#   data.frame() %>%
-#   dplyr::rename("id" = ".") %>%
-#   dplyr::filter(Freq > 1)
-# 
-# catch_haul_cruises %>%
-#   dplyr::filter(SRVY == "AI" &
-#                   cruisejoin == 1138955 &
-#                   hauljoin == 1139161 &
-#                   species_code == 91030)
-# 
-# catch0 %>%
-#   dplyr::filter(region == "AI" &
-#                   cruisejoin == 1138955 &
-#                   hauljoin == 1139161 &
-#                   species_code == 91030)
-# 
-# catch0 %>%
-#   dplyr::filter(region == "AI" &
-#                   cruisejoin == 327 &
-#                   hauljoin == 32854 &
-#                   species_code == 21341)
-# 
-# catch0 %>%
-#   dplyr::filter(region == "GOA" &
-#                   cruisejoin == 881074 &
-#                   hauljoin == 881110 &
-#                   species_code == 91030)
-# 
-# catch0 %>%
-#   dplyr::filter(region == "GOA" &
-#                   cruisejoin == 881074 &
-#                   hauljoin == 881111 &
-#                   species_code == 91030)
 
-# if we don't use catchjoin, we need to summarize by species_code... right?
-
-catch <- catch %>% 
+catch <- catch0 %>% 
   dplyr::group_by(region, cruisejoin, hauljoin, vessel, haul, species_code) %>% 
   dplyr::summarise(weight = sum(weight, na.rm = TRUE), 
                    number_fish = sum(number_fish, na.rm = TRUE))
 
 # dim(catch) # 2021
-# [1] 1613668       7
+# [1] 1613670       8
 
-}
-## catch_haul_cruises + _maxyr + maxyr-1-----------------------------------------------
+## catch_haul_cruises ----------------------------------------------------------
 
 catch_haul_cruises <-
   dplyr::inner_join(
@@ -222,7 +213,7 @@ catch_haul_cruises <-
   dplyr::left_join(
     x= ., 
     y = catch %>% 
-      dplyr::select(cruisejoin, hauljoin, region, vessel, haul, if(use_catchjoin){all_vars("catchjoin")}, 
+      dplyr::select(cruisejoin, hauljoin, region, vessel, haul, 
                     species_code, weight, number_fish), 
     by = c("hauljoin", "cruisejoin", "region", "vessel", "haul")) %>% 
   dplyr::left_join(x = ., 
@@ -243,4 +234,4 @@ catch_haul_cruises <-
     by = "species_code")
 
 # dim(catch_haul_cruises) # 2021
-# [1] 922757     33
+# [1] 831342     33 
