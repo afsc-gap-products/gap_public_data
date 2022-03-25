@@ -68,11 +68,20 @@ for (i in 1:length(locations)){
   } else {
     a<-RODBC::sqlQuery(channel, paste0("SELECT * FROM ", locations[i]))
   }
+  
+  if (locations[i] == "AI.CPUE") {
+    filename <- "cpue_ai"
+  } else if (locations[i] == "GOA.CPUE") {
+    filename <- "cpue_goa"
+  } else {
+    filename <- tolower(strsplit(x = locations[i], 
+                               split = ".", 
+                               fixed = TRUE)[[1]][2])
+  }
+    
   write.csv(x=a, 
             paste0("./data/oracle/",
-                   tolower(strsplit(x = locations[i], 
-                                    split = ".", 
-                                    fixed = TRUE)[[1]][2]),
+                   filename,
                    ".csv"))
   remove(a)
 }
