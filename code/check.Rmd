@@ -7,8 +7,11 @@ author: Emily Markowitz (emily.markowitz@noaa.gov)
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, comment=FALSE)
-# options(width = 80)
+knitr::opts_chunk$set(
+  echo = TRUE, 
+  warning = FALSE, 
+  message = FALSE, 
+  comment = FALSE)
 ```
 
 
@@ -16,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, comment=FALSE)
 source("../code/check_functions.R")
 ```
 
-# 2021 old public data: Load and compile data
+# 2021 OLD public data: Load and compile data
 
 column names have been changed to match with the new data column names
 
@@ -45,17 +48,17 @@ if (FALSE) {
   }
   
   # 2021 old public data: Basic data clean
-  data_old <- SameColNames(df.ls) %>% 
+  public_old <- SameColNames(df.ls) %>% 
     dplyr::mutate(srvy = toupper(str_extract(string = file, pattern = "[a-zA-Z]+"))) %>% 
     dplyr::filter(!is.na(year)) 
   
-  write_csv(x = data_old, file = here::here("data", "publicdata", "ak_gf_survey_public_2021.csv"))
+  write_csv(x = public_old, file = here::here("data", "publicdata", "ak_gf_survey_public_2021.csv"))
   
 } else {
-  data_old <- readr::read_csv(file = here::here("data", "publicdata", "ak_gf_survey_public_2021.csv"))
+  public_old <- readr::read_csv(file = here::here("data", "publicdata", "ak_gf_survey_public_2021.csv"))
 }
 
-data_old <- data_old0 <- data_old %>%
+public_old <- public_old0 <- public_old %>%
   dplyr::rename(surface_temperature_c = surf_temp, 
                 bottom_temperature_c = bot_temp, 
                 vessel_id = vessel, 
@@ -75,7 +78,7 @@ data_old <- data_old0 <- data_old %>%
     srvy == "BSS" ~ "Bering Sea Slope", 
     srvy == "GOA" ~ "Gulf of Alaska", 
     srvy == "AI" ~ "Aleutian Islands")) %>% 
-  dplyr::filter(# to match the data_new
+  dplyr::filter(# to match the public_new
     year != 2020 & # no surveys happened this year because of COVID
       (year >= 1982 & srvy %in% c("EBS", "NBS") | # 1982 BS inclusive - much more standardized after this year
          srvy %in% "BSS" | # keep all years of the BSS
@@ -94,7 +97,7 @@ data_old <- data_old0 <- data_old %>%
                 # weight_kg = NA,
                 area_swept_ha = NA) 
 
-data_old %>% 
+public_old %>% 
   dplyr::mutate(srvy = as.factor(srvy), 
                 survey = as.factor(survey), 
                 common_name = as.factor(common_name), 
@@ -104,23 +107,23 @@ data_old %>%
                 date_time = as.factor(date_time)) %>%
   summary()
 
-readr::write_csv(x = data_old, file = paste0(".", dir_out, "data_old.csv"))
+readr::write_csv(x = public_old, file = paste0(".", dir_out, "/check/public_old.csv"))
 
 ```
 
-## Check data_old for overarching structure and summarization issues
+## Check public_old for overarching structure and summarization issues
 
-```{r old_data_check}
+```{r public_old_check}
 
-# data_check(dat = data_old0) # run checks to see how the data looks, but don't implement it
+# data_check(dat = public_old0) # run checks to see how the data looks, but don't implement it
 
-data_old <- data_old %>%
+public_old <- public_old %>%
   dplyr::filter(
-    cpue_kgha != 0 & # removed because doesnt exist in the data_new
-      stratum != 0 & # removed because doesnt exist in the data_new
-      !is.na(species_code)) # removed because doesnt exist in the data_new
+    cpue_kgha != 0 & # removed because doesnt exist in the public_new
+      stratum != 0 & # removed because doesnt exist in the public_new
+      !is.na(species_code)) # removed because doesnt exist in the public_new
 
-data_old %>% 
+public_old %>% 
   dplyr::mutate(srvy = as.factor(srvy), 
                 survey = as.factor(survey), 
                 common_name = as.factor(common_name), 
@@ -134,9 +137,9 @@ data_old %>%
 
 Cleaned data! How many rows were removed using the data_check()
 
-```{r old_data_check_summary, echo = FALSE}
-# print(paste0("how many rows were removed using the data_check()?: ", nrow(data_old0)-nrow(data_old) ))
-# data_old %>% 
+```{r public_old_check_summary, echo = FALSE}
+# print(paste0("how many rows were removed using the data_check()?: ", nrow(public_old0)-nrow(public_old) ))
+# public_old %>% 
 #   dplyr::mutate(srvy = as.factor(srvy), 
 #                 survey = as.factor(survey), 
 #                 common_name = as.factor(common_name), 
@@ -148,17 +151,17 @@ Cleaned data! How many rows were removed using the data_check()
 ```
 
 
-# 2021 new public data: Load and compile data
+# 2021 NEW public data: Load and compile data
 
 ```{r load_new, echo = FALSE}
 
-data_new <- readr::read_csv(file = paste0(".", dir_out, "cpue_station.csv"))
+public_new <- readr::read_csv(file = paste0(".", dir_out, "cpue_station.csv"))
 
-data_new <- data_new %>% 
+public_new <- public_new %>% 
   dplyr::mutate(date_time = as.character(format(as.Date(date_time,
                                                         format="%m/%d/%Y"),"%m/%d/%Y")))
 
-data_new %>% 
+public_new %>% 
   dplyr::mutate(srvy = as.factor(srvy), 
                 survey = as.factor(survey), 
                 common_name = as.factor(common_name), 
@@ -168,19 +171,19 @@ data_new %>%
   summary()
 ```
 
-## Check data_new for overarching structure and summarization issues
+## Check public_new for overarching structure and summarization issues
 
-```{r new_data_check}
-data_new0<-data_new # the OG data
+```{r new_public_check}
+public_new0<-public_new # the OG data
 
-# data_check(data_new0) # run checks to see how the data looks, but don't implement it
+# data_check(public_new0) # run checks to see how the data looks, but don't implement it
 ```
 
 Cleaned data! How many rows were removed using the data_check()
 
-```{r new_data_check_summary, echo = FALSE}
-# print(paste0("how many rows were removed using the data_check()?: ", nrow(data_new0)-nrow(data_new) ))
-# data_new %>% 
+```{r new_public_check_summary, echo = FALSE}
+# print(paste0("how many rows were removed using the data_check()?: ", nrow(public_new0)-nrow(public_new) ))
+# public_new %>% 
 #   dplyr::mutate(srvy = as.factor(srvy), 
 #                 survey = as.factor(survey), 
 #                 common_name = as.factor(common_name), 
@@ -207,7 +210,7 @@ cols <- c("stratum", "station", "species_code",
 for (i in 1:length(trouble)){
   print(paste0("------------- Are there any '", trouble[i], "' in these columns? -------------"))
   for (ii in 1:length(cols)) {
-    a <- wheres_trouble(dat = data_new, col = cols[ii], trouble = trouble[i])
+    a <- wheres_trouble(dat = public_new, col = cols[ii], trouble = trouble[i])
     if (class(a) == "list") {
       print(a) 
     }
@@ -222,11 +225,11 @@ for (i in 1:length(trouble)){
 
 ```{r bind_new_old}
 dat <- dplyr::full_join(
-  x = data_new %>% 
+  x = public_new %>% 
     dplyr::mutate(dataset = "new", 
                   scientific_name = gsub(pattern = ",", replacement = "", 
                                          x = scientific_name, fixed = TRUE)), 
-  y = data_old %>% 
+  y = public_old %>% 
     dplyr::mutate(dataset = "old", 
                   count = NA, 
                   weight_kg = NA),
@@ -295,6 +298,32 @@ dat0 %>%
 #   table() 
 ```
 
+
+## CPUE for major species
+
+```{r CPUE_kgha_plot_new_old, fig.height = 7, fig.width = 4.8}
+spp <- c(69323, # blue king crab 
+         68580, # snow crab
+         69322, # red king crab
+         10110, # arrowtooth flounder
+         21720, # Pacific cod
+         21740, # walleye pollock
+         10112, # Kamchatka flounder
+         471, # Alaska skate
+         10285, # Alaska plaice
+         10210, # yellowfin sole
+         10261 # northern rock sole
+)
+
+# for (i in 1:length(unique(dat$srvy))) {
+for (ii in 1:length(spp)){
+  print(plot_cpue(dat = dat, spp0 = spp[ii], 
+                      dataset1 = "public_new", 
+                      dataset2 = "public_old"))
+}
+
+```
+
 ## Look through new and old 2021 data and note where differences are
 
 Please let me know if there are any differences between these datasets that are unacceptable (e.g., should be more like the old data or completely changed) and what tables and columns I should reference to fix these issues. 
@@ -346,7 +375,7 @@ dat0 <- dat %>%
   dplyr::arrange(-cpue_kgha_diff, -cpue_noha_diff)
 
 readr::write_csv(dat0, 
-                 file = paste0(".", dir_out, "diff_xnew_yold.csv"))
+                 file = paste0(".", dir_out, "/check/diff_xnew_yold.csv"))
 
 summary(dat0)
 ```
@@ -407,7 +436,7 @@ design_based <- dplyr::bind_rows(design_based1, design_based2) %>%
                 longitude_dd = longitude)
 
 design_based0<-design_based
-readr::write_csv(x = design_based, file = paste0(".", dir_out, "design_based.csv"))
+readr::write_csv(x = design_based, file = paste0(".", dir_out, "/check/design_based.csv"))
 
 dim(design_based) # before summarizing
 design_based %>% 
@@ -445,7 +474,7 @@ how many rows were removed using the data_check()
 #   summary()
 ```
 
-## Compare data_new to design_based data
+## Compare public_new to design_based data
 
 And now I am joining the new data and the designed based data together to see where differences arise. 
 
@@ -454,7 +483,7 @@ I am rounding the CPUE and area_swept columns to 3 digits so we only see the big
 ```{r join_diff_designbased_new}
 
 dat <- dplyr::full_join(
-  x = data_new %>% 
+  x = public_new %>% 
     dplyr::select(common_name, species_code, scientific_name, 
                   cpue_kgha, cpue_noha, 
                   area_swept_ha, #distance_fished_km, net_width_m, 
@@ -508,17 +537,43 @@ dat0 <- dat %>%
                   count.x, count.y, cpue_kgha.x, cpue_kgha.y, cpue_kgha_diff)
 
 readr::write_csv(dat0, 
-                 file = paste0(".", dir_out, "diff_xnew_ydesign.csv"))
+                 file = paste0(".", dir_out, "/check/diff_xnew_ydesign.csv"))
 
 summary(dat0)
 ```
 
+## CPUE for major species
+
+```{r CPUE_kgha_plot_new_design, fig.height = 7, fig.width = 4.8}
+spp <- c(69323, # blue king crab 
+         68580, # snow crab
+         69322, # red king crab
+         10110, # arrowtooth flounder
+         21720, # Pacific cod
+         21740, # walleye pollock
+         10112, # Kamchatka flounder
+         471, # Alaska skate
+         10285, # Alaska plaice
+         10210, # yellowfin sole
+         10261 # northern rock sole
+)
+
+# for (i in 1:length(unique(dat$srvy))) {
+for (ii in 1:length(spp)){
+  print(plot_cpue(dat = dat %>% 
+                    dplyr::filter(srvy != "BSS"), 
+                  spp0 = spp[ii], 
+                      dataset1 = "public_new", 
+                      dataset2 = "design_based"))
+}
+
+```
 
 # What stations for each year and survey look like in the new public data
 
 ```{r station_map, fig.height = 10, fig.width = 7}
-for (i in 1:length(unique(data_new$srvy))) {
-  print(plot_stations(dat = data_new, srvy0 = unique(data_new$srvy)[i]))
+for (i in 1:length(unique(public_new$srvy))) {
+  print(plot_stations(dat = public_new, srvy0 = unique(public_new$srvy)[i]))
 }
 ```
 

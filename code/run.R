@@ -37,8 +37,8 @@ source('./code/data.R')
 source('./code/analysis.R')
 
 # Check work -------------------------------------------------------------------
-
+dir.create(path = paste0(dir_out, "/check/"))
 rmarkdown::render(paste0("./code/check.Rmd"),
                   output_dir = dir_out,
-                  output_file = paste0("check.docx"))
+                  output_file = paste0("./check/check.docx"))
 

@@ -470,3 +470,80 @@ data_check <- function(dat) {
            dplyr::ungroup())
   
 }
+
+plot_cpue <- function(dat, spp0, 
+                      dataset1 = "public_new", 
+                      dataset2 = "public_old") {
+  
+  dat0 <- dat %>% 
+    dplyr::select(srvy, year, species_code, 
+                  dplyr::starts_with("cpue_kgha."), 
+                  dplyr::starts_with("cpue_noha.")) %>% 
+    dplyr::filter(species_code == spp0 #& 
+                  # srvy == unique(dat$srvy)[i]
+    ) %>% 
+    dplyr::group_by(srvy, year, species_code) %>% 
+    dplyr::summarise(cpue_kgha.x = sum(cpue_kgha.x, na.rm = TRUE), 
+                     cpue_kgha.y = sum(cpue_kgha.y, na.rm = TRUE), 
+                     cpue_noha.x = sum(cpue_noha.x, na.rm = TRUE), 
+                     cpue_noha.y = sum(cpue_noha.y, na.rm = TRUE)) 
+  
+  dat0 <- 
+    dplyr::full_join(
+      dat0 %>%
+        dplyr::select(-dplyr::starts_with("cpue_noha.")) %>%
+        tidyr::pivot_longer(cols = dplyr::starts_with("cpue_kgha."),
+                            values_to = "cpue_kgha",
+                            names_to = "dataset_cpue_kgha",
+                            values_drop_na = TRUE) %>% 
+        dplyr::mutate(
+          dataset = dplyr::case_when(
+            dataset_cpue_kgha == "cpue_kgha.x" ~ dataset1, 
+            dataset_cpue_kgha == "cpue_kgha.y" ~ dataset2)), 
+      dat0 %>%
+        dplyr::select(-dplyr::starts_with("cpue_kgha.")) %>%
+        tidyr::pivot_longer(cols = dplyr::starts_with("cpue_noha."),
+                            values_to = "cpue_noha",
+                            names_to = "dataset_cpue_noha",
+                            values_drop_na = TRUE) %>% 
+        dplyr::mutate(dataset = dplyr::case_when(
+          dataset_cpue_noha == "cpue_noha.x" ~ dataset1, 
+          dataset_cpue_noha == "cpue_noha.y" ~ dataset2 
+        )), 
+      by = c("srvy", "year", "species_code", "dataset")) #%>% 
+  # tidyr::pivot_longer(cols = dplyr::starts_with("dataset_"),
+  #                     values_to = "cpue",
+  #                     names_to = "dataset",
+  #                     values_drop_na = TRUE)
+  
+  g1 <- ggplot(data = dat0) +
+    ggplot2::geom_point(
+      mapping = aes(x = year, y = cpue_kgha, 
+                    group = dataset, 
+                    col = dataset, 
+                    shape = dataset), 
+      alpha = .5) +    
+    ggtitle(dat$common_name.x[dat$species_code == spp0][1]) + 
+    facet_wrap("srvy", ncol = 2) + 
+    theme_minimal() +
+    theme(legend.position = "bottom", 
+          legend.title = element_blank())
+  
+  g2 <- ggplot(data = dat0) +
+    ggplot2::geom_point(
+      mapping = aes(x = year, y = cpue_noha, 
+                    group = dataset, 
+                    col = dataset, 
+                    shape = dataset), 
+      alpha = .5) +
+    ggtitle("") + 
+    facet_wrap("srvy", ncol = 2, scales = "free") + 
+    theme_minimal() +
+    theme(legend.position = "bottom", 
+          legend.title = element_blank())
+  
+  library(cowplot)
+  gg <- cowplot::plot_grid(g1, g2)
+  
+  return(gg)
+}
