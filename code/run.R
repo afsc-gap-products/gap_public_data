@@ -2,15 +2,13 @@
 #' title: Create public data 
 #' author: EH Markowitz (emily.markowitz AT noaa.gov)
 #' start date: 2022-01-01
-#' last modified: 2022-03-01
+#' last modified: 2022-04-01
 #' Notes: 
 #' -----------------------------------------------------------------------------
 
 # ISSUES -----------------------------------------------------------------------
 
-# round cpue to .0001 and if positivie but less than 0.0001 = 0.0001?
-# including Mike Litzow and SAP into process - should we use retow data to replace data where retows were done??
-# how does this work with/conflict with Megsie's design-based-indies project?
+# [None at the moment]
 
 # START ------------------------------------------------------------------------
 
@@ -30,6 +28,7 @@ surveys <-
 
 # source('./code/dataDL.R')
 source('./code/functions.R')
+# source('./code/find_itis_species_codes.R")
 source('./code/data.R')
 
 # Run analysis -----------------------------------------------------------------

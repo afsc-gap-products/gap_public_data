@@ -1,7 +1,7 @@
 #' -----------------------------------------------------------------------------
 #' title: Create public data 
 #' author: EH Markowitz
-#' start date: 2022-01-01
+#' start date: 2022-04-01
 #' Notes: 
 #' -----------------------------------------------------------------------------
 
@@ -91,16 +91,25 @@ tax_conf <- SameColNames(df.ls) %>%
 # Wrangle Data -----------------------------------------------------------------
 
 ## Species info ----------------------------------------------------------------
-spp_info <- species0 %>% 
-  dplyr::select(species_code, common_name, species_name) %>% 
-  dplyr::rename(scientific_name = species_name) %>%
-  dplyr::mutate( # fix rouge spaces in species names
-    common_name = ifelse(is.na(common_name), "", common_name), 
-    common_name = gsub(pattern = "  ", replacement = " ", 
-                       x = trimws(common_name), fixed = TRUE), 
-    scientific_name = ifelse(is.na(scientific_name), "", scientific_name), 
-    scientific_name = gsub(pattern = "  ", replacement = " ", 
-                           x = trimws(scientific_name), fixed = TRUE))
+# spp_info <- 
+#   # dplyr::left_join(
+#     # x = 
+#   species0 %>% 
+#       dplyr::select(species_code, common_name, species_name) %>% # ,
+#     # y = species_taxonomics0 %>% 
+#       # dplyr::select(), 
+#     # by = c("")) %>% 
+#   dplyr::rename(scientific_name = species_name) %>%
+#   dplyr::mutate( # fix rouge spaces in species names
+#     common_name = ifelse(is.na(common_name), "", common_name), 
+#     common_name = gsub(pattern = "  ", replacement = " ", 
+#                        x = trimws(common_name), fixed = TRUE), 
+#     scientific_name = ifelse(is.na(scientific_name), "", scientific_name), 
+#     scientific_name = gsub(pattern = "  ", replacement = " ", 
+#                            x = trimws(scientific_name), fixed = TRUE))
+
+load(file = "./data/spp_info.rdata")
+
 
 ## cruises ---------------------------------------------------------------------
 
