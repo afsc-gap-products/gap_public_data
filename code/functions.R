@@ -14,6 +14,11 @@ PKG <- c(
   "dplyr",
   "magrittr",
   "readr",
+  "rmarkdown",
+  "here",
+  
+  "janitor",
+  "taxize", 
   
   # Text Management
   "stringr")
