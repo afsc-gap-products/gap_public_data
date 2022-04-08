@@ -82,11 +82,14 @@ for (i in 1:length(a)){
 
 tax_conf <- SameColNames(df.ls) %>% 
   dplyr::rename(SRVY = srvy) %>%
-  dplyr::mutate(tax_conf = dplyr::case_when(
+  dplyr::mutate(tax_conf0 = tax_conf, 
+                tax_conf = dplyr::case_when(
     tax_conf == 1 ~ "High",
     tax_conf == 2 ~ "Moderate",
     tax_conf == 3 ~ "Low", 
     TRUE ~ "Unassessed"))
+
+readr::write_csv(x = tax_conf, file = paste0(getwd(), "/data/taxon_confidence/taxon_confidence.csv"))
 
 # Wrangle Data -----------------------------------------------------------------
 

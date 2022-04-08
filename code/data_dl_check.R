@@ -31,12 +31,12 @@ source("C:/Users/emily.markowitz/Documents/Projects/ConnectToOracle.R")
 ##################DOWNLOAD CPUE and BIOMASS EST##################################
 
 locations<-c(
-  #General Tables of data
-  "RACEBASE.CATCH", 
-  "RACEBASE.HAUL", 
-  "RACE_DATA.V_CRUISES",
-  "RACEBASE.SPECIES", 
-  "RACE_DATA.VESSELS"
+  # Tbles to compare to
+  "GOA.CPUE", 
+  "AI.CPUE", 
+  "HAEHNR.cpue_nbs", 
+  "HAEHNR.cpue_ebs_plusnw", 
+  "HAEHNR.cpue_ebs_plusnw_grouped"
 )
 
 #sinks the data into connection as text file
@@ -66,10 +66,10 @@ for (i in 1:length(locations)){
     filename <- "cpue_goa"
   } else {
     filename <- tolower(strsplit(x = locations[i], 
-                               split = ".", 
-                               fixed = TRUE)[[1]][2])
+                                 split = ".", 
+                                 fixed = TRUE)[[1]][2])
   }
-    
+  
   write.csv(x=a, 
             paste0("./data/oracle/",
                    filename,

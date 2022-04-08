@@ -26,7 +26,7 @@ surveys <-
 
 # Support scripts --------------------------------------------------------------
 
-# source('./code/dataDL.R')
+# source('./code/data_dl.R')
 source('./code/functions.R')
 # source('./code/find_itis_species_codes.R")
 source('./code/data.R')
@@ -36,6 +36,9 @@ source('./code/data.R')
 source('./code/analysis.R')
 
 # Check work -------------------------------------------------------------------
+
+# source('./code/data_dl_check.R')
+
 dir.create(path = paste0(dir_out, "/check/"))
 rmarkdown::render(paste0("./code/check.Rmd"),
                   output_dir = dir_out,
