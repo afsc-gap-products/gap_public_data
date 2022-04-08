@@ -52,9 +52,7 @@ find_itis <- function(sci, common, known) {
 # Load Data --------------------------------------------------------------------
 
 ## Oracle Data -----------------------------------------------------------------
-a <- list.files(path = here::here("data", "oracle"))
-a <- a[!grepl(pattern = "cpue_", x = a)]
-a <- a[!grepl(pattern = "empty", x = a)]
+a <- list.files(path = here::here("data", "oracle"), pattern = "species.csv")
 for (i in 1:length(a)){
   print(a[i])
   b <- readr::read_csv(file = paste0(here::here("data", "oracle", a[i]))) %>% 
@@ -89,9 +87,6 @@ remove0 <- c(" sp.", " .spp")
 for (i in 1:length(remove0)) {
   spp_info0$scientific_name1<-gsub(pattern = remove0[i], replacement = "", x = spp_info0$scientific_name1)
 }
-
-
-
 
 # Create data ------------------------------------------------------------------
 rnge <- 101:150
