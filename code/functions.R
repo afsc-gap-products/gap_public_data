@@ -18,7 +18,7 @@ PKG <- c(
   "here",
   
   "janitor",
-  "taxize", 
+  "taxize",
   
   # Text Management
   "stringr")
