@@ -24,7 +24,8 @@ for (i in 1:length(a)){
 ## Taxonomic confidence data ---------------------------------------------------
 
 df.ls <- list()
-a<-list.files(path = here::here("data", "taxon_confidence"))
+a <- list.files(path = here::here("data", "taxon_confidence"))
+a <- a[a != "taxon_confidence.csv"]
 for (i in 1:length(a)){
   print(a[i])
   b <- readxl::read_xlsx(path = paste0(here::here("data", "taxon_confidence", a[i])), 
@@ -89,7 +90,8 @@ tax_conf <- SameColNames(df.ls) %>%
     tax_conf == 3 ~ "Low", 
     TRUE ~ "Unassessed"))
 
-readr::write_csv(x = tax_conf, file = paste0(getwd(), "/data/taxon_confidence/taxon_confidence.csv"))
+readr::write_csv(x = tax_conf, file = paste0(getwd(), 
+                                             "/data/taxon_confidence.csv"))
 
 # Wrangle Data -----------------------------------------------------------------
 
@@ -112,7 +114,8 @@ readr::write_csv(x = tax_conf, file = paste0(getwd(), "/data/taxon_confidence/ta
 #                            x = trimws(scientific_name), fixed = TRUE))
 
 load(file = "./data/spp_info.rdata")
-
+spp_info <- spp_info %>% 
+  dplyr::select(-notes_itis)
 
 ## cruises ---------------------------------------------------------------------
 
@@ -242,7 +245,7 @@ catch_haul_cruises <-
   dplyr::left_join(
     x = .,
     y = spp_info %>%
-      dplyr::select(species_code, scientific_name, common_name),
+      dplyr::select(species_code, scientific_name, common_name, itis),
     by = "species_code")
 
 # dim(catch_haul_cruises) # 2021
