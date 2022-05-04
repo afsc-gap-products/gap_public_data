@@ -64,6 +64,27 @@ cpue_station <- cpue_station_0filled %>%
 
 # print(dim(cpue_station)) # 2021
 # [1] 831340     11
+# Lookup vector to only rename/select if that column is present:
+lookup <- c(station = "stationid", 
+            weight_kg = "weight", 
+            count = "number_fish", 
+            srvy = "SRVY",
+            survey = "survey_name",
+            survey_id = "survey_definition_id", 
+            vessel_id = "vessel",
+            latitude_dd = "start_latitude", 
+            longitude_dd = "start_longitude", 
+            taxon_confidence = "tax_conf",
+            date_time = "start_time", 
+            latitude_dd = "start_latitude", 
+            longitude_dd = "start_longitude", 
+            bottom_temperature_c = "gear_temperature", 
+            surface_temperature_c = "surface_temperature",
+            distance_fished_km = "distance_fished", 
+            duration_hr = "duration", 
+            net_width_m = "net_width",
+            net_height_m = "net_height",
+            depth_m = "bottom_depth")
 
 cpue_station <- 
   dplyr::left_join( # bind with the rest of the cruise and haul data
@@ -71,34 +92,15 @@ cpue_station <-
     y = catch_haul_cruises %>% 
       dplyr::select(-distance_fished, -net_width, -number_fish, -weight),
     by = c("SRVY", "cruisejoin", "hauljoin", "species_code"))  %>%
-  dplyr::rename(station = stationid, 
-                weight_kg = weight, 
-                count = number_fish, 
-                srvy = SRVY,
-                survey = survey_name,
-                survey_id = survey_definition_id, 
-                vessel_id = vessel,
-                latitude_dd = start_latitude, 
-                longitude_dd = start_longitude, 
-                taxon_confidence = tax_conf, 
-                date_time = start_time, 
-                latitude_dd = start_latitude, 
-                longitude_dd = start_longitude, 
-                bottom_temperature_c = gear_temperature, 
-                surface_temperature_c = surface_temperature,
-                distance_fished_km = distance_fished, 
-                duration_hr = duration, 
-                net_width_m = net_width,
-                net_height_m = net_height,
-                depth_m = bottom_depth) %>% 
+  dplyr::rename(any_of(lookup)) %>% 
   dplyr::mutate(cpue_kgkm2 = cpue_kgha * 100, 
                 cpue_nokm2 = cpue_noha * 100, 
                 cpue_no1000km2 = cpue_nokm2 * 1000, 
                 cpue_kg1000km2 = cpue_kgkm2 * 1000, 
                 dplyr::across(dplyr::starts_with("cpue_"), round, digits = 6), 
                 weight_kg = round(weight_kg, digits = 6)) %>% 
-  dplyr::select(
-    year, srvy, survey, survey_id, cruise, haul, hauljoin, stratum, station, vessel_name, vessel_id, # survey data
+  dplyr::select(any_of(
+    c(as.character(expression(year, srvy, survey, survey_id, cruise, haul, hauljoin, stratum, station, vessel_name, vessel_id, # survey data
     date_time, latitude_dd, longitude_dd, # when/where
     species_code, itis, common_name, scientific_name, taxon_confidence,  # species info
     cpue_kgha, cpue_kgkm2, cpue_kg1000km2, # cpue weight
@@ -106,7 +108,7 @@ cpue_station <-
     weight_kg, count, # summed catch data
     bottom_temperature_c, surface_temperature_c, depth_m, #environmental data
     distance_fished_km, net_width_m, net_height_m, area_swept_ha, duration_hr # gear data
-  ) %>% 
+  ))))) %>% 
   dplyr::arrange(srvy, date_time, cpue_kgha)
 
 # print(dim(cpue_station)) # 2021

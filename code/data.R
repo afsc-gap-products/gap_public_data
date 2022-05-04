@@ -22,7 +22,7 @@ for (i in 1:length(a)){
 }
 
 ## Taxonomic confidence data ---------------------------------------------------
-
+if(taxize0){
 df.ls <- list()
 a <- list.files(path = here::here("data", "taxon_confidence"))
 a <- a[a != "taxon_confidence.csv"]
@@ -92,7 +92,7 @@ tax_conf <- SameColNames(df.ls) %>%
 
 readr::write_csv(x = tax_conf, file = paste0(getwd(), 
                                              "/data/taxon_confidence.csv"))
-
+}
 # Wrangle Data -----------------------------------------------------------------
 
 ## Species info ----------------------------------------------------------------
@@ -234,10 +234,10 @@ catch_haul_cruises <-
       dplyr::select(cruisejoin, hauljoin, region, vessel, haul, 
                     species_code, weight, number_fish), 
     by = c("hauljoin", "cruisejoin", "region", "vessel", "haul")) %>% 
-  dplyr::left_join(x = ., 
+  {if(taxize0) dplyr::left_join(x = ., 
                    y = tax_conf %>% 
                      dplyr::select(year, tax_conf, SRVY, species_code), 
-                   by = c("species_code", "SRVY", "year"))  %>%
+                   by = c("species_code", "SRVY", "year")) else .}  %>%
   dplyr::left_join(
     x = .,
     y = vessels0 %>%
