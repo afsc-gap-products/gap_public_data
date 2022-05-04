@@ -24,11 +24,16 @@ surveys <-
                            "Aleutian Islands", 
                            "Bering Sea Slope") )
 
+# incorporate species codes from databases
+taxize0 <- FALSE
+
 # Support scripts --------------------------------------------------------------
 
 # source('./code/data_dl.R')
 source('./code/functions.R')
-# source('./code/find_itis_species_codes.R")
+if (taxize0){
+  source('./code/find_itis_species_codes.R')
+}
 source('./code/data.R')
 
 # Run analysis -----------------------------------------------------------------

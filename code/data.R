@@ -96,26 +96,29 @@ readr::write_csv(x = tax_conf, file = paste0(getwd(),
 # Wrangle Data -----------------------------------------------------------------
 
 ## Species info ----------------------------------------------------------------
-# spp_info <- 
-#   # dplyr::left_join(
-#     # x = 
-#   species0 %>% 
-#       dplyr::select(species_code, common_name, species_name) %>% # ,
-#     # y = species_taxonomics0 %>% 
-#       # dplyr::select(), 
-#     # by = c("")) %>% 
-#   dplyr::rename(scientific_name = species_name) %>%
-#   dplyr::mutate( # fix rouge spaces in species names
-#     common_name = ifelse(is.na(common_name), "", common_name), 
-#     common_name = gsub(pattern = "  ", replacement = " ", 
-#                        x = trimws(common_name), fixed = TRUE), 
-#     scientific_name = ifelse(is.na(scientific_name), "", scientific_name), 
-#     scientific_name = gsub(pattern = "  ", replacement = " ", 
-#                            x = trimws(scientific_name), fixed = TRUE))
-
-load(file = "./data/spp_info.rdata")
-spp_info <- spp_info %>% 
-  dplyr::select(-notes_itis)
+if (taxize0){
+  load(file = "./data/spp_info.rdata")
+  spp_info <- spp_info %>% 
+    dplyr::select(-notes_itis)
+} else {
+  spp_info <-
+    # dplyr::left_join(
+      # x =
+    species0 %>%
+        dplyr::select(species_code, common_name, species_name) %>% # ,
+      # y = species_taxonomics0 %>%
+        # dplyr::select(),
+      # by = c("")) %>%
+    dplyr::rename(scientific_name = species_name) %>%
+    dplyr::mutate( # fix rouge spaces in species names
+      common_name = ifelse(is.na(common_name), "", common_name),
+      common_name = gsub(pattern = "  ", replacement = " ",
+                         x = trimws(common_name), fixed = TRUE),
+      scientific_name = ifelse(is.na(scientific_name), "", scientific_name),
+      scientific_name = gsub(pattern = "  ", replacement = " ",
+                             x = trimws(scientific_name), fixed = TRUE), 
+      itis = NA) # made if taxize0 == TRUE
+}
 
 ## cruises ---------------------------------------------------------------------
 
