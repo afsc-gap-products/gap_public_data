@@ -10,7 +10,7 @@
 library(taxize)
 
 
-find_itis <- function(dat,
+find_taxize <- function(dat,
                       known = NULL, 
                       db0 = "itis") {
   
@@ -264,6 +264,15 @@ known_tsn <- list( # will have to check these each year
   "Torellivelutina ammonia" = c(72591, "Code for Torellia ammonia (old name)"), 
   
   
+  "Psolus" = c(1077949, "ITIS returned more than one option."), 
+  "Porella" = c(156418, "ITIS returned more than one option."), 
+  "Polychaete" = c(64358, "ITIS returned more than one option."), 
+  "Pectinaria" = c(67706, "ITIS returned more than one option."), 
+  "Mallotus" = c(162034, "ITIS returned more than one option."), 
+  "Echiura" = c(914211, "ITIS returned more than one option."), 
+  "Echinacea" = c(157891, "ITIS returned more than one option."), 
+  'Cyanea' = c(51669, "ITIS returned more than one option."), 
+  "Caryophylliidae" = c(571698, "ITIS returned more than one option."), 
   "Parophrys vetulus X Platichthys stellatus hybrid" = c(NA, "AFSC defined species."), 
   "Platichthys stellatus X Pleuronectes quadrituberculatus hybrid" = c(NA, "AFSC defined species.")
   
@@ -272,13 +281,6 @@ known_tsn <- list( # will have to check these each year
   # "Myriapora subgracilis" = c(156608, "Typo: Used code for Leieschara subgracilis (d'Orbigny, 1852), new name for Myriapora subgracilis (d'Orbigny, 1853)."), 
 
 
-  
-)
-  
-  
-#   known_tsn0 <- list(
-#   
-# 
 #    "Calliostoma titanium" = c(NA, ""), 
 #   "Otukaia beringensis" = c(NA, ""), 
 #    "Oligomeria conoidea" = c(NA, ""), 
@@ -498,7 +500,7 @@ known_tsn <- list( # will have to check these each year
 #   # '' = c(NA, ""),
 #   # '' = c(NA, ""),
 #   # '' = c(NA, ""),
-# )
+)
 
 
 known_worms <- list( # will have to check these each year
@@ -506,6 +508,65 @@ known_worms <- list( # will have to check these each year
                           "Did not find this species in WoRMS"),
   "Neptunea vermii" = c(NA, 
                         "Did not find this species in WoRMS"), 
+  "Alcyonidium" = c(110993, "WoRMS returned more than one option."),
+  "Alcyonium" = c(125284, "WoRMS returned more than one option."),
+  'Anonyx nugax' = c(102514, "WoRMS returned more than one option."), 
+  "Ascidian" = c(562518, "WoRMS returned more than one option."), # selected Ascidianibacter ?
+  'Axinella' = c(131774, "WoRMS returned more than one option."), 
+  'Axinella rugosa' = c(132491, "WoRMS returned more than one option."), 
+  'Beroe' = c(1434803, "WoRMS returned more than one option."), 
+  'Buccinum costatum' = c(1023579, "WoRMS returned more than one option."), # unaccepted
+  'Buccinum obsoletum' = c(877185, "WoRMS returned more than one option."), 
+  'Buccinum scalariforme' = c(138875, "WoRMS returned more than one option."), 
+  'Calliostoma canaliculatum' = c(467171, "WoRMS returned more than one option."), 
+  'Careproctus gilberti' = c(367288, "WoRMS returned more than one option."), 
+  'Chaetopterus' = c(129229, "WoRMS returned more than one option."), 
+  'Chlamys' = c(138315, "WoRMS returned more than one option."), 
+  'Chrysaora' = c(135261, "WoRMS returned more than one option."), 
+  'Clavularia' = c(125286, "WoRMS returned more than one option."), # could also be 602367
+  'Ctenophora' = c(1248, "WoRMS returned more than one option."), # could also be 163921
+  'Flabellina' = c(138019, "WoRMS returned more than one option."), 
+  'Gadus' = c(125732, "WoRMS returned more than one option."), 
+  'gastropod' = c(101, "WoRMS returned more than one option."), # Gastropoda  Cuvier, 1795
+  'Geodia mesotriaena' = c(134035, "WoRMS returned more than one option."), 
+  'Glycera' = c(129296, "WoRMS returned more than one option."), 
+  'Gonostomatidae' = c(125601, "WoRMS returned more than one option."),  
+  'Haliclona digitata' = c(184508, "WoRMS returned more than one option."), 
+  'Henricia sanguinolenta' = c(123974, "WoRMS returned more than one option."), 
+  'Heteropora' = c(248342, "WoRMS returned more than one option."), 
+  'Hiatella' = c(138068, "WoRMS returned more than one option."), 
+  'Hippodiplosia' = c(146979, "WoRMS returned more than one option."), # not accepted
+  'Liparis' = c(126160, "WoRMS returned more than one option."), 
+  'Lumpenus fabricii' = c(127073 , "WoRMS returned more than one option."),  
+  'Lycodes concolor' = c(367289, "WoRMS returned more than one option."), 
+  'Molpadia' = c(123540, "WoRMS returned more than one option."),  
+  'Musculus' = c(138225, "WoRMS returned more than one option."), 
+  'Myxicola infundibulum' = c(130932, "WoRMS returned more than one option."),  
+  'Natica russa' = c(749499, "WoRMS returned more than one option."), # 254470 Natica russa Gould, 1859 unaccepted/749499 Natica russa  Dall, 1874 unaccepted
+  'Nucula tenuis' = c(152323, "WoRMS returned more than one option."),  # 1 152989             Nucula tenuis  Philippi, 1836 unaccepted/607396             Nucula tenuis (Montagu, 1808) unaccepted/152323             Nucula tenuis  (Powell, 1927) unaccepted
+  'Pagurus setosus' = c(366787, "WoRMS returned more than one option."), 
+  'Pandalopsis' = c(107044, "WoRMS returned more than one option."), # now Pandalus Leach, 1814 [in Leach, 1813-1815]
+  'Pectinaria' = c(129437, "WoRMS returned more than one option."), 
+  'Platichthys' = c(126119, "WoRMS returned more than one option."), 
+  'Polymastia pacifica' = c(170653, "WoRMS returned more than one option."), 
+  'Polyorchis' = c(267759, "WoRMS returned more than one option."), 
+  'Psolidae' = c(123189, "WoRMS returned more than one option."), 
+  'Psolus peroni' = c(529651, "WoRMS returned more than one option."), 
+  'Rectiplanes' = c(432545, "WoRMS returned more than one option."), # accepted now as Antiplanes Dall, 1902 432398
+  'Scorpaenichthys marmoratus' = c(282726, "WoRMS returned more than one option."), 
+  'Serpula vermicularis' = c(131051, "WoRMS returned more than one option."), 
+  'Stylatula elongata' = c(286695, "WoRMS returned more than one option."), 
+  'Themisto' = c(101800, "WoRMS returned more than one option."), 
+  'Vulcanella' = c(170325, "WoRMS returned more than one option."), # could also be 602186
+  'Yoldia hyperborea' = c(141989, "WoRMS returned more than one option."), 
+  # '' = c(, "WoRMS returned more than one option."), 
+  # '' = c(, "WoRMS returned more than one option."), 
+  # '' = c(, "WoRMS returned more than one option."), 
+  # '' = c(, "WoRMS returned more than one option."), 
+  # '' = c(, "WoRMS returned more than one option."), 
+  # '' = c(, "WoRMS returned more than one option."), 
+  # '' = c(, "WoRMS returned more than one option."), 
+  'Buccinum ectomycina' = c(NA, "WoRMS could not find."), 
   'Esperiopsis flagrum' = c(864174, "Worms unaccepted 233110. Used code for Abyssocladia flagrum (Lehnert, Stone & Heimler, 2006).")
   
   # "" = c(NA, 
@@ -514,24 +575,43 @@ known_worms <- list( # will have to check these each year
 
 # Run function -----------------------------------------------------------------
 
-# rnge <- 329:350
-rnge <- 1:nrow(spp_info0)
-spp_info00 <- find_itis(dat = data.frame(species_name = spp_info0$scientific_name[rnge], 
+# ITIS
+rnge <- 1:nrow(spp_info0) # rnge <- 329:350
+spp_info00 <- find_taxize(dat = data.frame(species_name = spp_info0$scientific_name[rnge], 
                                        scientific_name = spp_info0$scientific_name1[rnge], 
                                        common_name = spp_info0$common_name[rnge],
                                        species_code = spp_info0$species_code[rnge]), 
                       known = known_tsn,
                       db0 = "itis")
-                      
 
-still_missing <- spp_info00$still_missing 
-still_missing
+still_missing_itis <- spp_info00$still_missing 
+still_missing_itis
 
 spp_info <- spp_info00$spp_info
 # taxize::classification(
 #   sci_id = "Sicyonis",
 #   db = "itis")
 
+
+
+# WoRMS
+rnge <- 1:nrow(spp_info0) # rnge <- 329:350
+spp_info00 <- find_taxize(dat = data.frame(species_name = spp_info0$scientific_name[rnge], 
+                                           scientific_name = spp_info0$scientific_name1[rnge], 
+                                           common_name = spp_info0$common_name[rnge],
+                                           species_code = spp_info0$species_code[rnge]), 
+                          known = known_worms,
+                          db0 = "worms")
+
+still_missing_worms <- spp_info00$still_missing 
+still_missing_worms
+
+spp_info <- dplyr::full_join(x = spp_info, 
+                             y = spp_info00$spp_info, 
+                             by = c("species_name", "scientific_name", "common_name", "species_code"))
+# taxize::classification(
+#   sci_id = "Sicyonis",
+#   db = "itis")
 
 save(spp_info, file = "./data/spp_info.rdata")
 readr::write_csv(x = spp_info, file = "./data/spp_info.csv")

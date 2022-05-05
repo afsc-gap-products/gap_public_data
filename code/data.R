@@ -99,7 +99,7 @@ readr::write_csv(x = tax_conf, file = paste0(getwd(),
 if (taxize0){
   load(file = "./data/spp_info.rdata")
   spp_info <- spp_info %>% 
-    dplyr::select(-notes_itis)
+    dplyr::select(-notes_itis, -notes_worms)
 } else {
   spp_info <-
     # dplyr::left_join(
@@ -117,7 +117,8 @@ if (taxize0){
       scientific_name = ifelse(is.na(scientific_name), "", scientific_name),
       scientific_name = gsub(pattern = "  ", replacement = " ",
                              x = trimws(scientific_name), fixed = TRUE), 
-      itis = NA) # made if taxize0 == TRUE
+      itis = NA, 
+      worms = NA) # made if taxize0 == TRUE
 }
 
 ## cruises ---------------------------------------------------------------------
@@ -248,7 +249,7 @@ catch_haul_cruises <-
   dplyr::left_join(
     x = .,
     y = spp_info %>%
-      dplyr::select(species_code, scientific_name, common_name, itis),
+      dplyr::select(species_code, scientific_name, common_name, itis, worms),
     by = "species_code")
 
 # dim(catch_haul_cruises) # 2021

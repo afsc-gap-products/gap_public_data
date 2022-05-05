@@ -24,15 +24,14 @@ surveys <-
                            "Aleutian Islands", 
                            "Bering Sea Slope") )
 
-# incorporate species codes from databases
-taxize0 <- FALSE
+taxize0 <- TRUE # incorporate species codes from databases
 
 # Support scripts --------------------------------------------------------------
 
 # source('./code/data_dl.R')
 source('./code/functions.R')
 if (taxize0){
-  source('./code/find_itis_species_codes.R')
+  source('./code/find_taxize_species_codes.R')
 }
 source('./code/data.R')
 

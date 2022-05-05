@@ -100,9 +100,10 @@ cpue_station <-
                 dplyr::across(dplyr::starts_with("cpue_"), round, digits = 6), 
                 weight_kg = round(weight_kg, digits = 6)) %>% 
   dplyr::select(any_of(
-    c(as.character(expression(year, srvy, survey, survey_id, cruise, haul, hauljoin, stratum, station, vessel_name, vessel_id, # survey data
+    c(as.character(expression(
+      year, srvy, survey, survey_id, cruise, haul, hauljoin, stratum, station, vessel_name, vessel_id, # survey data
     date_time, latitude_dd, longitude_dd, # when/where
-    species_code, itis, common_name, scientific_name, taxon_confidence,  # species info
+    species_code, itis, common_name, scientific_name, taxon_confidence,  itis, worms, # species info
     cpue_kgha, cpue_kgkm2, cpue_kg1000km2, # cpue weight
     cpue_noha, cpue_nokm2, cpue_no1000km2, # cpue num
     weight_kg, count, # summed catch data
