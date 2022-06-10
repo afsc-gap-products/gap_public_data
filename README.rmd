@@ -1,8 +1,7 @@
 ---
-output: md_document
-editor_options: 
-  markdown: 
-    wrap: 72
+output: 
+  md_document: 
+    variant: markdown_github
 ---
 
 ```{r setup, include=FALSE}
@@ -14,7 +13,9 @@ knitr::opts_chunk$set(echo = TRUE)
 # [AFSC RACE Groundfish and Shellfish Survey Public Data](https://github.com/afsc-gap-products/gap_public_data) <img src="https://avatars.githubusercontent.com/u/91760178?s=96&amp;v=4" alt="Logo." align="right" width="139" height="139"/>
 
 ```{r echo=FALSE, results="hide", message=FALSE, include=FALSE, echo = FALSE}
-PKG <- c("badger", "flextable")
+PKG <- c("badger", #"flextable"
+         "kableExtra", 
+         "knitr")
 PKG <- unique(PKG)
 for (p in PKG) {
   if(!require(p,character.only = TRUE)) {
@@ -261,10 +262,18 @@ Species identification confidence in the Gulf of Alaska and Aleutian Islands sur
 
 names(column_data) <- c("Column name from data", "Descriptive Column Name", "Units", "Description")
 
-library(flextable)
-gg <- flextable::flextable(column_data) 
-gg <- theme_zebra(gg)
-gg
+# library(flextable)
+# gg <- flextable::flextable(column_data)
+# gg <- theme_zebra(gg)
+# gg
+# 
+# library(kableExtra)
+# library(knitr)
+# gg <- knitr::kable(column_data) #, "html"
+# gg <- kableExtra::kable_styling(gg, "striped")
+# gg
+
+column_data
 
 ```
 
