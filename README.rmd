@@ -267,9 +267,10 @@ names(column_data) <- c("Column name from data", "Descriptive Column Name", "Uni
 # gg <- theme_zebra(gg)
 # gg
 # 
-# library(kableExtra)
-# library(knitr)
-# gg <- knitr::kable(column_data) #, "html"
+library(kableExtra)
+library(knitr)
+# gg <- 
+  knitr::kable(column_data) #, "html"
 # gg <- kableExtra::kable_styling(gg, "striped")
 # gg
 

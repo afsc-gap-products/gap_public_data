@@ -249,6 +249,539 @@ platform, please contact us using the Comments page on the FOSS page.
 
 ### Column-level metadata
 
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+Column name from data
+</th>
+<th style="text-align:left;">
+Descriptive Column Name
+</th>
+<th style="text-align:left;">
+Units
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+year
+</td>
+<td style="text-align:left;">
+Year
+</td>
+<td style="text-align:left;">
+numeric
+</td>
+<td style="text-align:left;">
+Year the survey was conducted in.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+srvy
+</td>
+<td style="text-align:left;">
+Survey
+</td>
+<td style="text-align:left;">
+Abbreviated text
+</td>
+<td style="text-align:left;">
+Abbreviated survey names. The column ‘srvy’ is associated with the
+‘survey’ and ‘survey_id’ columns. Northern Bering Sea (NBS),
+Southeastern Bering Sea (EBS), Bering Sea Slope (BSS), Gulf of Alaska
+(GOA), Aleutian Islands (AI). survey Survey text Name and description of
+survey. The column ‘survey’ is associated with the ‘srvy’ and
+‘survey_id’ columns.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+survey_id
+</td>
+<td style="text-align:left;">
+Survey ID
+</td>
+<td style="text-align:left;">
+ID code
+</td>
+<td style="text-align:left;">
+This number uniquely identifies a survey. Name and description of
+survey. The column ‘survey_id’ is associated with the ‘srvy’ and
+‘survey’ columns. For a complete list of surveys go to
+\<<https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual%3E>;
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cruise
+</td>
+<td style="text-align:left;">
+Cruise ID
+</td>
+<td style="text-align:left;">
+ID code
+</td>
+<td style="text-align:left;">
+This is a six-digit number identifying the cruise number of the form:
+YYYY99 (where YYYY = year of the cruise; 99 = 2-digit number and is
+sequential; 01 denotes the first cruise that vessel made in this year,
+02 is the second, etc.) haul Haul Number ID code This number uniquely
+identifies a sampling event (haul) within a cruise. It is a sequential
+number, in chronological order of occurrence.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stratum
+</td>
+<td style="text-align:left;">
+Stratum ID
+</td>
+<td style="text-align:left;">
+ID Code
+</td>
+<td style="text-align:left;">
+RACE database statistical area for analyzing data. Strata were designed
+using bathymetry and other geographic and habitat-related elements. The
+strata are unique to each survey series. Stratum of value 0 indicates
+experimental tows. station Station ID ID code Alpha-numeric designation
+for the station established in the design of a survey.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+vessel_id
+</td>
+<td style="text-align:left;">
+Vessel ID
+</td>
+<td style="text-align:left;">
+ID Code
+</td>
+<td style="text-align:left;">
+
+ID number of the vessel used to collect data for that haul. The column
+‘vessel_id’ is associated with the ‘vessel_name’ column. Note that it is
+possible for a vessel to have a new name but the same vessel id number.
+
+For a complete list of vessel ID codes:
+\<<https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual%3E>;
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+vessel_name
+</td>
+<td style="text-align:left;">
+Vessel Name
+</td>
+<td style="text-align:left;">
+text
+</td>
+<td style="text-align:left;">
+
+Name of the vessel used to collect data for that haul. The column
+‘vessel_name’ is associated with the ‘vessel_id’ column. Note that it is
+possible for a vessel to have a new name but the same vessel id number.
+
+For a complete list of vessel ID codes:
+\<<https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual%3E>;
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+date_time
+</td>
+<td style="text-align:left;">
+Date and Time of Haul
+</td>
+<td style="text-align:left;">
+MM/DD/YYYYHH::MM
+</td>
+<td style="text-align:left;">
+The date (MM/DD/YYYY) and time (HH:MM) of the beginning of the haul.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+longitude_dd
+</td>
+<td style="text-align:left;">
+Longitude (decimal degrees)
+</td>
+<td style="text-align:left;">
+decimal degrees, 1e-05 resolution
+</td>
+<td style="text-align:left;">
+Longitude (one hundred thousandth of a decimal degree) of the start of
+the haul.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+latitude_dd
+</td>
+<td style="text-align:left;">
+Latitude (decimal degrees)
+</td>
+<td style="text-align:left;">
+decimal degrees, 1e-05 resolution
+</td>
+<td style="text-align:left;">
+Latitude (one hundred thousandth of a decimal degree) of the start of
+the haul.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+species_code
+</td>
+<td style="text-align:left;">
+Taxon Code
+</td>
+<td style="text-align:left;">
+ID code
+</td>
+<td style="text-align:left;">
+The species code of the organism associated with the ‘common_name’ and
+‘scientific_name’ columns. For a complete species list go to
+\<<https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual%3E>;
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+common_name
+</td>
+<td style="text-align:left;">
+Taxon Common Name
+</td>
+<td style="text-align:left;">
+text
+</td>
+<td style="text-align:left;">
+The common name of the marine organism associated with the
+‘scientific_name’ and ‘species_code’ columns. For a complete species
+list go to
+\<<https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual%3E>;
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+scientific_name
+</td>
+<td style="text-align:left;">
+Taxon Scientific Name
+</td>
+<td style="text-align:left;">
+text
+</td>
+<td style="text-align:left;">
+The scientific name of the organism associated with the ‘common_name’
+and ‘species_code’ columns. For a complete taxon list go to
+\<<https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual%3E>;
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+taxon_confidence
+</td>
+<td style="text-align:left;">
+Taxon Confidence Rating
+</td>
+<td style="text-align:left;">
+rating
+</td>
+<td style="text-align:left;">
+
+Confidence in the ability of the survey team to correctly identify the
+taxon to the specified level, based solely on identification skill
+(e.g., not likelihood of a taxon being caught at that station on a
+location-by-location basis). Quality codes follow:
+
+‘High’: High confidence and consistency. Taxonomy is stable and reliable
+at this level, and field identification characteristics are well known
+and reliable.
+
+‘Moderate’: Moderate confidence. Taxonomy may be questionable at this
+level, or field identification characteristics may be variable and
+difficult to assess consistently.
+
+‘Low’: Low confidence. Taxonomy is incompletely known, or reliable field
+identification characteristics are unknown.
+
+Species identification confidence in the eastern Bering Sea shelf survey
+(1982-2008):
+\<<http://apps-afsc.fisheries.noaa.gov/Publications/ProcRpt/PR2009-04.pdf%3E>;
+
+Species identification confidence in the eastern Bering Sea slope survey
+(1976-2010):
+\<<http://apps-afsc.fisheries.noaa.gov/Publications/ProcRpt/PR2014-05.pdf%3E>;
+
+Species identification confidence in the Gulf of Alaska and Aleutian
+Islands surveys (1980-2011):
+\<<http://apps-afsc.fisheries.noaa.gov/Publications/ProcRpt/PR2014-01.pdf%3E>;
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cpue_kgha
+</td>
+<td style="text-align:left;">
+Weight CPUE (kg/ha)
+</td>
+<td style="text-align:left;">
+kilograms/hectare
+</td>
+<td style="text-align:left;">
+Relative Density. Catch weight (kilograms) divided by area (hectares)
+swept by the net.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cpue_kgkm2
+</td>
+<td style="text-align:left;">
+Weight CPUE (kg/km^2)
+</td>
+<td style="text-align:left;">
+kilograms/kilometers^2
+</td>
+<td style="text-align:left;">
+Relative Density. Catch weight (kilograms) divided by area (squared
+kilometers) swept by the net.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cpue_kg1000km2
+</td>
+<td style="text-align:left;">
+Weight CPUE (kg/1,000 km^2)
+</td>
+<td style="text-align:left;">
+kilograms/1000 kilometers^2
+</td>
+<td style="text-align:left;">
+Relative Density. Catch weight (kilograms) divided by area (thousand
+square kilometers) swept by the net.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cpue_noha
+</td>
+<td style="text-align:left;">
+Number CPUE (no./ha)
+</td>
+<td style="text-align:left;">
+count/hectare
+</td>
+<td style="text-align:left;">
+Relative Abundance. Catch number (in number of organisms) per area
+(hectares) swept by the net.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cpue_nokm2
+</td>
+<td style="text-align:left;">
+Number CPUE (no./km^2)
+</td>
+<td style="text-align:left;">
+count/kilometers^2
+</td>
+<td style="text-align:left;">
+Relative Abundance. Catch number (in number of organisms) per area
+(squared kilometers) swept by the net.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cpue_no1000km2
+</td>
+<td style="text-align:left;">
+Number CPUE (no./1,000 km^2)
+</td>
+<td style="text-align:left;">
+count/1000 kilometers^2
+</td>
+<td style="text-align:left;">
+Relative Abundance. Catch weight (in number of organisms) divided by
+area (thousand square kilometers) swept by the net.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+weight_kg
+</td>
+<td style="text-align:left;">
+Taxon Weight (kg)
+</td>
+<td style="text-align:left;">
+kilograms, thousandth resolution
+</td>
+<td style="text-align:left;">
+Weight (thousandths of a kilogram) of individuals in a haul by taxon.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+count
+</td>
+<td style="text-align:left;">
+Taxon Count
+</td>
+<td style="text-align:left;">
+count, whole number resolution
+</td>
+<td style="text-align:left;">
+Total number of individuals caught in haul by taxon, represented in
+whole numbers.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+bottom_temperature_c
+</td>
+<td style="text-align:left;">
+Bottom Temperature (Degrees Celsius)
+</td>
+<td style="text-align:left;">
+degrees Celsius, tenths of a degree resolution
+</td>
+<td style="text-align:left;">
+Bottom temperature (tenths of a degree Celsius); NA indicates removed or
+missing values.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+surface_temperature_c
+</td>
+<td style="text-align:left;">
+Surface Temperature (Degrees Celsius)
+</td>
+<td style="text-align:left;">
+degrees Celsius, tenths of a degree resolution
+</td>
+<td style="text-align:left;">
+Surface temperature (tenths of a degree Celsius); NA indicates removed
+or missing values.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+bottom_temperature_c
+</td>
+<td style="text-align:left;">
+Bottom Temperature (Degrees Celsius)
+</td>
+<td style="text-align:left;">
+degrees Celsius, tenths of a degree resolution
+</td>
+<td style="text-align:left;">
+Bottom temperature (tenths of a degree Celsius); NA indicates removed or
+missing values.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+depth_m
+</td>
+<td style="text-align:left;">
+Depth (m)
+</td>
+<td style="text-align:left;">
+meters, tenths of a meter resolution
+</td>
+<td style="text-align:left;">
+Bottom depth (tenths of a meter).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+distance_fished_km
+</td>
+<td style="text-align:left;">
+Distance Fished (km)
+</td>
+<td style="text-align:left;">
+kilometers, thousandths of kilometer resolution
+</td>
+<td style="text-align:left;">
+Distance the net fished (thousandths of kilometers).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+net_width_m
+</td>
+<td style="text-align:left;">
+Net Width (m)
+</td>
+<td style="text-align:left;">
+meters
+</td>
+<td style="text-align:left;">
+Measured or estimated distance (meters) between wingtips of the trawl.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+net_height_m
+</td>
+<td style="text-align:left;">
+Net Height (m)
+</td>
+<td style="text-align:left;">
+meters
+</td>
+<td style="text-align:left;">
+Measured or estimated distance (meters) between footrope and headrope of
+the trawl.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+area_swept_ha
+</td>
+<td style="text-align:left;">
+Area Swept (ha)
+</td>
+<td style="text-align:left;">
+hectares
+</td>
+<td style="text-align:left;">
+The area the net covered while the net was fishing (hectares), defined
+as the distance fished times the net width.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+duration_hr
+</td>
+<td style="text-align:left;">
+Tow Duration (decimal hr)
+</td>
+<td style="text-align:left;">
+decimal hours
+</td>
+<td style="text-align:left;">
+This is the elapsed time between start and end of a haul (decimal
+hours).
+</td>
+</tr>
+</tbody>
+</table>
+
     ##    Column name from data               Descriptive Column Name
     ## 1                   year                                  Year
     ## 2                   srvy                                Survey
