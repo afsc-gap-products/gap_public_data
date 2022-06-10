@@ -38,19 +38,16 @@ cat(
 
 **Basic Requirements**
 
--   Making data independently understandable (well documented with
-    structured metadata)
+-   Making data independently understandable (well documented with structured metadata)
 -   Making data visible (discoverable)
 -   Making data accessible.
--   Archiving appropriate data, in cooperation with NOAA, at existing
-    Data Centers.
+-   Archiving appropriate data, in cooperation with NOAA, at existing Data Centers.
 
 If you feel that the data or metadata can be improved, please create a pull request, submit an issue, or reach out the the survey team leads or to [Fisheries One Stop Shop (FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:200:13496745795839:Mail:NO:::) platform managers.
 
 ## This code is primarily maintained by:
 
-**Emily Markowitz** (Emily.Markowitz AT noaa.gov;
-[\@EmilyMarkowitz-NOAA](https://github.com/EmilyMarkowitz-NOAA))  
+**Emily Markowitz** (Emily.Markowitz AT noaa.gov; [\@EmilyMarkowitz-NOAA](https://github.com/EmilyMarkowitz-NOAA))  
 Research Fisheries Biologist  
 Alaska Fisheries Science Center,  
 National Marine Fisheries Service,  
@@ -59,15 +56,11 @@ Seattle, WA 98195
 
 ## Obtain data interactively through the [Fisheries One Stop Shop (FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:200:13496745795839:Mail:NO:::) platform
 
-Select, filter, and package this and other NOAA Fisheries data from the
-[Fisheries One Stop Shop
-(FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:200:13496745795839:Mail:NO:::)
-platform. This user-friendly portal is maintained through Oracle APEX.
+Select, filter, and package this and other NOAA Fisheries data from the [Fisheries One Stop Shop (FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:200:13496745795839:Mail:NO:::) platform. This user-friendly portal is maintained through Oracle APEX.
 
 ## Access data via the API
 
-A useful intro to using APIs in R can be found
-[here](https://www.dataquest.io/blog/r-api-tutorial/).
+A useful intro to using APIs in R can be found [here](https://www.dataquest.io/blog/r-api-tutorial/).
 
 ### Obtain data by connecting to the API
 
@@ -83,17 +76,15 @@ api_link <- "https://origin-tst-ods-st.fisheries.noaa.gov/ods/foss/afsc_groundfi
 
 ```{r, echo = TRUE}
 res <- httr::GET(api_link)
-
-base::rawToChar(res$content) # Test connection
+# base::rawToChar(res$content) # Test connection
 data <- jsonlite::fromJSON(base::rawToChar(res$content))
 # names(data)
-head(data$items, 3)
+knitr::kable(head(data$items, 3)) 
 ```
 
 ### Subset data
 
-Here we subset the data for the 2018 Aleutian Islands Bottom Trawl
-Survey
+Here, as an example, we can subset the data for the 2018 Aleutian Islands Bottom Trawl Survey
 
 ```{r, echo = TRUE}
 res <- httr::GET(api_link, query = list(srvy = "EBS", year = 2018))
@@ -103,71 +94,64 @@ x <- x[,c("stratum", "station", "vessel_name", "latitude_dd", "longitude_dd",
           "species_code", "common_name", "scientific_name", "taxon_confidence", 
           "cpue_kgha", "cpue_noha", "weight_kg", "count", 
           "bottom_temperature_c", "surface_temperature_c", "depth_m")]
-head(x, 3)
+knitr::kable(head(x, 3)) 
 ```
 
 ## Metadata
 
 ### Data Description:
 
-The Resource Assessment and Conservation Engineering Division (RACE) Groundfish Assessment Program (GAP) of the Alaska Fisheries Science Center (AFSC) conducts fisheries-independent bottom trawl surveys to monitor the condition of the demersal fish and crab stocks of Alaska. These data are developed to describe the temporal distribution and abundance of commercially and ecologically important groundfish species, examine the changes in the species composition of the fauna over time and space, and describe the physical environment of the groundfish habitat. 
+The Resource Assessment and Conservation Engineering Division (RACE) Groundfish Assessment Program (GAP) of the Alaska Fisheries Science Center (AFSC) conducts fisheries-independent bottom trawl surveys to monitor the condition of the demersal fish and crab stocks of Alaska. These data are developed to describe the temporal distribution and abundance of commercially and ecologically important groundfish species, examine the changes in the species composition of the fauna over time and space, and describe the physical environment of the groundfish habitat.
 
-There are no legal restrictions on access to the data. They reside in the public domain and can be freely distributed. Users must read and fully comprehend the metadata prior to use. Data should not be used beyond the limits of the source scale. Acknowledgement of NOAA, as the source from which these data were obtained, in any publications and/or other representations of these data, is suggested. These data are compiled and approved annually after each summer survey season. The data from previous years are unlikely to change substantially once published. 
+There are no legal restrictions on access to the data. They reside in the public domain and can be freely distributed. Users must read and fully comprehend the metadata prior to use. Data should not be used beyond the limits of the source scale. Acknowledgement of NOAA, as the source from which these data were obtained, in any publications and/or other representations of these data, is suggested. These data are compiled and approved annually after each summer survey season. The data from previous years are unlikely to change substantially once published.
 
-These data are non-zero (presence) observations from surveys conducted on fishing vessels. These surveys monitor trends in distribution and abundance of groundfish, crab, and bottom-dwelling species in Alaska’s marine ecosystems. These data include estimates of catch-per-unit-effort (CPUE) for most identified species at a standard set of stations. Some survey data are excluded, such as non-standard stations, surveys completed in earlier years using different/non-standard gear, and special tows and non-standard data collections. 
+These data are non-zero (presence) observations from surveys conducted on fishing vessels. These surveys monitor trends in distribution and abundance of groundfish, crab, and bottom-dwelling species in Alaska’s marine ecosystems. These data include estimates of catch-per-unit-effort (CPUE) for most identified species at a standard set of stations. Some survey data are excluded, such as non-standard stations, surveys completed in earlier years using different/non-standard gear, and special tows and non-standard data collections.
 
-Though not included in the public data, these surveys also collect oceanographic and environmental data, and biological data such as length, weight, stomach contents (to learn more about diet), otoliths (fish ear bones to learn about age), and tissue samples for genetic analysis, all of which can be shared upon special request. Also not included in the public data are estimated biomass (average total weight of all fish and crabs sampled) of crabs and groundfish that support the creation of annual stock assessments. 
+Though not included in the public data, these surveys also collect oceanographic and environmental data, and biological data such as length, weight, stomach contents (to learn more about diet), otoliths (fish ear bones to learn about age), and tissue samples for genetic analysis, all of which can be shared upon special request. Also not included in the public data are estimated biomass (average total weight of all fish and crabs sampled) of crabs and groundfish that support the creation of annual stock assessments.
 
 ### Bottom Trawl Surveys and Regions
 
-**Eastern Bering Sea Shelf (EBS)**
+-   **Eastern Bering Sea Shelf (EBS)**
+    -   Annual
+    -   Fixed stations at center of 20 x 20 nm grid
+-   **Northern Bering Sea (NBS)**
+    -   Biennial/Annual
+    -   Fixed stations at center of 20 x 20 nm grid
+-   **Eastern Bering Sea Slope (BSS)**
+    -   Intermittent (funding dependent)
+    -   Modified Index-Stratified Random of Successful Stations Survey Design
+-   **Aleutian Islands (AI)**
+    -   Triennial (1990s)/Biennial since 2000 in even years
+    -   Modified Index-Stratified Random of Successful Stations Survey Design
+-   **Gulf of Alaska (GOA)**
+    -   Triennial (1990s)/Biennial since 2001 in odd years
+    -   Stratified Random Survey Design
 
--   Annual
--   Fixed stations at center of 20 x 20 nm grid
-
-**Northern Bering Sea (NBS)**
-
--   Biennial/Annual
--   Fixed stations at center of 20 x 20 nm grid
-
-**Eastern Bering Sea Slope (BSS)**
-
--   Intermittent (funding dependent)
--   Modified Index-Stratified Random of Successful Stations Survey
-    Design
-
-**Aleutian Islands (AI)**
-
--   Triennial (1990s)/Biennial since 2000 in even years
--   Modified Index-Stratified Random of Successful Stations Survey
-    Design
-
-**Gulf of Alaska (GOA)**
-
--   Triennial (1990s)/Biennial since 2001 in odd years
--   Stratified Random Survey Design
+<img src="img/_grid_bs.png" alt="Eastern and Northern Bering Sea Shelf" align="right" width="150"/> <img src="img/_grid_ai.png" alt="Aleutian Islands" align="right" width="150"/>
 
 ### User Resources:
 
-About AFSC’s Resource Assessment and Conservation Engineering Division. For more information about species codes, please refer to the Groundfish Species Codebook. Learn more about the [Research Surveys conducted at AFSC](https://www.fisheries.noaa.gov/alaska/ecosystems/alaska-fish-research-surveys), these surveys from [past reports](http://apps-afsc.fisheries.noaa.gov/RACE/surveys/cruise_results.htm), and [GitHub repository](https://github.com/afsc-gap-products/gap_public_data).
+-   [AFSC’s Resource Assessment and Conservation Engineering Division](https://www.fisheries.noaa.gov/about/resource-assessment-and-conservation-engineering-division).
+-   For more information about codes used in the tables, please refer to the [survey code books](https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual).
+-   Find [past reports](http://apps-afsc.fisheries.noaa.gov/RACE/surveys/cruise_results.htm) about these surveys.
+-   [GitHub repository](https://github.com/afsc-gap-products/gap_public_data).
+-   Learn more about other [Research Surveys conducted at AFSC](https://www.fisheries.noaa.gov/alaska/ecosystems/alaska-fish-research-surveys).
 
 ### Access Constraints:
 
 There are no legal restrictions on access to the data. They reside in public domain and can be freely distributed.
 
-**User Constraints:** Users must read and fully comprehend the metadata prior to use. Data should not be used beyond the limits of the source scale. Acknowledgement of AFSC Groundfish Assessment Program, as the source from which these data were obtained, in any publications and/or other representations of these data, is suggested. Contact Us with
+**User Constraints:** Users must read and fully comprehend the metadata prior to use. Data should not be used beyond the limits of the source scale. Acknowledgement of AFSC Groundfish Assessment Program, as the source from which these data were obtained, in any publications and/or other representations of these data, is suggested.
 
-**Address:**
-
-National Oceanic and Atmospheric Administration (NOAA)   
-Alaska Fisheries Science Center (AFSC)   
-Resource Assessment and Conservation Engineering Division (RACE)   
-Groundfish Assessment Program (GAP) 7600 Sand Point Way, N.E. bldg. 4   
+**Address:** National Oceanic and Atmospheric Administration (NOAA)  
+Alaska Fisheries Science Center (AFSC)  
+Resource Assessment and Conservation Engineering Division (RACE)  
+Groundfish Assessment Program (GAP) 7600 Sand Point Way, N.E. bldg. 4  
 Seattle, WA 98115 USA
 
-**General questions** **and more specific data requests** can be sent to [afsc.gap.metadata\@noaa.gov](mailto:afsc.gap.metadata@noaa.gov) or submitted as an [issue on our GitHub Organization.](https://github.com/afsc-gap-products/data-requests) . The version of this data used for stock assessments can be found through the Alaska Fisheries Information Network (AKFIN). For questions about the eastern Bering Sea surveys, contact Duane Stevenson ([Duane.Stevenson\@noaa.gov](mailto:Duane.Stevenson@noaa.gov)). For questions about the Gulf of Alaska or Aleutian Islands surveys, contact Ned Laman ([Ned.Laman\@noaa.gov](mailto:Ned.Laman@noaa.gov)). For questions specifically about crab data in any region, contact Mike Litzow ([mike.litzow\@noaa.gov](mailto:mike.litzow@noaa.gov)), the Shellfish Assessment Program lead.
+**General questions** **and more specific data requests** can be sent to [afsc.gap.metadata\@noaa.gov](mailto:afsc.gap.metadata@noaa.gov) or submitted as an [issue on our GitHub Organization](https://github.com/afsc-gap-products/data-requests). The version of this data used for stock assessments can be found through the Alaska Fisheries Information Network (AKFIN). For questions about the eastern Bering Sea surveys, contact Duane Stevenson ([Duane.Stevenson\@noaa.gov](mailto:Duane.Stevenson@noaa.gov)). For questions about the Gulf of Alaska or Aleutian Islands surveys, contact Ned Laman ([Ned.Laman\@noaa.gov](mailto:Ned.Laman@noaa.gov)). For questions specifically about crab data in any region, contact Mike Litzow ([mike.litzow\@noaa.gov](mailto:mike.litzow@noaa.gov)), the Shellfish Assessment Program lead.
 
-For questions, comments, and concerns specifically about the FOSS platform, please contact us using the Comments page on the FOSS page.
+For questions, comments, and concerns specifically about the [Fisheries One Stop Shop (FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:200:13496745795839:Mail:NO:::) platform, please contact us using the Comments page on the [FOSS](https://www.fisheries.noaa.gov/foss/f?p=215:200:13496745795839:Mail:NO:::) page.
 
 ### Column-level metadata
 
@@ -180,45 +164,29 @@ column_data <- data.frame(matrix(
 
 "srvy", "Survey", "Abbreviated text", "Abbreviated survey names. The column 'srvy' is associated with the 'survey' and 'survey_id' columns. Northern Bering Sea (NBS), Southeastern Bering Sea (EBS), Bering Sea Slope (BSS), Gulf of Alaska (GOA), Aleutian Islands (AI). survey Survey text Name and description of survey. The column 'survey' is associated with the 'srvy' and 'survey_id' columns. ", 
 
-"survey_id", "Survey ID", "ID code", "This number uniquely identifies a survey. Name and description of survey. The column 'survey_id' is associated with the 'srvy' and 'survey' columns. For a complete list of surveys go to https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual", 
+"survey_id", "Survey ID", "ID code", "This number uniquely identifies a survey. Name and description of survey. The column 'survey_id' is associated with the 'srvy' and 'survey' columns. For a complete list of surveys, review the [code books](https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual).", 
 
 "cruise", "Cruise ID", "ID code", "This is a six-digit number identifying the cruise number of the form: YYYY99 (where YYYY = year of the cruise; 99 = 2-digit number and is sequential; 01 denotes the first cruise that vessel made in this year, 02 is the second, etc.) haul Haul Number ID code This number uniquely identifies a sampling event (haul) within a cruise. It is a sequential number, in chronological order of occurrence.", 
 
 "stratum", "Stratum ID", "ID Code", "RACE database statistical area for analyzing data. Strata were designed using bathymetry and other geographic and habitat-related elements. The strata are unique to each survey series. Stratum of value 0 indicates experimental tows. station Station ID ID code Alpha-numeric designation for the station established in the design of a survey. ", 
 
-"vessel_id", "Vessel ID", "ID Code", "ID number of the vessel used to collect data for that haul. The column 'vessel_id' is associated with the 'vessel_name' column. Note that it is possible for a vessel to have a new name but the same vessel id number.
+"vessel_id", "Vessel ID", "ID Code", "ID number of the vessel used to collect data for that haul. The column 'vessel_id' is associated with the 'vessel_name' column. Note that it is possible for a vessel to have a new name but the same vessel id number. For a complete list of vessel ID codes, review the [code books](https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual).", 
 
-For a complete list of vessel ID codes: https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual", 
+"vessel_name", "Vessel Name", "text", "Name of the vessel used to collect data for that haul. The column 'vessel_name' is associated with the 'vessel_id' column. Note that it is possible for a vessel to have a new name but the same vessel id number. For a complete list of vessel ID codes, review the [code books](https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual). ", 
 
-"vessel_name", "Vessel Name", "text", "Name of the vessel used to collect data for that haul. The column 'vessel_name' is associated with the 'vessel_id' column. Note that it is possible for a vessel to have a new name but the same vessel id number.
-
-For a complete list of vessel ID codes: https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual", 
-
-"date_time", "Date and Time of Haul", "MM/DD/YYYYHH::MM", "The date (MM/DD/YYYY) and time (HH:MM) of the beginning of the haul. ", 
+"date_time", "Date and Time of Haul", "MM/DD/YYYY HH::MM", "The date (MM/DD/YYYY) and time (HH:MM) of the beginning of the haul. ", 
 
 "longitude_dd", "Longitude (decimal degrees)", "decimal degrees, 1e-05 resolution", "Longitude (one hundred thousandth of a decimal degree) of the start of the haul. ", 
 
 "latitude_dd", "Latitude (decimal degrees)", "decimal degrees, 1e-05 resolution", "Latitude (one hundred thousandth of a decimal degree) of the start of the haul. ",
 
-"species_code", "Taxon Code", "ID code", "The species code of the organism associated with the 'common_name' and 'scientific_name' columns. For a complete species list go to https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual ", 
+"species_code", "Taxon Code", "ID code", "The species code of the organism associated with the 'common_name' and 'scientific_name' columns. For a complete species, review the [code books](https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual).", 
 
-"common_name", "Taxon Common Name", "text", "The common name of the marine organism associated with the 'scientific_name' and 'species_code' columns. For a complete species list go to https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual", 
+"common_name", "Taxon Common Name", "text", "The common name of the marine organism associated with the 'scientific_name' and 'species_code' columns. For a complete species list, review the [code books](https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual).", 
 
-"scientific_name", "Taxon Scientific Name", "text", "The scientific name of the organism associated with the 'common_name' and 'species_code' columns. For a complete taxon list go to https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual", 
+"scientific_name", "Taxon Scientific Name", "text", "The scientific name of the organism associated with the 'common_name' and 'species_code' columns. For a complete taxon list, review the [code books](https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual).", 
 
-"taxon_confidence", "Taxon Confidence Rating", "rating", "Confidence in the ability of the survey team to correctly identify the taxon to the specified level, based solely on identification skill (e.g., not likelihood of a taxon being caught at that station on a location-by-location basis). Quality codes follow:
-
-'High': High confidence and consistency. Taxonomy is stable and reliable at this level, and field identification characteristics are well known and reliable.
-
-'Moderate': Moderate confidence. Taxonomy may be questionable at this level, or field identification characteristics may be variable and difficult to assess consistently.
-
-'Low': Low confidence. Taxonomy is incompletely known, or reliable field identification characteristics are unknown.
-
-Species identification confidence in the eastern Bering Sea shelf survey (1982-2008): http://apps-afsc.fisheries.noaa.gov/Publications/ProcRpt/PR2009-04.pdf
-
-Species identification confidence in the eastern Bering Sea slope survey (1976-2010): http://apps-afsc.fisheries.noaa.gov/Publications/ProcRpt/PR2014-05.pdf
-
-Species identification confidence in the Gulf of Alaska and Aleutian Islands surveys (1980-2011): http://apps-afsc.fisheries.noaa.gov/Publications/ProcRpt/PR2014-01.pdf", 
+"taxon_confidence", "Taxon Confidence Rating", "rating", "Confidence in the ability of the survey team to correctly identify the taxon to the specified level, based solely on identification skill (e.g., not likelihood of a taxon being caught at that station on a location-by-location basis). Quality codes follow: **'High'**: High confidence and consistency. Taxonomy is stable and reliable at this level, and field identification characteristics are well known and reliable. **'Moderate'**: Moderate confidence. Taxonomy may be questionable at this level, or field identification characteristics may be variable and difficult to assess consistently. **'Low'**: Low confidence. Taxonomy is incompletely known, or reliable field identification characteristics are unknown. Documentation: [Species identification confidence in the eastern Bering Sea shelf survey (1982-2008)](http://apps-afsc.fisheries.noaa.gov/Publications/ProcRpt/PR2009-04.pdf), [Species identification confidence in the eastern Bering Sea slope survey (1976-2010)](http://apps-afsc.fisheries.noaa.gov/Publications/ProcRpt/PR2014-05.pdf), and [Species identification confidence in the Gulf of Alaska and Aleutian Islands surveys (1980-2011)](http://apps-afsc.fisheries.noaa.gov/Publications/ProcRpt/PR2014-01.pdf). ", 
 
 "cpue_kgha", "Weight CPUE (kg/ha)", "kilograms/hectare", "Relative Density. Catch weight (kilograms) divided by area (hectares) swept by the net.", 
 
@@ -254,10 +222,8 @@ Species identification confidence in the Gulf of Alaska and Aleutian Islands sur
 
 "duration_hr", "Tow Duration (decimal hr)", "decimal hours", "This is the elapsed time between start and end of a haul (decimal hours).")))
 
-
 names(column_data) <- c("Column name from data", "Descriptive Column Name", "Units", "Description")
 
-library(knitr)
 knitr::kable(column_data) 
 
 ```
