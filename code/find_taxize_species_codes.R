@@ -44,7 +44,7 @@ find_taxize <- function(dat,
         id_indata <- taxize::classification(sci_id = dat1$scientific_name[i], db = db0)
         a <- lapply(X = id_indata,"[", 3)[[1]]
         
-        if (!is.na(a[1])) { # A taxon was successfully identified
+        if (sum(unlist(!is.na(a[1])))>0) { # A taxon was successfully identified
           
           a <- a$id[nrow(a)]
           
@@ -77,7 +77,7 @@ find_taxize <- function(dat,
                                                 db = db0)
             a <- lapply(X = id_indata,"[", 3)[[1]] 
             
-            if (!is.na(a[1])) { # A genus was successfully identified
+            if (sum(unlist(!is.na(a[1])))>0) { #(!is.na(a[1])) { # A genus was successfully identified
               print("Genus defined by database.")
               
               a <- a$id[nrow(a)]
@@ -559,6 +559,7 @@ known_worms <- list( # will have to check these each year
   'Themisto' = c(101800, "WoRMS returned more than one option."), 
   'Vulcanella' = c(170325, "WoRMS returned more than one option."), # could also be 602186
   'Yoldia hyperborea' = c(141989, "WoRMS returned more than one option."), 
+  "Iphinoe" = 110391, 
   # '' = c(, "WoRMS returned more than one option."), 
   # '' = c(, "WoRMS returned more than one option."), 
   # '' = c(, "WoRMS returned more than one option."), 

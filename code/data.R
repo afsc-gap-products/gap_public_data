@@ -22,7 +22,7 @@ for (i in 1:length(a)){
 }
 
 ## Taxonomic confidence data ---------------------------------------------------
-if(taxize0){
+if (taxize0) {
 df.ls <- list()
 a <- list.files(path = here::here("data", "taxon_confidence"))
 a <- a[a != "taxon_confidence.csv"]

@@ -6,6 +6,8 @@
 #' Notes: 
 #' -----------------------------------------------------------------------------
 
+# source("./code/run.R")
+
 # ISSUES -----------------------------------------------------------------------
 
 # [None at the moment]
@@ -24,15 +26,15 @@ surveys <-
                            "Aleutian Islands", 
                            "Bering Sea Slope") )
 
-taxize0 <- FALSE # incorporate species codes from databases
+taxize0 <- TRUE # incorporate species codes from databases
 
 # Support scripts --------------------------------------------------------------
 
 # source('./code/data_dl.R')
 source('./code/functions.R')
-# if (taxize0){ # only if you need to rerun {taxize} stuff - very time intensive!
-#   source('./code/find_taxize_species_codes.R')
-# }
+if (taxize0){ # only if you need to rerun {taxize} stuff - very time intensive!
+  source('./code/find_taxize_species_codes.R')
+}
 source('./code/data.R')
 
 # Run analysis -----------------------------------------------------------------
@@ -43,8 +45,8 @@ source('./code/analysis.R')
 
 # source('./code/data_dl_check.R')
 
-dir.create(path = paste0(dir_out, "/check/"))
-rmarkdown::render(paste0("./code/check.Rmd"),
-                  output_dir = dir_out,
-                  output_file = paste0("./check/check.docx"))
+# dir.create(path = paste0(dir_out, "/check/"))
+# rmarkdown::render(paste0("./code/check.Rmd"),
+#                   output_dir = dir_out,
+#                   output_file = paste0("./check/check.docx"))
 
