@@ -249,259 +249,47 @@ platform, please contact us using the Comments page on the FOSS page.
 
 ### Column-level metadata
 
-<table>
-<thead>
-<tr>
-<th style="text-align:left;">
-Column name from data
-</th>
-<th style="text-align:left;">
-Descriptive Column Name
-</th>
-<th style="text-align:left;">
-Units
-</th>
-<th style="text-align:left;">
-Description
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-year
-</td>
-<td style="text-align:left;">
-Year
-</td>
-<td style="text-align:left;">
-numeric
-</td>
-<td style="text-align:left;">
-Year the survey was conducted in.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-srvy
-</td>
-<td style="text-align:left;">
-Survey
-</td>
-<td style="text-align:left;">
-Abbreviated text
-</td>
-<td style="text-align:left;">
-Abbreviated survey names. The column ‘srvy’ is associated with the
-‘survey’ and ‘survey_id’ columns. Northern Bering Sea (NBS),
-Southeastern Bering Sea (EBS), Bering Sea Slope (BSS), Gulf of Alaska
-(GOA), Aleutian Islands (AI). survey Survey text Name and description of
-survey. The column ‘survey’ is associated with the ‘srvy’ and
-‘survey_id’ columns.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-survey_id
-</td>
-<td style="text-align:left;">
-Survey ID
-</td>
-<td style="text-align:left;">
-ID code
-</td>
-<td style="text-align:left;">
-This number uniquely identifies a survey. Name and description of
-survey. The column ‘survey_id’ is associated with the ‘srvy’ and
-‘survey’ columns. For a complete list of surveys go to
-\<<https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual%3E>;
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-cruise
-</td>
-<td style="text-align:left;">
-Cruise ID
-</td>
-<td style="text-align:left;">
-ID code
-</td>
-<td style="text-align:left;">
-This is a six-digit number identifying the cruise number of the form:
-YYYY99 (where YYYY = year of the cruise; 99 = 2-digit number and is
-sequential; 01 denotes the first cruise that vessel made in this year,
-02 is the second, etc.) haul Haul Number ID code This number uniquely
-identifies a sampling event (haul) within a cruise. It is a sequential
-number, in chronological order of occurrence.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-stratum
-</td>
-<td style="text-align:left;">
-Stratum ID
-</td>
-<td style="text-align:left;">
-ID Code
-</td>
-<td style="text-align:left;">
-RACE database statistical area for analyzing data. Strata were designed
-using bathymetry and other geographic and habitat-related elements. The
-strata are unique to each survey series. Stratum of value 0 indicates
-experimental tows. station Station ID ID code Alpha-numeric designation
-for the station established in the design of a survey.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-vessel_id
-</td>
-<td style="text-align:left;">
-Vessel ID
-</td>
-<td style="text-align:left;">
-ID Code
-</td>
-<td style="text-align:left;">
-
-ID number of the vessel used to collect data for that haul. The column
-‘vessel_id’ is associated with the ‘vessel_name’ column. Note that it is
-possible for a vessel to have a new name but the same vessel id number.
+| Column name from data | Descriptive Column Name | Units            | Description                                                                                                                                                                                                                                                                                                                                                                                                 |
+|:--|:--|:---|:--------------------------------------------------------------|
+| year                  | Year                    | numeric          | Year the survey was conducted in.                                                                                                                                                                                                                                                                                                                                                                           |
+| srvy                  | Survey                  | Abbreviated text | Abbreviated survey names. The column ‘srvy’ is associated with the ‘survey’ and ‘survey_id’ columns. Northern Bering Sea (NBS), Southeastern Bering Sea (EBS), Bering Sea Slope (BSS), Gulf of Alaska (GOA), Aleutian Islands (AI). survey Survey text Name and description of survey. The column ‘survey’ is associated with the ‘srvy’ and ‘survey_id’ columns.                                           |
+| survey_id             | Survey ID               | ID code          | This number uniquely identifies a survey. Name and description of survey. The column ‘survey_id’ is associated with the ‘srvy’ and ‘survey’ columns. For a complete list of surveys go to <https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual>                                                                                                    |
+| cruise                | Cruise ID               | ID code          | This is a six-digit number identifying the cruise number of the form: YYYY99 (where YYYY = year of the cruise; 99 = 2-digit number and is sequential; 01 denotes the first cruise that vessel made in this year, 02 is the second, etc.) haul Haul Number ID code This number uniquely identifies a sampling event (haul) within a cruise. It is a sequential number, in chronological order of occurrence. |
+| stratum               | Stratum ID              | ID Code          | RACE database statistical area for analyzing data. Strata were designed using bathymetry and other geographic and habitat-related elements. The strata are unique to each survey series. Stratum of value 0 indicates experimental tows. station Station ID ID code Alpha-numeric designation for the station established in the design of a survey.                                                        |
+| vessel_id             | Vessel ID               | ID Code          | ID number of the vessel used to collect data for that haul. The column ‘vessel_id’ is associated with the ‘vessel_name’ column. Note that it is possible for a vessel to have a new name but the same vessel id number.                                                                                                                                                                                     |
 
 For a complete list of vessel ID codes:
-\<<https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual%3E>;
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-vessel_name
-</td>
-<td style="text-align:left;">
-Vessel Name
-</td>
-<td style="text-align:left;">
-text
-</td>
-<td style="text-align:left;">
-
-Name of the vessel used to collect data for that haul. The column
-‘vessel_name’ is associated with the ‘vessel_id’ column. Note that it is
-possible for a vessel to have a new name but the same vessel id number.
+<https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual>
+\| \|vessel_name \|Vessel Name \|text \|Name of the vessel used to
+collect data for that haul. The column ‘vessel_name’ is associated with
+the ‘vessel_id’ column. Note that it is possible for a vessel to have a
+new name but the same vessel id number.
 
 For a complete list of vessel ID codes:
-\<<https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual%3E>;
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-date_time
-</td>
-<td style="text-align:left;">
-Date and Time of Haul
-</td>
-<td style="text-align:left;">
-MM/DD/YYYYHH::MM
-</td>
-<td style="text-align:left;">
-The date (MM/DD/YYYY) and time (HH:MM) of the beginning of the haul.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-longitude_dd
-</td>
-<td style="text-align:left;">
-Longitude (decimal degrees)
-</td>
-<td style="text-align:left;">
-decimal degrees, 1e-05 resolution
-</td>
-<td style="text-align:left;">
-Longitude (one hundred thousandth of a decimal degree) of the start of
-the haul.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-latitude_dd
-</td>
-<td style="text-align:left;">
-Latitude (decimal degrees)
-</td>
-<td style="text-align:left;">
-decimal degrees, 1e-05 resolution
-</td>
-<td style="text-align:left;">
-Latitude (one hundred thousandth of a decimal degree) of the start of
-the haul.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-species_code
-</td>
-<td style="text-align:left;">
-Taxon Code
-</td>
-<td style="text-align:left;">
-ID code
-</td>
-<td style="text-align:left;">
-The species code of the organism associated with the ‘common_name’ and
-‘scientific_name’ columns. For a complete species list go to
-\<<https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual%3E>;
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-common_name
-</td>
-<td style="text-align:left;">
-Taxon Common Name
-</td>
-<td style="text-align:left;">
-text
-</td>
-<td style="text-align:left;">
-The common name of the marine organism associated with the
-‘scientific_name’ and ‘species_code’ columns. For a complete species
-list go to
-\<<https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual%3E>;
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-scientific_name
-</td>
-<td style="text-align:left;">
-Taxon Scientific Name
-</td>
-<td style="text-align:left;">
-text
-</td>
-<td style="text-align:left;">
-The scientific name of the organism associated with the ‘common_name’
-and ‘species_code’ columns. For a complete taxon list go to
-\<<https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual%3E>;
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-taxon_confidence
-</td>
-<td style="text-align:left;">
-Taxon Confidence Rating
-</td>
-<td style="text-align:left;">
-rating
-</td>
-<td style="text-align:left;">
-
-Confidence in the ability of the survey team to correctly identify the
-taxon to the specified level, based solely on identification skill
-(e.g., not likelihood of a taxon being caught at that station on a
+<https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual>
+\| \|date_time \|Date and Time of Haul \|MM/DD/YYYYHH::MM \|The date
+(MM/DD/YYYY) and time (HH:MM) of the beginning of the haul. \|
+\|longitude_dd \|Longitude (decimal degrees) \|decimal degrees, 1e-05
+resolution \|Longitude (one hundred thousandth of a decimal degree) of
+the start of the haul. \| \|latitude_dd \|Latitude (decimal degrees)
+\|decimal degrees, 1e-05 resolution \|Latitude (one hundred thousandth
+of a decimal degree) of the start of the haul. \| \|species_code \|Taxon
+Code \|ID code \|The species code of the organism associated with the
+‘common_name’ and ‘scientific_name’ columns. For a complete species list
+go to
+<https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual>
+\| \|common_name \|Taxon Common Name \|text \|The common name of the
+marine organism associated with the ‘scientific_name’ and ‘species_code’
+columns. For a complete species list go to
+<https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual>
+\| \|scientific_name \|Taxon Scientific Name \|text \|The scientific
+name of the organism associated with the ‘common_name’ and
+‘species_code’ columns. For a complete taxon list go to
+<https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual>
+\| \|taxon_confidence \|Taxon Confidence Rating \|rating \|Confidence in
+the ability of the survey team to correctly identify the taxon to the
+specified level, based solely on identification skill (e.g., not
+likelihood of a taxon being caught at that station on a
 location-by-location basis). Quality codes follow:
 
 ‘High’: High confidence and consistency. Taxonomy is stable and reliable
@@ -517,367 +305,56 @@ identification characteristics are unknown.
 
 Species identification confidence in the eastern Bering Sea shelf survey
 (1982-2008):
-\<<http://apps-afsc.fisheries.noaa.gov/Publications/ProcRpt/PR2009-04.pdf%3E>;
+<http://apps-afsc.fisheries.noaa.gov/Publications/ProcRpt/PR2009-04.pdf>
 
 Species identification confidence in the eastern Bering Sea slope survey
 (1976-2010):
-\<<http://apps-afsc.fisheries.noaa.gov/Publications/ProcRpt/PR2014-05.pdf%3E>;
+<http://apps-afsc.fisheries.noaa.gov/Publications/ProcRpt/PR2014-05.pdf>
 
 Species identification confidence in the Gulf of Alaska and Aleutian
 Islands surveys (1980-2011):
-\<<http://apps-afsc.fisheries.noaa.gov/Publications/ProcRpt/PR2014-01.pdf%3E>;
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-cpue_kgha
-</td>
-<td style="text-align:left;">
-Weight CPUE (kg/ha)
-</td>
-<td style="text-align:left;">
-kilograms/hectare
-</td>
-<td style="text-align:left;">
-Relative Density. Catch weight (kilograms) divided by area (hectares)
-swept by the net.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-cpue_kgkm2
-</td>
-<td style="text-align:left;">
-Weight CPUE (kg/km^2)
-</td>
-<td style="text-align:left;">
-kilograms/kilometers^2
-</td>
-<td style="text-align:left;">
-Relative Density. Catch weight (kilograms) divided by area (squared
-kilometers) swept by the net.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-cpue_kg1000km2
-</td>
-<td style="text-align:left;">
-Weight CPUE (kg/1,000 km^2)
-</td>
-<td style="text-align:left;">
-kilograms/1000 kilometers^2
-</td>
-<td style="text-align:left;">
-Relative Density. Catch weight (kilograms) divided by area (thousand
-square kilometers) swept by the net.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-cpue_noha
-</td>
-<td style="text-align:left;">
-Number CPUE (no./ha)
-</td>
-<td style="text-align:left;">
-count/hectare
-</td>
-<td style="text-align:left;">
-Relative Abundance. Catch number (in number of organisms) per area
-(hectares) swept by the net.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-cpue_nokm2
-</td>
-<td style="text-align:left;">
-Number CPUE (no./km^2)
-</td>
-<td style="text-align:left;">
-count/kilometers^2
-</td>
-<td style="text-align:left;">
-Relative Abundance. Catch number (in number of organisms) per area
-(squared kilometers) swept by the net.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-cpue_no1000km2
-</td>
-<td style="text-align:left;">
-Number CPUE (no./1,000 km^2)
-</td>
-<td style="text-align:left;">
-count/1000 kilometers^2
-</td>
-<td style="text-align:left;">
-Relative Abundance. Catch weight (in number of organisms) divided by
-area (thousand square kilometers) swept by the net.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-weight_kg
-</td>
-<td style="text-align:left;">
-Taxon Weight (kg)
-</td>
-<td style="text-align:left;">
-kilograms, thousandth resolution
-</td>
-<td style="text-align:left;">
-Weight (thousandths of a kilogram) of individuals in a haul by taxon.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-count
-</td>
-<td style="text-align:left;">
-Taxon Count
-</td>
-<td style="text-align:left;">
-count, whole number resolution
-</td>
-<td style="text-align:left;">
-Total number of individuals caught in haul by taxon, represented in
-whole numbers.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-bottom_temperature_c
-</td>
-<td style="text-align:left;">
-Bottom Temperature (Degrees Celsius)
-</td>
-<td style="text-align:left;">
-degrees Celsius, tenths of a degree resolution
-</td>
-<td style="text-align:left;">
-Bottom temperature (tenths of a degree Celsius); NA indicates removed or
-missing values.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-surface_temperature_c
-</td>
-<td style="text-align:left;">
-Surface Temperature (Degrees Celsius)
-</td>
-<td style="text-align:left;">
-degrees Celsius, tenths of a degree resolution
-</td>
-<td style="text-align:left;">
-Surface temperature (tenths of a degree Celsius); NA indicates removed
-or missing values.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-bottom_temperature_c
-</td>
-<td style="text-align:left;">
-Bottom Temperature (Degrees Celsius)
-</td>
-<td style="text-align:left;">
-degrees Celsius, tenths of a degree resolution
-</td>
-<td style="text-align:left;">
-Bottom temperature (tenths of a degree Celsius); NA indicates removed or
-missing values.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-depth_m
-</td>
-<td style="text-align:left;">
-Depth (m)
-</td>
-<td style="text-align:left;">
-meters, tenths of a meter resolution
-</td>
-<td style="text-align:left;">
-Bottom depth (tenths of a meter).
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-distance_fished_km
-</td>
-<td style="text-align:left;">
-Distance Fished (km)
-</td>
-<td style="text-align:left;">
-kilometers, thousandths of kilometer resolution
-</td>
-<td style="text-align:left;">
-Distance the net fished (thousandths of kilometers).
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-net_width_m
-</td>
-<td style="text-align:left;">
-Net Width (m)
-</td>
-<td style="text-align:left;">
-meters
-</td>
-<td style="text-align:left;">
-Measured or estimated distance (meters) between wingtips of the trawl.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-net_height_m
-</td>
-<td style="text-align:left;">
-Net Height (m)
-</td>
-<td style="text-align:left;">
-meters
-</td>
-<td style="text-align:left;">
-Measured or estimated distance (meters) between footrope and headrope of
-the trawl.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-area_swept_ha
-</td>
-<td style="text-align:left;">
-Area Swept (ha)
-</td>
-<td style="text-align:left;">
-hectares
-</td>
-<td style="text-align:left;">
-The area the net covered while the net was fishing (hectares), defined
-as the distance fished times the net width.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-duration_hr
-</td>
-<td style="text-align:left;">
-Tow Duration (decimal hr)
-</td>
-<td style="text-align:left;">
-decimal hours
-</td>
-<td style="text-align:left;">
-This is the elapsed time between start and end of a haul (decimal
-hours).
-</td>
-</tr>
-</tbody>
-</table>
-
-    ##    Column name from data               Descriptive Column Name
-    ## 1                   year                                  Year
-    ## 2                   srvy                                Survey
-    ## 3              survey_id                             Survey ID
-    ## 4                 cruise                             Cruise ID
-    ## 5                stratum                            Stratum ID
-    ## 6              vessel_id                             Vessel ID
-    ## 7            vessel_name                           Vessel Name
-    ## 8              date_time                 Date and Time of Haul
-    ## 9           longitude_dd           Longitude (decimal degrees)
-    ## 10           latitude_dd            Latitude (decimal degrees)
-    ## 11          species_code                            Taxon Code
-    ## 12           common_name                     Taxon Common Name
-    ## 13       scientific_name                 Taxon Scientific Name
-    ## 14      taxon_confidence               Taxon Confidence Rating
-    ## 15             cpue_kgha                   Weight CPUE (kg/ha)
-    ## 16            cpue_kgkm2                 Weight CPUE (kg/km^2)
-    ## 17        cpue_kg1000km2           Weight CPUE (kg/1,000 km^2)
-    ## 18             cpue_noha                  Number CPUE (no./ha)
-    ## 19            cpue_nokm2                Number CPUE (no./km^2)
-    ## 20        cpue_no1000km2          Number CPUE (no./1,000 km^2)
-    ## 21             weight_kg                     Taxon Weight (kg)
-    ## 22                 count                           Taxon Count
-    ## 23  bottom_temperature_c  Bottom Temperature (Degrees Celsius)
-    ## 24 surface_temperature_c Surface Temperature (Degrees Celsius)
-    ## 25  bottom_temperature_c  Bottom Temperature (Degrees Celsius)
-    ## 26               depth_m                             Depth (m)
-    ## 27    distance_fished_km                  Distance Fished (km)
-    ## 28           net_width_m                         Net Width (m)
-    ## 29          net_height_m                        Net Height (m)
-    ## 30         area_swept_ha                       Area Swept (ha)
-    ## 31           duration_hr             Tow Duration (decimal hr)
-    ##                                              Units
-    ## 1                                          numeric
-    ## 2                                 Abbreviated text
-    ## 3                                          ID code
-    ## 4                                          ID code
-    ## 5                                          ID Code
-    ## 6                                          ID Code
-    ## 7                                             text
-    ## 8                                 MM/DD/YYYYHH::MM
-    ## 9                decimal degrees, 1e-05 resolution
-    ## 10               decimal degrees, 1e-05 resolution
-    ## 11                                         ID code
-    ## 12                                            text
-    ## 13                                            text
-    ## 14                                          rating
-    ## 15                               kilograms/hectare
-    ## 16                          kilograms/kilometers^2
-    ## 17                     kilograms/1000 kilometers^2
-    ## 18                                   count/hectare
-    ## 19                              count/kilometers^2
-    ## 20                         count/1000 kilometers^2
-    ## 21                kilograms, thousandth resolution
-    ## 22                  count, whole number resolution
-    ## 23  degrees Celsius, tenths of a degree resolution
-    ## 24  degrees Celsius, tenths of a degree resolution
-    ## 25  degrees Celsius, tenths of a degree resolution
-    ## 26            meters, tenths of a meter resolution
-    ## 27 kilometers, thousandths of kilometer resolution
-    ## 28                                          meters
-    ## 29                                          meters
-    ## 30                                        hectares
-    ## 31                                   decimal hours
-    ##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 Description
-    ## 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         Year the survey was conducted in.
-    ## 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        Abbreviated survey names. The column 'srvy' is associated with the 'survey' and 'survey_id' columns. Northern Bering Sea (NBS), Southeastern Bering Sea (EBS), Bering Sea Slope (BSS), Gulf of Alaska (GOA), Aleutian Islands (AI). survey Survey text Name and description of survey. The column 'survey' is associated with the 'srvy' and 'survey_id' columns. 
-    ## 3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  This number uniquely identifies a survey. Name and description of survey. The column 'survey_id' is associated with the 'srvy' and 'survey' columns. For a complete list of surveys go to <https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual>
-    ## 4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               This is a six-digit number identifying the cruise number of the form: YYYY99 (where YYYY = year of the cruise; 99 = 2-digit number and is sequential; 01 denotes the first cruise that vessel made in this year, 02 is the second, etc.) haul Haul Number ID code This number uniquely identifies a sampling event (haul) within a cruise. It is a sequential number, in chronological order of occurrence.
-    ## 5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     RACE database statistical area for analyzing data. Strata were designed using bathymetry and other geographic and habitat-related elements. The strata are unique to each survey series. Stratum of value 0 indicates experimental tows. station Station ID ID code Alpha-numeric designation for the station established in the design of a survey. 
-    ## 6                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         ID number of the vessel used to collect data for that haul. The column 'vessel_id' is associated with the 'vessel_name' column. Note that it is possible for a vessel to have a new name but the same vessel id number.\n\nFor a complete list of vessel ID codes: <https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual>
-    ## 7                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              Name of the vessel used to collect data for that haul. The column 'vessel_name' is associated with the 'vessel_id' column. Note that it is possible for a vessel to have a new name but the same vessel id number.\n\nFor a complete list of vessel ID codes: <https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual>
-    ## 8                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     The date (MM/DD/YYYY) and time (HH:MM) of the beginning of the haul. 
-    ## 9                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         Longitude (one hundred thousandth of a decimal degree) of the start of the haul. 
-    ## 10                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         Latitude (one hundred thousandth of a decimal degree) of the start of the haul. 
-    ## 11                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      The species code of the organism associated with the 'common_name' and 'scientific_name' columns. For a complete species list go to <https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual> 
-    ## 12                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                The common name of the marine organism associated with the 'scientific_name' and 'species_code' columns. For a complete species list go to <https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual>
-    ## 13                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         The scientific name of the organism associated with the 'common_name' and 'species_code' columns. For a complete taxon list go to <https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual>
-    ## 14 Confidence in the ability of the survey team to correctly identify the taxon to the specified level, based solely on identification skill (e.g., not likelihood of a taxon being caught at that station on a location-by-location basis). Quality codes follow:\n\n'High': High confidence and consistency. Taxonomy is stable and reliable at this level, and field identification characteristics are well known and reliable.\n\n'Moderate': Moderate confidence. Taxonomy may be questionable at this level, or field identification characteristics may be variable and difficult to assess consistently.\n\n'Low': Low confidence. Taxonomy is incompletely known, or reliable field identification characteristics are unknown.\n\nSpecies identification confidence in the eastern Bering Sea shelf survey (1982-2008): <http://apps-afsc.fisheries.noaa.gov/Publications/ProcRpt/PR2009-04.pdf>\n\nSpecies identification confidence in the eastern Bering Sea slope survey (1976-2010): <http://apps-afsc.fisheries.noaa.gov/Publications/ProcRpt/PR2014-05.pdf>\n\nSpecies identification confidence in the Gulf of Alaska and Aleutian Islands surveys (1980-2011): <http://apps-afsc.fisheries.noaa.gov/Publications/ProcRpt/PR2014-01.pdf>
-    ## 15                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  Relative Density. Catch weight (kilograms) divided by area (hectares) swept by the net.
-    ## 16                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       Relative Density. Catch weight (kilograms) divided by area (squared kilometers) swept by the net. 
-    ## 17                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               Relative Density. Catch weight (kilograms) divided by area (thousand square kilometers) swept by the net. 
-    ## 18                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         Relative Abundance. Catch number (in number of organisms) per area (hectares) swept by the net. 
-    ## 19                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               Relative Abundance. Catch number (in number of organisms) per area (squared kilometers) swept by the net. 
-    ## 20                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Relative Abundance. Catch weight (in number of organisms) divided by area (thousand square kilometers) swept by the net. 
-    ## 21                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   Weight (thousandths of a kilogram) of individuals in a haul by taxon. 
-    ## 22                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      Total number of individuals caught in haul by taxon, represented in whole numbers. 
-    ## 23                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Bottom temperature (tenths of a degree Celsius); NA indicates removed or missing values. 
-    ## 24                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               Surface temperature (tenths of a degree Celsius); NA indicates removed or missing values. 
-    ## 25                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Bottom temperature (tenths of a degree Celsius); NA indicates removed or missing values. 
-    ## 26                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       Bottom depth (tenths of a meter). 
-    ## 27                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Distance the net fished (thousandths of kilometers). 
-    ## 28                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  Measured or estimated distance (meters) between wingtips of the trawl. 
-    ## 29                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     Measured or estimated distance (meters) between footrope and headrope of the trawl. 
-    ## 30                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       The area the net covered while the net was fishing (hectares), defined as the distance fished times the net width.
-    ## 31                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                This is the elapsed time between start and end of a haul (decimal hours).
+<http://apps-afsc.fisheries.noaa.gov/Publications/ProcRpt/PR2014-01.pdf>
+\| \|cpue_kgha \|Weight CPUE (kg/ha) \|kilograms/hectare \|Relative
+Density. Catch weight (kilograms) divided by area (hectares) swept by
+the net. \| \|cpue_kgkm2 \|Weight CPUE (kg/km^2)
+\|kilograms/kilometers^2 \|Relative Density. Catch weight (kilograms)
+divided by area (squared kilometers) swept by the net. \|
+\|cpue_kg1000km2 \|Weight CPUE (kg/1,000 km^2) \|kilograms/1000
+kilometers^2 \|Relative Density. Catch weight (kilograms) divided by
+area (thousand square kilometers) swept by the net. \| \|cpue_noha
+\|Number CPUE (no./ha) \|count/hectare \|Relative Abundance. Catch
+number (in number of organisms) per area (hectares) swept by the net. \|
+\|cpue_nokm2 \|Number CPUE (no./km^2) \|count/kilometers^2 \|Relative
+Abundance. Catch number (in number of organisms) per area (squared
+kilometers) swept by the net. \| \|cpue_no1000km2 \|Number CPUE
+(no./1,000 km^2) \|count/1000 kilometers^2 \|Relative Abundance. Catch
+weight (in number of organisms) divided by area (thousand square
+kilometers) swept by the net. \| \|weight_kg \|Taxon Weight (kg)
+\|kilograms, thousandth resolution \|Weight (thousandths of a kilogram)
+of individuals in a haul by taxon. \| \|count \|Taxon Count \|count,
+whole number resolution \|Total number of individuals caught in haul by
+taxon, represented in whole numbers. \| \|bottom_temperature_c \|Bottom
+Temperature (Degrees Celsius) \|degrees Celsius, tenths of a degree
+resolution \|Bottom temperature (tenths of a degree Celsius); NA
+indicates removed or missing values. \| \|surface_temperature_c
+\|Surface Temperature (Degrees Celsius) \|degrees Celsius, tenths of a
+degree resolution \|Surface temperature (tenths of a degree Celsius); NA
+indicates removed or missing values. \| \|bottom_temperature_c \|Bottom
+Temperature (Degrees Celsius) \|degrees Celsius, tenths of a degree
+resolution \|Bottom temperature (tenths of a degree Celsius); NA
+indicates removed or missing values. \| \|depth_m \|Depth (m) \|meters,
+tenths of a meter resolution \|Bottom depth (tenths of a meter). \|
+\|distance_fished_km \|Distance Fished (km) \|kilometers, thousandths of
+kilometer resolution \|Distance the net fished (thousandths of
+kilometers). \| \|net_width_m \|Net Width (m) \|meters \|Measured or
+estimated distance (meters) between wingtips of the trawl. \|
+\|net_height_m \|Net Height (m) \|meters \|Measured or estimated
+distance (meters) between footrope and headrope of the trawl. \|
+\|area_swept_ha \|Area Swept (ha) \|hectares \|The area the net covered
+while the net was fishing (hectares), defined as the distance fished
+times the net width. \| \|duration_hr \|Tow Duration (decimal hr)
+\|decimal hours \|This is the elapsed time between start and end of a
+haul (decimal hours). \|
 
 ## NOAA README
 
