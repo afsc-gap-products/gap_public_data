@@ -32,7 +32,7 @@ taxize0 <- TRUE # incorporate species codes from databases
 
 # source('./code/data_dl.R')
 source('./code/functions.R')
-if (taxize0){ # only if you need to rerun {taxize} stuff - very time intensive!
+if (taxize0) { # only if you need to rerun {taxize} stuff - very time intensive!
   source('./code/find_taxize_species_codes.R')
 }
 source('./code/data.R')

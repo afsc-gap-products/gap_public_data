@@ -10,9 +10,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r echo=FALSE, results="hide", message=FALSE, include=FALSE, echo = FALSE}
+```{r echo = FALSE, results = "hide", message = FALSE, include = FALSE}
 PKG <- c("badger", #"flextable"
-         "knitr")
+         "knitr", 
+         "jsonlite", 
+         "httr")
 PKG <- unique(PKG)
 for (p in PKG) {
   if(!require(p,character.only = TRUE)) {
@@ -107,7 +109,6 @@ Though not included in the public data, these surveys also collect oceanographic
 
 ## Bottom Trawl Surveys and Regions
 
-<img src="img/_grid_bs.png" alt="Eastern and Northern Bering Sea Shelf" align="right" width="250"/> <img src="img/_grid_ai.png" alt="Aleutian Islands" align="right" width="300"/>
 
 -   **Eastern Bering Sea Shelf (EBS)**
     -   Annual
@@ -124,6 +125,10 @@ Though not included in the public data, these surveys also collect oceanographic
 -   **Gulf of Alaska (GOA)**
     -   Triennial (1990s)/Biennial since 2001 in odd years
     -   Stratified Random Survey Design
+
+<img src="img/_grid_bs.png" alt="Eastern and Northern Bering Sea Shelf" width="400"/> <img src="img/_grid_ai.png" alt="Aleutian Islands" width="500"/>
+
+<br/>
 
 ## User Resources:
 
@@ -164,7 +169,9 @@ column_data <- data.frame(matrix(
 
 "cruise", "Cruise ID", "ID code", "This is a six-digit number identifying the cruise number of the form: YYYY99 (where YYYY = year of the cruise; 99 = 2-digit number and is sequential; 01 denotes the first cruise that vessel made in this year, 02 is the second, etc.) haul Haul Number ID code This number uniquely identifies a sampling event (haul) within a cruise. It is a sequential number, in chronological order of occurrence.", 
 
-"stratum", "Stratum ID", "ID Code", "RACE database statistical area for analyzing data. Strata were designed using bathymetry and other geographic and habitat-related elements. The strata are unique to each survey series. Stratum of value 0 indicates experimental tows. station Station ID ID code Alpha-numeric designation for the station established in the design of a survey. ", 
+"stratum", "Stratum ID", "ID Code", "RACE database statistical area for analyzing data. Strata were designed using bathymetry and other geographic and habitat-related elements. The strata are unique to each survey series. Stratum of value 0 indicates experimental tows.", 
+
+"station", "Station ID", "ID code", "Alpha-numeric designation for the station established in the design of a survey. ", 
 
 "vessel_id", "Vessel ID", "ID Code", "ID number of the vessel used to collect data for that haul. The column 'vessel_id' is associated with the 'vessel_name' column. Note that it is possible for a vessel to have a new name but the same vessel id number. For a complete list of vessel ID codes, review the [code books](`r link_code_books `).", 
 
