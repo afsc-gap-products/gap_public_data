@@ -35,10 +35,15 @@ RODBC::sqlSave(channel = channel_foss,
                dat = cpue_station, 
                tablename = "racebase_public_foss")
 
-for (i in 1:nrow(column_metadata)) {
+column_metadata0 <- column_metadata
+for (i in 1:nrow(column_metadata0)) {
+  
   RODBC::sqlQuery(channel = channel_foss,
                   query = paste0('comment on column "RACEBASE_FOSS"."racebase_public_foss"."',
-                                 column_metadata$colname[i],'" is \'', column_metadata$colname_desc[i], ". ", column_metadata$desc[i],'\';'))
+                                 column_metadata0$colname[i],'" is \'', 
+                                 column_metadata0$colname_desc[i], ". ", 
+                                 gsub(pattern = "'", replacement ='\"', x = column_metadata0$desc[i]),'\';'))
+  
 }
 
 RODBC::sqlQuery(channel = channel_foss,
