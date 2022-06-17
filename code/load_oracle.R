@@ -38,13 +38,28 @@ RODBC::sqlSave(channel = channel_foss,
 column_metadata0 <- column_metadata
 for (i in 1:nrow(column_metadata0)) {
   
+  desc <- gsub(pattern = "<sup>2</sup>", replacement = "2", x = column_metadata0$colname_desc[i], fixed = TRUE)
+  short_colname <- gsub(pattern = "<sup>2</sup>", replacement = "2", x = column_metadata0$colname[i], fixed = TRUE)
+  
   RODBC::sqlQuery(channel = channel_foss,
                   query = paste0('comment on column "RACEBASE_FOSS"."racebase_public_foss"."',
-                                 column_metadata0$colname[i],'" is \'', 
-                                 column_metadata0$colname_desc[i], ". ", 
+                                 short_colname,'" is \'', 
+                                 desc, ". ", # remove markdown/html code
                                  gsub(pattern = "'", replacement ='\"', x = column_metadata0$desc[i]),'\';'))
   
 }
 
 RODBC::sqlQuery(channel = channel_foss,
                 query = paste0('comment on table "RACEBASE_FOSS"."racebase_public_foss" is \'',table_metadata,'\';'))
+
+# Grant access to data to all schemas ------------------------------------------
+
+# RODBC::sqlQuery(channel = channel_foss,
+#                 query = paste0('grant select on "RACEBASE_FOSS"."racebase_public_foss" to markowitze;'))
+
+all_schemas <- RODBC::sqlQuery(channel = channel_foss,
+                query = paste0('SELECT * FROM all_users;'))
+for (i in 1:length(sort(all_schemas$USERNAME))) {
+  RODBC::sqlQuery(channel = channel_foss,
+                  query = paste0('grant select on "RACEBASE_FOSS"."racebase_public_foss" to ',all_schemas$USERNAME[i],';'))
+}
