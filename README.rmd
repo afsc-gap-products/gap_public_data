@@ -67,26 +67,27 @@ api_link <- "https://origin-tst-ods-st.fisheries.noaa.gov/ods/foss/afsc_groundfi
 ### Select all data
 
 ```{r, echo = TRUE}
-res <- httr::GET(api_link)
+res <- httr::GET(url = api_link)
 # base::rawToChar(res$content) # Test connection
 data <- jsonlite::fromJSON(base::rawToChar(res$content))
 # names(data)
 knitr::kable(head(data$items, 3)) 
 ```
 
+```{r, echo = FALSE}
+
 ### Subset data
 
-Here, as an example, we can subset the data for the 2018 Aleutian Islands Bottom Trawl Survey
+# Here, as an example, we can subset the data for the 2018 Aleutian Islands Bottom Trawl Survey
 
-```{r, echo = TRUE}
-res <- httr::GET(api_link, query = list(srvy = "EBS", year = 2018))
-data <- jsonlite::fromJSON(base::rawToChar(res$content))
-x <- data$items
-x <- x[,c("stratum", "station", "vessel_name", "latitude_dd", "longitude_dd", 
-          "species_code", "common_name", "scientific_name", "taxon_confidence", 
-          "cpue_kgha", "cpue_noha", "weight_kg", "count", 
-          "bottom_temperature_c", "surface_temperature_c", "depth_m")]
-knitr::kable(head(x, 3)) 
+# res <- httr::GET(url = api_link, query = list(year = "2018")) # year = 2018, srvy = "EBS"
+# data <- jsonlite::fromJSON(base::rawToChar(res$content))
+# x <- data$items
+# x <- x[,c("srvy", "year", "stratum", "station", "vessel_name", "latitude_dd", "longitude_dd", 
+#           "species_code", "common_name", "scientific_name", "taxon_confidence", 
+#           "cpue_kgha", "cpue_noha", "weight_kg", "count", 
+#           "bottom_temperature_c", "surface_temperature_c", "depth_m")]
+# knitr::kable(head(x, 3)) 
 ```
 
 # Metadata

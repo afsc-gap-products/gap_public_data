@@ -92,6 +92,8 @@ tax_conf <- SameColNames(df.ls) %>%
 
 readr::write_csv(x = tax_conf, file = paste0(getwd(), 
                                              "/data/taxon_confidence.csv"))
+
+save(tax_conf, file = paste0(getwd(), "/data/taxon_confidence.rdata"))
 }
 # Wrangle Data -----------------------------------------------------------------
 
