@@ -16,9 +16,9 @@ National Marine Fisheries Service,
 National Oceanic and Atmospheric Administration,  
 Seattle, WA 98195
 
-# How to Access the Data
+# Access the Data
 
-## Obtain data interactively through the [Fisheries One Stop Shop (FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:200:13045102793007:Mail:NO:::) platform
+## Access data interactively through the [Fisheries One Stop Shop (FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:200:13045102793007:Mail:NO:::) platform
 
 Select, filter, and package this and other NOAA Fisheries data from the
 [Fisheries One Stop Shop
@@ -146,8 +146,8 @@ scale. Acknowledgement of AFSC Groundfish Assessment Program, as the
 source from which these data were obtained, in any publications and/or
 other representations of these data, is suggested.
 
-**Address:** National Oceanic and Atmospheric Administration (NOAA)  
-Alaska Fisheries Science Center (AFSC)  
+**Address:** Alaska Fisheries Science Center (AFSC) National Oceanic and
+Atmospheric Administration (NOAA)  
 Resource Assessment and Conservation Engineering Division (RACE)  
 Groundfish Assessment Program (GAP) 7600 Sand Point Way, N.E. bldg. 4  
 Seattle, WA 98115 USA
@@ -184,7 +184,7 @@ shared on the Fisheries One Stop Stop (FOSS) platform
 (<https://www.fisheries.noaa.gov/foss/f?p=215:200:13045102793007:Mail:NO>:::).
 The GitHub repository for the scripts that created this code can be
 found at <https://github.com/afsc-gap-products/gap_public_dataThese>
-data were last updated 2022-06-15 00:26:21.
+data were last updated NA.
 
 ## Column-level metadata
 
@@ -234,7 +234,7 @@ pull request, [submit an issue to the GitHub
 organization](https://github.com/afsc-gap-products/data-requests/issues),
 [submit an issue to the code’s
 repository](https://github.com/afsc-gap-products/gap_public_data/issues),
-reach out the the survey team leads (listed below), or to [Fisheries One
+reach out the the survey team leads (listed above), or to [Fisheries One
 Stop Shop
 (FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:200:13045102793007:Mail:NO:::)
 platform managers.
