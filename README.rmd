@@ -44,9 +44,9 @@ National Marine Fisheries Service,
 National Oceanic and Atmospheric Administration,  
 Seattle, WA 98195
 
-# How to Access the Data
+# Access the Data
 
-## Obtain data interactively through the [Fisheries One Stop Shop (FOSS)](`r link_foss `) platform
+## Access data interactively through the [Fisheries One Stop Shop (FOSS)](`r link_foss `) platform
 
 Select, filter, and package this and other NOAA Fisheries data from the [Fisheries One Stop Shop (FOSS)](`r link_foss `) platform. This user-friendly portal is maintained through Oracle APEX.
 
@@ -136,8 +136,9 @@ There are no legal restrictions on access to the data. They reside in public dom
 
 **User Constraints:** Users must read and fully comprehend the metadata prior to use. Data should not be used beyond the limits of the source scale. Acknowledgement of AFSC Groundfish Assessment Program, as the source from which these data were obtained, in any publications and/or other representations of these data, is suggested.
 
-**Address:** National Oceanic and Atmospheric Administration (NOAA)  
-Alaska Fisheries Science Center (AFSC)  
+**Address:** 
+Alaska Fisheries Science Center (AFSC)
+National Oceanic and Atmospheric Administration (NOAA)  
 Resource Assessment and Conservation Engineering Division (RACE)  
 Groundfish Assessment Program (GAP) 7600 Sand Point Way, N.E. bldg. 4  
 Seattle, WA 98115 USA
@@ -160,7 +161,7 @@ knitr::kable(column_metadata0, row.names = FALSE)
 
 # Suggestions and Comments
 
-If you feel that the data or metadata can be improved, please create a pull request, [submit an issue to the GitHub organization](`r "https://github.com/afsc-gap-products/data-requests/issues"`), [submit an issue to the code's repository](`r paste0(link_repo, "/issues")`), reach out the the survey team leads (listed below), or to [Fisheries One Stop Shop (FOSS)](`r link_foss `) platform managers.
+If you feel that the data or metadata can be improved, please create a pull request, [submit an issue to the GitHub organization](`r "https://github.com/afsc-gap-products/data-requests/issues"`), [submit an issue to the code's repository](`r paste0(link_repo, "/issues")`), reach out the the survey team leads (listed above), or to [Fisheries One Stop Shop (FOSS)](`r link_foss `) platform managers.
 
 ## NOAA README
 

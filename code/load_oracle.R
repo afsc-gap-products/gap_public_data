@@ -30,13 +30,16 @@ source("Z:/Projects/ConnectToOracle.R")
 
 
 ### what we came here for ------------------------------------------------------
-RODBC::sqlDrop(channel = channel_foss, sqtable = "racebase_public_foss")
 RODBC::sqlSave(channel = channel_foss, 
                dat = spp_info, 
                tablename = "afsc_itis_worms")
 RODBC::sqlSave(channel = channel_foss, 
-               dat = taxon_confidence, 
+               dat = tax_conf, 
                tablename = "taxon_confidence")
+
+RODBC::sqlDrop(channel = channel_foss, 
+               sqtable = "racebase_public_foss")
+
 RODBC::sqlSave(channel = channel_foss, 
                dat = cpue_station, 
                tablename = "racebase_public_foss")
