@@ -8,9 +8,13 @@
 
 # source("./code/run.R")
 
-# ISSUES -----------------------------------------------------------------------
+# NOTES -----------------------------------------------------------------------
 
-# [None at the moment]
+# Each year you will need to: 
+# - download the new data using the data_dl.R script
+# - aquire the new taxonomic_confidence tables. Contact D Stevenson. 
+# - run the find_taxize_species_codes.R script to find the appropriate and most up to date ITIS and WoRMS codes for species. 
+# - run the check to compare this year's data to last years. Make sure the data are similar and look right! 
 
 # START ------------------------------------------------------------------------
 
@@ -39,7 +43,7 @@ source('./code/functions.R')
 if (taxize0) { # only if you need to rerun {taxize} stuff - very time intensive!
   source('./code/find_taxize_species_codes.R')
 }
-taxize0 <- TRUE
+# taxize0 <- TRUE
 source('./code/data.R')
 
 # Run analysis -----------------------------------------------------------------
@@ -50,14 +54,14 @@ source('./code/analysis.R')
 
 # source('./code/data_dl_check.R')
 
-# dir.create(path = paste0(dir_out, "/check/"))
-# rmarkdown::render(paste0("./code/check.Rmd"),
-#                   output_dir = dir_out,
-#                   output_file = paste0("./check/check.docx"))
+dir.create(path = paste0(dir_out, "/check/"))
+rmarkdown::render(input = paste0("./code/check.Rmd"),
+                  output_dir = dir_out,
+                  output_file = paste0("./check/check_",Sys.Date(),".docx"))
 
 # Share table to oracle --------------------------------------------------------
 
-dir_out <- "./output/2022-07-02/"
+dir_out <- "./output/2022-09-10/"
 load(file = paste0(dir_out, "cpue_station.RData"))
 load(file = paste0("./data/taxon_confidence.rdata"))
 load(file = "./data/spp_info.rdata")

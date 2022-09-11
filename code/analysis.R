@@ -72,12 +72,14 @@ lookup <- c(station = "stationid",
             survey = "survey_name",
             survey_id = "survey_definition_id", 
             vessel_id = "vessel",
-            latitude_dd = "start_latitude", 
-            longitude_dd = "start_longitude", 
             taxon_confidence = "tax_conf",
             date_time = "start_time", 
-            latitude_dd = "start_latitude", 
-            longitude_dd = "start_longitude", 
+            # latitude_dd = "start_latitude", 
+            # longitude_dd = "start_longitude", 
+            latitude_dd_start = "start_latitude", 
+            longitude_dd_start = "start_longitude", 
+            latitude_dd_end = "end_latitude", 
+            longitude_dd_end = "end_longitude", 
             bottom_temperature_c = "gear_temperature", 
             surface_temperature_c = "surface_temperature",
             distance_fished_km = "distance_fished", 
@@ -92,7 +94,7 @@ cpue_station <-
     y = catch_haul_cruises %>% 
       dplyr::select(-distance_fished, -net_width, -number_fish, -weight),
     by = c("SRVY", "cruisejoin", "hauljoin", "species_code"))  %>%
-  dplyr::rename(any_of(lookup)) %>% 
+  dplyr::rename(dplyr::any_of(lookup)) %>% 
   dplyr::mutate(cpue_kgkm2 = cpue_kgha * 100, 
                 cpue_nokm2 = cpue_noha * 100, 
                 cpue_no1000km2 = cpue_nokm2 * 1000, 
@@ -102,13 +104,13 @@ cpue_station <-
   dplyr::select(any_of(
     c(as.character(expression(
       year, srvy, survey, survey_id, cruise, haul, hauljoin, stratum, station, vessel_name, vessel_id, # survey data
-    date_time, latitude_dd, longitude_dd, # when/where
+    date_time, latitude_dd, longitude_dd, latitude_dd_start, longitude_dd_start, latitude_dd_end, longitude_dd_end, # when/where
     species_code, itis, worms, common_name, scientific_name, taxon_confidence, # species info
     cpue_kgha, cpue_kgkm2, cpue_kg1000km2, # cpue weight
     cpue_noha, cpue_nokm2, cpue_no1000km2, # cpue num
     weight_kg, count, # summed catch data
     bottom_temperature_c, surface_temperature_c, depth_m, #environmental data
-    distance_fished_km, net_width_m, net_height_m, area_swept_ha, duration_hr # gear data
+    distance_fished_km, net_width_m, net_height_m, area_swept_ha, duration_hr, performance # gear data
   ))))) %>% 
   dplyr::arrange(srvy, date_time, cpue_kgha)
 
@@ -144,11 +146,15 @@ column_metadata <- data.frame(matrix(
     
     "date_time", "Date and Time of Haul", "MM/DD/YYYY HH::MM", "The date (MM/DD/YYYY) and time (HH:MM) of the beginning of the haul. ", 
     
-    "longitude_dd", "Longitude (decimal degrees)", "decimal degrees, 1e-05 resolution", "Longitude (one hundred thousandth of a decimal degree) of the start of the haul. ", 
+    "longitude_dd_start", "Start Longitude (decimal degrees)", "decimal degrees, 1e-05 resolution", "Longitude (one hundred thousandth of a decimal degree) of the start of the haul. ", 
     
-    "latitude_dd", "Latitude (decimal degrees)", "decimal degrees, 1e-05 resolution", "Latitude (one hundred thousandth of a decimal degree) of the start of the haul. ",
+    "latitude_dd_start", "Start Latitude (decimal degrees)", "decimal degrees, 1e-05 resolution", "Latitude (one hundred thousandth of a decimal degree) of the start of the haul. ",
+
+    "longitude_dd_end", "End Longitude (decimal degrees)", "decimal degrees, 1e-05 resolution", "Longitude (one hundred thousandth of a decimal degree) of the end of the haul. ", 
     
-    "species_code", "Taxon Code", "ID code", paste0("The species code of the organism associated with the 'common_name' and 'scientific_name' columns. For a complete species, review the [code books](", link_code_books ,")."), 
+    "latitude_dd_end", "End Latitude (decimal degrees)", "decimal degrees, 1e-05 resolution", "Latitude (one hundred thousandth of a decimal degree) of the end of the haul. ",
+    
+    "species_code", "Taxon Code", "ID code", paste0("The species code of the organism associated with the 'common_name' and 'scientific_name' columns. For a complete species list, review the [code books](", link_code_books ,")."), 
     
     "common_name", "Taxon Common Name", "text", paste0("The common name of the marine organism associated with the 'scientific_name' and 'species_code' columns. For a complete species list, review the [code books](", link_code_books ,")."), 
     
@@ -189,11 +195,17 @@ column_metadata <- data.frame(matrix(
     "area_swept_ha", "Area Swept (ha)", "hectares", "The area the net covered while the net was fishing (hectares), defined as the distance fished times the net width.", 
     
     "duration_hr", "Tow Duration (decimal hr)", "decimal hours", "This is the elapsed time between start and end of a haul (decimal hours).", 
+
+    "performance", "Haul Performance Code (rating)", "rating", paste0("This denotes what, if any, issues arose during the haul. For more information, review the [code books](", link_code_books ,")."), 
     
     "itis", "ITIS Taxonomic Serial Number", "ID code", paste0("Species code as identified in the Integrated Taxonomic Information System (https://itis.gov/). Codes were last updated ", file.info(paste0("./data/spp_info.csv"))$ctime, "."), 
     # "", "", "", "", 
     "worms", "World Register of Marine Species Taxonomic Serial Number", "ID code", paste0("Species code as identified in the World Register of Marine Species (WoRMS) (https://www.marinespecies.org/). Codes were last updated ", file.info(paste0("./data/spp_info.csv"))$ctime, ".")
   )))
+
+
+"Domain:  Groundfish Survey Codebook: Performance Codes;    
+http://www.afsc.noaa.gov/RACE/groundfish/Groundfish_Survey_Codes.pdf"
 
 names(column_metadata) <- c("colname", "colname_desc", "units", "desc")
 column_metadata <- column_metadata[match(names(cpue_station), column_metadata$colname),]  

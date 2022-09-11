@@ -91,22 +91,22 @@ plot_stations <- function(dat, srvy0) {
   
   dat0 <- dat %>% 
     dplyr::filter(srvy == srvy0) %>% 
-    dplyr::mutate(longitude_dd = 
-                    ifelse(longitude_dd>0, 
-                           abs(longitude_dd-360), 
-                           abs(longitude_dd+360))) %>%
-    dplyr::select(year, longitude_dd, latitude_dd) %>% 
+    dplyr::mutate(longitude_dd_start = 
+                    ifelse(longitude_dd_start>0, 
+                           abs(longitude_dd_start-360), 
+                           abs(longitude_dd_start+360))) %>%
+    dplyr::select(year, longitude_dd_start, latitude_dd_start) %>% 
     unique()
   
   gg <- ggplot(data = dat0,
-               mapping = aes(x = longitude_dd, y = latitude_dd, group = factor(year))) +
+               mapping = aes(x = longitude_dd_start, y = latitude_dd_start, group = factor(year))) +
     coord_fixed(1.3) + 
     geom_polygon(data = world,
                  mapping=aes(x=long, y=lat, group=group), 
                  color=NA, fill="lightgreen") +
     geom_point(size = .05) +
-    ggplot2::ylim(range(dat0$latitude_dd)) + 
-    ggplot2::xlim(range(dat0$longitude_dd)) 
+    ggplot2::ylim(range(dat0$latitude_dd_start)) + 
+    ggplot2::xlim(range(dat0$longitude_dd_start)) 
   
   if (length(unique(dat0$year))>20) {
     gg <- gg + 
@@ -345,7 +345,7 @@ data_check <- function(dat) {
   #   # data <- data %>%
   #   #   dplyr::group_by(srvy, cruise, stratum, station, vessel_id, # haul,
   #   #                   year, survey, common_name, species_code, scientific_name,
-  #   #                   longitude_dd, latitude_dd, date_time,
+  #   #                   longitude_dd_start, latitude_dd_start, date_time,
   #   #                   surface_temperature_c, bottom_temperature_c, depth_m) %>%
   #   #   dplyr::summarise(cpue_kgha = sum(cpue_kgha, na.rm = TRUE), # THIS IS WRONG
   #   #                    cpue_noha = sum(cpue_noha, na.rm = TRUE))
@@ -353,7 +353,7 @@ data_check <- function(dat) {
   #   data1 <- data0 %>%
   #     dplyr::group_by(srvy, cruise, stratum, station, vessel_id, # haul,
   #                     year, survey, common_name, species_code, scientific_name,
-  #                     longitude_dd, latitude_dd, date_time,
+  #                     longitude_dd_start, latitude_dd_start, date_time,
   #                     surface_temperature_c, bottom_temperature_c, depth_m) %>%
   #     dplyr::summarise(cpue_kgha = sum(cpue_kgha, na.rm = TRUE),
   #                      cpue_noha = sum(cpue_noha, na.rm = TRUE))
@@ -411,7 +411,7 @@ data_check <- function(dat) {
         dplyr::group_by(srvy, cruise, stratum, station, vessel_id, haul, 
                         year, common_name, species_code, scientific_name, 
                         surface_temperature_c, bottom_temperature_c, depth_m, survey, date_time, 
-                        longitude_dd, latitude_dd) %>% 
+                        longitude_dd_start, latitude_dd_start) %>% 
         dplyr::summarise(cpue_kgha = sum(cpue_kgha, na.rm = TRUE), 
                          cpue_noha = sum(cpue_noha, na.rm = TRUE), 
                          weight_kg = sum(weight_kg, na.rm = TRUE), 
@@ -422,7 +422,7 @@ data_check <- function(dat) {
         dplyr::group_by(srvy, cruise, stratum, station, vessel_id, haul, 
                         year, common_name, species_code, scientific_name, 
                         surface_temperature_c, bottom_temperature_c, depth_m, survey, date_time, 
-                        longitude_dd, latitude_dd) %>% 
+                        longitude_dd_start, latitude_dd_start) %>% 
         dplyr::summarise(cpue_kgha = sum(cpue_kgha, na.rm = TRUE), 
                          cpue_noha = sum(cpue_noha, na.rm = TRUE), 
                          weight_kg = sum(weight_kg, na.rm = TRUE), 
@@ -432,7 +432,7 @@ data_check <- function(dat) {
       data <- data %>%
         dplyr::group_by(srvy, cruise, stratum, station, vessel_id, haul, 
                         year, common_name, species_code, scientific_name, 
-                        longitude_dd, latitude_dd) %>% 
+                        longitude_dd_start, latitude_dd_start) %>% 
         dplyr::summarise(cpue_kgha = sum(cpue_kgha, na.rm = TRUE), 
                          cpue_noha = sum(cpue_noha, na.rm = TRUE), 
                          weight_kg = sum(weight_kg, na.rm = TRUE), 
@@ -442,7 +442,7 @@ data_check <- function(dat) {
       data1 <- data0 %>%
         dplyr::group_by(srvy, cruise, stratum, station, vessel_id, haul, 
                         year, common_name, species_code, scientific_name, 
-                        longitude_dd, latitude_dd) %>% 
+                        longitude_dd_start, latitude_dd_start) %>% 
         dplyr::summarise(cpue_kgha = sum(cpue_kgha, na.rm = TRUE), 
                          cpue_noha = sum(cpue_noha, na.rm = TRUE), 
                          weight_kg = sum(weight_kg, na.rm = TRUE), 
