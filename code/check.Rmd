@@ -61,9 +61,9 @@ if (FALSE) {
 public_old <- public_old0 <- public_old %>%
   dplyr::rename(surface_temperature_c = surf_temp, 
                 bottom_temperature_c = bot_temp, 
-                vessel_id = vessel, 
-                longitude_dd = longitude, 
-                latitude_dd = latitude, 
+                # vessel_id = vessel,
+                longitude_dd_start = longitude, 
+                latitude_dd_start = latitude, 
                 depth_m = bot_depth, 
                 date_time = datetime, 
                 cpue_kgha = wtcpue, 
@@ -509,13 +509,14 @@ for(i in 1:length(col)) {
   a <- diff_between_cols(dat = dat, 
                          colx = paste0(col[i], ".x"), 
                          coly = paste0(col[i], ".y"))
-  if (class(a) == "table") {
+  if (is(object = a, class2 = "tbl")) {
     print(paste0("----- Differences between '", col[i], ".x' (new public) and '", col[i], ".y' (design) -----"))
     print(diff_between_cols(dat = dat, colx = paste0(col[i], ".x"), coly = paste0(col[i], ".y")))  
   }
 }
 
 ```
+
 
 ```{r diff_xnew_ydesign}
 dat0 <- dat %>% 

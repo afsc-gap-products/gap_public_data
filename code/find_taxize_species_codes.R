@@ -274,8 +274,9 @@ known_tsn <- list( # will have to check these each year
   'Cyanea' = c(51669, "ITIS returned more than one option."), 
   "Caryophylliidae" = c(571698, "ITIS returned more than one option."), 
   "Parophrys vetulus X Platichthys stellatus hybrid" = c(NA, "AFSC defined species."), 
-  "Platichthys stellatus X Pleuronectes quadrituberculatus hybrid" = c(NA, "AFSC defined species.")
+  "Platichthys stellatus X Pleuronectes quadrituberculatus hybrid" = c(NA, "AFSC defined species."),
   
+  "Rhynocrangon sharpi" = c(97214, "ITIS returned more than one option."),
 
   # "Labidochirusendescens" = c(NA, "Not available in ITIS or WoRMS, though may be a misspelling of something like 'Labidochirus endescens'."), 
   # "Myriapora subgracilis" = c(156608, "Typo: Used code for Leieschara subgracilis (d'Orbigny, 1852), new name for Myriapora subgracilis (d'Orbigny, 1853)."), 
