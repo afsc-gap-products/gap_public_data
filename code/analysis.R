@@ -231,9 +231,11 @@ base::save(cpue_station,
            table_metadata, 
            file = paste0(dir_out,"cpue_station.RData"))
 
+table_metadata <- gsub(pattern = "non-zero (presence)", replacement = "all (presence and absence)", x = table_metadata)
+
 base::save(cpue_station_0filled, 
            column_metadata, 
-           gsub(pattern = "non-zero (presence)", replacement = "all (presence and absence)", x = table_metadata), 
+           table_metadata, 
            file = paste0(dir_out,"cpue_station_0filled.RData"))
 
 for (i in 1:length(files_to_save)) {

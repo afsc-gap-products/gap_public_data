@@ -19,7 +19,7 @@ source("Z:/Projects/ConnectToOracle.R")
 # 
 # odbcGetInfo(channel)
 
-### Test -----------------------------------------------------------------------
+# Test -----------------------------------------------------------------------
 # RODBC::sqlDrop(channel = channel_foss, sqtable = "USArrests")
 # USArrests0<-USArrests
 # RODBC::sqlSave(channel = channel_foss, dat = USArrests0, tablename = "USArrests", rownames = "state", addPK = TRUE)
@@ -29,9 +29,11 @@ source("Z:/Projects/ConnectToOracle.R")
 #                 query = paste0('comment on column "RACEBASE_FOSS"."USArrests"."Assault" is \'get out!\';'))
 
 
-### what we came here for ------------------------------------------------------
+# Upload data to oracle! -----------------------------
 
-# spp info
+## spp info --------------------------------------------------------------------
+print("spp info")
+load(file = "./data/spp_info.rdata")
 RODBC::sqlDrop(channel = channel_foss, 
                sqtable = "afsc_itis_worms")
 
@@ -39,7 +41,9 @@ RODBC::sqlSave(channel = channel_foss,
                dat = spp_info, 
                tablename = "afsc_itis_worms")
 
-# taxon conf
+## taxon conf ------------------------------------------------------------------
+print("taxon conf")
+load(file = paste0("./data/taxon_confidence.rdata"))
 RODBC::sqlDrop(channel = channel_foss, 
                sqtable = "taxon_confidence")
 
@@ -47,7 +51,9 @@ RODBC::sqlSave(channel = channel_foss,
                dat = tax_conf, 
                tablename = "taxon_confidence")
 
-# public foss
+## public foss -----------------------------------------------------------------
+print("public foss")
+load(file = paste0(dir_out, "cpue_station.RData"))
 RODBC::sqlDrop(channel = channel_foss, 
                sqtable = "racebase_public_foss")
 
@@ -56,7 +62,26 @@ RODBC::sqlSave(channel = channel_foss,
                tablename = "racebase_public_foss")
 
 
-# public foss
+column_metadata0 <- column_metadata
+for (i in 1:nrow(column_metadata0)) {
+  
+  desc <- gsub(pattern = "<sup>2</sup>", replacement = "2", x = column_metadata0$colname_desc[i], fixed = TRUE)
+  short_colname <- gsub(pattern = "<sup>2</sup>", replacement = "2", x = column_metadata0$colname[i], fixed = TRUE)
+  
+  RODBC::sqlQuery(channel = channel_foss,
+                  query = paste0('comment on column "RACEBASE_FOSS"."racebase_public_foss"."',
+                                 short_colname,'" is \'', 
+                                 desc, ". ", # remove markdown/html code
+                                 gsub(pattern = "'", replacement ='\"', x = column_metadata0$desc[i]),'\';'))
+  
+}
+
+RODBC::sqlQuery(channel = channel_foss,
+                query = paste0('comment on table "RACEBASE_FOSS"."racebase_public_foss" is \'',table_metadata,'\';'))
+
+## 0 filled --------------------------------------------------------------------
+print("0-filled")
+load(file = paste0(dir_out, "cpue_station_0filled.RData"))
 RODBC::sqlDrop(channel = channel_foss, 
                sqtable = "cpue_zerofilled")
 
@@ -91,4 +116,11 @@ all_schemas <- RODBC::sqlQuery(channel = channel_foss,
 for (i in 1:length(sort(all_schemas$USERNAME))) {
   RODBC::sqlQuery(channel = channel_foss,
                   query = paste0('grant select on "RACEBASE_FOSS"."racebase_public_foss" to ',all_schemas$USERNAME[i],';'))
+  RODBC::sqlQuery(channel = channel_foss,
+                  query = paste0('grant select on "RACEBASE_FOSS"."cpue_zerofilled" to ',all_schemas$USERNAME[i],';'))
+  RODBC::sqlQuery(channel = channel_foss,
+                  query = paste0('grant select on "RACEBASE_FOSS"."racebase_public_foss" to ',all_schemas$USERNAME[i],';'))
+  RODBC::sqlQuery(channel = channel_foss,
+                  query = paste0('grant select on "RACEBASE_FOSS"."cpue_zerofilled" to ',all_schemas$USERNAME[i],';'))
 }
+

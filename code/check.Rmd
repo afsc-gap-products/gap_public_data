@@ -61,7 +61,7 @@ if (FALSE) {
 public_old <- public_old0 <- public_old %>%
   dplyr::rename(surface_temperature_c = surf_temp, 
                 bottom_temperature_c = bot_temp, 
-                # vessel_id = vessel,
+                vessel_id = vessel_id, 
                 longitude_dd_start = longitude, 
                 latitude_dd_start = latitude, 
                 depth_m = bot_depth, 
@@ -432,8 +432,8 @@ design_based <- dplyr::bind_rows(design_based1, design_based2) %>%
                 distance_fished_km = distance_fished, 
                 net_width_m = net_width, 
                 station = stationid, 
-                latitude_dd = latitude, 
-                longitude_dd = longitude)
+                latitude_dd_start = latitude, 
+                longitude_dd_start = longitude)
 
 design_based0<-design_based
 readr::write_csv(x = design_based, file = paste0(".", dir_out, "/check/design_based.csv"))
@@ -489,14 +489,14 @@ dat <- dplyr::full_join(
                   area_swept_ha, #distance_fished_km, net_width_m, 
                   haul, cruise, station, stratum, srvy, 
                   count, weight_kg,
-                  vessel_id, latitude_dd, longitude_dd, year),
+                  vessel_id, latitude_dd_start, longitude_dd_start, year),
   y = design_based %>% 
     dplyr::select(common_name, species_code, scientific_name, 
                   cpue_kgha, cpue_noha, 
                   area_swept_ha, #distance_fished_km, net_width_m, 
                   haul, cruise, station, stratum, srvy, 
                   count, weight_kg,
-                  vessel_id, latitude_dd, longitude_dd, year), 
+                  vessel_id, latitude_dd_start, longitude_dd_start, year), 
   by = c("year", "haul", "cruise", "srvy", "species_code", "vessel_id", "stratum", "station")) %>%
   dplyr::mutate(dplyr::across(dplyr::starts_with("cpue_"), round, digits = 3), 
                 dplyr::across(dplyr::starts_with("area_swept_"), round, digits = 3)) 
@@ -509,7 +509,7 @@ for(i in 1:length(col)) {
   a <- diff_between_cols(dat = dat, 
                          colx = paste0(col[i], ".x"), 
                          coly = paste0(col[i], ".y"))
-  if (is(object = a, class2 = "tbl")) {
+  if (sum(class(a) %in% "tbl_df")>0) {
     print(paste0("----- Differences between '", col[i], ".x' (new public) and '", col[i], ".y' (design) -----"))
     print(diff_between_cols(dat = dat, colx = paste0(col[i], ".x"), coly = paste0(col[i], ".y")))  
   }
@@ -517,16 +517,13 @@ for(i in 1:length(col)) {
 
 ```
 
-
 ```{r diff_xnew_ydesign}
 dat0 <- dat %>% 
   dplyr::mutate(
     cpue_kgha_diff = cpue_kgha.x-cpue_kgha.y, 
     cpue_noha_diff = cpue_noha.x-cpue_noha.y, 
     area_swept_ha_diff = area_swept_ha.x-area_swept_ha.y) %>% 
-  dplyr::select(#-distance_fished_km.x, -net_width_m.x, -latitude_dd.x, -longitude_dd.x, 
-    #-distance_fished_km.y, -net_width_m.y, -latitude_dd.y, -longitude_dd.y, 
-    -common_name.y, -scientific_name.y) %>% 
+  dplyr::select(-common_name.y, -scientific_name.y) %>% 
   dplyr::filter(cpue_kgha_diff >= 0.01 | 
                   cpue_noha_diff >= 0.01 | 
                   area_swept_ha_diff >= 0.01 ) %>% 
@@ -545,7 +542,7 @@ summary(dat0)
 
 ## CPUE for major species
 
-```{r CPUE_kgha_plot_new_design, fig.height = 7, fig.width = 4.8}
+```{r CPUE_kgha_plot_new_design}
 spp <- c(69323, # blue king crab 
          68580, # snow crab
          69322, # red king crab
@@ -572,9 +569,12 @@ for (ii in 1:length(spp)){
 
 # What stations for each year and survey look like in the new public data
 
-```{r station_map, fig.height = 10, fig.width = 7}
+```{r station_map}
 for (i in 1:length(unique(public_new$srvy))) {
-  print(plot_stations(dat = public_new, srvy0 = unique(public_new$srvy)[i]))
+  print(plot_stations(dat = public_new %>% 
+                        dplyr::rename(longitude_dd = longitude_dd_start, 
+                                      latitude_dd = latitude_dd_start), 
+                      srvy0 = unique(public_new$srvy)[i]))
 }
 ```
 
