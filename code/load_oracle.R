@@ -71,6 +71,7 @@ RODBC::sqlQuery(channel = channel_foss,
 print("0-filled")
 load(file = paste0(dir_out, "cpue_station_0filled.RData"))
 RACEBASE_PUBLIC_FOSS_ZEROFILLED <- cpue_station_0filled
+
 RODBC::sqlDrop(channel = channel_foss, 
                sqtable = "RACEBASE_PUBLIC_FOSS_ZEROFILLED")
 

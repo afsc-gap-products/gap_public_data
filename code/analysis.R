@@ -98,7 +98,7 @@ cpue_station <-
     y = catch_haul_cruises %>% 
       dplyr::select(-distance_fished, -net_width, -number_fish, -weight),
     by = c("SRVY", "cruisejoin", "hauljoin", "species_code"))  %>%
-  dplyr::rename(any_of(lookup)) %>% 
+  dplyr::rename(dplyr::any_of(lookup)) %>% 
   dplyr::mutate(cpue_kgkm2 = cpue_kgha * 100, 
                 cpue_nokm2 = cpue_noha * 100, 
                 cpue_no1000km2 = cpue_nokm2 * 1000, 
@@ -155,7 +155,7 @@ column_metadata <- data.frame(matrix(
     "longitude_dd_start", "Start Longitude (decimal degrees)", "decimal degrees, 1e-05 resolution", "Longitude (one hundred thousandth of a decimal degree) of the start of the haul. ", 
     
     "latitude_dd_start", "Start Latitude (decimal degrees)", "decimal degrees, 1e-05 resolution", "Latitude (one hundred thousandth of a decimal degree) of the start of the haul. ",
-    
+
     "longitude_dd_end", "End Longitude (decimal degrees)", "decimal degrees, 1e-05 resolution", "Longitude (one hundred thousandth of a decimal degree) of the end of the haul. ", 
     
     "latitude_dd_end", "End Latitude (decimal degrees)", "decimal degrees, 1e-05 resolution", "Latitude (one hundred thousandth of a decimal degree) of the end of the haul. ",
@@ -201,6 +201,8 @@ column_metadata <- data.frame(matrix(
     "area_swept_ha", "Area Swept (ha)", "hectares", "The area the net covered while the net was fishing (hectares), defined as the distance fished times the net width.", 
     
     "duration_hr", "Tow Duration (decimal hr)", "decimal hours", "This is the elapsed time between start and end of a haul (decimal hours).", 
+
+    "performance", "Haul Performance Code (rating)", "rating", paste0("This denotes what, if any, issues arose during the haul. For more information, review the [code books](", link_code_books ,")."), 
     
     "performance", "Haul Performance Code (rating)", "rating", paste0("This denotes what, if any, issues arose during the haul. For more information, review the [code books](", link_code_books ,")."), 
     
@@ -209,7 +211,7 @@ column_metadata <- data.frame(matrix(
     "worms", "World Register of Marine Species Taxonomic Serial Number", "ID code", paste0("Species code as identified in the World Register of Marine Species (WoRMS) (https://www.marinespecies.org/). Codes were last updated ", file.info(paste0("./data/spp_info.csv"))$ctime, ".")
   )))
 
-column_metadata$colname <- stringr::str_to_upper(column_metadata$colname)
+
 names(column_metadata) <- c("colname", "colname_desc", "units", "desc")
 column_metadata <- column_metadata[match(names(cpue_station), column_metadata$colname),]  
 readr::write_csv(x = column_metadata, file = paste0(dir_out, "column_metadata.csv"))

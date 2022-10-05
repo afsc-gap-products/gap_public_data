@@ -35,6 +35,11 @@ A useful intro to using APIs in R can be found
 ``` r
 # install.packages(c("httr", "jsonlite"))
 library("httr")
+```
+
+    ## Warning: package 'httr' was built under R version 4.2.1
+
+``` r
 library("jsonlite")
 # link to the API
 api_link <- "https://origin-tst-ods-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/"

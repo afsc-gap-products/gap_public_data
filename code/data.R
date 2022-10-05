@@ -104,10 +104,6 @@ save(tax_conf, file = paste0(getwd(), "/data/taxon_confidence.rdata"))
 
 ## Species info ----------------------------------------------------------------
 if (taxize0){
-  load(file = "./data/spp_info.rdata")
-  spp_info <- spp_info %>% 
-    dplyr::select(-notes_itis, -notes_worms)
-} else {
   spp_info <-
     # dplyr::left_join(
       # x =
@@ -126,6 +122,10 @@ if (taxize0){
                              x = trimws(scientific_name), fixed = TRUE), 
       itis = NA, 
       worms = NA) # made if taxize0 == TRUE
+} else {
+load(file = "./data/spp_info.rdata")
+spp_info <- spp_info %>% 
+  dplyr::select(-notes_itis, -notes_worms)
 }
 
 ## cruises ---------------------------------------------------------------------

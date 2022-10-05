@@ -412,7 +412,7 @@ design_based1 <- dplyr::bind_rows(
 design_based2 <- dplyr::bind_rows(
   readr::read_csv(file = "../data/oracle/cpue_ebs_plusnw.csv") %>% 
     dplyr::mutate(survey = "EBS"), 
-  readr::read_csv(file = "../data/oracle/cpue_nbs.csv") %>% 
+  readr::read_csv(file = "../data/oracle/cpue_nbs_.csv") %>% 
     dplyr::mutate(survey = "NBS")) %>% 
   janitor::clean_names() %>% 
   dplyr::select(-x1)  %>% 
