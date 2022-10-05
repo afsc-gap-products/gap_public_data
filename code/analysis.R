@@ -55,7 +55,11 @@ for (i in 1:length(surveys$SRVY)) {
 # Calculate simple station-level CPUE estimates --------------------------------
 
 # make data NOT 0-filled
-cpue_station <- cpue_station_0filled %>%
+cpue_station <- cpue_station_0filled 
+
+names(cpue_station_0filled) <- stringr::str_to_upper(names(cpue_station_0filled))
+
+cpue_station <- cpue_station %>%
   dplyr::filter(
     !(number_fish %in% c(NA, 0) & # this will remove 0-filled values
         weight %in% c(NA, 0)) | 
@@ -113,6 +117,8 @@ cpue_station <-
       distance_fished_km, net_width_m, net_height_m, area_swept_ha, duration_hr, performance # gear data
   ))))) %>% 
   dplyr::arrange(srvy, date_time, cpue_kgha)
+
+names(cpue_station) <- stringr::str_to_upper(names(cpue_station))
 
 # print(dim(cpue_station)) # 2021
 # [1] 831340     11
@@ -203,6 +209,7 @@ column_metadata <- data.frame(matrix(
     "worms", "World Register of Marine Species Taxonomic Serial Number", "ID code", paste0("Species code as identified in the World Register of Marine Species (WoRMS) (https://www.marinespecies.org/). Codes were last updated ", file.info(paste0("./data/spp_info.csv"))$ctime, ".")
   )))
 
+column_metadata$colname <- stringr::str_to_upper(column_metadata$colname)
 names(column_metadata) <- c("colname", "colname_desc", "units", "desc")
 column_metadata <- column_metadata[match(names(cpue_station), column_metadata$colname),]  
 readr::write_csv(x = column_metadata, file = paste0(dir_out, "column_metadata.csv"))

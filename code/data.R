@@ -46,7 +46,11 @@ for (i in 1:length(a)){
                                     x = year))) %>% 
     dplyr::distinct()
   
-  cc <- strsplit(x = gsub(x = gsub(x = a[i], pattern = "Taxon_confidence_", replacement = ""), pattern = ".xlsx", replacement = ""), split = "_")[[1]]
+  cc <- strsplit(x = gsub(x = gsub(x = a[i], 
+                                   pattern = "Taxon_confidence_", replacement = ""), 
+                          pattern = ".xlsx", 
+                          replacement = ""), 
+                 split = "_")[[1]]
   
   if (length(cc) == 1) {
     b$SRVY <- cc
@@ -90,8 +94,8 @@ tax_conf <- SameColNames(df.ls) %>%
     tax_conf == 3 ~ "Low", 
     TRUE ~ "Unassessed"))
 
-readr::write_csv(x = tax_conf, file = paste0(getwd(), 
-                                             "/data/taxon_confidence.csv"))
+readr::write_csv(x = tax_conf, 
+                 file = paste0(getwd(), "/data/taxon_confidence.csv"))
 
 save(tax_conf, file = paste0(getwd(), "/data/taxon_confidence.rdata"))
 

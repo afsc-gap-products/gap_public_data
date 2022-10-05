@@ -57,7 +57,7 @@ rmarkdown::render(paste0("./code/check.Rmd"),
 
 # Share table to oracle --------------------------------------------------------
 
-dir_out <- "./output/2022-09-27/"
+dir_out <- "./output/2022-10-03/"
 
 # cpue_station <- readr::read_csv(file = paste0("./output/2022-06-10/cpue_station.csv"))
 source("./code/load_oracle.R")
