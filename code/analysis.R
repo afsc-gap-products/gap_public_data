@@ -55,7 +55,11 @@ for (i in 1:length(surveys$SRVY)) {
 # Calculate simple station-level CPUE estimates --------------------------------
 
 # make data NOT 0-filled
-cpue_station <- cpue_station_0filled %>%
+cpue_station <- cpue_station_0filled 
+
+names(cpue_station_0filled) <- stringr::str_to_upper(names(cpue_station_0filled))
+
+cpue_station <- cpue_station %>%
   dplyr::filter(
     !(number_fish %in% c(NA, 0) & # this will remove 0-filled values
         weight %in% c(NA, 0)) | 
@@ -104,15 +108,17 @@ cpue_station <-
   dplyr::select(any_of(
     c(as.character(expression(
       year, srvy, survey, survey_id, cruise, haul, hauljoin, stratum, station, vessel_name, vessel_id, # survey data
-    date_time, latitude_dd, longitude_dd, latitude_dd_start, longitude_dd_start, latitude_dd_end, longitude_dd_end, # when/where
-    species_code, itis, worms, common_name, scientific_name, taxon_confidence, # species info
-    cpue_kgha, cpue_kgkm2, cpue_kg1000km2, # cpue weight
-    cpue_noha, cpue_nokm2, cpue_no1000km2, # cpue num
-    weight_kg, count, # summed catch data
-    bottom_temperature_c, surface_temperature_c, depth_m, #environmental data
-    distance_fished_km, net_width_m, net_height_m, area_swept_ha, duration_hr, performance # gear data
+      date_time, latitude_dd, longitude_dd, latitude_dd_start, longitude_dd_start, latitude_dd_end, longitude_dd_end, # when/where
+      species_code, itis, worms, common_name, scientific_name, taxon_confidence, # species info
+      cpue_kgha, cpue_kgkm2, cpue_kg1000km2, # cpue weight
+      cpue_noha, cpue_nokm2, cpue_no1000km2, # cpue num
+      weight_kg, count, # summed catch data
+      bottom_temperature_c, surface_temperature_c, depth_m, #environmental data
+      distance_fished_km, net_width_m, net_height_m, area_swept_ha, duration_hr, performance # gear data
   ))))) %>% 
   dplyr::arrange(srvy, date_time, cpue_kgha)
+
+names(cpue_station) <- stringr::str_to_upper(names(cpue_station))
 
 # print(dim(cpue_station)) # 2021
 # [1] 831340     11
@@ -135,7 +141,7 @@ column_metadata <- data.frame(matrix(
     "haul", "Haul Number", "ID code", "This number uniquely identifies a sampling event (haul) within a cruise. It is a sequential number, in chronological order of occurrence. ", 
     
     "hauljoin", "hauljoin", "ID Code", "This is a unique numeric identifier assigned to each (vessel, cruise, and haul) combination.", 
-
+    
     "stratum", "Stratum ID", "ID Code", "RACE database statistical area for analyzing data. Strata were designed using bathymetry and other geographic and habitat-related elements. The strata are unique to each survey series. Stratum of value 0 indicates experimental tows.", 
     
     "station", "Station ID", "ID code", "Alpha-numeric designation for the station established in the design of a survey. ", 
@@ -198,14 +204,13 @@ column_metadata <- data.frame(matrix(
 
     "performance", "Haul Performance Code (rating)", "rating", paste0("This denotes what, if any, issues arose during the haul. For more information, review the [code books](", link_code_books ,")."), 
     
+    "performance", "Haul Performance Code (rating)", "rating", paste0("This denotes what, if any, issues arose during the haul. For more information, review the [code books](", link_code_books ,")."), 
+    
     "itis", "ITIS Taxonomic Serial Number", "ID code", paste0("Species code as identified in the Integrated Taxonomic Information System (https://itis.gov/). Codes were last updated ", file.info(paste0("./data/spp_info.csv"))$ctime, "."), 
     # "", "", "", "", 
     "worms", "World Register of Marine Species Taxonomic Serial Number", "ID code", paste0("Species code as identified in the World Register of Marine Species (WoRMS) (https://www.marinespecies.org/). Codes were last updated ", file.info(paste0("./data/spp_info.csv"))$ctime, ".")
   )))
 
-
-"Domain:  Groundfish Survey Codebook: Performance Codes;    
-http://www.afsc.noaa.gov/RACE/groundfish/Groundfish_Survey_Codes.pdf"
 
 names(column_metadata) <- c("colname", "colname_desc", "units", "desc")
 column_metadata <- column_metadata[match(names(cpue_station), column_metadata$colname),]  
@@ -230,11 +235,17 @@ readr::write_lines(x = table_metadata,
 files_to_save <- list("cpue_station" = cpue_station,
                       "cpue_station_0filled" = cpue_station_0filled)
 
-base::save(cpue_station, column_metadata, table_metadata, 
-     file = paste0(dir_out,"cpue_station.RData"))
+base::save(cpue_station, 
+           column_metadata, 
+           table_metadata, 
+           file = paste0(dir_out,"cpue_station.RData"))
 
-base::save(cpue_station_0filled, column_metadata, table_metadata, 
-     file = paste0(dir_out,"cpue_station_0filled.RData"))
+table_metadata <- gsub(pattern = "non-zero (presence)", replacement = "all (presence and absence)", x = table_metadata)
+
+base::save(cpue_station_0filled, 
+           column_metadata, 
+           table_metadata, 
+           file = paste0(dir_out,"cpue_station_0filled.RData"))
 
 for (i in 1:length(files_to_save)) {
   readr::write_csv(

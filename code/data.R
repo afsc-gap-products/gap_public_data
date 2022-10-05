@@ -46,7 +46,11 @@ for (i in 1:length(a)){
                                     x = year))) %>% 
     dplyr::distinct()
   
-  cc <- strsplit(x = gsub(x = gsub(x = a[i], pattern = "Taxon_confidence_", replacement = ""), pattern = ".xlsx", replacement = ""), split = "_")[[1]]
+  cc <- strsplit(x = gsub(x = gsub(x = a[i], 
+                                   pattern = "Taxon_confidence_", replacement = ""), 
+                          pattern = ".xlsx", 
+                          replacement = ""), 
+                 split = "_")[[1]]
   
   if (length(cc) == 1) {
     b$SRVY <- cc
@@ -90,10 +94,11 @@ tax_conf <- SameColNames(df.ls) %>%
     tax_conf == 3 ~ "Low", 
     TRUE ~ "Unassessed"))
 
-readr::write_csv(x = tax_conf, file = paste0(getwd(), 
-                                             "/data/taxon_confidence.csv"))
+readr::write_csv(x = tax_conf, 
+                 file = paste0(getwd(), "/data/taxon_confidence.csv"))
 
 save(tax_conf, file = paste0(getwd(), "/data/taxon_confidence.rdata"))
+
 }
 # Wrangle Data -----------------------------------------------------------------
 
@@ -124,7 +129,6 @@ spp_info <- spp_info %>%
 }
 
 ## cruises ---------------------------------------------------------------------
-
 cruises <-  
   dplyr::left_join(
     x = surveys, # a data frame of all surveys and survey_definition_ids we want included in the public data, created in the run.R script
@@ -219,6 +223,7 @@ catch <- catch0 %>%
 
 ## catch_haul_cruises ----------------------------------------------------------
 
+
 catch_haul_cruises <-
   dplyr::inner_join(
     x = cruises %>% 
@@ -236,7 +241,44 @@ catch_haul_cruises <-
     y = catch %>% 
       dplyr::select(cruisejoin, hauljoin, region, vessel, haul, 
                     species_code, weight, number_fish), 
-    by = c("hauljoin", "cruisejoin", "region", "vessel", "haul")) %>% 
+    by = c("hauljoin", "cruisejoin", "region", "vessel", "haul"))
+
+
+# fill in tax_conf with, if missing, the values from the year before
+comb1 <- unique(catch_haul_cruises[, c("SRVY", "year")] )
+comb2 <- unique(tax_conf[, c("SRVY", "year")])
+# names(comb2) <- names(comb1) <- c("SRVY", "year")
+comb1$comb <- paste0(comb1$SRVY, "_", comb1$year)
+comb2$comb <- paste0(comb2$SRVY, "_", comb2$year)
+comb <- strsplit(x = setdiff(comb1$comb, comb2$comb), split = "_")
+
+for (i in 1:length(comb)) {
+  srvy0 <- comb[[i]][1]
+  year0 <- as.numeric(comb[[i]][2])
+  
+  yr_prev <- tax_conf %>% 
+    dplyr::filter(SRVY == srvy0)
+  
+  # if there is one entry for all years of the survey
+  if (length(unique(yr_prev$year)) == 1) {
+    if (is.na(unique(yr_prev$year))) {
+      tax_conf <- dplyr::bind_rows(tax_conf, 
+                                 yr_prev %>% 
+                                   dplyr::mutate(year = year0))
+    }
+  } else {
+  
+  # missing year - find closest previous year
+    tax_conf <- dplyr::bind_rows(tax_conf, 
+                                yr_prev %>% 
+      dplyr::filter(year < year0) %>% 
+      dplyr::filter(year == max(year, na.rm = TRUE)) %>% 
+      dplyr::mutate(year = year0) )
+  }
+
+}
+
+catch_haul_cruises <- catch_haul_cruises %>% 
   {if(taxize0) dplyr::left_join(x = ., 
                    y = tax_conf %>% 
                      dplyr::select(year, tax_conf, SRVY, species_code), 

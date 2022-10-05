@@ -19,7 +19,7 @@ source("Z:/Projects/ConnectToOracle.R")
 # 
 # odbcGetInfo(channel)
 
-### Test -----------------------------------------------------------------------
+# Test -----------------------------------------------------------------------
 # RODBC::sqlDrop(channel = channel_foss, sqtable = "USArrests")
 # USArrests0<-USArrests
 # RODBC::sqlSave(channel = channel_foss, dat = USArrests0, tablename = "USArrests", rownames = "state", addPK = TRUE)
@@ -29,47 +29,113 @@ source("Z:/Projects/ConnectToOracle.R")
 #                 query = paste0('comment on column "RACEBASE_FOSS"."USArrests"."Assault" is \'get out!\';'))
 
 
-### what we came here for ------------------------------------------------------
-# afsc_itis_worms
+# Upload data to oracle! -----------------------------
+
+## public foss -----------------------------------------------------------------
+print("public foss")
+load(file = paste0(dir_out, "cpue_station.RData")) 
+RACEBASE_PUBLIC_FOSS <- cpue_station
+names(RACEBASE_PUBLIC_FOSS) <- stringr::str_to_upper(names(RACEBASE_PUBLIC_FOSS))
+column_metadata$colname <- stringr::str_to_upper(column_metadata$colname)
+
 RODBC::sqlDrop(channel = channel_foss, 
-               sqtable = "afsc_itis_worms")
+               sqtable = "RACEBASE_PUBLIC_FOSS")
 
 RODBC::sqlSave(channel = channel_foss, 
-               dat = spp_info, 
-               tablename = "afsc_itis_worms")
-
-# taxon_confidence
-RODBC::sqlDrop(channel = channel_foss, 
-               sqtable = "taxon_confidence")
-
-RODBC::sqlSave(channel = channel_foss, 
-               dat = tax_conf, 
-               tablename = "taxon_confidence")
-
-# racebase_public_foss
-RODBC::sqlDrop(channel = channel_foss, 
-               sqtable = "racebase_public_foss")
-
-RODBC::sqlSave(channel = channel_foss, 
-               dat = cpue_station, 
-               tablename = "racebase_public_foss")
+               # tablename = "RACEBASE_PUBLIC_FOSS", 
+               dat = RACEBASE_PUBLIC_FOSS)
 
 column_metadata0 <- column_metadata
 for (i in 1:nrow(column_metadata0)) {
   
-  desc <- gsub(pattern = "<sup>2</sup>", replacement = "2", x = column_metadata0$colname_desc[i], fixed = TRUE)
-  short_colname <- gsub(pattern = "<sup>2</sup>", replacement = "2", x = column_metadata0$colname[i], fixed = TRUE)
+  desc <- gsub(pattern = "<sup>2</sup>", 
+               replacement = "2", 
+               x = column_metadata0$colname_desc[i], fixed = TRUE)
+  short_colname <- gsub(pattern = "<sup>2</sup>", replacement = "2", 
+                        x = column_metadata0$colname[i], fixed = TRUE)
   
   RODBC::sqlQuery(channel = channel_foss,
-                  query = paste0('comment on column "RACEBASE_FOSS"."racebase_public_foss"."',
+                  query = paste0('comment on column "RACEBASE_FOSS"."RACEBASE_PUBLIC_FOSS"."',
                                  short_colname,'" is \'', 
                                  desc, ". ", # remove markdown/html code
-                                 gsub(pattern = "'", replacement ='\"', x = column_metadata0$desc[i]),'\';'))
+                                 gsub(pattern = "'", replacement ='\"', 
+                                      x = column_metadata0$desc[i]),'\';'))
   
 }
 
 RODBC::sqlQuery(channel = channel_foss,
-                query = paste0('comment on table "RACEBASE_FOSS"."racebase_public_foss" is \'',table_metadata,'\';'))
+                query = paste0('comment on table "RACEBASE_FOSS"."RACEBASE_PUBLIC_FOSS" is \'',
+                               table_metadata,'\';'))
+
+## 0 filled --------------------------------------------------------------------
+print("0-filled")
+load(file = paste0(dir_out, "cpue_station_0filled.RData"))
+RACEBASE_PUBLIC_FOSS_ZEROFILLED <- cpue_station_0filled
+
+RODBC::sqlDrop(channel = channel_foss, 
+               sqtable = "RACEBASE_PUBLIC_FOSS_ZEROFILLED")
+
+RODBC::sqlSave(channel = channel_foss, 
+               # tablename = "racebase_public_foss_zerofilled", 
+               dat = RACEBASE_PUBLIC_FOSS_ZEROFILLED)
+
+column_metadata0 <- column_metadata
+for (i in 1:nrow(column_metadata0)) {
+  
+  desc <- gsub(pattern = "<sup>2</sup>", 
+               replacement = "2", 
+               x = column_metadata0$colname_desc[i], fixed = TRUE)
+  short_colname <- gsub(pattern = "<sup>2</sup>", replacement = "2", 
+                        x = column_metadata0$colname[i], fixed = TRUE)
+  
+  RODBC::sqlQuery(channel = channel_foss,
+                  query = paste0('comment on column "RACEBASE_FOSS"."RACEBASE_PUBLIC_FOSS_ZEROFILLED"."',
+                                 short_colname,'" is \'', 
+                                 desc, ". ", # remove markdown/html code
+                                 gsub(pattern = "'", replacement ='\"', 
+                                      x = column_metadata0$desc[i]),'\';'))
+  
+}
+
+RODBC::sqlQuery(channel = channel_foss,
+                query = paste0('comment on table "RACEBASE_FOSS"."RACEBASE_PUBLIC_FOSS_ZEROFILLED" is \'',
+                               table_metadata,'\';'))
+
+## spp info --------------------------------------------------------------------
+print("spp info")
+load(file = "./data/spp_info.rdata")
+AFSC_ITIS_WORMS <- spp_info
+RODBC::sqlDrop(channel = channel_foss, 
+               sqtable = 'AFSC_ITIS_WORMS')
+
+RODBC::sqlSave(channel = channel_foss,
+               dat = AFSC_ITIS_WORMS, addPK=TRUE,
+               # tablename = 'AFSC_ITIS_WORMS',
+               fast = TRUE)
+
+# dat2 <- RODBC::sqlQuery(channel = channel_foss, 
+#                         query = 'SELECT * FROM "RACEBASE_FOSS"."AFSC_ITIS_WORMS"')
+# 
+# dat1 <- RODBC::sqlQuery(channel = channel_foss,
+#                         query = 'SELECT * FROM RACEBASE_FOSS.AFSC_ITIS_WORMS')
+
+# RODBC::sqlQuery(channel = channel_foss,
+#                 query = paste0('CREATE TABLE RACEBASE_FOSS.AFSC_ITIS_WORMS;'))
+
+
+## taxon conf ------------------------------------------------------------------
+print("taxon conf")
+load(file = paste0("./data/taxon_confidence.rdata"))
+TAXON_CONFIDENCE <- tax_conf 
+RODBC::sqlDrop(channel = channel_foss, 
+               sqtable = "TAXON_CONFIDENCE")
+
+RODBC::sqlSave(channel = channel_foss,
+               # tablename = "TAXON_CONFIDENCE", 
+               dat = TAXON_CONFIDENCE)
+
+dat1 <- RODBC::sqlQuery(channel = channel_foss,
+                        query = 'SELECT * FROM RACEBASE_FOSS.TAXON_CONFIDENCE')
 
 # Grant access to data to all schemas ------------------------------------------
 
@@ -80,5 +146,12 @@ all_schemas <- RODBC::sqlQuery(channel = channel_foss,
                 query = paste0('SELECT * FROM all_users;'))
 for (i in 1:length(sort(all_schemas$USERNAME))) {
   RODBC::sqlQuery(channel = channel_foss,
-                  query = paste0('grant select on "RACEBASE_FOSS"."racebase_public_foss" to ',all_schemas$USERNAME[i],';'))
+                  query = paste0('grant select on "RACEBASE_FOSS"."AFSC_ITIS_WORMS" to ',all_schemas$USERNAME[i],';'))
+  RODBC::sqlQuery(channel = channel_foss,
+                  query = paste0('grant select on "RACEBASE_FOSS"."TAXON_CONFIDENCE" to ',all_schemas$USERNAME[i],';'))
+  RODBC::sqlQuery(channel = channel_foss,
+                  query = paste0('grant select on "RACEBASE_FOSS"."RACEBASE_PUBLIC_FOSS" to ',all_schemas$USERNAME[i],';'))
+  RODBC::sqlQuery(channel = channel_foss,
+                  query = paste0('grant select on "RACEBASE_FOSS"."RACEBASE_PUBLIC_FOSS_ZEROFILLED" to ',all_schemas$USERNAME[i],';'))
 }
+

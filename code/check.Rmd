@@ -542,7 +542,7 @@ summary(dat0)
 
 ## CPUE for major species
 
-```{r CPUE_kgha_plot_new_design, fig.height = 7, fig.width = 4.8}
+```{r CPUE_kgha_plot_new_design}
 spp <- c(69323, # blue king crab 
          68580, # snow crab
          69322, # red king crab
@@ -569,9 +569,12 @@ for (ii in 1:length(spp)){
 
 # What stations for each year and survey look like in the new public data
 
-```{r station_map, fig.height = 10, fig.width = 7}
+```{r station_map}
 for (i in 1:length(unique(public_new$srvy))) {
-  print(plot_stations(dat = public_new, srvy0 = unique(public_new$srvy)[i]))
+  print(plot_stations(dat = public_new %>% 
+                        dplyr::rename(longitude_dd = longitude_dd_start, 
+                                      latitude_dd = latitude_dd_start), 
+                      srvy0 = unique(public_new$srvy)[i]))
 }
 ```
 
