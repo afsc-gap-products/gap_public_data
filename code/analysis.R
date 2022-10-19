@@ -213,7 +213,7 @@ column_metadata <- data.frame(matrix(
 
 
 names(column_metadata) <- c("colname", "colname_desc", "units", "desc")
-column_metadata <- column_metadata[match(names(cpue_station), column_metadata$colname),]  
+column_metadata <- column_metadata[match(names(cpue_station), toupper(column_metadata$colname)),]  
 readr::write_csv(x = column_metadata, file = paste0(dir_out, "column_metadata.csv"))
 
 # setdiff(as.character(column_metadata$`Column name from data`), names(cpue_station))

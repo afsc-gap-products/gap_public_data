@@ -43,7 +43,7 @@ source('./code/functions.R')
 if (taxize0) { # only if you need to rerun {taxize} stuff - very time intensive!
   source('./code/find_taxize_species_codes.R')
 }
-# taxize0 <- TRUE
+taxize0 <- TRUE
 source('./code/data.R')
 
 # Run analysis -----------------------------------------------------------------
@@ -61,7 +61,7 @@ rmarkdown::render(paste0("./code/check.Rmd"),
 
 # Share table to oracle --------------------------------------------------------
 
-dir_out <- "./output/2022-10-03/"
+dir_out <- "./output/2022-10-18/"
 
 
 # cpue_station <- readr::read_csv(file = paste0("./output/2022-06-10/cpue_station.csv"))
