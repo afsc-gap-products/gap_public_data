@@ -68,38 +68,40 @@ RODBC::sqlQuery(channel = channel_foss,
                                table_metadata,'\';'))
 
 ## 0 filled --------------------------------------------------------------------
-# print("0-filled")
-# load(file = paste0(dir_out, "cpue_station_0filled.RData"))
-# RACEBASE_PUBLIC_FOSS_ZEROFILLED <- cpue_station_0filled
-# 
-# RODBC::sqlDrop(channel = channel_foss, 
-#                sqtable = "RACEBASE_PUBLIC_FOSS_ZEROFILLED")
-# 
-# RODBC::sqlSave(channel = channel_foss, 
-#                # tablename = "racebase_public_foss_zerofilled", 
-#                dat = RACEBASE_PUBLIC_FOSS_ZEROFILLED)
-# 
-# column_metadata0 <- column_metadata
-# for (i in 1:nrow(column_metadata0)) {
-#   
-#   desc <- gsub(pattern = "<sup>2</sup>", 
-#                replacement = "2", 
-#                x = column_metadata0$colname_desc[i], fixed = TRUE)
-#   short_colname <- gsub(pattern = "<sup>2</sup>", replacement = "2", 
-#                         x = column_metadata0$colname[i], fixed = TRUE)
-#   
-#   RODBC::sqlQuery(channel = channel_foss,
-#                   query = paste0('comment on column "RACEBASE_FOSS"."RACEBASE_PUBLIC_FOSS_ZEROFILLED"."',
-#                                  short_colname,'" is \'', 
-#                                  desc, ". ", # remove markdown/html code
-#                                  gsub(pattern = "'", replacement ='\"', 
-#                                       x = column_metadata0$desc[i]),'\';'))
-#   
-# }
-# 
-# RODBC::sqlQuery(channel = channel_foss,
-#                 query = paste0('comment on table "RACEBASE_FOSS"."RACEBASE_PUBLIC_FOSS_ZEROFILLED" is \'',
-#                                table_metadata,'\';'))
+print("0-filled")
+load(file = paste0(dir_out, "cpue_station_0filled.RData"))
+RACEBASE_PUBLIC_FOSS_ZEROFILLED <- cpue_station_0filled
+names(RACEBASE_PUBLIC_FOSS_ZEROFILLED) <- toupper(names(RACEBASE_PUBLIC_FOSS_ZEROFILLED))
+column_metadata$colname <- toupper(column_metadata$colname)
+
+RODBC::sqlDrop(channel = channel_foss,
+               sqtable = "RACEBASE_PUBLIC_FOSS_ZEROFILLED")
+
+RODBC::sqlSave(channel = channel_foss,
+               # tablename = "racebase_public_foss_zerofilled",
+               dat = RACEBASE_PUBLIC_FOSS_ZEROFILLED)
+
+column_metadata0 <- column_metadata
+for (i in 1:nrow(column_metadata0)) {
+
+  desc <- gsub(pattern = "<sup>2</sup>",
+               replacement = "2",
+               x = column_metadata0$colname_desc[i], fixed = TRUE)
+  short_colname <- gsub(pattern = "<sup>2</sup>", replacement = "2",
+                        x = column_metadata0$colname[i], fixed = TRUE)
+
+  RODBC::sqlQuery(channel = channel_foss,
+                  query = paste0('comment on column "RACEBASE_FOSS"."RACEBASE_PUBLIC_FOSS_ZEROFILLED"."',
+                                 short_colname,'" is \'',
+                                 desc, ". ", # remove markdown/html code
+                                 gsub(pattern = "'", replacement ='\"',
+                                      x = column_metadata0$desc[i]),'\';'))
+
+}
+
+RODBC::sqlQuery(channel = channel_foss,
+                query = paste0('comment on table "RACEBASE_FOSS"."RACEBASE_PUBLIC_FOSS_ZEROFILLED" is \'',
+                               table_metadata,'\';'))
 
 ## spp info --------------------------------------------------------------------
 print("spp info")
