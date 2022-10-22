@@ -18,7 +18,7 @@ Seattle, WA 98195
 
 # Cite this Data
 
-NOAA Fisheries Alaska Fisheries Science Center, RACE Division Bottom
+NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom
 Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss,
 Accessed mm/dd/yyyy
 
