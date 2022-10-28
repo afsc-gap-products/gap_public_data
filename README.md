@@ -50,7 +50,7 @@ api_link <- "https://origin-tst-ods-st.fisheries.noaa.gov/ods/foss/afsc_groundfi
 
 ``` r
 res <- httr::GET(url = api_link)
-# base::rawToChar(res$content) # Test connection
+# res # Test connection
 data <- jsonlite::fromJSON(base::rawToChar(res$content))
 # names(data)
 knitr::kable(head(data$items, 3)) 
