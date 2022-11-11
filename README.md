@@ -113,6 +113,21 @@ for (i in 1:length(locations)){
 
 For reference:
 
+    ## RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS: 
+    ## rows: 1038632
+    ## cols: 37
+    ## 0.319 GB
+    ## 
+    ## RACEBASE_FOSS.FOSS_ZEROFILLED: 
+    ## rows: 36350712
+    ## cols: 11
+    ## 1.616 GB
+    ## 
+    ## RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS_ZEROFILLED: 
+    ## rows: 36440900
+    ## cols: 37
+    ## 4.514 GB
+
 # Metadata
 
 ## Data Description

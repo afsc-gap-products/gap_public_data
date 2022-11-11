@@ -159,9 +159,10 @@ rows: ", nrow(cpue_station_0filled), "
 cols: ", ncol(cpue_station_0filled), "
 ", round(file.size(paste0(dir_out, "cpue_station_0filled.csv"))/1e+9, 3), " GB") 
 
+cat(str0)
+
 ```
 
-`r print(str0)`
 
 # Metadata
 
