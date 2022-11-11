@@ -91,9 +91,12 @@ environment.
 
 ``` r
 locations <- c(
-  "RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS", # Presence-only data. This is a much smaller file than the zero-filled one
-  "RACEBASE_FOSS.FOSS_ZEROFILLED", # Presence and absensece data. This is a huge file but with the minimal columns
-  "RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS_ZEROFILLED") # Presence and absensece data. This is a huge file but with all of the bells and whistels
+  # Presence-only data. This is a much smaller file than the zero-filled one
+  "RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS", 
+  # Presence and absensece data. This is a huge file but with the minimal columns
+  "RACEBASE_FOSS.FOSS_ZEROFILLED", 
+  # Presence and absensece data. This is a huge file but with all of the bells and whistels
+  "RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS_ZEROFILLED") 
 
 # loop through each oracle table you want to pull
 for (i in 1:length(locations)){
@@ -152,13 +155,13 @@ other representations of these data, is suggested. These data are
 compiled and approved annually after each summer survey season. The data
 from previous years are unlikely to change substantially once published.
 
-These data are all (presence and absence) observations from surveys
-conducted on fishing vessels. These surveys monitor trends in
-distribution and abundance of groundfish, crab, and bottom-dwelling
-species in Alaska’s marine ecosystems. These data include estimates of
-catch-per-unit-effort (CPUE) for most identified species at a standard
-set of stations. Some survey data are excluded, such as non-standard
-stations, surveys completed in earlier years using
+These data are all (presence and absence; a.k.a. “zero-filled”)
+observations from surveys conducted on fishing vessels. These surveys
+monitor trends in distribution and abundance of groundfish, crab, and
+bottom-dwelling species in Alaska’s marine ecosystems. These data
+include estimates of catch-per-unit-effort (CPUE) for most identified
+species at a standard set of stations. Some survey data are excluded,
+such as non-standard stations, surveys completed in earlier years using
 different/non-standard gear, and special tows and non-standard data
 collections.
 
