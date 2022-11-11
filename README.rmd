@@ -161,7 +161,7 @@ cols: ", ncol(cpue_station_0filled), "
 
 ```
 
-print(str0)
+`r print(str0)`
 
 # Metadata
 

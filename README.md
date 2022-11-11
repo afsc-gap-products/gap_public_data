@@ -113,8 +113,6 @@ for (i in 1:length(locations)){
 
 For reference:
 
-print(str0)
-
 # Metadata
 
 ## Data Description
