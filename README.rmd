@@ -119,7 +119,8 @@ Then, you can pull and save (if you need) the table into your R environment.
 
 locations <- c(
   "RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS", # Presence-only data. This is a much smaller file than the zero-filled one
-  "RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS_ZEROFILLED") # Presence and absensece data. This is a huge file. 
+  "RACEBASE_FOSS.FOSS_ZEROFILLED", # Presence and absensece data. This is a huge file but with the minimal columns
+  "RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS_ZEROFILLED") # Presence and absensece data. This is a huge file but with all of the bells and whistels
 
 # loop through each oracle table you want to pull
 for (i in 1:length(locations)){
