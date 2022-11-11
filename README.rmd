@@ -48,6 +48,8 @@ Seattle, WA 98195
 
 NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss, Accessed mm/dd/yyyy
 
+These data were last ran on `r gsub("(\\D)0", "\\1", format(file.info(paste0(dir_out, "cpue_station.csv"))$mtime, "%B %d, %Y"))`. 
+
 # Access the Data
 
 ## Access data interactively through the [Fisheries One Stop Shop (FOSS)](`r link_foss `) platform
@@ -94,6 +96,69 @@ knitr::kable(head(data$items, 3))
 # knitr::kable(head(x, 3)) 
 ```
 
+## Access data via Oracle (AFSC-only)
+
+If you have access to the AFSC Oracle data base, you can pull the data directly from the Oracle schema these data are pulled from for FOSS. 
+
+You will need to install the `RODBC` R package and have OFIS (IT) connect R to Oracle. Once connected, you can use the following code in R to connect to Oracle. 
+
+```{r, echo = TRUE, eval = FALSE}
+library("RODBC")
+
+channel<-odbcConnect(dsn = "AFSC",
+                     uid = "USERNAME", # change
+                     pwd = "PASSWORD", #change
+                     believeNRows = FALSE)
+
+odbcGetInfo(channel)
+```
+
+Then, you can pull and save (if you need) the table into your R environment. 
+
+```{r, echo = TRUE, eval = FALSE}
+
+locations <- c(
+  "RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS", # Presence-only data. This is a much smaller file than the zero-filled one
+  "RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS_ZEROFILLED") # Presence and absensece data. This is a huge file. 
+
+# loop through each oracle table you want to pull
+for (i in 1:length(locations)){
+  print(locations[i])
+  # pull table from oracle into R environment
+  a <- RODBC::sqlQuery(channel, paste0("SELECT * FROM ", locations[i]))
+  # Save table to local directory
+  write.csv(x = a, 
+            paste0(getwd(), "/",
+                   gsub(pattern = '.', 
+                        replacement = "", 
+                        x = locations[i], 
+                        fixed = TRUE, 
+                        perl = TRUE),
+                   ".csv"))
+}
+
+```
+
+For reference: 
+
+```{r, echo = TRUE,}
+
+print(paste0("RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS: ", "
+             rows: ", nrow(cpue_station), "
+             cols: ", ncol(cpue_station), "
+             ", file.size(paste0(dir_out, "cpue_station.csv"))/1e+9, " GB") )
+
+print(paste0("RACEBASE_FOSS.FOSS_ZEROFILLED: ", "
+             rows: ", nrow(cpue_station_0filled_clean), "
+             cols: ", ncol(cpue_station_0filled_clean), "
+             ", file.size(paste0(dir_out, "cpue_station_0filled_clean.csv"))/1e+9, " GB") )
+
+print(paste0("RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS_ZEROFILLED: ", "
+             rows: ", nrow(cpue_station_0filled), "
+             cols: ", ncol(cpue_station_0filled), "
+             ", file.size(paste0(dir_out, "cpue_station_0filled.csv"))/1e+9, " GB") )
+```
+
 # Metadata
 
 ## Data Description
@@ -102,7 +167,7 @@ The Resource Assessment and Conservation Engineering Division (RACE) Groundfish 
 
 There are no legal restrictions on access to the data. They reside in the public domain and can be freely distributed. Users must read and fully comprehend the metadata prior to use. Data should not be used beyond the limits of the source scale. Acknowledgement of NOAA, as the source from which these data were obtained, in any publications and/or other representations of these data, is suggested. These data are compiled and approved annually after each summer survey season. The data from previous years are unlikely to change substantially once published.
 
-These data are non-zero (presence) observations from surveys conducted on fishing vessels. These surveys monitor trends in distribution and abundance of groundfish, crab, and bottom-dwelling species in Alaska’s marine ecosystems. These data include estimates of catch-per-unit-effort (CPUE) for most identified species at a standard set of stations. Some survey data are excluded, such as non-standard stations, surveys completed in earlier years using different/non-standard gear, and special tows and non-standard data collections.
+These data are all (presence and absence) observations from surveys conducted on fishing vessels. These surveys monitor trends in distribution and abundance of groundfish, crab, and bottom-dwelling species in Alaska’s marine ecosystems. These data include estimates of catch-per-unit-effort (CPUE) for most identified species at a standard set of stations. Some survey data are excluded, such as non-standard stations, surveys completed in earlier years using different/non-standard gear, and special tows and non-standard data collections.
 
 Though not included in the public data, these surveys also collect oceanographic and environmental data, and biological data such as length, weight, stomach contents (to learn more about diet), otoliths (fish ear bones to learn about age), and tissue samples for genetic analysis, all of which can be shared upon special request. Also not included in the public data are estimated biomass (average total weight of all fish and crabs sampled) of crabs and groundfish that support the creation of annual stock assessments.
 

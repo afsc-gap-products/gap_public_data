@@ -54,20 +54,21 @@ source('./code/analysis.R')
 
 # source('./code/data_dl_check.R')
 
-dir.create(path = paste0(dir_out, "/check/"))
-rmarkdown::render(paste0("./code/check.Rmd"),
-                  output_dir = dir_out,
-                  output_file = paste0("./check/check.docx"))
+# dir.create(path = paste0(dir_out, "/check/"))
+# rmarkdown::render(paste0("./code/check.Rmd"),
+#                   output_dir = dir_out,
+#                   output_file = paste0("./check/check.docx"))
 
-# Share table to oracle --------------------------------------------------------
+# Update README ----------------------------------------------------------------
 
-dir_out <- "./output/2022-10-18/"
-
-
-# cpue_station <- readr::read_csv(file = paste0("./output/2022-06-10/cpue_station.csv"))
-source("./code/load_oracle.R")
+dir_out <- "./output/2022-11-10/"
 
 rmarkdown::render(paste0("./README.Rmd"),
                   output_dir = "./",
                   output_file = paste0("README.md"))
+
+# Share table to oracle --------------------------------------------------------
+
+# cpue_station <- readr::read_csv(file = paste0("./output/2022-06-10/cpue_station.csv"))
+source("./code/load_oracle.R")
 
