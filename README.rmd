@@ -141,23 +141,28 @@ for (i in 1:length(locations)){
 
 For reference: 
 
-```{r, echo = TRUE,}
+```{r, echo = FALSE}
 
-print(paste0("RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS: ", "
-             rows: ", nrow(cpue_station), "
-             cols: ", ncol(cpue_station), "
-             ", file.size(paste0(dir_out, "cpue_station.csv"))/1e+9, " GB") )
+str0 <- paste0(
+"RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS: ", "
+rows: ", nrow(cpue_station), "
+cols: ", ncol(cpue_station), "
+", file.size(paste0(dir_out, "cpue_station.csv"))/1e+9, " GB
 
-print(paste0("RACEBASE_FOSS.FOSS_ZEROFILLED: ", "
-             rows: ", nrow(cpue_station_0filled_clean), "
-             cols: ", ncol(cpue_station_0filled_clean), "
-             ", file.size(paste0(dir_out, "cpue_station_0filled_clean.csv"))/1e+9, " GB") )
+RACEBASE_FOSS.FOSS_ZEROFILLED: ", "
+rows: ", nrow(cpue_station_0filled_clean), "
+cols: ", ncol(cpue_station_0filled_clean), "
+", file.size(paste0(dir_out, "cpue_station_0filled_clean.csv"))/1e+9, " GB
 
-print(paste0("RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS_ZEROFILLED: ", "
-             rows: ", nrow(cpue_station_0filled), "
-             cols: ", ncol(cpue_station_0filled), "
-             ", file.size(paste0(dir_out, "cpue_station_0filled.csv"))/1e+9, " GB") )
+RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS_ZEROFILLED: ", "
+rows: ", nrow(cpue_station_0filled), "
+cols: ", ncol(cpue_station_0filled), "
+", file.size(paste0(dir_out, "cpue_station_0filled.csv"))/1e+9, " GB") 
+
+cat(str0)
+
 ```
+
 
 # Metadata
 

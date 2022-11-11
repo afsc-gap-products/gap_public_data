@@ -111,32 +111,20 @@ for (i in 1:length(locations)){
 
 For reference:
 
-``` r
-print(paste0("RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS: ", "
-             rows: ", nrow(cpue_station), "
-             cols: ", ncol(cpue_station), "
-             ", file.size(paste0(dir_out, "cpue_station.csv"))/1e+9, " GB") )
-```
-
-    ## [1] "RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS: \n             rows: 1038632\n             cols: 37\n             0.31880795 GB"
-
-``` r
-print(paste0("RACEBASE_FOSS.FOSS_ZEROFILLED: ", "
-             rows: ", nrow(cpue_station_0filled_clean), "
-             cols: ", ncol(cpue_station_0filled_clean), "
-             ", file.size(paste0(dir_out, "cpue_station_0filled_clean.csv"))/1e+9, " GB") )
-```
-
-    ## [1] "RACEBASE_FOSS.FOSS_ZEROFILLED: \n             rows: 36350712\n             cols: 11\n             1.616481804 GB"
-
-``` r
-print(paste0("RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS_ZEROFILLED: ", "
-             rows: ", nrow(cpue_station_0filled), "
-             cols: ", ncol(cpue_station_0filled), "
-             ", file.size(paste0(dir_out, "cpue_station_0filled.csv"))/1e+9, " GB") )
-```
-
-    ## [1] "RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS_ZEROFILLED: \n             rows: 36440900\n             cols: 37\n             4.514155786 GB"
+    ## RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS: 
+    ## rows: 1038632
+    ## cols: 37
+    ## 0.31880795 GB
+    ## 
+    ## RACEBASE_FOSS.FOSS_ZEROFILLED: 
+    ## rows: 36350712
+    ## cols: 11
+    ## 1.616481804 GB
+    ## 
+    ## RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS_ZEROFILLED: 
+    ## rows: 36440900
+    ## cols: 37
+    ## 4.514155786 GB
 
 # Metadata
 
