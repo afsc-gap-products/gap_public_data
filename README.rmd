@@ -48,7 +48,7 @@ Seattle, WA 98195
 
 NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss, Accessed mm/dd/yyyy
 
-These data were last ran on `r gsub("(\\D)0", "\\1", format(file.info(paste0(dir_out, "cpue_station.csv"))$mtime, "%B %d, %Y"))`. 
+These data were last ran and pushed to the AFSC oracle on `r gsub("(\\D)0", "\\1", format(file.info(paste0(dir_out, "cpue_station.csv"))$mtime, "%B %d, %Y"))`. This is not the date that these data were pulled into FOSS and the FOSS dataset may be behind. 
 
 # Access the Data
 
@@ -159,10 +159,9 @@ rows: ", nrow(cpue_station_0filled), "
 cols: ", ncol(cpue_station_0filled), "
 ", file.size(paste0(dir_out, "cpue_station_0filled.csv"))/1e+9, " GB") 
 
-cat(str0)
-
 ```
 
+print(str0)
 
 # Metadata
 

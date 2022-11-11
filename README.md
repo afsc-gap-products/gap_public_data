@@ -22,7 +22,9 @@ NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom
 Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss,
 Accessed mm/dd/yyyy
 
-These data were last ran on November 10, 2022.
+These data were last ran and pushed to the AFSC oracle on November 10,
+2022. This is not the date that these data were pulled into FOSS and the
+FOSS dataset may be behind.
 
 # Access the Data
 
@@ -111,20 +113,7 @@ for (i in 1:length(locations)){
 
 For reference:
 
-    ## RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS: 
-    ## rows: 1038632
-    ## cols: 37
-    ## 0.31880795 GB
-    ## 
-    ## RACEBASE_FOSS.FOSS_ZEROFILLED: 
-    ## rows: 36350712
-    ## cols: 11
-    ## 1.616481804 GB
-    ## 
-    ## RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS_ZEROFILLED: 
-    ## rows: 36440900
-    ## cols: 37
-    ## 4.514155786 GB
+print(str0)
 
 # Metadata
 
