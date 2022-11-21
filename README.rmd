@@ -145,7 +145,7 @@ api_link <- "https://origin-tst-ods-st.fisheries.noaa.gov/ods/foss/afsc_groundfi
 
 ### Select all data
 
-```{r, echo = TRUE}
+```{r, echo = TRUE, eval = FALSE}
 res <- httr::GET(url = api_link)
 # res # Test connection
 data <- jsonlite::fromJSON(base::rawToChar(res$content))

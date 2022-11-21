@@ -209,11 +209,18 @@ readr::write_csv(x = column_metadata, file = paste0(dir_out, "column_metadata.cs
 # setdiff(as.character(column_metadata$`Column name from data`), names(cpue_station_0filled))
 # setdiff(names(cpue_station_0filled), as.character(column_metadata$`colname`))
 
-table_metadata <- paste0("This dataset includes non-zero (presence) observations and catch-per-unit-effort (CPUE) estimates for most identified species at a standard set of stations in the Northern Bering Sea (NBS), Eastern Bering Sea (EBS), Bering Sea Slope (BSS), Gulf of Alaska (GOA), and Aleutian Islands (AI) Surveys conducted by the esource Assessment and Conservation Engineering Division (RACE) Groundfish Assessment Program (GAP) of the Alaska Fisheries Science Center (AFSC). 
+
+table_metadata <- paste0("This dataset includes zero-filled (presence and absence) observations and catch-per-unit-effort (CPUE) estimates for most identified species at a standard set of stations in the Northern Bering Sea (NBS), Eastern Bering Sea (EBS), Bering Sea Slope (BSS), Gulf of Alaska (GOA), and Aleutian Islands (AI) Surveys conducted by the esource Assessment and Conservation Engineering Division (RACE) Groundfish Assessment Program (GAP) of the Alaska Fisheries Science Center (AFSC). 
 There are no legal restrictions on access to the data. 
 The data from this dataset are shared on the Fisheries One Stop Stop (FOSS) platform (",link_foss,"). 
 The GitHub repository for the scripts that created this code can be found at ",link_repo,
-"These data were last updated ", file.info(paste0(dir_out, "cpue_station_0filled.csv"))$ctime, ".")
+                         "These data were last updated ", file.info(paste0(dir_out, "cpue_station_0filled.csv"))$ctime, ".")
+
+# table_metadata <- paste0("This dataset includes non-zero (presence) observations and catch-per-unit-effort (CPUE) estimates for most identified species at a standard set of stations in the Northern Bering Sea (NBS), Eastern Bering Sea (EBS), Bering Sea Slope (BSS), Gulf of Alaska (GOA), and Aleutian Islands (AI) Surveys conducted by the esource Assessment and Conservation Engineering Division (RACE) Groundfish Assessment Program (GAP) of the Alaska Fisheries Science Center (AFSC). 
+# There are no legal restrictions on access to the data. 
+# The data from this dataset are shared on the Fisheries One Stop Stop (FOSS) platform (",link_foss,"). 
+# The GitHub repository for the scripts that created this code can be found at ",link_repo,
+# "These data were last updated ", file.info(paste0(dir_out, "cpue_station_0filled.csv"))$ctime, ".")
 table_metadata <- gsub(pattern = "\n", replacement = "", x = table_metadata)
 readr::write_lines(x = table_metadata, 
                    file = paste0(dir_out, "table_metadata.txt"))

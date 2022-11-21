@@ -18,119 +18,13 @@ Seattle, WA 98195
 
 # Cite this Data
 
-NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom
+**NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom
 Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss,
-Accessed mm/dd/yyyy
+Accessed mm/dd/yyyy**
 
-These data were last ran and pushed to the AFSC oracle on November 10,
-2022. This is not the date that these data were pulled into FOSS and the
-FOSS dataset may be behind.
-
-# Access the Data
-
-## Access data interactively through the [Fisheries One Stop Shop (FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:200:13045102793007:Mail:NO:::) platform
-
-Select, filter, and package this and other NOAA Fisheries data from the
-[Fisheries One Stop Shop
-(FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:200:13045102793007:Mail:NO:::)
-platform. This user-friendly portal is maintained through Oracle APEX.
-
-## Access data via the API
-
-A useful intro to using APIs in R can be found
-[here](https://www.dataquest.io/blog/r-api-tutorial/).
-
-### Obtain data by connecting to the API
-
-``` r
-# install.packages(c("httr", "jsonlite"))
-library("httr")
-library("jsonlite")
-# link to the API
-api_link <- "https://origin-tst-ods-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/"
-```
-
-### Select all data
-
-``` r
-res <- httr::GET(url = api_link)
-# res # Test connection
-data <- jsonlite::fromJSON(base::rawToChar(res$content))
-# names(data)
-knitr::kable(head(data$items, 3)) 
-```
-
-| year | srvy | survey                               | survey_id | cruise | haul | stratum | station | vessel_name | vessel_id | date_time             | latitude_dd | longitude_dd | species_code | common_name         | scientific_name        | taxon_confidence | cpue_kgha | cpue_kgkm2 | cpue_kg1000km2 | cpue_noha | cpue_nokm2 | cpue_no1000km2 | weight_kg | count | bottom_temperature_c | surface_temperature_c | depth_m | distance_fished_km | net_width_m | net_height_m | area_swept_ha | duration_hr | tsn | ak_survey_id | links                                                                                   |
-|-:|:-|:---|:-|:-|:-|:-|:-|:-|:-|:--|:-|:-|:-|:--|:--|:-|:-|:-|:-|:-|:-|:-|:-|:-|:--|:--|:-|:--|:-|:-|:-|:-|:-|-:|:----------|
-| 2002 | AI   | Aleutian Islands Bottom Trawl Survey | 52        | 200201 | 2    | 722     | 303-64  | Vesteraalen | 94        | 5/17/2002 10:20:08 AM | 53.79037    | -167.2581    | 68560        | Tanner crab         | Chionoecetes bairdi    | High             | 0.010185  | 1.018504   | NA             | 0.424377  | 42.437674  | 42437.674334   | 0.024     | 1     | 4.1                  | 5                     | 164     | 1.488              | 15.836      | 7.159        | 2.3563968     | 0.27        | NA  |            1 | self , <https://origin-tst-ods-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/1> |
-| 2002 | AI   | Aleutian Islands Bottom Trawl Survey | 52        | 200201 | 2    | 722     | 303-64  | Vesteraalen | 94        | 5/17/2002 10:20:08 AM | 53.79037    | -167.2581    | 66031        | Alaskan pink shrimp | Pandalus eous          | Moderate         | 0.016975  | 1.697507   | NA             | 2.970637  | 297.06372  | 297063.720338  | 0.04      | 7     | 4.1                  | 5                     | 164     | 1.488              | 15.836      | 7.159        | 2.3563968     | 0.27        | NA  |            2 | self , <https://origin-tst-ods-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/2> |
-| 2002 | AI   | Aleutian Islands Bottom Trawl Survey | 52        | 200201 | 2    | 722     | 303-64  | Vesteraalen | 94        | 5/17/2002 10:20:08 AM | 53.79037    | -167.2581    | 72500        | Oregon triton       | Fusitriton oregonensis | High             | 0.018673  | 1.867258   | NA             | 0.424377  | 42.437674  | 42437.674334   | 0.044     | 1     | 4.1                  | 5                     | 164     | 1.488              | 15.836      | 7.159        | 2.3563968     | 0.27        | NA  |            3 | self , <https://origin-tst-ods-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/3> |
-
-## Access data via Oracle (AFSC-only)
-
-If you have access to the AFSC Oracle data base, you can pull the data
-directly from the Oracle schema these data are pulled from for FOSS.
-
-You will need to install the `RODBC` R package and have OFIS (IT)
-connect R to Oracle. Once connected, you can use the following code in R
-to connect to Oracle.
-
-``` r
-library("RODBC")
-
-channel<-odbcConnect(dsn = "AFSC",
-                     uid = "USERNAME", # change
-                     pwd = "PASSWORD", #change
-                     believeNRows = FALSE)
-
-odbcGetInfo(channel)
-```
-
-Then, you can pull and save (if you need) the table into your R
-environment.
-
-``` r
-locations <- c(
-  # Presence-only data. This is a much smaller file than the zero-filled one
-  "RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS", 
-  # Presence and absence data. This is a huge file but with the minimal columns
-  "RACEBASE_FOSS.FOSS_ZEROFILLED", 
-  # Presence and absence data. This is a huge file but with all of the bells and whistles
-  "RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS_ZEROFILLED") 
-
-# loop through each oracle table you want to pull
-for (i in 1:length(locations)){
-  print(locations[i])
-  # pull table from oracle into R environment
-  a <- RODBC::sqlQuery(channel, paste0("SELECT * FROM ", locations[i]))
-  # Save table to local directory
-  write.csv(x = a, 
-            paste0(getwd(), "/",
-                   gsub(pattern = '.', 
-                        replacement = "", 
-                        x = locations[i], 
-                        fixed = TRUE, 
-                        perl = TRUE),
-                   ".csv"))
-}
-```
-
-For reference:
-
-    ## RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS: 
-    ## rows: 1038632
-    ## cols: 37
-    ## 0.319 GB
-    ## 
-    ## RACEBASE_FOSS.FOSS_ZEROFILLED: 
-    ## rows: 36350712
-    ## cols: 11
-    ## 1.616 GB
-    ## 
-    ## RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS_ZEROFILLED: 
-    ## rows: 36440900
-    ## cols: 37
-    ## 4.514 GB
+*These data were last ran and pushed to the AFSC oracle on November 10,
+2022*. This is not the date that these data were pulled into FOSS and
+the FOSS dataset may be behind.
 
 # Metadata
 
@@ -180,22 +74,22 @@ creation of annual stock assessments.
 <img src="img/_grid_ai.png" alt="Aleutian Islands" align="right" width="300"/>
 
 -   **Eastern Bering Sea Shelf (EBS)**
-    -   Annual
-    -   Fixed stations at center of 20 x 20 nm grid
+-   Annual
+-   Fixed stations at center of 20 x 20 nm grid
 -   **Northern Bering Sea (NBS)**
-    -   Biennial/Annual
-    -   Fixed stations at center of 20 x 20 nm grid
+-   Biennial/Annual
+-   Fixed stations at center of 20 x 20 nm grid
 -   **Eastern Bering Sea Slope (BSS)**
-    -   Intermittent (funding dependent)
-    -   Modified Index-Stratified Random of Successful Stations Survey
-        Design
+-   Intermittent (funding dependent)
+-   Modified Index-Stratified Random of Successful Stations Survey
+    Design
 -   **Aleutian Islands (AI)**
-    -   Triennial (1990s)/Biennial since 2000 in even years
-    -   Modified Index-Stratified Random of Successful Stations Survey
-        Design
+-   Triennial (1990s)/Biennial since 2000 in even years
+-   Modified Index-Stratified Random of Successful Stations Survey
+    Design
 -   **Gulf of Alaska (GOA)**
-    -   Triennial (1990s)/Biennial since 2001 in odd years
-    -   Stratified Random Survey Design
+-   Triennial (1990s)/Biennial since 2001 in odd years
+-   Stratified Random Survey Design
 
 ## User Resources:
 
@@ -249,9 +143,13 @@ webpage.
 
 ## Table short metadata
 
-This dataset includes non-zero (presence) observations and
-catch-per-unit-effort (CPUE) estimates for most identified species at a
-standard set of stations in the Northern Bering Sea (NBS), Eastern
+``` r
+table_metadata <- readLines(paste0(dir_out, "table_metadata.txt"))
+```
+
+This dataset includes zero-filled (presence and absence) observations
+and catch-per-unit-effort (CPUE) estimates for most identified species
+at a standard set of stations in the Northern Bering Sea (NBS), Eastern
 Bering Sea (EBS), Bering Sea Slope (BSS), Gulf of Alaska (GOA), and
 Aleutian Islands (AI) Surveys conducted by the esource Assessment and
 Conservation Engineering Division (RACE) Groundfish Assessment Program
@@ -304,6 +202,93 @@ data were last updated 2022-11-10 18:37:20.
 | area_swept_ha         | Area Swept (ha)                                          | hectares                                        | The area the net covered while the net was fishing (hectares), defined as the distance fished times the net width.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | duration_hr           | Tow Duration (decimal hr)                                | decimal hours                                   | This is the elapsed time between start and end of a haul (decimal hours).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | performance           | Haul Performance Code (rating)                           | rating                                          | This denotes what, if any, issues arose during the haul. For more information, review the [code books](https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+
+# Access the Data
+
+## Access data interactively through the [Fisheries One Stop Shop (FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:200:13045102793007:Mail:NO:::) platform
+
+Select, filter, and package this and other NOAA Fisheries data from the
+[Fisheries One Stop Shop
+(FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:200:13045102793007:Mail:NO:::)
+platform. This user-friendly portal is maintained through Oracle APEX.
+
+## Access data via the API
+
+A useful intro to using APIs in R can be found
+[here](https://www.dataquest.io/blog/r-api-tutorial/).
+
+### Obtain data by connecting to the API
+
+``` r
+# install.packages(c("httr", "jsonlite"))
+library("httr")
+library("jsonlite")
+# link to the API
+api_link <- "https://origin-tst-ods-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/"
+```
+
+### Select all data
+
+``` r
+res <- httr::GET(url = api_link)
+# res # Test connection
+data <- jsonlite::fromJSON(base::rawToChar(res$content))
+# names(data)
+knitr::kable(head(data$items, 3)) 
+```
+
+## Access data via Oracle (AFSC-only)
+
+If you have access to the AFSC Oracle data base, you can pull the data
+directly from the Oracle schema these data are pulled from for FOSS.
+
+You will need to install the `RODBC` R package and have OFIS (IT)
+connect R to Oracle. Once connected, you can use the following code in R
+to connect to Oracle.
+
+``` r
+library("RODBC")
+
+channel<-odbcConnect(dsn = "AFSC",
+                     uid = "USERS_USERNAME", # change
+                     pwd = "USERS_PASSWORD", # change
+                     believeNRows = FALSE)
+
+odbcGetInfo(channel)
+```
+
+Then, you can pull and save (if you need) the table into your R
+environment.
+
+``` r
+# pull table from oracle into R environment
+a <- RODBC::sqlQuery(channel, "SELECT * FROM RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED")
+# Save table to local directory
+write.csv(x = a, 
+          file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED.csv")
+```
+
+This is presence and absence data. This is a huge file and has all of
+the bells and whistles. For reference:
+
+    ## RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED: 
+    ##   rows: 36440900
+    ##   cols: 37
+    ##   4.514 GB
+
+If you only want to pull a small subset of the data (especially since
+files like `RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED` are so big), you can use
+a variation of the following code. Here, we are pulling EBS Pacific cod
+from 2010 - 2021:
+
+``` r
+# Pull data
+a <- RODBC::sqlQuery(channel, "SELECT * FROM RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED WHERE SRVY = 'EBS' AND COMMON_NAME = 'Pacific cod' AND YEAR >= 2010 AND YEAR < 2021")
+
+# Save table to local directory
+write.csv(x = a, 
+          file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED-ebs_pcod_2010-2020.csv")
+```
 
 # Suggestions and Comments
 
