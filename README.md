@@ -93,9 +93,9 @@ environment.
 locations <- c(
   # Presence-only data. This is a much smaller file than the zero-filled one
   "RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS", 
-  # Presence and absensece data. This is a huge file but with the minimal columns
+  # Presence and absence data. This is a huge file but with the minimal columns
   "RACEBASE_FOSS.FOSS_ZEROFILLED", 
-  # Presence and absensece data. This is a huge file but with all of the bells and whistels
+  # Presence and absence data. This is a huge file but with all of the bells and whistles
   "RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS_ZEROFILLED") 
 
 # loop through each oracle table you want to pull
