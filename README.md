@@ -143,10 +143,6 @@ webpage.
 
 ## Table short metadata
 
-``` r
-table_metadata <- readLines(paste0(dir_out, "table_metadata.txt"))
-```
-
 This dataset includes zero-filled (presence and absence) observations
 and catch-per-unit-effort (CPUE) estimates for most identified species
 at a standard set of stations in the Northern Bering Sea (NBS), Eastern
@@ -283,7 +279,11 @@ from 2010 - 2021:
 
 ``` r
 # Pull data
-a <- RODBC::sqlQuery(channel, "SELECT * FROM RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED WHERE SRVY = 'EBS' AND COMMON_NAME = 'Pacific cod' AND YEAR >= 2010 AND YEAR < 2021")
+a <- RODBC::sqlQuery(channel, "SELECT * FROM RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED 
+WHERE SRVY = 'EBS' 
+AND COMMON_NAME = 'Pacific cod' 
+AND YEAR >= 2010 
+AND YEAR < 2021")
 
 # Save table to local directory
 write.csv(x = a, 

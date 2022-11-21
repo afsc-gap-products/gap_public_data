@@ -109,7 +109,7 @@ For questions, comments, and concerns specifically about the [Fisheries One Stop
 
 ## Table short metadata
 
-```{r}
+```{r, echo = FALSE}
 table_metadata <- readLines(paste0(dir_out, "table_metadata.txt"))
 ```
 
@@ -215,7 +215,11 @@ If you only want to pull a small subset of the data (especially since files like
 
 ```{r, echo = TRUE, eval = FALSE}
 # Pull data
-a <- RODBC::sqlQuery(channel, "SELECT * FROM RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED WHERE SRVY = 'EBS' AND COMMON_NAME = 'Pacific cod' AND YEAR >= 2010 AND YEAR < 2021")
+a <- RODBC::sqlQuery(channel, "SELECT * FROM RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED 
+WHERE SRVY = 'EBS' 
+AND COMMON_NAME = 'Pacific cod' 
+AND YEAR >= 2010 
+AND YEAR < 2021")
 
 # Save table to local directory
 write.csv(x = a, 
