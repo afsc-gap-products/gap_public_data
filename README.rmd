@@ -67,20 +67,20 @@ Though not included in the public data, these surveys also collect oceanographic
 <img src="img/_grid_bs.png" alt="Eastern and Northern Bering Sea Shelf" align="right" width="250"/> <img src="img/_grid_ai.png" alt="Aleutian Islands" align="right" width="300"/>
 
 -   **Eastern Bering Sea Shelf (EBS)**
-    -   Annual
-    -   Fixed stations at center of 20 x 20 nm grid
+-   Annual
+-   Fixed stations at center of 20 x 20 nm grid
 -   **Northern Bering Sea (NBS)**
-    -   Biennial/Annual
-    -   Fixed stations at center of 20 x 20 nm grid
+-   Biennial/Annual
+-   Fixed stations at center of 20 x 20 nm grid
 -   **Eastern Bering Sea Slope (BSS)**
-    -   Intermittent (funding dependent)
-    -   Modified Index-Stratified Random of Successful Stations Survey Design
+-   Intermittent (funding dependent)
+-   Modified Index-Stratified Random of Successful Stations Survey Design
 -   **Aleutian Islands (AI)**
-    -   Triennial (1990s)/Biennial since 2000 in even years
-    -   Modified Index-Stratified Random of Successful Stations Survey Design
+-   Triennial (1990s)/Biennial since 2000 in even years
+-   Modified Index-Stratified Random of Successful Stations Survey Design
 -   **Gulf of Alaska (GOA)**
-    -   Triennial (1990s)/Biennial since 2001 in odd years
-    -   Stratified Random Survey Design
+-   Triennial (1990s)/Biennial since 2001 in odd years
+-   Stratified Random Survey Design
 
 ## User Resources:
 
@@ -109,16 +109,19 @@ For questions, comments, and concerns specifically about the [Fisheries One Stop
 
 ## Table short metadata
 
+```{r}
+table_metadata <- readLines(paste0(dir_out, "table_metadata.txt"))
+```
+
 `r table_metadata `
 
 ## Column-level metadata
 
 ```{r, echo = FALSE}
-column_metadata0 <- column_metadata
+column_metadata0 <- read.csv(file = paste0(dir_out, "column_metadata.csv"))
 names(column_metadata0) <- c("Column name from data", "Descriptive Column Name", "Units", "Description")
 knitr::kable(column_metadata0, row.names = FALSE) 
 ```
-
 
 # Access the Data
 
@@ -176,8 +179,8 @@ You will need to install the `RODBC` R package and have OFIS (IT) connect R to O
 library("RODBC")
 
 channel<-odbcConnect(dsn = "AFSC",
-                     uid = "USERNAME", # change
-                     pwd = "PASSWORD", #change
+                     uid = "USERS_USERNAME", # change
+                     pwd = "USERS_PASSWORD", # change
                      believeNRows = FALSE)
 
 odbcGetInfo(channel)
@@ -187,56 +190,37 @@ Then, you can pull and save (if you need) the table into your R environment.
 
 ```{r, echo = TRUE, eval = FALSE}
 
-locations <- c(
-  # Presence-only data. This is a much smaller file than the zero-filled one
-  "RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS", 
-  # Presence and absence data. This is a huge file but with the minimal columns
-  "RACEBASE_FOSS.FOSS_ZEROFILLED", 
-  # Presence and absence data. This is a huge file but with all of the bells and whistles
-  "RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS_ZEROFILLED") 
-
-# loop through each oracle table you want to pull
-for (i in 1:length(locations)){
-  print(locations[i])
-  # pull table from oracle into R environment
-  a <- RODBC::sqlQuery(channel, paste0("SELECT * FROM ", locations[i]))
-  # Save table to local directory
-  write.csv(x = a, 
-            paste0(getwd(), "/",
-                   gsub(pattern = '.', 
-                        replacement = "", 
-                        x = locations[i], 
-                        fixed = TRUE, 
-                        perl = TRUE),
-                   ".csv"))
-}
-
+# pull table from oracle into R environment
+a <- RODBC::sqlQuery(channel, "SELECT * FROM RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED")
+# Save table to local directory
+write.csv(x = a, 
+          file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED.csv")
 ```
 
-For reference: 
+This is presence and absence data. This is a huge file and has all of the bells and whistles. For reference: 
 
 ```{r, echo = FALSE}
 
 str0 <- paste0(
-"RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS: ", "
-rows: ", nrow(cpue_station), "
-cols: ", ncol(cpue_station), "
-", round(file.size(paste0(dir_out, "cpue_station.csv"))/1e+9, 3), " GB
-
-RACEBASE_FOSS.FOSS_ZEROFILLED: ", "
-rows: ", nrow(cpue_station_0filled_clean), "
-cols: ", ncol(cpue_station_0filled_clean), "
-", round(file.size(paste0(dir_out, "cpue_station_0filled_clean.csv"))/1e+9, 3), " GB
-
-RACEBASE_FOSS.RACEBASE_PUBLIC_FOSS_ZEROFILLED: ", "
-rows: ", nrow(cpue_station_0filled), "
-cols: ", ncol(cpue_station_0filled), "
-", round(file.size(paste0(dir_out, "cpue_station_0filled.csv"))/1e+9, 3), " GB") 
+  "RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED: ", "
+  rows: ", nrow(cpue_station_0filled), "
+  cols: ", ncol(cpue_station_0filled), "
+  ", round(file.size(paste0(dir_out, "cpue_station_0filled.csv"))/1e+9, 3), " GB") 
 
 cat(str0)
 
 ```
 
+If you only want to pull a small subset of the data (especially since files like `RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED` are so big), you can use a variation of the following code. Here, we are pulling EBS Pacific cod from 2010 - 2021: 
+
+```{r, echo = TRUE, eval = FALSE}
+# Pull data
+a <- RODBC::sqlQuery(channel, "SELECT * FROM RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED WHERE SRVY = 'EBS' AND COMMON_NAME = 'Pacific cod' AND YEAR >= 2010 AND YEAR < 2021")
+
+# Save table to local directory
+write.csv(x = a, 
+          file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED-ebs_pcod_2010-2020.csv")
+```
 
 # Suggestions and Comments
 
