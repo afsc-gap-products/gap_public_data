@@ -18,13 +18,43 @@ Seattle, WA 98195
 
 # Cite this Data
 
-**NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom
+NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom
 Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss,
-Accessed mm/dd/yyyy**
+Accessed mm/dd/yyyy
 
-*These data were last ran and pushed to the AFSC oracle on November 10,
-2022*. This is not the date that these data were pulled into FOSS and
-the FOSS dataset may be behind.
+# Access the Data
+
+## Access data interactively through the [Fisheries One Stop Shop (FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:200:13045102793007:Mail:NO:::) platform
+
+Select, filter, and package this and other NOAA Fisheries data from the
+[Fisheries One Stop Shop
+(FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:200:13045102793007:Mail:NO:::)
+platform. This user-friendly portal is maintained through Oracle APEX.
+
+## Access data via the API
+
+A useful intro to using APIs in R can be found
+[here](https://www.dataquest.io/blog/r-api-tutorial/).
+
+### Obtain data by connecting to the API
+
+``` r
+# install.packages(c("httr", "jsonlite"))
+library("httr")
+library("jsonlite")
+# link to the API
+api_link <- "https://origin-tst-ods-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/"
+```
+
+### Select all data
+
+``` r
+res <- httr::GET(url = api_link)
+# res # Test connection
+data <- jsonlite::fromJSON(base::rawToChar(res$content))
+# names(data)
+knitr::kable(head(data$items, 3)) 
+```
 
 # Metadata
 
@@ -49,15 +79,14 @@ other representations of these data, is suggested. These data are
 compiled and approved annually after each summer survey season. The data
 from previous years are unlikely to change substantially once published.
 
-These data are all (presence and absence; a.k.a. “zero-filled”)
-observations from surveys conducted on fishing vessels. These surveys
-monitor trends in distribution and abundance of groundfish, crab, and
-bottom-dwelling species in Alaska’s marine ecosystems. These data
-include estimates of catch-per-unit-effort (CPUE) for most identified
-species at a standard set of stations. Some survey data are excluded,
-such as non-standard stations, surveys completed in earlier years using
-different/non-standard gear, and special tows and non-standard data
-collections.
+These data are non-zero (presence) observations from surveys conducted
+on fishing vessels. These surveys monitor trends in distribution and
+abundance of groundfish, crab, and bottom-dwelling species in Alaska’s
+marine ecosystems. These data include estimates of catch-per-unit-effort
+(CPUE) for most identified species at a standard set of stations. Some
+survey data are excluded, such as non-standard stations, surveys
+completed in earlier years using different/non-standard gear, and
+special tows and non-standard data collections.
 
 Though not included in the public data, these surveys also collect
 oceanographic and environmental data, and biological data such as
@@ -74,22 +103,22 @@ creation of annual stock assessments.
 <img src="img/_grid_ai.png" alt="Aleutian Islands" align="right" width="300"/>
 
 -   **Eastern Bering Sea Shelf (EBS)**
--   Annual
--   Fixed stations at center of 20 x 20 nm grid
+    -   Annual
+    -   Fixed stations at center of 20 x 20 nm grid
 -   **Northern Bering Sea (NBS)**
--   Biennial/Annual
--   Fixed stations at center of 20 x 20 nm grid
+    -   Biennial/Annual
+    -   Fixed stations at center of 20 x 20 nm grid
 -   **Eastern Bering Sea Slope (BSS)**
--   Intermittent (funding dependent)
--   Modified Index-Stratified Random of Successful Stations Survey
-    Design
+    -   Intermittent (funding dependent)
+    -   Modified Index-Stratified Random of Successful Stations Survey
+        Design
 -   **Aleutian Islands (AI)**
--   Triennial (1990s)/Biennial since 2000 in even years
--   Modified Index-Stratified Random of Successful Stations Survey
-    Design
+    -   Triennial (1990s)/Biennial since 2000 in even years
+    -   Modified Index-Stratified Random of Successful Stations Survey
+        Design
 -   **Gulf of Alaska (GOA)**
--   Triennial (1990s)/Biennial since 2001 in odd years
--   Stratified Random Survey Design
+    -   Triennial (1990s)/Biennial since 2001 in odd years
+    -   Stratified Random Survey Design
 
 ## User Resources:
 
@@ -199,97 +228,6 @@ data were last updated 2022-11-10 18:37:20.
 | duration_hr           | Tow Duration (decimal hr)                                | decimal hours                                   | This is the elapsed time between start and end of a haul (decimal hours).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | performance           | Haul Performance Code (rating)                           | rating                                          | This denotes what, if any, issues arose during the haul. For more information, review the [code books](https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 
-# Access the Data
-
-## Access data interactively through the [Fisheries One Stop Shop (FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:200:13045102793007:Mail:NO:::) platform
-
-Select, filter, and package this and other NOAA Fisheries data from the
-[Fisheries One Stop Shop
-(FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:200:13045102793007:Mail:NO:::)
-platform. This user-friendly portal is maintained through Oracle APEX.
-
-## Access data via the API
-
-A useful intro to using APIs in R can be found
-[here](https://www.dataquest.io/blog/r-api-tutorial/).
-
-### Obtain data by connecting to the API
-
-``` r
-# install.packages(c("httr", "jsonlite"))
-library("httr")
-library("jsonlite")
-# link to the API
-api_link <- "https://origin-tst-ods-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/"
-```
-
-### Select all data
-
-``` r
-res <- httr::GET(url = api_link)
-# res # Test connection
-data <- jsonlite::fromJSON(base::rawToChar(res$content))
-# names(data)
-knitr::kable(head(data$items, 3)) 
-```
-
-## Access data via Oracle (AFSC-only)
-
-If you have access to the AFSC Oracle data base, you can pull the data
-directly from the Oracle schema these data are pulled from for FOSS.
-
-You will need to install the `RODBC` R package and have OFIS (IT)
-connect R to Oracle. Once connected, you can use the following code in R
-to connect to Oracle.
-
-``` r
-library("RODBC")
-
-channel<-odbcConnect(dsn = "AFSC",
-                     uid = "USERS_USERNAME", # change
-                     pwd = "USERS_PASSWORD", # change
-                     believeNRows = FALSE)
-
-odbcGetInfo(channel)
-```
-
-Then, you can pull and save (if you need) the table into your R
-environment.
-
-``` r
-# pull table from oracle into R environment
-a <- RODBC::sqlQuery(channel, "SELECT * FROM RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED")
-# Save table to local directory
-write.csv(x = a, 
-          file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED.csv")
-```
-
-This is presence and absence data. This is a huge file and has all of
-the bells and whistles. For reference:
-
-    ## RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED: 
-    ##   rows: 36440900
-    ##   cols: 37
-    ##   4.514 GB
-
-If you only want to pull a small subset of the data (especially since
-files like `RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED` are so big), you can use
-a variation of the following code. Here, we are pulling EBS Pacific cod
-from 2010 - 2021:
-
-``` r
-# Pull data
-a <- RODBC::sqlQuery(channel, "SELECT * FROM RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED 
-WHERE SRVY = 'EBS' 
-AND COMMON_NAME = 'Pacific cod' 
-AND YEAR >= 2010 
-AND YEAR < 2021")
-
-# Save table to local directory
-write.csv(x = a, 
-          file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED-ebs_pcod_2010-2020.csv")
-```
-
 # Suggestions and Comments
 
 If you feel that the data or metadata can be improved, please create a
@@ -301,6 +239,43 @@ reach out the the survey team leads (listed above), or to [Fisheries One
 Stop Shop
 (FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:200:13045102793007:Mail:NO:::)
 platform managers.
+
+# R Version Metadata
+
+``` r
+sessionInfo()
+```
+
+    ## R version 4.2.1 (2022-06-23 ucrt)
+    ## Platform: x86_64-w64-mingw32/x64 (64-bit)
+    ## Running under: Windows 10 x64 (build 19044)
+    ## 
+    ## Matrix products: default
+    ## 
+    ## locale:
+    ## [1] LC_COLLATE=English_United States.utf8  LC_CTYPE=English_United States.utf8    LC_MONETARY=English_United States.utf8
+    ## [4] LC_NUMERIC=C                           LC_TIME=English_United States.utf8    
+    ## 
+    ## attached base packages:
+    ## [1] stats     graphics  grDevices utils     datasets  methods   base     
+    ## 
+    ## other attached packages:
+    ## [1] jsonlite_1.8.3 httr_1.4.4     knitr_1.41     badger_0.2.2  
+    ## 
+    ## loaded via a namespace (and not attached):
+    ##  [1] tidyr_1.2.1         foreach_1.5.2       bold_1.2.0          here_1.0.1          assertthat_0.2.1    askpass_1.1         highr_0.9          
+    ##  [8] BiocManager_1.30.19 rvcheck_0.2.1       yulab.utils_0.0.5   taxize_0.9.100      cellranger_1.1.0    yaml_2.3.6          pillar_1.8.1       
+    ## [15] lattice_0.20-45     glue_1.6.2          uuid_1.1-0          digest_0.6.30       RColorBrewer_1.1-3  snakecase_0.11.0    colorspace_2.0-3   
+    ## [22] cowplot_1.1.1       htmltools_0.5.3     plyr_1.8.8          pkgconfig_2.0.3     httpcode_0.3.0      gitcreds_0.1.2      purrr_0.3.5        
+    ## [29] scales_1.2.1        tzdb_0.3.0          openssl_2.0.4       timechange_0.1.1    tibble_3.1.8        generics_0.1.3      ggplot2_3.4.0      
+    ## [36] usethis_2.1.6       ellipsis_0.3.2      janitor_2.1.0       credentials_1.3.2   cli_3.4.1           magrittr_2.0.3      crayon_1.5.2       
+    ## [43] readxl_1.4.1        evaluate_0.18       fs_1.5.2            fansi_1.0.3         nlme_3.1-157        xml2_1.3.3          gh_1.3.1           
+    ## [50] tools_4.2.1         data.table_1.14.6   hms_1.1.2           gert_1.9.1          lifecycle_1.0.3     stringr_1.4.1       munsell_0.5.0      
+    ## [57] RODBC_1.3-19        compiler_4.2.1      rlang_1.0.6         grid_4.2.1          conditionz_0.1.0    sys_3.4.1           iterators_1.0.14   
+    ## [64] rstudioapi_0.14     rmarkdown_2.18      gtable_0.3.1        codetools_0.2-18    DBI_1.1.3           reshape_0.8.9       curl_4.3.3         
+    ## [71] R6_2.5.1            zoo_1.8-11          lubridate_1.9.0     dplyr_1.0.10        fastmap_1.1.0       utf8_1.2.2          rprojroot_2.0.3    
+    ## [78] dlstats_0.1.5       readr_2.1.3         ape_5.6-2           stringi_1.7.8       parallel_4.2.1      crul_1.3            Rcpp_1.0.9         
+    ## [85] vctrs_0.5.1         tidyselect_1.2.0    xfun_0.35
 
 ## NOAA README
 

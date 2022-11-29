@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r echo=FALSE, results="hide", message=FALSE, include=FALSE, echo = FALSE}
+```{r packages, echo=FALSE, results="hide", message=FALSE, include=FALSE, echo = FALSE}
 PKG <- c("badger", #"flextable"
          "knitr")
 PKG <- unique(PKG)
@@ -24,7 +24,7 @@ for (p in PKG) {
 
 # [AFSC RACE Groundfish and Shellfish Survey Public Data](`r link_repo`) <img src="https://avatars.githubusercontent.com/u/91760178?s=96&amp;v=4" alt="Logo." align="right" width="139" height="139"/>
 
-```{r, echo = FALSE, results='asis', message=FALSE}
+```{r badge, echo = FALSE, results='asis', message=FALSE}
 cat(
   # badge_devel("afsc-gap-products/gap_public_data", "blue"),
   # badge_lifecycle("maturing", "blue"),
@@ -46,9 +46,53 @@ Seattle, WA 98195
 
 # Cite this Data
 
-**NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss, Accessed mm/dd/yyyy**
+NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss, Accessed mm/dd/yyyy
 
-*These data were last ran and pushed to the AFSC oracle on `r gsub("(\\D)0", "\\1", format(file.info(paste0(dir_out, "cpue_station.csv"))$mtime, "%B %d, %Y"))`*. This is not the date that these data were pulled into FOSS and the FOSS dataset may be behind. 
+# Access the Data
+
+## Access data interactively through the [Fisheries One Stop Shop (FOSS)](`r link_foss `) platform
+
+Select, filter, and package this and other NOAA Fisheries data from the [Fisheries One Stop Shop (FOSS)](`r link_foss `) platform. This user-friendly portal is maintained through Oracle APEX.
+
+## Access data via the API
+
+A useful intro to using APIs in R can be found [here](https://www.dataquest.io/blog/r-api-tutorial/).
+
+### Obtain data by connecting to the API
+
+```{r api-link, echo = TRUE}
+# install.packages(c("httr", "jsonlite"))
+library("httr")
+library("jsonlite")
+# link to the API
+api_link <- "https://origin-tst-ods-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/"
+```
+
+### Select all data
+
+```{r api-all-data-ex, echo = TRUE, eval=FALSE}
+res <- httr::GET(url = api_link)
+# res # Test connection
+data <- jsonlite::fromJSON(base::rawToChar(res$content))
+# names(data)
+knitr::kable(head(data$items, 3)) 
+```
+
+```{r api-subset-ex, echo = FALSE}
+
+### Subset data
+
+# Here, as an example, we can subset the data for the 2018 Aleutian Islands Bottom Trawl Survey
+
+# res <- httr::GET(url = api_link, query = list(year = "2018")) # year = 2018, srvy = "EBS"
+# data <- jsonlite::fromJSON(base::rawToChar(res$content))
+# x <- data$items
+# x <- x[,c("srvy", "year", "stratum", "station", "vessel_name", "latitude_dd", "longitude_dd", 
+#           "species_code", "common_name", "scientific_name", "taxon_confidence", 
+#           "cpue_kgha", "cpue_noha", "weight_kg", "count", 
+#           "bottom_temperature_c", "surface_temperature_c", "depth_m")]
+# knitr::kable(head(x, 3)) 
+```
 
 # Metadata
 
@@ -58,7 +102,7 @@ The Resource Assessment and Conservation Engineering Division (RACE) Groundfish 
 
 There are no legal restrictions on access to the data. They reside in the public domain and can be freely distributed. Users must read and fully comprehend the metadata prior to use. Data should not be used beyond the limits of the source scale. Acknowledgement of NOAA, as the source from which these data were obtained, in any publications and/or other representations of these data, is suggested. These data are compiled and approved annually after each summer survey season. The data from previous years are unlikely to change substantially once published.
 
-These data are all (presence and absence; a.k.a. "zero-filled") observations from surveys conducted on fishing vessels. These surveys monitor trends in distribution and abundance of groundfish, crab, and bottom-dwelling species in Alaska’s marine ecosystems. These data include estimates of catch-per-unit-effort (CPUE) for most identified species at a standard set of stations. Some survey data are excluded, such as non-standard stations, surveys completed in earlier years using different/non-standard gear, and special tows and non-standard data collections.
+These data are non-zero (presence) observations from surveys conducted on fishing vessels. These surveys monitor trends in distribution and abundance of groundfish, crab, and bottom-dwelling species in Alaska’s marine ecosystems. These data include estimates of catch-per-unit-effort (CPUE) for most identified species at a standard set of stations. Some survey data are excluded, such as non-standard stations, surveys completed in earlier years using different/non-standard gear, and special tows and non-standard data collections.
 
 Though not included in the public data, these surveys also collect oceanographic and environmental data, and biological data such as length, weight, stomach contents (to learn more about diet), otoliths (fish ear bones to learn about age), and tissue samples for genetic analysis, all of which can be shared upon special request. Also not included in the public data are estimated biomass (average total weight of all fish and crabs sampled) of crabs and groundfish that support the creation of annual stock assessments.
 
@@ -67,20 +111,20 @@ Though not included in the public data, these surveys also collect oceanographic
 <img src="img/_grid_bs.png" alt="Eastern and Northern Bering Sea Shelf" align="right" width="250"/> <img src="img/_grid_ai.png" alt="Aleutian Islands" align="right" width="300"/>
 
 -   **Eastern Bering Sea Shelf (EBS)**
--   Annual
--   Fixed stations at center of 20 x 20 nm grid
+    -   Annual
+    -   Fixed stations at center of 20 x 20 nm grid
 -   **Northern Bering Sea (NBS)**
--   Biennial/Annual
--   Fixed stations at center of 20 x 20 nm grid
+    -   Biennial/Annual
+    -   Fixed stations at center of 20 x 20 nm grid
 -   **Eastern Bering Sea Slope (BSS)**
--   Intermittent (funding dependent)
--   Modified Index-Stratified Random of Successful Stations Survey Design
+    -   Intermittent (funding dependent)
+    -   Modified Index-Stratified Random of Successful Stations Survey Design
 -   **Aleutian Islands (AI)**
--   Triennial (1990s)/Biennial since 2000 in even years
--   Modified Index-Stratified Random of Successful Stations Survey Design
+    -   Triennial (1990s)/Biennial since 2000 in even years
+    -   Modified Index-Stratified Random of Successful Stations Survey Design
 -   **Gulf of Alaska (GOA)**
--   Triennial (1990s)/Biennial since 2001 in odd years
--   Stratified Random Survey Design
+    -   Triennial (1990s)/Biennial since 2001 in odd years
+    -   Stratified Random Survey Design
 
 ## User Resources:
 
@@ -109,126 +153,25 @@ For questions, comments, and concerns specifically about the [Fisheries One Stop
 
 ## Table short metadata
 
-```{r, echo = FALSE}
-table_metadata <- readLines(paste0(dir_out, "table_metadata.txt"))
-```
-
 `r table_metadata `
 
 ## Column-level metadata
 
-```{r, echo = FALSE}
-column_metadata0 <- read.csv(file = paste0(dir_out, "column_metadata.csv"))
+```{r column-metadata, echo = FALSE}
+column_metadata0 <- column_metadata
 names(column_metadata0) <- c("Column name from data", "Descriptive Column Name", "Units", "Description")
 knitr::kable(column_metadata0, row.names = FALSE) 
-```
-
-# Access the Data
-
-## Access data interactively through the [Fisheries One Stop Shop (FOSS)](`r link_foss `) platform
-
-Select, filter, and package this and other NOAA Fisheries data from the [Fisheries One Stop Shop (FOSS)](`r link_foss `) platform. This user-friendly portal is maintained through Oracle APEX.
-
-## Access data via the API
-
-A useful intro to using APIs in R can be found [here](https://www.dataquest.io/blog/r-api-tutorial/).
-
-### Obtain data by connecting to the API
-
-```{r, echo = TRUE}
-# install.packages(c("httr", "jsonlite"))
-library("httr")
-library("jsonlite")
-# link to the API
-api_link <- "https://origin-tst-ods-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/"
-```
-
-### Select all data
-
-```{r, echo = TRUE, eval = FALSE}
-res <- httr::GET(url = api_link)
-# res # Test connection
-data <- jsonlite::fromJSON(base::rawToChar(res$content))
-# names(data)
-knitr::kable(head(data$items, 3)) 
-```
-
-```{r, echo = FALSE}
-
-### Subset data
-
-# Here, as an example, we can subset the data for the 2018 Aleutian Islands Bottom Trawl Survey
-
-# res <- httr::GET(url = api_link, query = list(year = "2018")) # year = 2018, srvy = "EBS"
-# data <- jsonlite::fromJSON(base::rawToChar(res$content))
-# x <- data$items
-# x <- x[,c("srvy", "year", "stratum", "station", "vessel_name", "latitude_dd", "longitude_dd", 
-#           "species_code", "common_name", "scientific_name", "taxon_confidence", 
-#           "cpue_kgha", "cpue_noha", "weight_kg", "count", 
-#           "bottom_temperature_c", "surface_temperature_c", "depth_m")]
-# knitr::kable(head(x, 3)) 
-```
-
-## Access data via Oracle (AFSC-only)
-
-If you have access to the AFSC Oracle data base, you can pull the data directly from the Oracle schema these data are pulled from for FOSS. 
-
-You will need to install the `RODBC` R package and have OFIS (IT) connect R to Oracle. Once connected, you can use the following code in R to connect to Oracle. 
-
-```{r, echo = TRUE, eval = FALSE}
-library("RODBC")
-
-channel<-odbcConnect(dsn = "AFSC",
-                     uid = "USERS_USERNAME", # change
-                     pwd = "USERS_PASSWORD", # change
-                     believeNRows = FALSE)
-
-odbcGetInfo(channel)
-```
-
-Then, you can pull and save (if you need) the table into your R environment. 
-
-```{r, echo = TRUE, eval = FALSE}
-
-# pull table from oracle into R environment
-a <- RODBC::sqlQuery(channel, "SELECT * FROM RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED")
-# Save table to local directory
-write.csv(x = a, 
-          file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED.csv")
-```
-
-This is presence and absence data. This is a huge file and has all of the bells and whistles. For reference: 
-
-```{r, echo = FALSE}
-
-str0 <- paste0(
-  "RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED: ", "
-  rows: ", nrow(cpue_station_0filled), "
-  cols: ", ncol(cpue_station_0filled), "
-  ", round(file.size(paste0(dir_out, "cpue_station_0filled.csv"))/1e+9, 3), " GB") 
-
-cat(str0)
-
-```
-
-If you only want to pull a small subset of the data (especially since files like `RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED` are so big), you can use a variation of the following code. Here, we are pulling EBS Pacific cod from 2010 - 2021: 
-
-```{r, echo = TRUE, eval = FALSE}
-# Pull data
-a <- RODBC::sqlQuery(channel, "SELECT * FROM RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED 
-WHERE SRVY = 'EBS' 
-AND COMMON_NAME = 'Pacific cod' 
-AND YEAR >= 2010 
-AND YEAR < 2021")
-
-# Save table to local directory
-write.csv(x = a, 
-          file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED-ebs_pcod_2010-2020.csv")
 ```
 
 # Suggestions and Comments
 
 If you feel that the data or metadata can be improved, please create a pull request, [submit an issue to the GitHub organization](`r "https://github.com/afsc-gap-products/data-requests/issues"`), [submit an issue to the code's repository](`r paste0(link_repo, "/issues")`), reach out the the survey team leads (listed above), or to [Fisheries One Stop Shop (FOSS)](`r link_foss `) platform managers.
+
+# R Version Metadata
+
+```{r sessioninfo}
+sessionInfo()
+```
 
 ## NOAA README
 

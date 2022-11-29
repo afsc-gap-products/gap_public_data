@@ -259,12 +259,12 @@ files_to_save <- list("cpue_station" = cpue_station,
 #            column_metadata, 
 #            table_metadata, 
 #            file = paste0(dir_out,"cpue_station_0filled.RData"))
+  table_metadata0 <- table_metadata
 
 for (i in 1:length(files_to_save)) {
   
-  table_metadata0 <- table_metadata
   if (names(files_to_save)[i] != "cpue_station") {
-    table_metadata0 <- gsub(pattern = "non-zero (presence)", replacement = "all (presence and absence)", x = table_metadata)
+    table_metadata <- gsub(pattern = "non-zero (presence)", replacement = "all (presence and absence)", x = table_metadata0)
   }
   
   x <- files_to_save[i][[1]]
@@ -272,7 +272,7 @@ for (i in 1:length(files_to_save)) {
   base::save(
     x, 
     column_metadata, 
-    table_metadata0, 
+    table_metadata, 
     file = paste0(dir_out, names(files_to_save)[i], ".RData"))
   
   readr::write_csv(

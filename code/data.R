@@ -128,6 +128,8 @@ spp_info <- spp_info %>%
   dplyr::select(-notes_itis, -notes_worms)
 }
 
+
+
 ## cruises ---------------------------------------------------------------------
 cruises <-  
   dplyr::left_join(
@@ -222,7 +224,6 @@ catch <- catch0 %>%
 # [1] 1613670       8
 
 ## catch_haul_cruises ----------------------------------------------------------
-
 
 catch_haul_cruises <-
   dplyr::inner_join(
