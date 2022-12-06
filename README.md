@@ -18,53 +18,29 @@ Seattle, WA 98195
 
 # Table of Contents
 
-    ## Warning in get_source(x, text_field = text_field, docid_field = docid_field, : Unsupported extension 'rmd' of file ./README.Rmd treating as plain text.
-
--   toc \<- toc\[\[1\]\]\[stri_detect_fixed(toc\[\[1\]\], ” -
-    “)\](#toc-\<–toc\[\[1\]\]\[stri_detect_fixed(toc\[\[1\]\],-““)\])
-
--   Cite this Data(#cite-this-data)
-
--   Metadata(#metadata)
-
--   Data Description(#data-description)
-
--   Bottom Trawl Surveys and Regions(#bottom-trawl-surveys-and-regions)
-
--   User Resources(#user-resources)
-
--   Access Constraints(#access-constraints)
-
--   Table short metadata(#table-short-metadata)
-
--   Column-level metadata(#column-level-metadata)
-
--   Access the Data(#access-the-data)
-
--   Access data interactively through the FOSS
-    platform(#access-data-interactively-through-the-foss-platform)
-
-    -   Connect to the API(#connect-to-the-api)
-
-    -   Select all data(#select-all-data)
-
-    -   Subset data(#subset-data)
-
--   Access data via Oracle(#access-data-via-oracle)
-
-    -   Connect to Oracle from R(#connect-to-oracle-from-r)
-
-    -   Select all data(#select-all-data)
-
-    -   Subset data(#subset-data)
-
--   Suggestions and Comments(#suggestions-and-comments)
-
--   R Version Metadata(#r-version-metadata)
-
--   NOAA README(#noaa-readme)
-
--   NOAA License(#noaa-license)
+-   [Cite this Data](#cite-this-data)
+-   [Metadata](#metadata)
+-   [Data Description](#data-description)
+-   [Bottom Trawl Surveys and
+    Regions](#bottom-trawl-surveys-and-regions)
+-   [User Resources](#user-resources)
+-   [Access Constraints](#access-constraints)
+-   [Table short metadata](#table-short-metadata)
+-   [Column-level metadata](#column-level-metadata)
+-   [Access the Data](#access-the-data)
+-   [Access data interactively through the FOSS
+    platform](#access-data-interactively-through-the-foss-platform)
+    -   [Connect to the API](#connect-to-the-api)
+    -   [Select all data](#select-all-data)
+    -   [Subset data](#subset-data)
+-   [Access data via Oracle](#access-data-via-oracle)
+    -   [Connect to Oracle from R](#connect-to-oracle-from-r)
+    -   [Select all data](#select-all-data)
+    -   [Subset data](#subset-data)
+-   [Suggestions and Comments](#suggestions-and-comments)
+-   [R Version Metadata](#r-version-metadata)
+-   [NOAA README](#noaa-readme)
+-   [NOAA License](#noaa-license)
 
 # Cite this Data
 
