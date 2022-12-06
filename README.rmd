@@ -2,6 +2,8 @@
 output: 
   md_document: 
     variant: gfm
+csl: "https://raw.githubusercontent.com/citation-style-language/styles/master/apa-no-ampersand.csl"
+bibliography: "https://raw.githubusercontent.com/EmilyMarkowitz-NOAA/gap_bs_data_report/main/cite/bibliography.bib"
 ---
 
 ```{r setup, include=FALSE}
@@ -27,7 +29,8 @@ for (p in PKG) {
 
 **Emily Markowitz** (Emily.Markowitz AT noaa.gov; [\@EmilyMarkowitz-NOAA](https://github.com/EmilyMarkowitz-NOAA))  
 Research Fisheries Biologist  
-Bering Sea Groundfish Survey Team
+*Bering Sea Groundfish Survey Team*
+
 Alaska Fisheries Science Center,  
 National Marine Fisheries Service,  
 National Oceanic and Atmospheric Administration,  
@@ -80,28 +83,35 @@ Though not included in the public data, these surveys also collect oceanographic
 
 ## Bottom trawl surveys and regions
 
-<img src="img/_grid_bs.png" alt="Eastern and Northern Bering Sea Shelf" align="right" width="250"/> <img src="img/_grid_ai.png" alt="Aleutian Islands" align="right" width="300"/>
+<img src="img/_grid_bs.png" alt="Eastern and Northern Bering Sea Shelf" align="right" width="250"/> 
 
--   **Eastern Bering Sea Shelf (EBS)**
+<img src="img/_grid_ai.png" alt="Aleutian Islands" align="right" width="400"/>
+
+
+-   **Eastern Bering Sea Shelf (EBS)** [@2021NEBS2022]
     -   Annual
     -   Fixed stations at center of 20 x 20 nm grid
--   **Northern Bering Sea (NBS)**
+-   **Northern Bering Sea (NBS)** [@2021NEBS2022]
     -   Biennial/Annual
     -   Fixed stations at center of 20 x 20 nm grid
--   **Eastern Bering Sea Slope (BSS)**
+-   **Eastern Bering Sea Slope (BSS)** [@RN979]
     -   Intermittent (funding dependent)
     -   Modified Index-Stratified Random of Successful Stations Survey Design
--   **Aleutian Islands (AI)**
+-   **Aleutian Islands (AI)** [@AI2018]
     -   Triennial (1990s)/Biennial since 2000 in even years
     -   Modified Index-Stratified Random of Successful Stations Survey Design
--   **Gulf of Alaska (GOA)**
+-   **Gulf of Alaska (GOA)** [@GOA2018]
     -   Triennial (1990s)/Biennial since 2001 in odd years
     -   Stratified Random Survey Design
+
+## Relevant technical memorandums
+
+<div id="refs"></div>
 
 ## User resources
 
 -   [AFSC’s Resource Assessment and Conservation Engineering Division](https://www.fisheries.noaa.gov/about/resource-assessment-and-conservation-engineering-division).
--   For more information about codes used in the tables, please refer to the [survey code books](`r link_code_books `).
+-   For more information about codes used in the tables, please refer to the [survey code books](`r link_code_books `; @cb2021).
 -   Find [past reports](http://apps-afsc.fisheries.noaa.gov/RACE/surveys/cruise_results.htm) about these surveys.
 -   [GitHub repository](`r link_repo`).
 -   Learn more about other [Research Surveys conducted at AFSC](https://www.fisheries.noaa.gov/alaska/ecosystems/alaska-fish-research-surveys).

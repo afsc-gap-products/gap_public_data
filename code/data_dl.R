@@ -31,7 +31,7 @@ source("Z:/Projects/ConnectToOracle.R")
 
 ##################DOWNLOAD CPUE and BIOMASS EST##################################
 
-locations<-c(
+locations <- c(
   #General Tables of data
   "RACEBASE.CATCH", 
   "RACEBASE.HAUL", 

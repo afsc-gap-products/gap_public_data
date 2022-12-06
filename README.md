@@ -7,7 +7,9 @@
 **Emily Markowitz** (Emily.Markowitz AT noaa.gov;
 [@EmilyMarkowitz-NOAA](https://github.com/EmilyMarkowitz-NOAA))  
 Research Fisheries Biologist  
-Bering Sea Groundfish Survey Team Alaska Fisheries Science Center,  
+*Bering Sea Groundfish Survey Team*
+
+Alaska Fisheries Science Center,  
 National Marine Fisheries Service,  
 National Oceanic and Atmospheric Administration,  
 Seattle, WA 98195
@@ -19,6 +21,8 @@ Seattle, WA 98195
 > -   [*Data description*](#data-description)
 > -   [*Bottom trawl surveys and
 >     regions*](#bottom-trawl-surveys-and-regions)
+> -   [*Relevant technical
+>     memorandums*](#relevant-technical-memorandums)
 > -   [*User resources*](#user-resources)
 > -   [*Access constraints*](#access-constraints)
 > -   [*Table short metadata*](#table-short-metadata)
@@ -96,25 +100,67 @@ creation of annual stock assessments.
 ## Bottom trawl surveys and regions
 
 <img src="img/_grid_bs.png" alt="Eastern and Northern Bering Sea Shelf" align="right" width="250"/>
-<img src="img/_grid_ai.png" alt="Aleutian Islands" align="right" width="300"/>
 
--   **Eastern Bering Sea Shelf (EBS)**
+<img src="img/_grid_ai.png" alt="Aleutian Islands" align="right" width="400"/>
+
+-   **Eastern Bering Sea Shelf (EBS)** (Markowitz et al., 2022)
     -   Annual
     -   Fixed stations at center of 20 x 20 nm grid
--   **Northern Bering Sea (NBS)**
+-   **Northern Bering Sea (NBS)** (Markowitz et al., 2022)
     -   Biennial/Annual
     -   Fixed stations at center of 20 x 20 nm grid
--   **Eastern Bering Sea Slope (BSS)**
+-   **Eastern Bering Sea Slope (BSS)** (Hoff, 2016)
     -   Intermittent (funding dependent)
     -   Modified Index-Stratified Random of Successful Stations Survey
         Design
--   **Aleutian Islands (AI)**
+-   **Aleutian Islands (AI)** (VON SZALAY and RARING, 2020)
     -   Triennial (1990s)/Biennial since 2000 in even years
     -   Modified Index-Stratified Random of Successful Stations Survey
         Design
--   **Gulf of Alaska (GOA)**
+-   **Gulf of Alaska (GOA)** (VON SZALAY and RARING, 2018)
     -   Triennial (1990s)/Biennial since 2001 in odd years
     -   Stratified Random Survey Design
+
+## Relevant technical memorandums
+
+<div id="refs" class="references csl-bib-body hanging-indent"
+line-spacing="2">
+
+<div id="ref-RN979" class="csl-entry">
+
+Hoff, G. R. (2016). *Results of the 2016 eastern Bering Sea upper
+continental slope survey of groundfishes and invertebrate resources*
+\[NOAA Tech. Memo.\]. *NOAA-AFSC-339*.
+<https://doi.org/10.7289/V5/TM-AFSC-339>
+
+</div>
+
+<div id="ref-2021NEBS2022" class="csl-entry">
+
+Markowitz, E. H., Dawson, E. J., Charriere, N. E., Prohaska, B. K.,
+Rohan, S. K., Stevenson, D. E., and Britt, L. L. (2022). *Results of the
+2021 eastern and northern Bering Sea continental shelf bottom trawl
+survey of groundfish and invertebrate fauna* \[NOAA Tech. Memo.\].
+
+</div>
+
+<div id="ref-GOA2018" class="csl-entry">
+
+VON SZALAY, P. G., and RARING, N. W. (2018). *Data report: 2017 gulf of
+alaska bottom trawl survey* \[NOAA Tech. Memo.\]. *NMFS-AFSC-374*.
+<https://apps-afsc.fisheries.noaa.gov/Publications/AFSC-TM/NOAA-TM-AFSC-374.pdf>
+
+</div>
+
+<div id="ref-AI2018" class="csl-entry">
+
+VON SZALAY, P. G., and RARING, N. W. (2020). *Data report: 2018 aleutian
+islands bottom trawl survey* \[NOAA Tech. Memo.\]. *NMFS-AFSC-409*.
+<https://repository.library.noaa.gov/view/noaa/26367>
+
+</div>
+
+</div>
 
 ## User resources
 
@@ -122,7 +168,7 @@ creation of annual stock assessments.
     Division](https://www.fisheries.noaa.gov/about/resource-assessment-and-conservation-engineering-division).
 -   For more information about codes used in the tables, please refer to
     the [survey code
-    books](https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual).
+    books](https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual;%20@cb2021).
 -   Find [past
     reports](http://apps-afsc.fisheries.noaa.gov/RACE/surveys/cruise_results.htm)
     about these surveys.
@@ -179,8 +225,8 @@ restrictions on access to the data. The data from this dataset are
 shared on the Fisheries One Stop Stop (FOSS) platform
 (<https://www.fisheries.noaa.gov/foss/f?p=215:200:13045102793007:Mail:NO>:::).
 The GitHub repository for the scripts that created this code can be
-found at <https://github.com/afsc-gap-products/gap_public_dataThese>
-data were last updated NA.
+found at <https://github.com/afsc-gap-products/gap_public_data>. These
+data were last updated November 30, 2022.
 
 ## Column-level metadata
 
@@ -378,20 +424,32 @@ sessionInfo()
     ## Matrix products: default
     ## 
     ## locale:
-    ## [1] LC_COLLATE=English_United States.utf8  LC_CTYPE=English_United States.utf8    LC_MONETARY=English_United States.utf8 LC_NUMERIC=C                           LC_TIME=English_United States.utf8    
+    ## [1] LC_COLLATE=English_United States.utf8  LC_CTYPE=English_United States.utf8    LC_MONETARY=English_United States.utf8
+    ## [4] LC_NUMERIC=C                           LC_TIME=English_United States.utf8    
     ## 
     ## attached base packages:
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ##  [1] stringi_1.7.8  getPass_0.2-2  jsonlite_1.8.3 httr_1.4.4     knitr_1.41     badger_0.2.2   RODBC_1.3-19   stringr_1.4.1  taxize_0.9.100 janitor_2.1.0  here_1.0.1     rmarkdown_2.18 readr_2.1.3    magrittr_2.0.3 dplyr_1.0.10   tidyr_1.2.1   
+    ##  [1] stringi_1.7.8  getPass_0.2-2  jsonlite_1.8.3 httr_1.4.4     knitr_1.41     badger_0.2.2   RODBC_1.3-19   stringr_1.4.1 
+    ##  [9] taxize_0.9.100 janitor_2.1.0  here_1.0.1     rmarkdown_2.18 readr_2.1.3    magrittr_2.0.3 dplyr_1.0.10   tidyr_1.2.1   
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] nlme_3.1-157        fs_1.5.2            usethis_2.1.6       bold_1.2.0          lubridate_1.9.0     bit64_4.0.5         RColorBrewer_1.1-3  rprojroot_2.0.3     worrms_0.4.2        gh_1.3.1            tools_4.2.1         utf8_1.2.2          R6_2.5.1            DBI_1.1.3           colorspace_2.0-3    withr_2.5.0         tidyselect_1.2.0   
-    ## [18] bit_4.0.5           curl_4.3.3          compiler_4.2.1      ritis_1.0.0         cli_3.4.1           xml2_1.3.3          triebeard_0.3.0     scales_1.2.1        askpass_1.1         yulab.utils_0.0.5   digest_0.6.30       solrium_1.2.0       pkgconfig_2.0.3     htmltools_0.5.3     highr_0.9           fastmap_1.1.0       rlang_1.0.6        
-    ## [35] readxl_1.4.1        rstudioapi_0.14     httpcode_0.3.0      generics_0.1.3      zoo_1.8-11          vroom_1.6.0         credentials_1.3.2   Rcpp_1.0.9          munsell_0.5.0       fansi_1.0.3         ape_5.6-2           lifecycle_1.0.3     yaml_2.3.6          snakecase_0.11.0    plyr_1.8.8          grid_4.2.1          parallel_4.2.1     
-    ## [52] crayon_1.5.2        lattice_0.20-45     conditionz_0.1.0    hms_1.1.2           sys_3.4.1           pillar_1.8.1        uuid_1.1-0          codetools_0.2-18    readtext_0.81       crul_1.3            glue_1.6.2          evaluate_0.18       data.table_1.14.6   BiocManager_1.30.19 vctrs_0.5.1         tzdb_0.3.0          urltools_1.7.3     
-    ## [69] foreach_1.5.2       cellranger_1.1.0    openssl_2.0.4       gtable_0.3.1        purrr_0.3.5         reshape_0.8.9       assertthat_0.2.1    ggplot2_3.4.0       xfun_0.35           gitcreds_0.1.2      gert_1.9.1          dlstats_0.1.5       tibble_3.1.8        iterators_1.0.14    rvcheck_0.2.1       timechange_0.1.1    ellipsis_0.3.2
+    ##  [1] nlme_3.1-157        fs_1.5.2            usethis_2.1.6       bold_1.2.0          lubridate_1.9.0     bit64_4.0.5        
+    ##  [7] RColorBrewer_1.1-3  rprojroot_2.0.3     worrms_0.4.2        gh_1.3.1            tools_4.2.1         utf8_1.2.2         
+    ## [13] R6_2.5.1            DBI_1.1.3           colorspace_2.0-3    withr_2.5.0         tidyselect_1.2.0    bit_4.0.5          
+    ## [19] curl_4.3.3          compiler_4.2.1      ritis_1.0.0         cli_3.4.1           xml2_1.3.3          triebeard_0.3.0    
+    ## [25] scales_1.2.1        askpass_1.1         yulab.utils_0.0.5   digest_0.6.30       solrium_1.2.0       pkgconfig_2.0.3    
+    ## [31] htmltools_0.5.3     highr_0.9           fastmap_1.1.0       rlang_1.0.6         readxl_1.4.1        rstudioapi_0.14    
+    ## [37] httpcode_0.3.0      generics_0.1.3      zoo_1.8-11          vroom_1.6.0         credentials_1.3.2   Rcpp_1.0.9         
+    ## [43] munsell_0.5.0       fansi_1.0.3         ape_5.6-2           lifecycle_1.0.3     yaml_2.3.6          snakecase_0.11.0   
+    ## [49] plyr_1.8.8          grid_4.2.1          parallel_4.2.1      crayon_1.5.2        lattice_0.20-45     conditionz_0.1.0   
+    ## [55] hms_1.1.2           sys_3.4.1           pillar_1.8.1        uuid_1.1-0          codetools_0.2-18    readtext_0.81      
+    ## [61] crul_1.3            glue_1.6.2          evaluate_0.18       data.table_1.14.6   BiocManager_1.30.19 vctrs_0.5.1        
+    ## [67] tzdb_0.3.0          urltools_1.7.3      foreach_1.5.2       cellranger_1.1.0    openssl_2.0.4       gtable_0.3.1       
+    ## [73] purrr_0.3.5         reshape_0.8.9       assertthat_0.2.1    ggplot2_3.4.0       xfun_0.35           gitcreds_0.1.2     
+    ## [79] gert_1.9.1          dlstats_0.1.5       tibble_3.1.8        iterators_1.0.14    rvcheck_0.2.1       timechange_0.1.1   
+    ## [85] ellipsis_0.3.2
 
 ## NOAA README
 

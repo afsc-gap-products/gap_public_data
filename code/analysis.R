@@ -212,7 +212,7 @@ table_metadata <- paste0("This dataset includes zero-filled (presence and absenc
 There are no legal restrictions on access to the data. 
 The data from this dataset are shared on the Fisheries One Stop Stop (FOSS) platform (",link_foss,"). 
 The GitHub repository for the scripts that created this code can be found at ",link_repo,
-                         "These data were last updated ", file.info(paste0(dir_out, "cpue_station_0filled.csv"))$ctime, ".")
+                         ". These data were last updated ", format(x = as.Date(strsplit(x = dir_out, split = "/", fixed = TRUE)[[1]][3]), "%B %d, %Y"), ".")
 
 # table_metadata <- paste0("This dataset includes non-zero (presence) observations and catch-per-unit-effort (CPUE) estimates for most identified species at a standard set of stations in the Northern Bering Sea (NBS), Eastern Bering Sea (EBS), Bering Sea Slope (BSS), Gulf of Alaska (GOA), and Aleutian Islands (AI) Surveys conducted by the esource Assessment and Conservation Engineering Division (RACE) Groundfish Assessment Program (GAP) of the Alaska Fisheries Science Center (AFSC). 
 # There are no legal restrictions on access to the data. 
