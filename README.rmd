@@ -84,13 +84,6 @@ Though not included in the public data, these surveys also collect oceanographic
 
 <img src="img/_grid_bs.png" alt="Eastern and Northern Bering Sea Shelf" align="right" width="250"/> <img src="img/_grid_ai.png" alt="Aleutian Islands" align="right" width="300"/>
 
-\br
-\br
-\br
-\br
-\br
-\br
-
 -   **Eastern Bering Sea Shelf (EBS)**
     -   Annual
     -   Fixed stations at center of 20 x 20 nm grid
@@ -173,7 +166,7 @@ api_link <- "https://origin-tst-ods-st.fisheries.noaa.gov/ods/foss/afsc_groundfi
 
 ### Select all data
 
-```{r api-all-data-ex, echo = TRUE, eval=FALSE}
+```{r api-all-data-ex, echo = TRUE, eval = FALSE}
 res <- httr::GET(url = api_link)
  # res # Test connection
 data <- jsonlite::fromJSON(base::rawToChar(res$content))
@@ -186,7 +179,7 @@ knitr::kable(head(data$items, 3))
 Here, as an example, we can subset the data for the 2018 Aleutian Islands Bottom Trawl Survey. 
 
 ```{r api-subset-ex, echo = TRUE, eval = FALSE}
-res <- httr::GET(url = api_link, query = list(year = "2018")) # year = 2018, srvy = "EBS"
+res <- httr::GET(url = api_link, query = list(year = "2018", srvy = "AI")
 data <- jsonlite::fromJSON(base::rawToChar(res$content))
 x <- data$items
 x <- x[,c("srvy", "year", "stratum", "station", "vessel_name", "latitude_dd", "longitude_dd",

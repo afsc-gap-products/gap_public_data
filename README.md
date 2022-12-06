@@ -269,7 +269,7 @@ Here, as an example, we can subset the data for the 2018 Aleutian
 Islands Bottom Trawl Survey.
 
 ``` r
-res <- httr::GET(url = api_link, query = list(year = "2018")) # year = 2018, srvy = "EBS"
+res <- httr::GET(url = api_link, query = list(year = "2018", srvy = "AI")
 data <- jsonlite::fromJSON(base::rawToChar(res$content))
 x <- data$items
 x <- x[,c("srvy", "year", "stratum", "station", "vessel_name", "latitude_dd", "longitude_dd",
