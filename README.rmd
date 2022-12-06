@@ -84,6 +84,8 @@ Though not included in the public data, these surveys also collect oceanographic
 
 <img src="img/_grid_bs.png" alt="Eastern and Northern Bering Sea Shelf" align="right" width="250"/> <img src="img/_grid_ai.png" alt="Aleutian Islands" align="right" width="300"/>
 
+<\br>
+
 -   **Eastern Bering Sea Shelf (EBS)**
     -   Annual
     -   Fixed stations at center of 20 x 20 nm grid
@@ -110,7 +112,7 @@ Though not included in the public data, these surveys also collect oceanographic
 
 ## Access Constraints
 
-There are no legal restrictions on access to the data. They reside in public domain and can be freely distributed.
+There are no legal restrictions on access to the data. They reside in the public domain and can be freely distributed.
 
 **User Constraints:** Users must read and fully comprehend the metadata prior to use. Data should not be used beyond the limits of the source scale. Acknowledgement of AFSC Groundfish Assessment Program, as the source from which these data were obtained, in any publications and/or other representations of these data, is suggested.
 

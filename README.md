@@ -98,6 +98,8 @@ creation of annual stock assessments.
 <img src="img/_grid_bs.png" alt="Eastern and Northern Bering Sea Shelf" align="right" width="250"/>
 <img src="img/_grid_ai.png" alt="Aleutian Islands" align="right" width="300"/>
 
+\<\>
+
 -   **Eastern Bering Sea Shelf (EBS)**
     -   Annual
     -   Fixed stations at center of 20 x 20 nm grid
@@ -134,7 +136,7 @@ creation of annual stock assessments.
 ## Access Constraints
 
 There are no legal restrictions on access to the data. They reside in
-public domain and can be freely distributed.
+the public domain and can be freely distributed.
 
 **User Constraints:** Users must read and fully comprehend the metadata
 prior to use. Data should not be used beyond the limits of the source
