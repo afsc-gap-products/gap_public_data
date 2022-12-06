@@ -98,8 +98,6 @@ creation of annual stock assessments.
 <img src="img/_grid_bs.png" alt="Eastern and Northern Bering Sea Shelf" align="right" width="250"/>
 <img src="img/_grid_ai.png" alt="Aleutian Islands" align="right" width="300"/>
 
-\<\>
-
 -   **Eastern Bering Sea Shelf (EBS)**
     -   Annual
     -   Fixed stations at center of 20 x 20 nm grid

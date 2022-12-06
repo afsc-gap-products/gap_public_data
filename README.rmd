@@ -84,7 +84,12 @@ Though not included in the public data, these surveys also collect oceanographic
 
 <img src="img/_grid_bs.png" alt="Eastern and Northern Bering Sea Shelf" align="right" width="250"/> <img src="img/_grid_ai.png" alt="Aleutian Islands" align="right" width="300"/>
 
-<\br>
+\br
+\br
+\br
+\br
+\br
+\br
 
 -   **Eastern Bering Sea Shelf (EBS)**
     -   Annual
