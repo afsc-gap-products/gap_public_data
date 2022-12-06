@@ -43,21 +43,21 @@ National Marine Fisheries Service,
 National Oceanic and Atmospheric Administration,  
 Seattle, WA 98195
 
-# Table of Contents
+## Table of Contents
 
 ```{r toc, echo = FALSE, eval = TRUE}
 toc <- strsplit(x = readtext::readtext(file = "./README.Rmd")[[2]], split = "\n")
 toc <- toc[[1]][substr(x = toc[[1]], start = 1, stop = 1) == "#"]
 toc <- toc[-c(1:3)]
 toc_list <- toc
-toc_list <- gsub(pattern = "### ", replacement = "      - [", x = toc_list, fixed = TRUE)
-toc_list <- gsub(pattern = "## ", replacement = "   - [", x = toc_list, fixed = TRUE)
-toc_list <- gsub(pattern = "# ", replacement = "  - [", x = toc_list, fixed = TRUE)
+toc_list <- gsub(pattern = "### ", replacement = ">      - [*", x = toc_list, fixed = TRUE)
+toc_list <- gsub(pattern = "## ", replacement = ">   - [*", x = toc_list, fixed = TRUE)
+toc_list <- gsub(pattern = "# ", replacement = ">  - [*", x = toc_list, fixed = TRUE)
 toc_link <- tolower(gsub(pattern = " ", replacement = "-", 
                           x = gsub(pattern = "#", replacement = "", 
                                    x = gsub(pattern = "# ", replacement = "", 
                                             x = toc, fixed = TRUE), fixed = TRUE)))
-toc <- paste0(toc_list, "](#", toc_link, ")", collapse = "\n")
+toc <- paste0(toc_list, "*](#", toc_link, ")", collapse = "\n")
 ```
 
 `r toc`
@@ -154,7 +154,7 @@ cat(str0)
 
 Select, filter, and package this and other NOAA Fisheries data from the [Fisheries One Stop Shop (FOSS)](`r link_foss `) platform. This user-friendly portal is maintained through `Oracle APEX`. A useful intro to using APIs in `R` can be found [here](https://www.dataquest.io/blog/r-api-tutorial/).
 
-### Connect to the API
+### Connect to the API with R
 
 ```{r api-link, echo = TRUE}
  # install.packages(c("httr", "jsonlite"))

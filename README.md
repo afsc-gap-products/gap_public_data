@@ -16,31 +16,31 @@ National Marine Fisheries Service,
 National Oceanic and Atmospheric Administration,  
 Seattle, WA 98195
 
-# Table of Contents
+## Table of Contents
 
--   [Cite this Data](#cite-this-data)
--   [Metadata](#metadata)
--   [Data Description](#data-description)
--   [Bottom Trawl Surveys and
-    Regions](#bottom-trawl-surveys-and-regions)
--   [User Resources](#user-resources)
--   [Access Constraints](#access-constraints)
--   [Table short metadata](#table-short-metadata)
--   [Column-level metadata](#column-level-metadata)
--   [Access the Data](#access-the-data)
--   [Access data interactively through the FOSS
-    platform](#access-data-interactively-through-the-foss-platform)
-    -   [Connect to the API](#connect-to-the-api)
-    -   [Select all data](#select-all-data)
-    -   [Subset data](#subset-data)
--   [Access data via Oracle](#access-data-via-oracle)
-    -   [Connect to Oracle from R](#connect-to-oracle-from-r)
-    -   [Select all data](#select-all-data)
-    -   [Subset data](#subset-data)
--   [Suggestions and Comments](#suggestions-and-comments)
--   [R Version Metadata](#r-version-metadata)
--   [NOAA README](#noaa-readme)
--   [NOAA License](#noaa-license)
+> -   [*Cite this Data*](#cite-this-data)
+> -   [*Metadata*](#metadata)
+> -   [*Data Description*](#data-description)
+> -   [*Bottom Trawl Surveys and
+>     Regions*](#bottom-trawl-surveys-and-regions)
+> -   [*User Resources*](#user-resources)
+> -   [*Access Constraints*](#access-constraints)
+> -   [*Table short metadata*](#table-short-metadata)
+> -   [*Column-level metadata*](#column-level-metadata)
+> -   [*Access the Data*](#access-the-data)
+> -   [*Access data interactively through the FOSS
+>     platform*](#access-data-interactively-through-the-foss-platform)
+>     -   [*Connect to the API with R*](#connect-to-the-api-with-r)
+>     -   [*Select all data*](#select-all-data)
+>     -   [*Subset data*](#subset-data)
+> -   [*Access data via Oracle*](#access-data-via-oracle)
+>     -   [*Connect to Oracle from R*](#connect-to-oracle-from-r)
+>     -   [*Select all data*](#select-all-data)
+>     -   [*Subset data*](#subset-data)
+> -   [*Suggestions and Comments*](#suggestions-and-comments)
+> -   [*R Version Metadata*](#r-version-metadata)
+> -   [*NOAA README*](#noaa-readme)
+> -   [*NOAA License*](#noaa-license)
 
 # Cite this Data
 
@@ -243,7 +243,7 @@ platform. This user-friendly portal is maintained through `Oracle APEX`.
 A useful intro to using APIs in `R` can be found
 [here](https://www.dataquest.io/blog/r-api-tutorial/).
 
-### Connect to the API
+### Connect to the API with R
 
 ``` r
  # install.packages(c("httr", "jsonlite"))
