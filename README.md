@@ -2,10 +2,6 @@
 
 # [AFSC RACE Groundfish and Shellfish Survey Public Data](https://github.com/afsc-gap-products/gap_public_data) <img src="https://avatars.githubusercontent.com/u/91760178?s=96&amp;v=4" alt="Logo." align="right" width="139" height="139"/>
 
-[![](https://img.shields.io/github/last-commit/afsc-gap-products/gap_public_data.svg)](https://github.com/afsc-gap-products/gap_public_data/commits/main)
-
-> Code is always in development
-
 ## This code is primarily maintained by:
 
 **Emily Markowitz** (Emily.Markowitz AT noaa.gov;
@@ -16,18 +12,18 @@ National Marine Fisheries Service,
 National Oceanic and Atmospheric Administration,  
 Seattle, WA 98195
 
-## Table of Contents
+## Table of contents
 
-> -   [*Cite this Data*](#cite-this-data)
+> -   [*Cite this data*](#cite-this-data)
 > -   [*Metadata*](#metadata)
-> -   [*Data Description*](#data-description)
-> -   [*Bottom Trawl Surveys and
->     Regions*](#bottom-trawl-surveys-and-regions)
-> -   [*User Resources*](#user-resources)
-> -   [*Access Constraints*](#access-constraints)
+> -   [*Data description*](#data-description)
+> -   [*Bottom trawl surveys and
+>     regions*](#bottom-trawl-surveys-and-regions)
+> -   [*User resources*](#user-resources)
+> -   [*Access constraints*](#access-constraints)
 > -   [*Table short metadata*](#table-short-metadata)
 > -   [*Column-level metadata*](#column-level-metadata)
-> -   [*Access the Data*](#access-the-data)
+> -   [*Access the data*](#access-the-data)
 > -   [*Access data interactively through the FOSS
 >     platform*](#access-data-interactively-through-the-foss-platform)
 >     -   [*Connect to the API with R*](#connect-to-the-api-with-r)
@@ -37,24 +33,28 @@ Seattle, WA 98195
 >     -   [*Connect to Oracle from R*](#connect-to-oracle-from-r)
 >     -   [*Select all data*](#select-all-data)
 >     -   [*Subset data*](#subset-data)
-> -   [*Suggestions and Comments*](#suggestions-and-comments)
-> -   [*R Version Metadata*](#r-version-metadata)
+> -   [*Suggestions and comments*](#suggestions-and-comments)
+> -   [*R version metadata*](#r-version-metadata)
 > -   [*NOAA README*](#noaa-readme)
 > -   [*NOAA License*](#noaa-license)
 
-# Cite this Data
+# Cite this data
+
+[![](https://img.shields.io/github/last-commit/afsc-gap-products/gap_public_data.svg)](https://github.com/afsc-gap-products/gap_public_data/commits/main)
 
 > NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom
 > Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss,
 > Accessed mm/dd/yyyy
 
-These data were last ran and pushed to the AFSC oracle on **November 30,
-2022**. *This is not the date that these data were pulled into FOSS and
-the FOSS dataset may be behind.*
+The code is in development. Refer to
+[releases](https://github.com/afsc-gap-products/gap_public_data/releases)
+for finalized products. These data were last ran and pushed to the AFSC
+oracle on **November 30, 2022**. *This is not the date that these data
+were pulled into FOSS and the FOSS dataset may be behind.*
 
 # Metadata
 
-## Data Description
+## Data description
 
 The Resource Assessment and Conservation Engineering Division (RACE)
 Groundfish Assessment Program (GAP) of the Alaska Fisheries Science
@@ -93,7 +93,7 @@ included in the public data are estimated biomass (average total weight
 of all fish and crabs sampled) of crabs and groundfish that support the
 creation of annual stock assessments.
 
-## Bottom Trawl Surveys and Regions
+## Bottom trawl surveys and regions
 
 <img src="img/_grid_bs.png" alt="Eastern and Northern Bering Sea Shelf" align="right" width="250"/>
 <img src="img/_grid_ai.png" alt="Aleutian Islands" align="right" width="300"/>
@@ -116,7 +116,7 @@ creation of annual stock assessments.
     -   Triennial (1990s)/Biennial since 2001 in odd years
     -   Stratified Random Survey Design
 
-## User Resources
+## User resources
 
 -   [AFSC’s Resource Assessment and Conservation Engineering
     Division](https://www.fisheries.noaa.gov/about/resource-assessment-and-conservation-engineering-division).
@@ -131,7 +131,7 @@ creation of annual stock assessments.
 -   Learn more about other [Research Surveys conducted at
     AFSC](https://www.fisheries.noaa.gov/alaska/ecosystems/alaska-fish-research-surveys).
 
-## Access Constraints
+## Access constraints
 
 There are no legal restrictions on access to the data. They reside in
 the public domain and can be freely distributed.
@@ -224,7 +224,7 @@ data were last updated NA.
 | DURATION_HR           | Tow Duration (decimal hr)                                | decimal hours                                   | This is the elapsed time between start and end of a haul (decimal hours).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | PERFORMANCE           | Haul Performance Code (rating)                           | rating                                          | This denotes what, if any, issues arose during the haul. For more information, review the [code books](https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 
-# Access the Data
+# Access the data
 
 While pulling data, please keep in mind that this is a very large file.
 For reference:
@@ -351,7 +351,7 @@ AND YEAR < 2021")
 write.csv(x = a, file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED-ebs_pcod_2010-2020.csv")
 ```
 
-# Suggestions and Comments
+# Suggestions and comments
 
 If the data or metadata can be improved, please create a pull request,
 [submit an issue to the GitHub
@@ -363,7 +363,7 @@ Stop Shop
 (FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:200:13045102793007:Mail:NO:::)
 platform managers.
 
-## R Version Metadata
+## R version metadata
 
 This data was compiled using the below `R` environment and `R` packages:
 
