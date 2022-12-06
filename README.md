@@ -113,11 +113,11 @@ creation of annual stock assessments.
     -   Intermittent (funding dependent)
     -   Modified Index-Stratified Random of Successful Stations Survey
         Design
--   **Aleutian Islands (AI)** (VON SZALAY and RARING, 2020)
+-   **Aleutian Islands (AI)** (Von Szalay and Raring, 2020)
     -   Triennial (1990s)/Biennial since 2000 in even years
     -   Modified Index-Stratified Random of Successful Stations Survey
         Design
--   **Gulf of Alaska (GOA)** (VON SZALAY and RARING, 2018)
+-   **Gulf of Alaska (GOA)** (Von Szalay and Raring, 2018)
     -   Triennial (1990s)/Biennial since 2001 in odd years
     -   Stratified Random Survey Design
 
@@ -144,9 +144,17 @@ survey of groundfish and invertebrate fauna* \[NOAA Tech. Memo.\].
 
 </div>
 
+<div id="ref-cb2021" class="csl-entry">
+
+Resource Assessment, A. F. S. C. (U.S.)., and Division, C. E. (2021).
+*Groundfish survey data codes and forms*.
+<https://repository.library.noaa.gov/view/noaa/31570>
+
+</div>
+
 <div id="ref-GOA2018" class="csl-entry">
 
-VON SZALAY, P. G., and RARING, N. W. (2018). *Data report: 2017 gulf of
+Von Szalay, P. G., and Raring, N. W. (2018). *Data report: 2017 gulf of
 alaska bottom trawl survey* \[NOAA Tech. Memo.\]. *NMFS-AFSC-374*.
 <https://apps-afsc.fisheries.noaa.gov/Publications/AFSC-TM/NOAA-TM-AFSC-374.pdf>
 
@@ -154,7 +162,7 @@ alaska bottom trawl survey* \[NOAA Tech. Memo.\]. *NMFS-AFSC-374*.
 
 <div id="ref-AI2018" class="csl-entry">
 
-VON SZALAY, P. G., and RARING, N. W. (2020). *Data report: 2018 aleutian
+Von Szalay, P. G., and Raring, N. W. (2020). *Data report: 2018 aleutian
 islands bottom trawl survey* \[NOAA Tech. Memo.\]. *NMFS-AFSC-409*.
 <https://repository.library.noaa.gov/view/noaa/26367>
 
@@ -168,7 +176,8 @@ islands bottom trawl survey* \[NOAA Tech. Memo.\]. *NMFS-AFSC-409*.
     Division](https://www.fisheries.noaa.gov/about/resource-assessment-and-conservation-engineering-division).
 -   For more information about codes used in the tables, please refer to
     the [survey code
-    books](https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual;%20@cb2021).
+    books](https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual)
+    (Resource Assessment and Division, 2021).
 -   Find [past
     reports](http://apps-afsc.fisheries.noaa.gov/RACE/surveys/cruise_results.htm)
     about these surveys.
