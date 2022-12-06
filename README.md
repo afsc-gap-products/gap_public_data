@@ -22,6 +22,10 @@ Seattle, WA 98195
 > Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss,
 > Accessed mm/dd/yyyy
 
+These data were last ran and pushed to the AFSC oracle on December 01,
+2022. This is not the date that these data were pulled into FOSS and the
+FOSS dataset may be behind.
+
 # Metadata
 
 ## Data Description
@@ -202,18 +206,18 @@ For reference:
     ## RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED: 
     ##   rows: 36440900
     ##   cols: 37
-    ##   4.514 GB
+    ##   NA GB
 
 ## Access data interactively through the [Fisheries One Stop Shop (FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:200:13045102793007:Mail:NO:::) platform
 
 Select, filter, and package this and other NOAA Fisheries data from the
 [Fisheries One Stop Shop
 (FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:200:13045102793007:Mail:NO:::)
-platform. This user-friendly portal is maintained through Oracle APEX. A
-useful intro to using APIs in R can be found
+platform. This user-friendly portal is maintained through `Oracle APEX`.
+A useful intro to using APIs in `R` can be found
 [here](https://www.dataquest.io/blog/r-api-tutorial/).
 
-### Connecting to the API
+### Connect to the API
 
 ``` r
 # install.packages(c("httr", "jsonlite"))
@@ -236,18 +240,29 @@ knitr::kable(head(data$items, 3))
 ### Subset data
 
 Here, as an example, we can subset the data for the 2018 Aleutian
-Islands Bottom Trawl Survey
+Islands Bottom Trawl Survey.
 
-## Access data via Oracle (AFSC-only)
+``` r
+res <- httr::GET(url = api_link, query = list(year = "2018")) # year = 2018, srvy = "EBS"
+data <- jsonlite::fromJSON(base::rawToChar(res$content))
+x <- data$items
+x <- x[,c("srvy", "year", "stratum", "station", "vessel_name", "latitude_dd", "longitude_dd",
+          "species_code", "common_name", "scientific_name", "taxon_confidence",
+          "cpue_kgha", "cpue_noha", "weight_kg", "count",
+          "bottom_temperature_c", "surface_temperature_c", "depth_m")]
+knitr::kable(head(x, 3))
+```
 
-If the user has access to the AFSC Oracle database, the user can use
+## Access data via `Oracle` (AFSC-only)
+
+If the user has access to the AFSC `Oracle` database, the user can use
 `SQL developer` to view and pull the FOSS public data directly from the
-`RACEBASE_FOSS` Oracle schema.
+`RACEBASE_FOSS` `Oracle` schema.
 
-### Connecting to Oracle from R
+### Connect to `Oracle` from R
 
 Many users will want to access the data from `Oracle` using `R`. The
-user will need to install the `RODBC` R package and ask OFIS (IT)
+user will need to install the `RODBC` `R` package and ask OFIS (IT)
 connect `R` to `Oracle`. Then, use the following code in `R` to
 establish a connection from `R` to `Oracle`:
 
@@ -265,7 +280,7 @@ channel<-odbcConnect(dsn = "AFSC",
 odbcGetInfo(channel) # Execute the connection
 ```
 
-…Or have the script prompt the user for the connection info. Here,
+Or have the script prompt the user for the connection info. Here,
 pop-ups will appear on the screen asking for the username and password.
 
 ``` r
@@ -283,7 +298,7 @@ channel <- get.connected() # Execute the connection
 
 ### Select all data
 
-Once connected, pull and save (if needed) the table into the R
+Once connected, pull and save (if needed) the table into the `R`
 environment.
 
 ``` r
@@ -322,7 +337,7 @@ Stop Shop
 (FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:200:13045102793007:Mail:NO:::)
 platform managers.
 
-# R Version Metadata
+# `R` Version Metadata
 
 This data was compiled using the below `R` environment and `R` packages:
 
