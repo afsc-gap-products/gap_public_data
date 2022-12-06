@@ -48,52 +48,6 @@ Seattle, WA 98195
 
 NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss, Accessed mm/dd/yyyy
 
-# Access the Data
-
-## Access data interactively through the [Fisheries One Stop Shop (FOSS)](`r link_foss `) platform
-
-Select, filter, and package this and other NOAA Fisheries data from the [Fisheries One Stop Shop (FOSS)](`r link_foss `) platform. This user-friendly portal is maintained through Oracle APEX.
-
-## Access data via the API
-
-A useful intro to using APIs in R can be found [here](https://www.dataquest.io/blog/r-api-tutorial/).
-
-### Obtain data by connecting to the API
-
-```{r api-link, echo = TRUE}
-# install.packages(c("httr", "jsonlite"))
-library("httr")
-library("jsonlite")
-# link to the API
-api_link <- "https://origin-tst-ods-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/"
-```
-
-### Select all data
-
-```{r api-all-data-ex, echo = TRUE, eval=FALSE}
-res <- httr::GET(url = api_link)
-# res # Test connection
-data <- jsonlite::fromJSON(base::rawToChar(res$content))
-# names(data)
-knitr::kable(head(data$items, 3)) 
-```
-
-```{r api-subset-ex, echo = FALSE}
-
-### Subset data
-
-# Here, as an example, we can subset the data for the 2018 Aleutian Islands Bottom Trawl Survey
-
-# res <- httr::GET(url = api_link, query = list(year = "2018")) # year = 2018, srvy = "EBS"
-# data <- jsonlite::fromJSON(base::rawToChar(res$content))
-# x <- data$items
-# x <- x[,c("srvy", "year", "stratum", "station", "vessel_name", "latitude_dd", "longitude_dd", 
-#           "species_code", "common_name", "scientific_name", "taxon_confidence", 
-#           "cpue_kgha", "cpue_noha", "weight_kg", "count", 
-#           "bottom_temperature_c", "surface_temperature_c", "depth_m")]
-# knitr::kable(head(x, 3)) 
-```
-
 # Metadata
 
 ## Data Description
@@ -161,6 +115,118 @@ For questions, comments, and concerns specifically about the [Fisheries One Stop
 column_metadata0 <- column_metadata
 names(column_metadata0) <- c("Column name from data", "Descriptive Column Name", "Units", "Description")
 knitr::kable(column_metadata0, row.names = FALSE) 
+```
+
+# Access the Data
+
+This is presence and absence data. This is a huge file and has all of the bells and whistles. Keep this in mind while pulling data. For reference: 
+
+```{r oracle-data-size, echo = FALSE}
+str0 <- paste0(
+  "RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED: ", "
+  rows: ", nrow(cpue_station_0filled), "
+  cols: ", ncol(cpue_station_0filled), "
+  ", round(file.size(paste0(dir_out, "cpue_station_0filled.csv"))/1e+9, 3), " GB") 
+cat(str0)
+```
+
+## Access data interactively through the [Fisheries One Stop Shop (FOSS)](`r link_foss `) platform
+
+Select, filter, and package this and other NOAA Fisheries data from the [Fisheries One Stop Shop (FOSS)](`r link_foss `) platform. This user-friendly portal is maintained through Oracle APEX. A useful intro to using APIs in R can be found [here](https://www.dataquest.io/blog/r-api-tutorial/).
+
+### Connecting to the API
+
+```{r api-link, echo = TRUE}
+# install.packages(c("httr", "jsonlite"))
+library("httr")
+library("jsonlite")
+# link to the API
+api_link <- "https://origin-tst-ods-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/"
+```
+
+### Select all data
+
+```{r api-all-data-ex, echo = TRUE, eval=FALSE}
+res <- httr::GET(url = api_link)
+# res # Test connection
+data <- jsonlite::fromJSON(base::rawToChar(res$content))
+# names(data)
+knitr::kable(head(data$items, 3)) 
+```
+
+### Subset data
+
+Here, as an example, we can subset the data for the 2018 Aleutian Islands Bottom Trawl Survey
+
+```{r api-subset-ex, echo = FALSE, eval = FALSE}
+res <- httr::GET(url = api_link, query = list(year = "2018")) # year = 2018, srvy = "EBS"
+data <- jsonlite::fromJSON(base::rawToChar(res$content))
+x <- data$items
+x <- x[,c("srvy", "year", "stratum", "station", "vessel_name", "latitude_dd", "longitude_dd",
+          "species_code", "common_name", "scientific_name", "taxon_confidence",
+          "cpue_kgha", "cpue_noha", "weight_kg", "count",
+          "bottom_temperature_c", "surface_temperature_c", "depth_m")]
+knitr::kable(head(x, 3))
+```
+
+## Access data via Oracle (AFSC-only)
+
+If you have access to the AFSC Oracle database, you can pull the data directly from the Oracle schema these data are pulled from for FOSS. 
+
+### Connecting to Oracle from R
+
+While you can access the data directly by opening `SQL developer`, many users will want to access the data using `R`. You will need to install the `RODBC` R package and have OFIS (IT) connect R to Oracle. Once connected, you can use the following code in R to connect to Oracle. 
+
+```{r oracle-connect-1, echo = TRUE, eval = FALSE}
+library("RODBC")
+# Define RODBC connection to ORACLE
+channel<-odbcConnect(dsn = "AFSC",
+                     uid = "USERS_USERNAME", # change
+                     pwd = "USERS_PASSWORD", # change
+                     believeNRows = FALSE)
+odbcGetInfo(channel) # Execute the connection
+```
+
+Or prompt the script to ask the user for the connection info
+
+```{r oracle-connect-2, echo = TRUE, eval = FALSE}
+library("RODBC")
+library("getPass")
+# Define RODBC connection to ORACLE
+get.connected <- function(schema='AFSC'){(echo=FALSE)
+  username <- getPass(msg = "Enter your ORACLE Username: ")
+  password <- getPass(msg = "Enter your ORACLE Password: ")
+  channel  <- RODBC::odbcConnect(paste(schema),paste(username),paste(password), believeNRows=FALSE)
+}
+channel <- get.connected() # Execute the connection
+```
+
+### Select all data
+
+Then, you can pull and save (if you need) the table into your R environment. 
+
+```{r oracle-data-pull, echo = TRUE, eval = FALSE}
+# pull table from oracle into R environment
+a <- RODBC::sqlQuery(channel, "SELECT * FROM RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED")
+# Save table to local directory
+write.csv(x = a, 
+          file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED.csv")
+```
+
+### Subset data
+
+If you only want to pull a small subset of the data (especially since files like `RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED` are so big), you can use a variation of the following code. Here, we are pulling EBS Pacific cod from 2010 - 2021: 
+
+```{r oracle-data-pull-subset, echo = TRUE, eval = FALSE}
+# Pull data
+a <- RODBC::sqlQuery(channel, "SELECT * FROM RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED 
+WHERE SRVY = 'EBS' 
+AND COMMON_NAME = 'Pacific cod' 
+AND YEAR >= 2010 
+AND YEAR < 2021")
+# Save table to local directory
+write.csv(x = a, 
+          file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED-ebs_pcod_2010-2020.csv")
 ```
 
 # Suggestions and Comments

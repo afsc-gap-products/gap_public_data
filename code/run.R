@@ -41,6 +41,7 @@ taxize0 <- FALSE# incorporate species codes from databases
 # source('./code/data_dl.R')
 source('./code/functions.R')
 if (taxize0) { # only if you need to rerun {taxize} stuff - very time intensive!
+  option <- 3
   source('./code/find_taxize_species_codes.R')
 }
 taxize0 <- TRUE
@@ -61,7 +62,7 @@ source('./code/analysis.R')
 
 # Update README ----------------------------------------------------------------
 
-dir_out <- "./output/2022-11-10/"
+dir_out <- "./output/2022-12-01/"
 
 rmarkdown::render(paste0("./README.Rmd"),
                   output_dir = "./",
