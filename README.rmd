@@ -38,7 +38,7 @@ cat(
 
 **Emily Markowitz** (Emily.Markowitz AT noaa.gov; [\@EmilyMarkowitz-NOAA](https://github.com/EmilyMarkowitz-NOAA))  
 Research Fisheries Biologist  
-Bering Sea Survey Team
+Bering Sea Groundfish Survey Team
 Alaska Fisheries Science Center,  
 National Marine Fisheries Service,  
 National Oceanic and Atmospheric Administration,  
@@ -46,7 +46,7 @@ Seattle, WA 98195
 
 # Cite this Data
 
-NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss, Accessed mm/dd/yyyy
+> NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss, Accessed mm/dd/yyyy
 
 # Metadata
 
@@ -119,7 +119,7 @@ knitr::kable(column_metadata0, row.names = FALSE)
 
 # Access the Data
 
-This is presence and absence data. This is a huge file and has all of the bells and whistles. Keep this in mind while pulling data. For reference: 
+While pulling data, please keep in mind that this is a very large file. For reference: 
 
 ```{r oracle-data-size, echo = FALSE}
 str0 <- paste0(
@@ -171,11 +171,13 @@ knitr::kable(head(x, 3))
 
 ## Access data via Oracle (AFSC-only)
 
-If you have access to the AFSC Oracle database, you can pull the data directly from the Oracle schema these data are pulled from for FOSS. 
+If the user has access to the AFSC Oracle database, the user can use `SQL developer` to view and pull the FOSS public data directly from the `RACEBASE_FOSS` Oracle schema. 
 
 ### Connecting to Oracle from R
 
-While you can access the data directly by opening `SQL developer`, many users will want to access the data using `R`. You will need to install the `RODBC` R package and have OFIS (IT) connect R to Oracle. Once connected, you can use the following code in R to connect to Oracle. 
+Many users will want to access the data from `Oracle` using `R`. The user will need to install the `RODBC` R package and ask OFIS (IT) connect `R` to `Oracle`. Then, use the following code in `R` to establish a connection from `R` to `Oracle`: 
+
+Here, the user can write in their username and password directly into the `RODBC` connect function. Never save usernames or passwords in scripts that may be intentionally or unintentionally shared with others. 
 
 ```{r oracle-connect-1, echo = TRUE, eval = FALSE}
 library("RODBC")
@@ -187,7 +189,7 @@ channel<-odbcConnect(dsn = "AFSC",
 odbcGetInfo(channel) # Execute the connection
 ```
 
-Or prompt the script to ask the user for the connection info
+...Or have the script prompt the user for the connection info. Here, pop-ups will appear on the screen asking for the username and password. 
 
 ```{r oracle-connect-2, echo = TRUE, eval = FALSE}
 library("RODBC")
@@ -196,26 +198,26 @@ library("getPass")
 get.connected <- function(schema='AFSC'){(echo=FALSE)
   username <- getPass(msg = "Enter your ORACLE Username: ")
   password <- getPass(msg = "Enter your ORACLE Password: ")
-  channel  <- RODBC::odbcConnect(paste(schema),paste(username),paste(password), believeNRows=FALSE)
+  channel  <- RODBC::odbcConnect(paste(schema),paste(username),paste(password), 
+                                 believeNRows=FALSE)
 }
 channel <- get.connected() # Execute the connection
 ```
 
 ### Select all data
 
-Then, you can pull and save (if you need) the table into your R environment. 
+Once connected, pull and save (if needed) the table into the R environment. 
 
 ```{r oracle-data-pull, echo = TRUE, eval = FALSE}
 # pull table from oracle into R environment
 a <- RODBC::sqlQuery(channel, "SELECT * FROM RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED")
 # Save table to local directory
-write.csv(x = a, 
-          file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED.csv")
+write.csv(x = a, file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED.csv")
 ```
 
 ### Subset data
 
-If you only want to pull a small subset of the data (especially since files like `RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED` are so big), you can use a variation of the following code. Here, we are pulling EBS Pacific cod from 2010 - 2021: 
+To pull a small subset of the data (especially since files like `RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED` are so big), use a variation of the following code. Here, we are pulling EBS Pacific cod from 2010 - 2021: 
 
 ```{r oracle-data-pull-subset, echo = TRUE, eval = FALSE}
 # Pull data
@@ -225,15 +227,16 @@ AND COMMON_NAME = 'Pacific cod'
 AND YEAR >= 2010 
 AND YEAR < 2021")
 # Save table to local directory
-write.csv(x = a, 
-          file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED-ebs_pcod_2010-2020.csv")
+write.csv(x = a, file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED-ebs_pcod_2010-2020.csv")
 ```
 
 # Suggestions and Comments
 
-If you feel that the data or metadata can be improved, please create a pull request, [submit an issue to the GitHub organization](`r "https://github.com/afsc-gap-products/data-requests/issues"`), [submit an issue to the code's repository](`r paste0(link_repo, "/issues")`), reach out the the survey team leads (listed above), or to [Fisheries One Stop Shop (FOSS)](`r link_foss `) platform managers.
+If the data or metadata can be improved, please create a pull request, [submit an issue to the GitHub organization](`r "https://github.com/afsc-gap-products/data-requests/issues"`), [submit an issue to the code's repository](`r paste0(link_repo, "/issues")`), reach out the the survey team leads (listed above), or to [Fisheries One Stop Shop (FOSS)](`r link_foss `) platform managers.
 
 # R Version Metadata
+
+This data was compiled using the below `R` environment and `R` packages:
 
 ```{r sessioninfo}
 sessionInfo()

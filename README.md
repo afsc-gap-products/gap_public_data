@@ -11,16 +11,16 @@
 **Emily Markowitz** (Emily.Markowitz AT noaa.gov;
 [@EmilyMarkowitz-NOAA](https://github.com/EmilyMarkowitz-NOAA))  
 Research Fisheries Biologist  
-Bering Sea Survey Team Alaska Fisheries Science Center,  
+Bering Sea Groundfish Survey Team Alaska Fisheries Science Center,  
 National Marine Fisheries Service,  
 National Oceanic and Atmospheric Administration,  
 Seattle, WA 98195
 
 # Cite this Data
 
-NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom
-Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss,
-Accessed mm/dd/yyyy
+> NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom
+> Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss,
+> Accessed mm/dd/yyyy
 
 # Metadata
 
@@ -196,9 +196,8 @@ data were last updated NA.
 
 # Access the Data
 
-This is presence and absence data. This is a huge file and has all of
-the bells and whistles. Keep this in mind while pulling data. For
-reference:
+While pulling data, please keep in mind that this is a very large file.
+For reference:
 
     ## RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED: 
     ##   rows: 36440900
@@ -241,15 +240,20 @@ Islands Bottom Trawl Survey
 
 ## Access data via Oracle (AFSC-only)
 
-If you have access to the AFSC Oracle database, you can pull the data
-directly from the Oracle schema these data are pulled from for FOSS.
+If the user has access to the AFSC Oracle database, the user can use
+`SQL developer` to view and pull the FOSS public data directly from the
+`RACEBASE_FOSS` Oracle schema.
 
 ### Connecting to Oracle from R
 
-While you can access the data directly by opening `SQL developer`, many
-users will want to access the data using `R`. You will need to install
-the `RODBC` R package and have OFIS (IT) connect R to Oracle. Once
-connected, you can use the following code in R to connect to Oracle.
+Many users will want to access the data from `Oracle` using `R`. The
+user will need to install the `RODBC` R package and ask OFIS (IT)
+connect `R` to `Oracle`. Then, use the following code in `R` to
+establish a connection from `R` to `Oracle`:
+
+Here, the user can write in their username and password directly into
+the `RODBC` connect function. Never save usernames or passwords in
+scripts that may be intentionally or unintentionally shared with others.
 
 ``` r
 library("RODBC")
@@ -261,7 +265,8 @@ channel<-odbcConnect(dsn = "AFSC",
 odbcGetInfo(channel) # Execute the connection
 ```
 
-Or prompt the script to ask the user for the connection info
+…Or have the script prompt the user for the connection info. Here,
+pop-ups will appear on the screen asking for the username and password.
 
 ``` r
 library("RODBC")
@@ -270,30 +275,29 @@ library("getPass")
 get.connected <- function(schema='AFSC'){(echo=FALSE)
   username <- getPass(msg = "Enter your ORACLE Username: ")
   password <- getPass(msg = "Enter your ORACLE Password: ")
-  channel  <- RODBC::odbcConnect(paste(schema),paste(username),paste(password), believeNRows=FALSE)
+  channel  <- RODBC::odbcConnect(paste(schema),paste(username),paste(password), 
+                                 believeNRows=FALSE)
 }
 channel <- get.connected() # Execute the connection
 ```
 
 ### Select all data
 
-Then, you can pull and save (if you need) the table into your R
+Once connected, pull and save (if needed) the table into the R
 environment.
 
 ``` r
 # pull table from oracle into R environment
 a <- RODBC::sqlQuery(channel, "SELECT * FROM RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED")
 # Save table to local directory
-write.csv(x = a, 
-          file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED.csv")
+write.csv(x = a, file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED.csv")
 ```
 
 ### Subset data
 
-If you only want to pull a small subset of the data (especially since
-files like `RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED` are so big), you can use
-a variation of the following code. Here, we are pulling EBS Pacific cod
-from 2010 - 2021:
+To pull a small subset of the data (especially since files like
+`RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED` are so big), use a variation of the
+following code. Here, we are pulling EBS Pacific cod from 2010 - 2021:
 
 ``` r
 # Pull data
@@ -303,14 +307,13 @@ AND COMMON_NAME = 'Pacific cod'
 AND YEAR >= 2010 
 AND YEAR < 2021")
 # Save table to local directory
-write.csv(x = a, 
-          file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED-ebs_pcod_2010-2020.csv")
+write.csv(x = a, file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED-ebs_pcod_2010-2020.csv")
 ```
 
 # Suggestions and Comments
 
-If you feel that the data or metadata can be improved, please create a
-pull request, [submit an issue to the GitHub
+If the data or metadata can be improved, please create a pull request,
+[submit an issue to the GitHub
 organization](https://github.com/afsc-gap-products/data-requests/issues),
 [submit an issue to the code’s
 repository](https://github.com/afsc-gap-products/gap_public_data/issues),
@@ -320,6 +323,8 @@ Stop Shop
 platform managers.
 
 # R Version Metadata
+
+This data was compiled using the below `R` environment and `R` packages:
 
 ``` r
 sessionInfo()
@@ -338,7 +343,7 @@ sessionInfo()
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ##  [1] jsonlite_1.8.3 httr_1.4.4     knitr_1.41     badger_0.2.2   RODBC_1.3-19   stringr_1.4.1  taxize_0.9.100 janitor_2.1.0  here_1.0.1     rmarkdown_2.18 readr_2.1.3    magrittr_2.0.3 dplyr_1.0.10   tidyr_1.2.1   
+    ##  [1] getPass_0.2-2  jsonlite_1.8.3 httr_1.4.4     knitr_1.41     badger_0.2.2   RODBC_1.3-19   stringr_1.4.1  taxize_0.9.100 janitor_2.1.0  here_1.0.1     rmarkdown_2.18 readr_2.1.3    magrittr_2.0.3 dplyr_1.0.10   tidyr_1.2.1   
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] nlme_3.1-157        fs_1.5.2            usethis_2.1.6       bold_1.2.0          lubridate_1.9.0     bit64_4.0.5         RColorBrewer_1.1-3  rprojroot_2.0.3     worrms_0.4.2        gh_1.3.1            tools_4.2.1         utf8_1.2.2          R6_2.5.1            DBI_1.1.3           colorspace_2.0-3    withr_2.5.0         tidyselect_1.2.0   
