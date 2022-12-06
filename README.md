@@ -16,6 +16,56 @@ National Marine Fisheries Service,
 National Oceanic and Atmospheric Administration,  
 Seattle, WA 98195
 
+# Table of Contents
+
+    ## Warning in get_source(x, text_field = text_field, docid_field = docid_field, : Unsupported extension 'rmd' of file ./README.Rmd treating as plain text.
+
+-   toc \<- toc\[\[1\]\]\[stri_detect_fixed(toc\[\[1\]\], ” -
+    “)\](#toc-\<–toc\[\[1\]\]\[stri_detect_fixed(toc\[\[1\]\],-““)\])
+
+-   Cite this Data(#cite-this-data)
+
+-   Metadata(#metadata)
+
+-   Data Description(#data-description)
+
+-   Bottom Trawl Surveys and Regions(#bottom-trawl-surveys-and-regions)
+
+-   User Resources(#user-resources)
+
+-   Access Constraints(#access-constraints)
+
+-   Table short metadata(#table-short-metadata)
+
+-   Column-level metadata(#column-level-metadata)
+
+-   Access the Data(#access-the-data)
+
+-   Access data interactively through the FOSS
+    platform(#access-data-interactively-through-the-foss-platform)
+
+    -   Connect to the API(#connect-to-the-api)
+
+    -   Select all data(#select-all-data)
+
+    -   Subset data(#subset-data)
+
+-   Access data via Oracle(#access-data-via-oracle)
+
+    -   Connect to Oracle from R(#connect-to-oracle-from-r)
+
+    -   Select all data(#select-all-data)
+
+    -   Subset data(#subset-data)
+
+-   Suggestions and Comments(#suggestions-and-comments)
+
+-   R Version Metadata(#r-version-metadata)
+
+-   NOAA README(#noaa-readme)
+
+-   NOAA License(#noaa-license)
+
 # Cite this Data
 
 > NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom
@@ -90,7 +140,7 @@ creation of annual stock assessments.
     -   Triennial (1990s)/Biennial since 2001 in odd years
     -   Stratified Random Survey Design
 
-## User Resources:
+## User Resources
 
 -   [AFSC’s Resource Assessment and Conservation Engineering
     Division](https://www.fisheries.noaa.gov/about/resource-assessment-and-conservation-engineering-division).
@@ -105,7 +155,7 @@ creation of annual stock assessments.
 -   Learn more about other [Research Surveys conducted at
     AFSC](https://www.fisheries.noaa.gov/alaska/ecosystems/alaska-fish-research-surveys).
 
-## Access Constraints:
+## Access Constraints
 
 There are no legal restrictions on access to the data. They reside in
 public domain and can be freely distributed.
@@ -208,7 +258,7 @@ For reference:
     ##   cols: 37
     ##   4.514 GB
 
-## Access data interactively through the [Fisheries One Stop Shop (FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:200:13045102793007:Mail:NO:::) platform
+## Access data interactively through the FOSS platform
 
 Select, filter, and package this and other NOAA Fisheries data from the
 [Fisheries One Stop Shop
@@ -220,10 +270,10 @@ A useful intro to using APIs in `R` can be found
 ### Connect to the API
 
 ``` r
-# install.packages(c("httr", "jsonlite"))
+ # install.packages(c("httr", "jsonlite"))
 library("httr")
 library("jsonlite")
-# link to the API
+ # link to the API
 api_link <- "https://origin-tst-ods-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/"
 ```
 
@@ -231,9 +281,9 @@ api_link <- "https://origin-tst-ods-st.fisheries.noaa.gov/ods/foss/afsc_groundfi
 
 ``` r
 res <- httr::GET(url = api_link)
-# res # Test connection
+ # res # Test connection
 data <- jsonlite::fromJSON(base::rawToChar(res$content))
-# names(data)
+ # names(data)
 knitr::kable(head(data$items, 3)) 
 ```
 
@@ -253,13 +303,13 @@ x <- x[,c("srvy", "year", "stratum", "station", "vessel_name", "latitude_dd", "l
 knitr::kable(head(x, 3))
 ```
 
-## Access data via `Oracle` (AFSC-only)
+## Access data via Oracle
 
 If the user has access to the AFSC `Oracle` database, the user can use
 `SQL developer` to view and pull the FOSS public data directly from the
 `RACEBASE_FOSS` `Oracle` schema.
 
-### Connect to `Oracle` from R
+### Connect to Oracle from R
 
 Many users will want to access the data from `Oracle` using `R`. The
 user will need to install the `RODBC` `R` package and ask OFIS (IT)
@@ -272,7 +322,7 @@ scripts that may be intentionally or unintentionally shared with others.
 
 ``` r
 library("RODBC")
-# Define RODBC connection to ORACLE
+ # Define RODBC connection to ORACLE
 channel<-odbcConnect(dsn = "AFSC",
                      uid = "USERS_USERNAME", # change
                      pwd = "USERS_PASSWORD", # change
@@ -286,7 +336,7 @@ pop-ups will appear on the screen asking for the username and password.
 ``` r
 library("RODBC")
 library("getPass")
-# Define RODBC connection to ORACLE
+ # Define RODBC connection to ORACLE
 get.connected <- function(schema='AFSC'){(echo=FALSE)
   username <- getPass(msg = "Enter your ORACLE Username: ")
   password <- getPass(msg = "Enter your ORACLE Password: ")
@@ -302,9 +352,9 @@ Once connected, pull and save (if needed) the table into the `R`
 environment.
 
 ``` r
-# pull table from oracle into R environment
+ # pull table from oracle into R environment
 a <- RODBC::sqlQuery(channel, "SELECT * FROM RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED")
-# Save table to local directory
+ # Save table to local directory
 write.csv(x = a, file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED.csv")
 ```
 
@@ -315,13 +365,13 @@ To pull a small subset of the data (especially since files like
 following code. Here, we are pulling EBS Pacific cod from 2010 - 2021:
 
 ``` r
-# Pull data
+ # Pull data
 a <- RODBC::sqlQuery(channel, "SELECT * FROM RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED 
 WHERE SRVY = 'EBS' 
 AND COMMON_NAME = 'Pacific cod' 
 AND YEAR >= 2010 
 AND YEAR < 2021")
-# Save table to local directory
+ # Save table to local directory
 write.csv(x = a, file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED-ebs_pcod_2010-2020.csv")
 ```
 
@@ -337,7 +387,7 @@ Stop Shop
 (FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:200:13045102793007:Mail:NO:::)
 platform managers.
 
-# `R` Version Metadata
+## R Version Metadata
 
 This data was compiled using the below `R` environment and `R` packages:
 
@@ -358,13 +408,13 @@ sessionInfo()
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ##  [1] getPass_0.2-2  jsonlite_1.8.3 httr_1.4.4     knitr_1.41     badger_0.2.2   RODBC_1.3-19   stringr_1.4.1  taxize_0.9.100 janitor_2.1.0  here_1.0.1     rmarkdown_2.18 readr_2.1.3    magrittr_2.0.3 dplyr_1.0.10   tidyr_1.2.1   
+    ##  [1] stringi_1.7.8  getPass_0.2-2  jsonlite_1.8.3 httr_1.4.4     knitr_1.41     badger_0.2.2   RODBC_1.3-19   stringr_1.4.1  taxize_0.9.100 janitor_2.1.0  here_1.0.1     rmarkdown_2.18 readr_2.1.3    magrittr_2.0.3 dplyr_1.0.10   tidyr_1.2.1   
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] nlme_3.1-157        fs_1.5.2            usethis_2.1.6       bold_1.2.0          lubridate_1.9.0     bit64_4.0.5         RColorBrewer_1.1-3  rprojroot_2.0.3     worrms_0.4.2        gh_1.3.1            tools_4.2.1         utf8_1.2.2          R6_2.5.1            DBI_1.1.3           colorspace_2.0-3    withr_2.5.0         tidyselect_1.2.0   
     ## [18] bit_4.0.5           curl_4.3.3          compiler_4.2.1      ritis_1.0.0         cli_3.4.1           xml2_1.3.3          triebeard_0.3.0     scales_1.2.1        askpass_1.1         yulab.utils_0.0.5   digest_0.6.30       solrium_1.2.0       pkgconfig_2.0.3     htmltools_0.5.3     highr_0.9           fastmap_1.1.0       rlang_1.0.6        
-    ## [35] readxl_1.4.1        rstudioapi_0.14     httpcode_0.3.0      generics_0.1.3      zoo_1.8-11          vroom_1.6.0         credentials_1.3.2   Rcpp_1.0.9          munsell_0.5.0       fansi_1.0.3         ape_5.6-2           lifecycle_1.0.3     stringi_1.7.8       yaml_2.3.6          snakecase_0.11.0    plyr_1.8.8          grid_4.2.1         
-    ## [52] parallel_4.2.1      crayon_1.5.2        lattice_0.20-45     conditionz_0.1.0    hms_1.1.2           sys_3.4.1           pillar_1.8.1        uuid_1.1-0          codetools_0.2-18    crul_1.3            glue_1.6.2          evaluate_0.18       data.table_1.14.6   BiocManager_1.30.19 vctrs_0.5.1         tzdb_0.3.0          urltools_1.7.3     
+    ## [35] readxl_1.4.1        rstudioapi_0.14     httpcode_0.3.0      generics_0.1.3      zoo_1.8-11          vroom_1.6.0         credentials_1.3.2   Rcpp_1.0.9          munsell_0.5.0       fansi_1.0.3         ape_5.6-2           lifecycle_1.0.3     yaml_2.3.6          snakecase_0.11.0    plyr_1.8.8          grid_4.2.1          parallel_4.2.1     
+    ## [52] crayon_1.5.2        lattice_0.20-45     conditionz_0.1.0    hms_1.1.2           sys_3.4.1           pillar_1.8.1        uuid_1.1-0          codetools_0.2-18    readtext_0.81       crul_1.3            glue_1.6.2          evaluate_0.18       data.table_1.14.6   BiocManager_1.30.19 vctrs_0.5.1         tzdb_0.3.0          urltools_1.7.3     
     ## [69] foreach_1.5.2       cellranger_1.1.0    openssl_2.0.4       gtable_0.3.1        purrr_0.3.5         reshape_0.8.9       assertthat_0.2.1    ggplot2_3.4.0       xfun_0.35           gitcreds_0.1.2      gert_1.9.1          dlstats_0.1.5       tibble_3.1.8        iterators_1.0.14    rvcheck_0.2.1       timechange_0.1.1    ellipsis_0.3.2
 
 ## NOAA README
