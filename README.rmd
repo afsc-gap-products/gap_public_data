@@ -1,7 +1,7 @@
 ---
 output: 
   md_document: 
-    variant: markdown_github
+    variant: gfm
 ---
 
 ```{r setup, include=FALSE}
@@ -48,7 +48,7 @@ Seattle, WA 98195
 
 > NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss, Accessed mm/dd/yyyy
 
-These data were last ran and pushed to the AFSC oracle on `r format(x = as.Date(strsplit(x = dir_out, split = "/", fixed = TRUE)[[1]][3]), "%B %d, %Y")`. This is not the date that these data were pulled into FOSS and the FOSS dataset may be behind. 
+These data were last ran and pushed to the AFSC oracle on **`r format(x = as.Date(strsplit(x = dir_out, split = "/", fixed = TRUE)[[1]][3]), "%B %d, %Y")`**. *This is not the date that these data were pulled into FOSS and the FOSS dataset may be behind.* 
 
 # Metadata
 

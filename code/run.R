@@ -62,7 +62,7 @@ source('./code/analysis.R')
 
 # Update README ----------------------------------------------------------------
 
-dir_out <- "./output/2022-12-01/"
+dir_out <- "./output/2022-11-30/"
 
 rmarkdown::render(paste0("./README.Rmd"),
                   output_dir = "./",
