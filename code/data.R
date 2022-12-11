@@ -25,12 +25,13 @@ for (i in 1:length(a)){
 
 # Now available on the RACEBASE_FOSS oracle schema
 
-load(file = "./data/spp_info.rdata")
+load(file = paste0("./data/spp_info",option,".rdata"))
 load(file = "./data/taxon_confidence.rdata")
 
 # Wrangle Data -----------------------------------------------------------------
 
 ## Species info ----------------------------------------------------------------
+
 # if (FALSE) { # if itis/worms codes have not been run yet
 #   spp_info <-
 #     # dplyr::left_join(
@@ -170,6 +171,7 @@ catch_haul_cruises <-
                     species_code, weight, number_fish), 
     by = c("hauljoin", "cruisejoin", "region", "vessel", "haul"))
 
+## taxon confidence ------------------------------------------------------------
 
 # fill in tax_conf with, if missing, the values from the year before
 comb1 <- unique(catch_haul_cruises[, c("SRVY", "year")] )

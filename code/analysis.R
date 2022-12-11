@@ -22,7 +22,7 @@ for (i in 1:length(surveys$SRVY)) {
   cpue_station_0filled <- 
     tidyr::crossing( # create all possible haul event x species_code combinations
       temp %>% 
-        dplyr::select(SRVY, hauljoin, cruisejoin) %>% # unique haul event
+        dplyr::select(SRVY, hauljoin) %>% # unique haul event
         dplyr::distinct(),
       temp %>%
         dplyr::distinct(., species_code)) %>% # unique species_codes
@@ -31,7 +31,7 @@ for (i in 1:length(surveys$SRVY)) {
       y = temp %>%
         dplyr::select(SRVY, cruisejoin, hauljoin, species_code,
                       distance_fished, net_width, weight, number_fish),
-      by = c("species_code", "hauljoin", "cruisejoin", "SRVY")) %>%
+      by = c("species_code", "hauljoin", "SRVY")) %>%
     # summarize weight and count - already summarized catch data earlier so this step is now obsolete, but wouldnt hurt anything
     # dplyr::group_by(SRVY, hauljoin, cruisejoin, species_code, 
     #                 distance_fished, net_width) %>% 
@@ -68,10 +68,8 @@ lookup <- c(station = "stationid",
             vessel_id = "vessel",
             taxon_confidence = "tax_conf",
             date_time = "start_time", 
-            # latitude_dd = "start_latitude", 
-            # longitude_dd = "start_longitude", 
-            latitude_dd_start = "start_latitude", 
-            longitude_dd_start = "start_longitude", 
+            latitude_dd_start = "start_latitude", # latitude_dd = "start_latitude", 
+            longitude_dd_start = "start_longitude",  # longitude_dd = "start_longitude", 
             latitude_dd_end = "end_latitude", 
             longitude_dd_end = "end_longitude", 
             bottom_temperature_c = "gear_temperature", 
@@ -206,7 +204,6 @@ readr::write_csv(x = column_metadata, file = paste0(dir_out, "column_metadata.cs
 
 # setdiff(as.character(column_metadata$`Column name from data`), names(cpue_station_0filled))
 # setdiff(names(cpue_station_0filled), as.character(column_metadata$`colname`))
-
 
 table_metadata <- paste0("This dataset includes zero-filled (presence and absence) observations and catch-per-unit-effort (CPUE) estimates for most identified species at a standard set of stations in the Northern Bering Sea (NBS), Eastern Bering Sea (EBS), Bering Sea Slope (BSS), Gulf of Alaska (GOA), and Aleutian Islands (AI) Surveys conducted by the esource Assessment and Conservation Engineering Division (RACE) Groundfish Assessment Program (GAP) of the Alaska Fisheries Science Center (AFSC). 
 There are no legal restrictions on access to the data. 
