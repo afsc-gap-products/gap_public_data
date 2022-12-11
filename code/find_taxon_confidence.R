@@ -24,10 +24,12 @@
       tidyr::pivot_longer(cols = starts_with("x"), 
                           names_to = "year", 
                           values_to = "tax_conf") %>% 
-      dplyr::mutate(year = 
-                      as.numeric(gsub(pattern = "[a-z]", 
+      dplyr::mutate(year = gsub(pattern = "[a-z]", 
                                       replacement = "", 
-                                      x = year))) %>% 
+                                      x = year), 
+                    year = gsub(pattern = "_0", replacement = "", 
+                                x = year), 
+                    year = as.numeric(year)) %>% 
       dplyr::distinct()
     
     cc <- strsplit(x = gsub(x = gsub(x = a[i], 
@@ -69,8 +71,7 @@
   # 3 – Low confidence.  Taxonomy is incompletely known, or reliable field  
   #     identification characteristics are unknown.
   
-  tax_conf <- SameColNames(df.ls) %>% 
-    dplyr::rename(SRVY = srvy) %>%
+  tax_conf <- dplyr::bind_rows(df.ls) %>% 
     dplyr::mutate(tax_conf0 = tax_conf, 
                   tax_conf = dplyr::case_when(
                     tax_conf == 1 ~ "High",

@@ -53,7 +53,9 @@ load(file = "./data/taxon_confidence.rdata")
 #       worms = NA) # made if taxize0 == TRUE
 # } else {
 spp_info <- spp_info %>% 
-  dplyr::select(-notes_itis, -notes_worms)
+  dplyr::select(-notes_itis, -notes_worms) %>% 
+  dplyr::mutate(itis = as.numeric(itis), 
+                worms = as.numeric(worms))
 # }
 
 
@@ -145,85 +147,120 @@ haul <- haul0 %>%
 catch <- catch0 %>% 
   dplyr::group_by(region, cruisejoin, hauljoin, vessel, haul, species_code) %>% 
   dplyr::summarise(weight = sum(weight, na.rm = TRUE), 
-                   number_fish = sum(number_fish, na.rm = TRUE))
+                   number_fish = sum(number_fish, na.rm = TRUE)) %>% 
+  dplyr::ungroup()
 
 # dim(catch) # 2021
 # [1] 1613670       8
 
-## catch_haul_cruises ----------------------------------------------------------
+## haul_cruises_vess ----------------------------------------------------------
 
-catch_haul_cruises <-
-  dplyr::inner_join(
-    x = cruises %>% 
-      dplyr::select(cruisejoin, vessel, region,  
-                    survey_definition_id, SRVY, SRVY_long, survey_name, year, cruise),  
-    y = haul %>% 
-      dplyr::select(cruisejoin, vessel, region, 
-                    hauljoin, stationid, stratum, haul, start_time, 
-                    start_latitude, start_longitude, end_latitude, end_longitude, 
-                    bottom_depth, gear_temperature, surface_temperature, performance, 
-                    duration, distance_fished, net_width, net_height), 
-    by = c("cruisejoin", "vessel", "region")) %>% 
-  dplyr::left_join(
-    x= ., 
-    y = catch %>% 
-      dplyr::select(cruisejoin, hauljoin, region, vessel, haul, 
-                    species_code, weight, number_fish), 
-    by = c("hauljoin", "cruisejoin", "region", "vessel", "haul"))
-
-## taxon confidence ------------------------------------------------------------
-
-# fill in tax_conf with, if missing, the values from the year before
-comb1 <- unique(catch_haul_cruises[, c("SRVY", "year")] )
-comb2 <- unique(tax_conf[, c("SRVY", "year")])
-# names(comb2) <- names(comb1) <- c("SRVY", "year")
-comb1$comb <- paste0(comb1$SRVY, "_", comb1$year)
-comb2$comb <- paste0(comb2$SRVY, "_", comb2$year)
-comb <- strsplit(x = setdiff(comb1$comb, comb2$comb), split = "_")
-
-for (i in 1:length(comb)) {
-  srvy0 <- comb[[i]][1]
-  year0 <- as.numeric(comb[[i]][2])
-  
-  yr_prev <- tax_conf %>% 
-    dplyr::filter(SRVY == srvy0)
-  
-  # if there is one entry for all years of the survey
-  if (length(unique(yr_prev$year)) == 1) {
-    if (is.na(unique(yr_prev$year))) {
-      tax_conf <- dplyr::bind_rows(tax_conf, 
-                                 yr_prev %>% 
-                                   dplyr::mutate(year = year0))
-    }
-  } else {
-  
-  # missing year - find closest previous year
-    tax_conf <- dplyr::bind_rows(tax_conf, 
-                                yr_prev %>% 
-      dplyr::filter(year < year0) %>% 
-      dplyr::filter(year == max(year, na.rm = TRUE)) %>% 
-      dplyr::mutate(year = year0) )
-  }
-
-}
-
-catch_haul_cruises <- catch_haul_cruises %>% 
-  {if(taxize0) dplyr::left_join(x = ., 
-                   y = tax_conf %>% 
-                     dplyr::select(year, tax_conf, SRVY, species_code), 
-                   by = c("species_code", "SRVY", "year")) else .}  %>%
+haul_cruises_vess <- dplyr::inner_join(
+  x = cruises %>% 
+    dplyr::select(cruisejoin, vessel, region,  
+                  survey_definition_id, SRVY, SRVY_long, survey_name, year, cruise),  
+  y = haul %>% 
+    dplyr::select(cruisejoin, vessel, region, haul_type, 
+                  hauljoin, stationid, stratum, haul, start_time, 
+                  start_latitude, start_longitude, end_latitude, end_longitude, 
+                  bottom_depth, gear_temperature, surface_temperature, performance, 
+                  duration, distance_fished, net_width, net_height), 
+  by = c("cruisejoin", "vessel", "region")) %>% 
   dplyr::left_join(
     x = .,
     y = vessels0 %>%
       dplyr::select(vessel_id, name) %>%
       dplyr::rename(vessel_name = name) %>% 
       dplyr::mutate(vessel_name = stringr::str_to_title(vessel_name)), 
-    by = c("vessel" = "vessel_id")) %>%
-  dplyr::left_join(
-    x = .,
-    y = spp_info %>%
-      dplyr::select(species_code, scientific_name, common_name, itis, worms),
-    by = "species_code")
+    by = c("vessel" = "vessel_id"))
 
-# dim(catch_haul_cruises) # 2021
-# [1] 831342     33 
+# Check 
+# a <- unique(haul_cruises_vess[,c("SRVY", "year", "stationid", "haul_type")]); table(a$year, a$SRVY, a$haul_type)
+
+## catch_haul_cruises_vess -----------------------------------------------------
+
+# Essentially our presence-only data
+catch_haul_cruises_vess <- dplyr::left_join(
+  x = haul_cruises_vess, 
+  y = catch %>% 
+    dplyr::select(hauljoin, #cruisejoin, region, vessel, haul, 
+                  species_code, weight, number_fish), 
+  by = c("hauljoin"))
+
+# catch_haul_cruises <-
+#   dplyr::inner_join(
+#     x = cruises %>% 
+#       dplyr::select(cruisejoin, vessel, region,  
+#                     survey_definition_id, SRVY, SRVY_long, survey_name, year, cruise),  
+#     y = haul %>% 
+#       dplyr::select(cruisejoin, vessel, region, 
+#                     hauljoin, stationid, stratum, haul, start_time, 
+#                     start_latitude, start_longitude, end_latitude, end_longitude, 
+#                     bottom_depth, gear_temperature, surface_temperature, performance, 
+#                     duration, distance_fished, net_width, net_height), 
+#     by = c("cruisejoin", "vessel", "region")) %>% 
+#   dplyr::left_join(
+#     x= ., 
+#     y = catch %>% 
+#       dplyr::select(cruisejoin, hauljoin, region, vessel, haul, 
+#                     species_code, weight, number_fish), 
+#     by = c("hauljoin", "cruisejoin", "region", "vessel", "haul"))
+
+## taxon confidence ------------------------------------------------------------
+
+# fill in tax_conf with, if missing, the values from the year before
+comb1 <- unique(catch_haul_cruises_vess[, c("SRVY", "year")] )
+comb2 <- unique(tax_conf[, c("SRVY", "year")])
+# names(comb2) <- names(comb1) <- c("SRVY", "year")
+comb1$comb <- paste0(comb1$SRVY, "_", comb1$year)
+comb2$comb <- paste0(comb2$SRVY, "_", comb2$year)
+comb <- strsplit(x = setdiff(comb1$comb, comb2$comb), split = "_")
+
+tax_conf <- dplyr::bind_rows(
+  tax_conf, 
+  tax_conf %>% 
+    dplyr::filter(
+      SRVY %in% sapply(comb,"[[",1) &
+        year == 2021) %>% 
+    dplyr::mutate(year = 2022))
+
+# 
+# for (i in 1:length(comb)) {
+#   srvy0 <- comb[[i]][1]
+#   year0 <- as.numeric(comb[[i]][2])
+# 
+#   yr_prev <- tax_conf %>%
+#     dplyr::filter(SRVY == srvy0)
+# 
+#   # if there is one entry for all years of the survey
+#   if (length(unique(yr_prev$year)) == 1) {
+#     if (is.na(unique(yr_prev$year))) {
+#       tax_conf <- dplyr::bind_rows(tax_conf,
+#                                  yr_prev %>%
+#                                    dplyr::mutate(year = year0))
+#     }
+#   } else {
+# 
+#   # missing year - find closest previous year
+#     tax_conf <- dplyr::bind_rows(tax_conf,
+#                                 yr_prev %>%
+#       dplyr::filter(year < year0) %>%
+#       dplyr::filter(year == max(year, na.rm = TRUE)) %>%
+#       dplyr::mutate(year = year0) )
+#   }
+# 
+# }
+
+
+# a <- tax_conf  %>%
+#   dplyr::filter(!is.na(year)) %>%
+#   dplyr::distinct() %>%
+#   dplyr::mutate(case = paste0(year, SRVY, species_code)) %>%
+#   dplyr::select(case)
+# 
+# a <- data.frame(table(a)) %>%
+#   dplyr::filter(Freq > 1) %>%
+#   dplyr::arrange(-Freq)
+# 
+# a
+  

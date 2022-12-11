@@ -64,12 +64,12 @@ source('./code/analysis.R')
 
 # Update README ----------------------------------------------------------------
 
-dir_out <- "./output/2022-11-30/"
+dir_out <- "./output/2022-12-10/"
 load(paste0(dir_out, "cpue_station_0filled.RData"))
 
 rmarkdown::render(paste0("./README.Rmd"),
                   output_dir = "./",
-                  output_file = paste0("sREADME.md"))
+                  output_file = paste0("README.md"))
 
 # Share table to oracle --------------------------------------------------------
 
