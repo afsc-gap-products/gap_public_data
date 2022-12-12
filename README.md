@@ -8,7 +8,11 @@
 
 <div class="column" width="20%">
 
-![Emily Markowitz](https://github.com/emilymarkowitz-noaa.png)
+<figure>
+<img src="https://github.com/emilymarkowitz-noaa.png"
+style="width:20.0%" alt="Emily Markowitz" />
+<figcaption aria-hidden="true">Emily Markowitz</figcaption>
+</figure>
 
 </div>
 

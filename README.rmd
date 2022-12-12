@@ -30,7 +30,7 @@ for (p in PKG) {
 :::::::::::::: {.columns}
 ::: {.column width="20%"}
 
-![Emily Markowitz](https://github.com/emilymarkowitz-noaa.png)
+![Emily Markowitz](https://github.com/emilymarkowitz-noaa.png){width="20%"}
 
 :::
 ::: {.column width="5%"}
