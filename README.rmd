@@ -27,20 +27,6 @@ for (p in PKG) {
 
 ## This code is primarily maintained by:
 
-:::::::::::::: {.columns}
-::: {.column width="5%"}
-
-![Emily Markowitz](https://github.com/emilymarkowitz-noaa.png)
-
-:::
-::: {.column width="5%"}
-
-\
-
-:::
-::: {.column width="80%"}
-
-
 **Emily Markowitz** (Emily.Markowitz AT noaa.gov; [\@EmilyMarkowitz-NOAA](https://github.com/EmilyMarkowitz-NOAA))  
 Research Fisheries Biologist  
 *Bering Sea Groundfish Survey Team*
@@ -49,9 +35,6 @@ Alaska Fisheries Science Center,
 National Marine Fisheries Service,  
 National Oceanic and Atmospheric Administration,  
 Seattle, WA 98195
-
-:::
-::::::::::::::
 
 ## Table of contents
 

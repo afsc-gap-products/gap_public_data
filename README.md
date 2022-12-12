@@ -4,22 +4,6 @@
 
 ## This code is primarily maintained by:
 
-<div class="columns">
-
-<div class="column" width="5%">
-
-![Emily Markowitz](https://github.com/emilymarkowitz-noaa.png)
-
-</div>
-
-<div class="column" width="5%">
-
-  
-
-</div>
-
-<div class="column" width="80%">
-
 **Emily Markowitz** (Emily.Markowitz AT noaa.gov;
 [@EmilyMarkowitz-NOAA](https://github.com/EmilyMarkowitz-NOAA))  
 Research Fisheries Biologist  
@@ -29,10 +13,6 @@ Alaska Fisheries Science Center,
 National Marine Fisheries Service,  
 National Oceanic and Atmospheric Administration,  
 Seattle, WA 98195
-
-</div>
-
-</div>
 
 ## Table of contents
 
