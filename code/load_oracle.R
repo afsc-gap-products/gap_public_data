@@ -69,7 +69,7 @@ RODBC::sqlQuery(channel = channel_foss,
 
 ## spp info --------------------------------------------------------------------
 print("spp info")
-load(file = "./data/spp_info.rdata")
+load(file = "./data/spp_info3.rdata")
 AFSC_ITIS_WORMS <- spp_info
 RODBC::sqlDrop(channel = channel_foss, 
                sqtable = 'AFSC_ITIS_WORMS')
