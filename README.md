@@ -6,13 +6,9 @@
 
 <div class="columns">
 
-<div class="column" width="20%">
+<div class="column" width="5%">
 
-<figure>
-<img src="https://github.com/emilymarkowitz-noaa.png" style="width:5.0%"
-alt="Emily Markowitz" />
-<figcaption aria-hidden="true">Emily Markowitz</figcaption>
-</figure>
+![Emily Markowitz](https://github.com/emilymarkowitz-noaa.png)
 
 </div>
 
@@ -22,7 +18,7 @@ alt="Emily Markowitz" />
 
 </div>
 
-<div class="column" width="75%">
+<div class="column" width="80%">
 
 **Emily Markowitz** (Emily.Markowitz AT noaa.gov;
 [@EmilyMarkowitz-NOAA](https://github.com/EmilyMarkowitz-NOAA))  

@@ -28,9 +28,9 @@ for (p in PKG) {
 ## This code is primarily maintained by:
 
 :::::::::::::: {.columns}
-::: {.column width="20%"}
+::: {.column width="5%"}
 
-![Emily Markowitz](https://github.com/emilymarkowitz-noaa.png){width="5%"}
+![Emily Markowitz](https://github.com/emilymarkowitz-noaa.png)
 
 :::
 ::: {.column width="5%"}
@@ -38,7 +38,7 @@ for (p in PKG) {
 \
 
 :::
-::: {.column width="75%"}
+::: {.column width="80%"}
 
 
 **Emily Markowitz** (Emily.Markowitz AT noaa.gov; [\@EmilyMarkowitz-NOAA](https://github.com/EmilyMarkowitz-NOAA))  
