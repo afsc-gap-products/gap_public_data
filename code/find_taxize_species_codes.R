@@ -420,7 +420,7 @@ known_worms <- list( # will have to check these each year
   'Themisto' = c(101800, more_than_one_opt),
   "Velella" = c(117200, more_than_one_opt),
   'Vulcanella' = c(170325, paste0(more_than_one_opt, "Could also be 602186 ")),
-  "Weberella" = c(132059 more_than_one_opt),
+  "Weberella" = c(132059, more_than_one_opt),
   'Yoldia hyperborea' = c(141989, more_than_one_opt),
   # "Iphinoe" = 110391, 
   # # '' = c(, more_than_one_opt), 

@@ -79,6 +79,30 @@
                     tax_conf == 3 ~ "Low", 
                     TRUE ~ "Unassessed"))
   
+  # fill in tax_conf with, if missing, the values from the year before
+  
+  cruises <- read.csv("./data/oracle/v_cruises.csv") %>% 
+    janitor::clean_names() %>% 
+    dplyr::left_join(
+      x = surveys, # a data frame of all surveys and survey_definition_ids we want included in the public data, created in the run.R script
+      y = ., 
+      by  = c("survey_definition_id"))
+  comb1 <- unique(cruises[, c("SRVY", "year")] )
+  comb2 <- unique(tax_conf[, c("SRVY", "year")])
+  # names(comb2) <- names(comb1) <- c("SRVY", "year")
+  comb1$comb <- paste0(comb1$SRVY, "_", comb1$year)
+  comb2$comb <- paste0(comb2$SRVY, "_", comb2$year)
+  comb <- strsplit(x = setdiff(comb1$comb, comb2$comb), split = "_")
+  
+  tax_conf <- dplyr::bind_rows(
+    tax_conf, 
+    tax_conf %>% 
+      dplyr::filter(
+        SRVY %in% sapply(comb,"[[",1) &
+          year == 2021) %>% 
+      dplyr::mutate(year = 2022))
+  
+  
   readr::write_csv(x = tax_conf, 
                    file = paste0(getwd(), "/data/taxon_confidence.csv"))
   

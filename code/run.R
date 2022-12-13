@@ -34,7 +34,7 @@ surveys <-
                            "Aleutian Islands", 
                            "Bering Sea Slope") )
 
-taxize0 <- FALSE# incorporate species codes from databases
+taxize0 <- FALSE # incorporate species codes from databases
 
 # Support scripts --------------------------------------------------------------
 
@@ -48,10 +48,7 @@ if (taxize0) { # only if you need to rerun {taxize} stuff - very time intensive!
 }
 # taxize0 <- TRUE
 source('./code/data.R')
-
-# Run analysis -----------------------------------------------------------------
-
-source('./code/analysis.R')
+source('./code/calc_cpue.R')
 
 # Check work -------------------------------------------------------------------
 
@@ -74,5 +71,4 @@ rmarkdown::render(paste0("./README.Rmd"),
 # Share table to oracle --------------------------------------------------------
 
 # cpue_station <- readr::read_csv(file = paste0("./output/2022-06-10/cpue_station.csv"))
-source("./code/load_oracle.R")
-
+source("./code/load_oracle.R") 

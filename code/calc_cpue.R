@@ -15,18 +15,18 @@ cpue_station_0filled_comb <- data.frame()
 for (i in 1:length(surveys$SRVY)) {
   
   # subset presence-only data to survey
-temp <- catch_haul_cruises_vess %>% 
-  dplyr::filter(SRVY == surveys$SRVY[i]) 
-
-cpue_station_0filled_comb <- 
-  tidyr::crossing( # create all possible haul event x species_code combinations
-    temp %>% 
-      dplyr::select(SRVY, hauljoin) %>% # unique haul event
-      dplyr::distinct(),
-    temp %>%
-      dplyr::distinct(., species_code) %>%  # unique species_codes
-      dplyr::distinct()) %>% 
-  dplyr::bind_rows(cpue_station_0filled_comb, .)
+  temp <- catch_haul_cruises_vess %>% 
+    dplyr::filter(SRVY == surveys$SRVY[i]) 
+  
+  cpue_station_0filled_comb <- 
+    tidyr::crossing( # create all possible haul event x species_code combinations
+      temp %>% 
+        dplyr::select(SRVY, hauljoin) %>% # unique haul event
+        dplyr::distinct(),
+      temp %>%
+        dplyr::distinct(., species_code) %>%  # unique species_codes
+        dplyr::distinct()) %>% 
+    dplyr::bind_rows(cpue_station_0filled_comb, .)
 }
 
 # # Make sure that there are no NAs
@@ -139,20 +139,20 @@ lookup <- c(station = "stationid",
             depth_m = "bottom_depth")
 
 cpue_station_0filled <- cpue_station_0filled %>%
-  dplyr::mutate( # calculates CPUE for each species group by station
-    area_swept_ha = distance_fished * (net_width/10), # both in units of km
-    cpue_kgha = weight/area_swept_ha, 
-    cpue_noha = ifelse(weight > 0 & number_fish == 0, 
-                       NA, (number_fish/area_swept_ha)), 
-    cpue_kgha = ifelse(is.na(cpue_kgha), 0, cpue_kgha), 
-    cpue_noha = ifelse(is.na(cpue_noha), 0, cpue_noha)) %>%
   dplyr::rename(dplyr::any_of(lookup)) %>% 
-  dplyr::mutate(cpue_kgkm2 = cpue_kgha * 100, 
-                cpue_nokm2 = cpue_noha * 100, 
-                # cpue_no1000km2 = cpue_nokm2 * 1000, 
-                # cpue_kg1000km2 = cpue_kgkm2 * 1000, 
-                dplyr::across(dplyr::starts_with("cpue_"), round, digits = 6), 
-                weight_kg = round(weight_kg, digits = 6)) %>% 
+  dplyr::mutate( # calculates CPUE for each species group by station
+    area_swept_ha = distance_fished_km * (net_width_m/10), # both in units of km
+    cpue_kgha = weight_kg/area_swept_ha, 
+    cpue_noha = ifelse(weight_kg > 0 & count == 0, 
+                       NA, (count/area_swept_ha)), 
+    cpue_kgha = ifelse(is.na(cpue_kgha), 0, cpue_kgha), 
+    cpue_noha = ifelse(is.na(cpue_noha), 0, cpue_noha), 
+    cpue_kgkm2 = cpue_kgha * 100, 
+    cpue_nokm2 = cpue_noha * 100, 
+    # cpue_no1000km2 = cpue_nokm2 * 1000, 
+    # cpue_kg1000km2 = cpue_kgkm2 * 1000, 
+    dplyr::across(dplyr::starts_with("cpue_"), round, digits = 6), 
+    weight_kg = round(weight_kg, digits = 6)) %>% 
   dplyr::select(any_of(
     c(as.character(expression(
       year, srvy, survey, survey_id, cruise, haul, hauljoin, stratum, station, vessel_name, vessel_id, # survey data
@@ -216,6 +216,21 @@ cpue_station_0filled <- cpue_station_0filled %>%
 
 names(cpue_station_0filled) <- stringr::str_to_upper(names(cpue_station_0filled))
 
+
+# names(column_metadata) <- c("Column name from data", "Descriptive Column Name", "Units", "Description")
+
+
+# make data NOT 0-filled -------------------------------------------------------
+
+cpue_station <- cpue_station_0filled 
+
+cpue_station <- cpue_station %>%
+  dplyr::filter(
+    !(COUNT %in% c(NA, 0) & # this will remove 0-filled values
+        WEIGHT_KG %in% c(NA, 0)) | 
+      !(CPUE_KGHA %in% c(NA, 0) & # this will remove usless 0-cpue values, 
+          CPUE_NOKM2 %in% c(NA, 0)) ) # which shouldn't happen, but good to double check
+
 # Metadata ---------------------------------------------------------------------
 
 column_metadata <- data.frame(matrix(
@@ -248,7 +263,7 @@ column_metadata <- data.frame(matrix(
     "longitude_dd_start", "Start Longitude (decimal degrees)", "decimal degrees, 1e-05 resolution", "Longitude (one hundred thousandth of a decimal degree) of the start of the haul. ", 
     
     "latitude_dd_start", "Start Latitude (decimal degrees)", "decimal degrees, 1e-05 resolution", "Latitude (one hundred thousandth of a decimal degree) of the start of the haul. ",
-
+    
     "longitude_dd_end", "End Longitude (decimal degrees)", "decimal degrees, 1e-05 resolution", "Longitude (one hundred thousandth of a decimal degree) of the end of the haul. ", 
     
     "latitude_dd_end", "End Latitude (decimal degrees)", "decimal degrees, 1e-05 resolution", "Latitude (one hundred thousandth of a decimal degree) of the end of the haul. ",
@@ -294,7 +309,7 @@ column_metadata <- data.frame(matrix(
     "area_swept_ha", "Area Swept (ha)", "hectares", "The area the net covered while the net was fishing (hectares), defined as the distance fished times the net width.", 
     
     "duration_hr", "Tow Duration (decimal hr)", "decimal hours", "This is the elapsed time between start and end of a haul (decimal hours).", 
-
+    
     "performance", "Haul Performance Code (rating)", "rating", paste0("This denotes what, if any, issues arose during the haul. For more information, review the [code books](", link_code_books ,")."), 
     
     "itis", "ITIS Taxonomic Serial Number", "ID code", paste0("Species code as identified in the Integrated Taxonomic Information System (https://itis.gov/). Codes were last updated ", file.info(paste0("./data/spp_info.csv"))$ctime, "."), 
@@ -321,58 +336,21 @@ The GitHub repository for the scripts that created this code can be found at ",l
 # The data from this dataset are shared on the Fisheries One Stop Stop (FOSS) platform (",link_foss,"). 
 # The GitHub repository for the scripts that created this code can be found at ",link_repo,
 # "These data were last updated ", file.info(paste0(dir_out, "cpue_station_0filled.csv"))$ctime, ".")
+
+# Save public data output ------------------------------------------------------
+
+
 table_metadata <- gsub(pattern = "\n", replacement = "", x = table_metadata)
 readr::write_lines(x = table_metadata, 
                    file = paste0(dir_out, "table_metadata.txt"))
 
-# names(column_metadata) <- c("Column name from data", "Descriptive Column Name", "Units", "Description")
+base::save(
+  cpue_station_0filled, 
+  column_metadata, 
+  table_metadata, 
+  file = paste0(dir_out, "cpue_station_0filled.RData"))
 
-
-# make data NOT 0-filled -------------------------------------------------------
-
-cpue_station <- cpue_station_0filled 
-
-cpue_station <- cpue_station %>%
-  dplyr::filter(
-    !(COUNT %in% c(NA, 0) & # this will remove 0-filled values
-        WEIGHT_KG %in% c(NA, 0)) | 
-      !(CPUE_KGHA %in% c(NA, 0) & # this will remove usless 0-cpue values, 
-          CPUE_NOKM2 %in% c(NA, 0)) ) # which shouldn't happen, but good to double check
-
-
-# Save public data output ------------------------------------------------------
-
-files_to_save <- list(#"cpue_station" = cpue_station, 
-                      # "cpue_station_0filled_clean" = cpue_station_0filled_clean,
-                      "cpue_station_0filled" = cpue_station_0filled)
-
-# base::save(cpue_station_0filled, 
-#            column_metadata, 
-#            table_metadata, 
-#            file = paste0(dir_out,"cpue_station_0filled.RData"))
-# 
-# base::save(cpue_station_0filled, 
-#            column_metadata, 
-#            table_metadata, 
-#            file = paste0(dir_out,"cpue_station_0filled.RData"))
-  table_metadata0 <- table_metadata
-
-for (i in 1:length(files_to_save)) {
-  
-  if (names(files_to_save)[i] != "cpue_station") {
-    table_metadata <- gsub(pattern = "non-zero (presence)", replacement = "all (presence and absence)", x = table_metadata0)
-  }
-  
-  x <- files_to_save[i][[1]]
-  
-  base::save(
-    x, 
-    column_metadata, 
-    table_metadata, 
-    file = paste0(dir_out, names(files_to_save)[i], ".RData"))
-  
-  readr::write_csv(
-    x = files_to_save[i][[1]], 
-    file = paste0(dir_out, names(files_to_save)[i], ".csv"), 
-    col_names = TRUE)
-}
+readr::write_csv(
+  x = cpue_station_0filled, 
+  file = paste0(dir_out, "cpue_station_0filled.csv"), 
+  col_names = TRUE)
