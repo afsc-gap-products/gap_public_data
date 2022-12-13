@@ -64,7 +64,7 @@ source('./code/analysis.R')
 
 # Update README ----------------------------------------------------------------
 
-dir_out <- "./output/2022-12-10/"
+dir_out <- "./output/2022-12-12/"
 load(paste0(dir_out, "cpue_station_0filled.RData"))
 
 rmarkdown::render(paste0("./README.Rmd"),
