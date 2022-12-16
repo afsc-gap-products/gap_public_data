@@ -93,7 +93,7 @@ for (i in 1:nrow(column_metadata0)) {
 
   RODBC::sqlQuery(channel = channel_foss,
                   query = paste0('comment on column RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED.',
-                                 short_colname,'" is \'',
+                                 short_colname,' is \'',
                                  desc, ". ", # remove markdown/html code
                                  gsub(pattern = "'", replacement ='\"',
                                       x = column_metadata0$desc[i]),'\';'))

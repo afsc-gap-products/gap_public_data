@@ -435,26 +435,23 @@ sessionInfo()
     ## Matrix products: default
     ## 
     ## locale:
-    ## [1] LC_COLLATE=English_United States.utf8  LC_CTYPE=English_United States.utf8    LC_MONETARY=English_United States.utf8 LC_NUMERIC=C                          
-    ## [5] LC_TIME=English_United States.utf8    
+    ## [1] LC_COLLATE=English_United States.utf8  LC_CTYPE=English_United States.utf8    LC_MONETARY=English_United States.utf8 LC_NUMERIC=C                           LC_TIME=English_United States.utf8    
     ## 
     ## attached base packages:
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ## [1] jsonlite_1.8.3 httr_1.4.4     knitr_1.41     badger_0.2.2  
+    ##  [1] jsonlite_1.8.3 httr_1.4.4     knitr_1.41     badger_0.2.2   stringr_1.4.1  taxize_0.9.100 janitor_2.1.0  here_1.0.1     rmarkdown_2.18 readr_2.1.3    magrittr_2.0.3 dplyr_1.0.10   tidyr_1.2.1   
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] tidyr_1.2.1         foreach_1.5.2       bold_1.2.0          here_1.0.1          assertthat_0.2.1    askpass_1.1         highr_0.9           BiocManager_1.30.19 rvcheck_0.2.1      
-    ## [10] yulab.utils_0.0.5   taxize_0.9.100      cellranger_1.1.0    yaml_2.3.6          pillar_1.8.1        lattice_0.20-45     glue_1.6.2          uuid_1.1-0          digest_0.6.30      
-    ## [19] RColorBrewer_1.1-3  snakecase_0.11.0    colorspace_2.0-3    htmltools_0.5.3     plyr_1.8.8          pkgconfig_2.0.3     httpcode_0.3.0      gitcreds_0.1.2      purrr_0.3.5        
-    ## [28] scales_1.2.1        tzdb_0.3.0          timechange_0.1.1    tibble_3.1.8        openssl_2.0.4       generics_0.1.3      ggplot2_3.4.0       usethis_2.1.6       ellipsis_0.3.2     
-    ## [37] janitor_2.1.0       credentials_1.3.2   cli_3.4.1           magrittr_2.0.3      crayon_1.5.2        readxl_1.4.1        evaluate_0.18       fs_1.5.2            fansi_1.0.3        
-    ## [46] nlme_3.1-157        xml2_1.3.3          gh_1.3.1            tools_4.2.1         data.table_1.14.6   hms_1.1.2           lifecycle_1.0.3     gert_1.9.1          stringr_1.4.1      
-    ## [55] munsell_0.5.0       RODBC_1.3-19        compiler_4.2.1      rlang_1.0.6         grid_4.2.1          conditionz_0.1.0    iterators_1.0.14    rstudioapi_0.14     sys_3.4.1          
-    ## [64] rmarkdown_2.18      gtable_0.3.1        codetools_0.2-18    DBI_1.1.3           reshape_0.8.9       curl_4.3.3          readtext_0.81       R6_2.5.1            zoo_1.8-11         
-    ## [73] lubridate_1.9.0     dplyr_1.0.10        fastmap_1.1.0       utf8_1.2.2          rprojroot_2.0.3     dlstats_0.1.5       readr_2.1.3         ape_5.6-2           stringi_1.7.8      
-    ## [82] parallel_4.2.1      crul_1.3            Rcpp_1.0.9          vctrs_0.5.1         tidyselect_1.2.0    xfun_0.35
+    ##  [1] foreach_1.5.2       bold_1.2.0          assertthat_0.2.1    askpass_1.1         BiocManager_1.30.19 rvcheck_0.2.1       highr_0.9           yulab.utils_0.0.5   yaml_2.3.6          pillar_1.8.1       
+    ## [11] lattice_0.20-45     glue_1.6.2          uuid_1.1-0          digest_0.6.30       RColorBrewer_1.1-3  snakecase_0.11.0    colorspace_2.0-3    htmltools_0.5.3     plyr_1.8.8          pkgconfig_2.0.3    
+    ## [21] httpcode_0.3.0      purrr_0.3.5         gitcreds_0.1.2      scales_1.2.1        tzdb_0.3.0          timechange_0.1.1    tibble_3.1.8        openssl_2.0.4       generics_0.1.3      ggplot2_3.4.0      
+    ## [31] usethis_2.1.6       ellipsis_0.3.2      credentials_1.3.2   cli_3.4.1           crayon_1.5.2        evaluate_0.18       fs_1.5.2            fansi_1.0.3         nlme_3.1-157        xml2_1.3.3         
+    ## [41] tools_4.2.1         gh_1.3.1            data.table_1.14.6   hms_1.1.2           lifecycle_1.0.3     gert_1.9.1          munsell_0.5.0       RODBC_1.3-19        compiler_4.2.1      rlang_1.0.6        
+    ## [51] grid_4.2.1          conditionz_0.1.0    iterators_1.0.14    rstudioapi_0.14     sys_3.4.1           gtable_0.3.1        codetools_0.2-18    DBI_1.1.3           reshape_0.8.9       curl_4.3.3         
+    ## [61] readtext_0.81       R6_2.5.1            zoo_1.8-11          lubridate_1.9.0     fastmap_1.1.0       utf8_1.2.2          rprojroot_2.0.3     dlstats_0.1.5       ape_5.6-2           stringi_1.7.8      
+    ## [71] parallel_4.2.1      crul_1.3            Rcpp_1.0.9          vctrs_0.5.1         tidyselect_1.2.0    xfun_0.35
 
 ## NOAA README
 
