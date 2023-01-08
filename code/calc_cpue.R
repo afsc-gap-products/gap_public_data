@@ -10,7 +10,7 @@
 # using a loop so we only make zero-filled for species that occred in a survey 
 # (e.g., no 0s for a species that never occured in a survey)
 # as it is a bit exessive
-cpue_station_0filled_comb <- data.frame() 
+FOSS_CPUE_ZEROFILLED_comb <- data.frame() 
 
 for (i in 1:length(surveys$SRVY)) {
   
@@ -18,7 +18,7 @@ for (i in 1:length(surveys$SRVY)) {
   temp <- catch_haul_cruises_vess %>% 
     dplyr::filter(SRVY == surveys$SRVY[i]) 
   
-  cpue_station_0filled_comb <- 
+  FOSS_CPUE_ZEROFILLED_comb <- 
     tidyr::crossing( # create all possible haul event x species_code combinations
       temp %>% 
         dplyr::select(SRVY, hauljoin) %>% # unique haul event
@@ -26,11 +26,11 @@ for (i in 1:length(surveys$SRVY)) {
       temp %>%
         dplyr::distinct(., species_code) %>%  # unique species_codes
         dplyr::distinct()) %>% 
-    dplyr::bind_rows(cpue_station_0filled_comb, .)
+    dplyr::bind_rows(FOSS_CPUE_ZEROFILLED_comb, .)
 }
 
 # # Make sure that there are no NAs
-# summary(cpue_station_0filled_comb %>% dplyr::mutate(SRVY = factor(SRVY)))
+# summary(FOSS_CPUE_ZEROFILLED_comb %>% dplyr::mutate(SRVY = factor(SRVY)))
 # SRVY             hauljoin        species_code  
 # AI : 7224189   Min.   : -22026   Min.   :    1  
 # BSS:  865632   1st Qu.: -12959   1st Qu.:30420  
@@ -40,11 +40,11 @@ for (i in 1:length(surveys$SRVY)) {
 #                Max.   :1225635   Max.   :99999  
 #
 # # Make sure that future version of this data in this script do not change the number of rows
-# dim(cpue_station_0filled_comb)
+# dim(FOSS_CPUE_ZEROFILLED_comb)
 # [1] 36308030        3
 
 ## Fill data -------------------------------------------------------------------
-cpue_station_0filled <- cpue_station_0filled_comb %>%
+FOSS_CPUE_ZEROFILLED <- FOSS_CPUE_ZEROFILLED_comb %>%
   dplyr::left_join( # Add haul data
     x = ., 
     y = haul_cruises_vess %>% 
@@ -52,12 +52,13 @@ cpue_station_0filled <- cpue_station_0filled_comb %>%
     by = c("hauljoin", "SRVY")) %>% 
   dplyr::left_join( # Add species info
     x = .,
-    y = spp_info, 
+    y = AFSC_ITIS_WORMS %>% 
+      dplyr::select(-notes_itis, -notes_worms), 
     by = "species_code") %>%
   dplyr::left_join( # Add species info
     x = .,
-    y = tax_conf %>% 
-      dplyr::select(year, tax_conf, SRVY, species_code), 
+    y = TAXON_CONFIDENCE %>% 
+      dplyr::select(year, taxon_confidence, SRVY, species_code), 
     by = c("year", "SRVY", "species_code")) %>%
   dplyr::left_join( # overwrite NAs where data exists for CPUE calculation
     x = .,
@@ -68,7 +69,7 @@ cpue_station_0filled <- cpue_station_0filled_comb %>%
 
 
 # # Make sure that there are no NAs
-# summary(cpue_station_0filled %>% dplyr::mutate(SRVY = factor(SRVY)))
+# summary(FOSS_CPUE_ZEROFILLED %>% dplyr::mutate(SRVY = factor(SRVY)))
 # SRVY             hauljoin        species_code     cruisejoin          vessel      survey_definition_id  SRVY_long        
 # AI : 7224189   Min.   : -22026   Min.   :    1   Min.   :   -758   Min.   :  1.0   Min.   : 47.00       Length:36308030   
 # BSS:  865632   1st Qu.: -12959   1st Qu.:30420   1st Qu.:   -687   1st Qu.: 88.0   1st Qu.: 47.00       Class :character  
@@ -101,7 +102,7 @@ cpue_station_0filled <- cpue_station_0filled_comb %>%
 # 3rd Qu.:0.5000   3rd Qu.:2.789   3rd Qu.:17.11   3rd Qu.: 6.9                                            3rd Qu.: 162663  
 # Max.   :0.7900   Max.   :4.334   Max.   :23.82   Max.   :11.0                                            Max.   :1173151  
 # NA's   :2954941                                         NA's   :658270   
-# worms         species_name       common_name          tax_conf             weight          number_fish      
+# worms         species_name       common_name          taxon_confidence     weight          number_fish      
 # Min.   :      2   Length:36308030    Length:36308030    Length:36308030    Min.   :    0      Min.   :     0    
 # 1st Qu.: 122388   Class :character   Class :character   Class :character   1st Qu.:    0      1st Qu.:     1    
 # Median : 126175   Mode  :character   Mode  :character   Mode  :character   Median :    1      Median :     5    
@@ -111,7 +112,7 @@ cpue_station_0filled <- cpue_station_0filled_comb %>%
 # NA's   :197257                                                             NA's   :35402266   NA's   :35402266 
 # 
 # # Make sure that future version of this data in this script do not change the number of rows
-# dim(cpue_station_0filled)
+# dim(FOSS_CPUE_ZEROFILLED)
 # [1] 36308030       36
 
 ## Wrangle data ----------------------------------------------------------------
@@ -124,7 +125,6 @@ lookup <- c(station = "stationid",
             survey = "survey_name",
             survey_id = "survey_definition_id", 
             vessel_id = "vessel",
-            taxon_confidence = "tax_conf",
             date_time = "start_time", 
             latitude_dd_start = "start_latitude", # latitude_dd = "start_latitude", 
             longitude_dd_start = "start_longitude",  # longitude_dd = "start_longitude", 
@@ -138,7 +138,7 @@ lookup <- c(station = "stationid",
             net_height_m = "net_height",
             depth_m = "bottom_depth")
 
-cpue_station_0filled <- cpue_station_0filled %>%
+FOSS_CPUE_ZEROFILLED <- FOSS_CPUE_ZEROFILLED %>%
   dplyr::rename(dplyr::any_of(lookup)) %>% 
   dplyr::mutate( # calculates CPUE for each species group by station
     area_swept_ha = distance_fished_km * (net_width_m/10), # both in units of km
@@ -164,11 +164,12 @@ cpue_station_0filled <- cpue_station_0filled %>%
       bottom_temperature_c, surface_temperature_c, depth_m, #environmental data
       distance_fished_km, net_width_m, net_height_m, area_swept_ha, duration_hr, performance # gear data
     ))))) %>% 
-  dplyr::arrange(srvy, date_time, cpue_kgha)
-
+  dplyr::arrange(srvy, date_time, cpue_kgha) %>% 
+  dplyr::mutate(count = ifelse(is.na(count), 0, count), 
+                weight_kg = ifelse(is.na(weight_kg), 0, weight_kg) )
 
 # # Make sure that there are no NAs
-# summary(cpue_station_0filled %>% dplyr::mutate(srvy = factor(srvy)))
+# summary(FOSS_CPUE_ZEROFILLED %>% dplyr::mutate(srvy = factor(srvy)))
 # year       srvy             survey            survey_id          cruise            haul          hauljoin          stratum        station         
 # Min.   :1982   AI : 7224189   Length:36308030    Min.   : 47.00   Min.   :198201   Min.   :  1.0   Min.   : -22026   Min.   : 10.0   Length:36308030   
 # 1st Qu.:1997   BSS:  865632   Class :character   1st Qu.: 47.00   1st Qu.:199701   1st Qu.: 59.0   1st Qu.: -12959   1st Qu.: 31.0   Class :character  
@@ -201,6 +202,7 @@ cpue_station_0filled <- cpue_station_0filled %>%
 # 3rd Qu.:   12      3rd Qu.:    31     3rd Qu.: 5.4         3rd Qu.: 9.6          3rd Qu.: 170   3rd Qu.:2.789      3rd Qu.:17.11   3rd Qu.: 6.9     
 # Max.   :18188      Max.   :867119     Max.   :15.3         Max.   :18.1          Max.   :1200   Max.   :4.334      Max.   :23.82   Max.   :11.0     
 # NA's   :35402266   NA's   :35402266   NA's   :1393764      NA's   :801519                                                          NA's   :2954941  
+# 
 #  area_swept_ha     duration_hr      performance   
 #  Min.   :0.2314   Min.   :0.0250   Min.   :0.000  
 #  1st Qu.:2.3639   1st Qu.:0.2680   1st Qu.:0.000  
@@ -211,20 +213,43 @@ cpue_station_0filled <- cpue_station_0filled %>%
 #  
 # 
 # # Make sure that future version of this data in this script do not change the number of rows
-# dim(cpue_station_0filled)
+# dim(FOSS_CPUE_ZEROFILLED)
 # [1] 36308030       37
 
-names(cpue_station_0filled) <- stringr::str_to_upper(names(cpue_station_0filled))
+names(FOSS_CPUE_ZEROFILLED) <- stringr::str_to_upper(names(FOSS_CPUE_ZEROFILLED))
 
+# split up data to make smaller join files -------------------------------------
 
-# names(column_metadata) <- c("Column name from data", "Descriptive Column Name", "Units", "Description")
+JOIN_FOSS_CPUE_COMB <- FOSS_CPUE_ZEROFILLED %>%  # FOSS_CPUE_ZEROFILLED_comb
+  dplyr::select(SRVY, HAULJOIN, SPECIES_CODE) %>% 
+  dplyr::distinct()
 
+JOIN_FOSS_CPUE_HAUL <- FOSS_CPUE_ZEROFILLED %>%
+  dplyr::select(
+    YEAR, HAULJOIN, # Join these
+    SURVEY, SURVEY_ID, CRUISE, 
+    HAUL, VESSEL_NAME, VESSEL_ID, STATION, STRATUM, DATE_TIME, 
+    BOTTOM_TEMPERATURE_C, SURFACE_TEMPERATURE_C,
+    DEPTH_M, LATITUDE_DD_START, LATITUDE_DD_END, LONGITUDE_DD_START, LONGITUDE_DD_END, 
+    NET_HEIGHT_M, NET_WIDTH_M, DISTANCE_FISHED_KM, DURATION_HR, AREA_SWEPT_HA, PERFORMANCE) %>% 
+  dplyr::distinct()
+# haul_cruises_vess %>% 
+#     dplyr::select(-region) # by = c("hauljoin", "SRVY")) %>% 
+
+JOIN_FOSS_CPUE_CATCH <- FOSS_CPUE_ZEROFILLED %>% 
+  dplyr::select(HAULJOIN, SPECIES_CODE, # join these
+                CPUE_KGHA, CPUE_KGKM2, CPUE_NOHA, CPUE_NOKM2, COUNT, WEIGHT_KG,
+                TAXON_CONFIDENCE, 
+                SCIENTIFIC_NAME, COMMON_NAME, WORMS, ITIS) %>% 
+  dplyr::distinct()
+# setdiff(names(FOSS_CPUE_ZEROFILLED), 
+#   unique(c(names(JOIN_FOSS_CPUE_CATCH), names(JOIN_FOSS_CPUE_TAXCONF),
+# names(JOIN_FOSS_CPUE_SPP), names(JOIN_FOSS_CPUE_HAUL),
+# names(JOIN_FOSS_CPUE_COMB))))
 
 # make data NOT 0-filled -------------------------------------------------------
 
-cpue_station <- cpue_station_0filled 
-
-cpue_station <- cpue_station %>%
+FOSS_CPUE_PRESONLY <- FOSS_CPUE_ZEROFILLED %>%
   dplyr::filter(
     !(COUNT %in% c(NA, 0) & # this will remove 0-filled values
         WEIGHT_KG %in% c(NA, 0)) | 
@@ -233,124 +258,87 @@ cpue_station <- cpue_station %>%
 
 # Metadata ---------------------------------------------------------------------
 
-column_metadata <- data.frame(matrix(
-  ncol = 4, byrow = TRUE, 
-  data = c(
-    "year", "Year", "numeric", "Year the survey was conducted in.", 
-    
-    "srvy", "Survey", "Abbreviated text", "Abbreviated survey names. The column 'srvy' is associated with the 'survey' and 'survey_id' columns. Northern Bering Sea (NBS), Southeastern Bering Sea (EBS), Bering Sea Slope (BSS), Gulf of Alaska (GOA), Aleutian Islands (AI). ", 
-    
-    "survey", "Survey Name", "text", "Name and description of survey. The column 'survey' is associated with the 'srvy' and 'survey_id' columns. ", 
-    
-    "survey_id", "Survey ID", "ID code", paste0("This number uniquely identifies a survey. Name and description of survey. The column 'survey_id' is associated with the 'srvy' and 'survey' columns. For a complete list of surveys, review the [code books](", link_code_books ,"). "), 
-    
-    "cruise", "Cruise ID", "ID code", "This is a six-digit number identifying the cruise number of the form: YYYY99 (where YYYY = year of the cruise; 99 = 2-digit number and is sequential; 01 denotes the first cruise that vessel made in this year, 02 is the second, etc.). ", 
-    
-    "haul", "Haul Number", "ID code", "This number uniquely identifies a sampling event (haul) within a cruise. It is a sequential number, in chronological order of occurrence. ", 
-    
-    "hauljoin", "hauljoin", "ID Code", "This is a unique numeric identifier assigned to each (vessel, cruise, and haul) combination.", 
-    
-    "stratum", "Stratum ID", "ID Code", "RACE database statistical area for analyzing data. Strata were designed using bathymetry and other geographic and habitat-related elements. The strata are unique to each survey series. Stratum of value 0 indicates experimental tows.", 
-    
-    "station", "Station ID", "ID code", "Alpha-numeric designation for the station established in the design of a survey. ", 
-    
-    "vessel_id", "Vessel ID", "ID Code", paste0("ID number of the vessel used to collect data for that haul. The column 'vessel_id' is associated with the 'vessel_name' column. Note that it is possible for a vessel to have a new name but the same vessel id number. For a complete list of vessel ID codes, review the [code books](", link_code_books ,")."), 
-    
-    "vessel_name", "Vessel Name", "text", paste0("Name of the vessel used to collect data for that haul. The column 'vessel_name' is associated with the 'vessel_id' column. Note that it is possible for a vessel to have a new name but the same vessel id number. For a complete list of vessel ID codes, review the [code books](", link_code_books ,"). "), 
-    
-    "date_time", "Date and Time of Haul", "MM/DD/YYYY HH::MM", "The date (MM/DD/YYYY) and time (HH:MM) of the beginning of the haul. ", 
-    
-    "longitude_dd_start", "Start Longitude (decimal degrees)", "decimal degrees, 1e-05 resolution", "Longitude (one hundred thousandth of a decimal degree) of the start of the haul. ", 
-    
-    "latitude_dd_start", "Start Latitude (decimal degrees)", "decimal degrees, 1e-05 resolution", "Latitude (one hundred thousandth of a decimal degree) of the start of the haul. ",
-    
-    "longitude_dd_end", "End Longitude (decimal degrees)", "decimal degrees, 1e-05 resolution", "Longitude (one hundred thousandth of a decimal degree) of the end of the haul. ", 
-    
-    "latitude_dd_end", "End Latitude (decimal degrees)", "decimal degrees, 1e-05 resolution", "Latitude (one hundred thousandth of a decimal degree) of the end of the haul. ",
-    
-    "species_code", "Taxon Code", "ID code", paste0("The species code of the organism associated with the 'common_name' and 'scientific_name' columns. For a complete species list, review the [code books](", link_code_books ,")."), 
-    
-    "common_name", "Taxon Common Name", "text", paste0("The common name of the marine organism associated with the 'scientific_name' and 'species_code' columns. For a complete species list, review the [code books](", link_code_books ,")."), 
-    
-    "scientific_name", "Taxon Scientific Name", "text", paste0("The scientific name of the organism associated with the 'common_name' and 'species_code' columns. For a complete taxon list, review the [code books](", link_code_books ,")."), 
-    
-    "taxon_confidence", "Taxon Confidence Rating", "rating", "Confidence in the ability of the survey team to correctly identify the taxon to the specified level, based solely on identification skill (e.g., not likelihood of a taxon being caught at that station on a location-by-location basis). Quality codes follow: **'High'**: High confidence and consistency. Taxonomy is stable and reliable at this level, and field identification characteristics are well known and reliable. **'Moderate'**: Moderate confidence. Taxonomy may be questionable at this level, or field identification characteristics may be variable and difficult to assess consistently. **'Low'**: Low confidence. Taxonomy is incompletely known, or reliable field identification characteristics are unknown. Documentation: [Species identification confidence in the eastern Bering Sea shelf survey (1982-2008)](http://apps-afsc.fisheries.noaa.gov/Publications/ProcRpt/PR2009-04.pdf), [Species identification confidence in the eastern Bering Sea slope survey (1976-2010)](http://apps-afsc.fisheries.noaa.gov/Publications/ProcRpt/PR2014-05.pdf), and [Species identification confidence in the Gulf of Alaska and Aleutian Islands surveys (1980-2011)](http://apps-afsc.fisheries.noaa.gov/Publications/ProcRpt/PR2014-01.pdf). ", 
-    
-    "cpue_kgha", "Weight CPUE (kg/ha)", "kilograms/hectare", "Relative Density. Catch weight (kilograms) divided by area (hectares) swept by the net.", 
-    
-    "cpue_kgkm2", "Weight CPUE (kg/km<sup>2</sup>)", "kilograms/kilometers<sup>2</sup>", "Relative Density. Catch weight (kilograms) divided by area (squared kilometers) swept by the net. ", 
-    
-    # "cpue_kg1000km2", "Weight CPUE (kg/1,000 km<sup>2</sup>)", "kilograms/1000 kilometers<sup>2</sup>", "Relative Density. Catch weight (kilograms) divided by area (thousand square kilometers) swept by the net. ", 
-    
-    "cpue_noha", "Number CPUE (no./ha)", "count/hectare", "Relative Abundance. Catch number (in number of organisms) per area (hectares) swept by the net. ", 
-    
-    "cpue_nokm2", "Number CPUE (no./km<sup>2</sup>)", "count/kilometers<sup>2</sup>", "Relative Abundance. Catch number (in number of organisms) per area (squared kilometers) swept by the net. ", 
-    
-    # "cpue_no1000km2", "Number CPUE (no./1,000 km<sup>2</sup>)", "count/1000 kilometers<sup>2</sup>", "Relative Abundance. Catch weight (in number of organisms) divided by area (thousand square kilometers) swept by the net. ", 
-    
-    "weight_kg", "Taxon Weight (kg)", "kilograms, thousandth resolution", "Weight (thousandths of a kilogram) of individuals in a haul by taxon. ",
-    
-    "count", "Taxon Count", "count, whole number resolution", "Total number of individuals caught in haul by taxon, represented in whole numbers. ", 
-    
-    "bottom_temperature_c", "Bottom Temperature (Degrees Celsius)", "degrees Celsius, tenths of a degree resolution", "Bottom temperature (tenths of a degree Celsius); NA indicates removed or missing values. ", 
-    
-    "surface_temperature_c", "Surface Temperature (Degrees Celsius)", "degrees Celsius, tenths of a degree resolution", "Surface temperature (tenths of a degree Celsius); NA indicates removed or missing values. ", 
-    
-    "bottom_temperature_c", "Bottom Temperature (Degrees Celsius)", "degrees Celsius, tenths of a degree resolution", "Bottom temperature (tenths of a degree Celsius); NA indicates removed or missing values. ", 
-    
-    "depth_m", "Depth (m)", "meters, tenths of a meter resolution", "Bottom depth (tenths of a meter). ", 
-    
-    "distance_fished_km", "Distance Fished (km)", "kilometers, thousandths of kilometer resolution", "Distance the net fished (thousandths of kilometers). ", 
-    
-    "net_width_m", "Net Width (m)", "meters", "Measured or estimated distance (meters) between wingtips of the trawl. ", 
-    
-    "net_height_m", "Net Height (m)", "meters", "Measured or estimated distance (meters) between footrope and headrope of the trawl. ", 
-    
-    "area_swept_ha", "Area Swept (ha)", "hectares", "The area the net covered while the net was fishing (hectares), defined as the distance fished times the net width.", 
-    
-    "duration_hr", "Tow Duration (decimal hr)", "decimal hours", "This is the elapsed time between start and end of a haul (decimal hours).", 
-    
-    "performance", "Haul Performance Code (rating)", "rating", paste0("This denotes what, if any, issues arose during the haul. For more information, review the [code books](", link_code_books ,")."), 
-    
-    "itis", "ITIS Taxonomic Serial Number", "ID code", paste0("Species code as identified in the Integrated Taxonomic Information System (https://itis.gov/). Codes were last updated ", file.info(paste0("./data/spp_info.csv"))$ctime, "."), 
-    # "", "", "", "", 
-    "worms", "World Register of Marine Species Taxonomic Serial Number", "ID code", paste0("Species code as identified in the World Register of Marine Species (WoRMS) (https://www.marinespecies.org/). Codes were last updated ", file.info(paste0("./data/spp_info.csv"))$ctime, ".")
-  )))
+column_metadata <- column_metadata[match(names(FOSS_CPUE_ZEROFILLED), toupper(column_metadata$colname)),]  
 
-
-names(column_metadata) <- c("colname", "colname_desc", "units", "desc")
-column_metadata <- column_metadata[match(names(cpue_station_0filled), toupper(column_metadata$colname)),]  
-readr::write_csv(x = column_metadata, file = paste0(dir_out, "column_metadata.csv"))
-
-# setdiff(as.character(column_metadata$`Column name from data`), names(cpue_station_0filled))
-# setdiff(names(cpue_station_0filled), as.character(column_metadata$`colname`))
-
-table_metadata <- paste0("This dataset includes zero-filled (presence and absence) observations and catch-per-unit-effort (CPUE) estimates for most identified species at a standard set of stations in the Northern Bering Sea (NBS), Eastern Bering Sea (EBS), Bering Sea Slope (BSS), Gulf of Alaska (GOA), and Aleutian Islands (AI) Surveys conducted by the esource Assessment and Conservation Engineering Division (RACE) Groundfish Assessment Program (GAP) of the Alaska Fisheries Science Center (AFSC). 
-There are no legal restrictions on access to the data. 
-The data from this dataset are shared on the Fisheries One Stop Stop (FOSS) platform (",link_foss,"). 
-The GitHub repository for the scripts that created this code can be found at ",link_repo,
-                         ". These data were last updated ", format(x = as.Date(strsplit(x = dir_out, split = "/", fixed = TRUE)[[1]][3]), "%B %d, %Y"), ".")
-
-# table_metadata <- paste0("This dataset includes non-zero (presence) observations and catch-per-unit-effort (CPUE) estimates for most identified species at a standard set of stations in the Northern Bering Sea (NBS), Eastern Bering Sea (EBS), Bering Sea Slope (BSS), Gulf of Alaska (GOA), and Aleutian Islands (AI) Surveys conducted by the esource Assessment and Conservation Engineering Division (RACE) Groundfish Assessment Program (GAP) of the Alaska Fisheries Science Center (AFSC). 
-# There are no legal restrictions on access to the data. 
-# The data from this dataset are shared on the Fisheries One Stop Stop (FOSS) platform (",link_foss,"). 
-# The GitHub repository for the scripts that created this code can be found at ",link_repo,
-# "These data were last updated ", file.info(paste0(dir_out, "cpue_station_0filled.csv"))$ctime, ".")
+# setdiff(as.character(column_metadata$`Column name from data`), names(FOSS_CPUE_ZEROFILLED))
+# setdiff(names(FOSS_CPUE_ZEROFILLED), as.character(column_metadata$`colname`))
 
 # Save public data output ------------------------------------------------------
 
+# zero-fill join tables
 
-table_metadata <- gsub(pattern = "\n", replacement = "", x = table_metadata)
-readr::write_lines(x = table_metadata, 
-                   file = paste0(dir_out, "table_metadata.txt"))
+table_metadata <- paste0(
+  "The JOIN_FOSS_CPUE_COMB (a reference dataset of standard stations to which the following tables will be joined to), 
+  JOIN_FOSS_CPUE_CATCH (join using HAULJOIN, SPECIES_CODE), 
+  JOIN_FOSS_CPUE_HAUL (using YEAR, HAULJOIN) datasets 
+  need to be full joined to create zero-filled (presence and absence) observations and 
+  catch-per-unit-effort (CPUE) estimates for all identified species at a standard set of stations ", 
+  metadata_sentence_survey_institution, 
+  metadata_sentence_legal_restrict, 
+  metadata_sentence_foss, 
+  metadata_sentence_github, 
+  metadata_sentence_codebook, 
+  metadata_sentence_last_updated)
+
+readr::write_lines(x = gsub(pattern = "\n", replacement = "", x = table_metadata), 
+                   file = paste0(dir_out, "JOIN_FOSS_CPUE_table_metadata.txt"))
 
 base::save(
-  cpue_station_0filled, 
+  JOIN_FOSS_CPUE_COMB, 
+  JOIN_FOSS_CPUE_HAUL, 
+  JOIN_FOSS_CPUE_CATCH, 
   column_metadata, 
   table_metadata, 
-  file = paste0(dir_out, "cpue_station_0filled.RData"))
+  file = paste0(dir_out, "FOSS_CPUE_JOIN.RData"))
 
-readr::write_csv(
-  x = cpue_station_0filled, 
-  file = paste0(dir_out, "cpue_station_0filled.csv"), 
-  col_names = TRUE)
+# Zero filled 
+
+table_metadata <- paste0(
+  "This dataset includes zero-filled (presence and absence) observations and 
+  catch-per-unit-effort (CPUE) estimates for most identified species at a standard set of stations ", 
+  metadata_sentence_survey_institution, 
+  metadata_sentence_legal_restrict, 
+  metadata_sentence_foss, 
+  metadata_sentence_github, 
+  metadata_sentence_codebook, 
+  metadata_sentence_last_updated)
+
+readr::write_lines(x = gsub(pattern = "\n", replacement = "", x = table_metadata), 
+                   file = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_table_metadata.txt"))
+
+base::save(
+  FOSS_CPUE_ZEROFILLED, 
+  column_metadata, 
+  table_metadata, 
+  file = paste0(dir_out, "FOSS_CPUE_ZEROFILLED.RData"))
+
+# PRES ONLY
+
+table_metadata <- gsub(pattern = "zero-filled (presence and absence)", 
+     replacement = "presence-only",
+     x = paste(readLines(con = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_table_metadata.txt")), collapse="\n"))
+
+readr::write_lines(x = gsub(pattern = "\n", replacement = "", x = table_metadata), 
+                   file = paste0(dir_out, "FOSS_CPUE_PRESONLY_table_metadata.txt"))
+
+base::save(
+  FOSS_CPUE_PRESONLY, 
+  column_metadata, 
+  table_metadata, 
+  file = paste0(dir_out, "FOSS_CPUE_PRESONLY.RData"))
+
+list_to_save <- c(
+  "JOIN_FOSS_CPUE_CATCH", 
+  # "JOIN_FOSS_CPUE_TAXCONF", 
+  # "JOIN_FOSS_CPUE_SPP", 
+  "JOIN_FOSS_CPUE_HAUL",
+  "JOIN_FOSS_CPUE_COMB", 
+  "FOSS_CPUE_PRESONLY", 
+  "FOSS_CPUE_ZEROFILLED")
+
+for (i in 1:length(list_to_save)) {
+  readr::write_csv(
+    x = get(list_to_save[i]), 
+    file = paste0(dir_out, list_to_save[i], ".csv"), 
+    col_names = TRUE)
+}

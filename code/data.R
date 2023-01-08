@@ -25,15 +25,15 @@ for (i in 1:length(a)){
 
 # Now available on the RACEBASE_FOSS oracle schema
 
-load(file = paste0("./data/spp_info",option,".rdata"))
-load(file = "./data/taxon_confidence.rdata")
+load(file = paste0("./data/AFSC_ITIS_WORMS",option,".rdata"))
+load(file = "./data/TAXON_CONFIDENCE.rdata")
 
 # Wrangle Data -----------------------------------------------------------------
 
 ## Species info ----------------------------------------------------------------
 
 # if (FALSE) { # if itis/worms codes have not been run yet
-#   spp_info <-
+#   AFSC_ITIS_WORMS <-
 #     # dplyr::left_join(
 #       # x =
 #     species0 %>%
@@ -52,10 +52,10 @@ load(file = "./data/taxon_confidence.rdata")
 #       itis = NA, 
 #       worms = NA) # made if taxize0 == TRUE
 # } else {
-spp_info <- spp_info %>% 
-  dplyr::select(-notes_itis, -notes_worms) %>% 
-  dplyr::mutate(itis = as.numeric(itis), 
-                worms = as.numeric(worms))
+# AFSC_ITIS_WORMS <- AFSC_ITIS_WORMS %>% 
+#   dplyr::select(-notes_itis, -notes_worms) %>% 
+#   dplyr::mutate(itis = as.numeric(itis), 
+#                 worms = as.numeric(worms))
 # }
 
 

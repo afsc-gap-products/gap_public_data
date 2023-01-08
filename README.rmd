@@ -67,7 +67,7 @@ cat(
 
 > NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss, Accessed mm/dd/yyyy
 
-The code is in development. Refer to [releases](`r paste0(link_repo, "/releases")`) for finalized products. These data were last ran and pushed to the AFSC oracle on **`r format(x = as.Date(strsplit(x = dir_out, split = "/", fixed = TRUE)[[1]][3]), "%B %d, %Y")`**. *This is not the date that these data were pulled into FOSS and the FOSS dataset may be behind.* 
+The code is in development. Refer to [releases](`r paste0(link_repo, "/releases")`) for finalized products. These data were last ran and pushed to the AFSC oracle on **`r format(x = as.Date(strsplit(x = dir_out, split = "/", fixed = TRUE)[[1]][5]), "%B %d, %Y")`**. *This is not the date that these data were pulled into FOSS and the FOSS dataset may be behind.* 
 
 # Metadata
 
@@ -152,9 +152,9 @@ While pulling data, please keep in mind that this is a very large file. For refe
 ```{r oracle-data-size, echo = FALSE}
 str0 <- paste0(
   "RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED: ", "
-  rows: ", nrow(cpue_station_0filled), "
-  cols: ", ncol(cpue_station_0filled), "
-  ", round(file.size(paste0(dir_out, "cpue_station_0filled.csv"))/1e+9, 3), " GB") 
+  rows: ", nrow(FOSS_CPUE_ZEROFILLED), "
+  cols: ", ncol(FOSS_CPUE_ZEROFILLED), "
+  ", round(file.size(paste0(dir_out, "FOSS_CPUE_ZEROFILLED.csv"))/1e+9, 3), " GB") 
 cat(str0)
 ```
 
@@ -243,6 +243,7 @@ a <- RODBC::sqlQuery(channel, "SELECT * FROM RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED"
 write.csv(x = a, file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED.csv")
 ```
 
+
 ### Subset data
 
 To pull a small subset of the data (especially since files like `RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED` are so big), use a variation of the following code. Here, we are pulling EBS Pacific cod from 2010 - 2021: 
@@ -256,6 +257,40 @@ AND YEAR >= 2010
 AND YEAR < 2021")
  # Save table to local directory
 write.csv(x = a, file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED-ebs_pcod_2010-2020.csv")
+```
+
+
+### If this file is too large, you can join catch and haul data
+
+Pull the `RACEBASE_FOSS.JOIN_FOSS_CPUE_COMB`, `RACEBASE_FOSS.JOIN_FOSS_CPUE_CATCH`, and  `RACEBASE_FOSS.JOIN_FOSS_CPUE_HAUL` tables, which are much smaller, and combine the table locally yourself. 
+
+`r paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_table_metadata.txt")), collapse="\n") `
+
+```{r oracle-data-size-join-comb, echo = FALSE}
+str0 <- paste0(
+  "RACEBASE_FOSS.JOIN_FOSS_CPUE_COMB: ", "
+  rows: ", nrow(JOIN_FOSS_CPUE_COMB), "
+  cols: ", ncol(JOIN_FOSS_CPUE_COMB), "
+  ", round(file.size(paste0(dir_out, "JOIN_FOSS_CPUE_COMB"))/1e+9, 3), " GB") 
+cat(str0)
+```
+
+```{r oracle-data-size-join-catch, echo = FALSE}
+str0 <- paste0(
+  "RACEBASE_FOSS.JOIN_FOSS_CPUE_CATCH: ", "
+  rows: ", nrow(JOIN_FOSS_CPUE_CATCH), "
+  cols: ", ncol(JOIN_FOSS_CPUE_CATCH), "
+  ", round(file.size(paste0(dir_out, "JOIN_FOSS_CPUE_CATCH"))/1e+9, 3), " GB") 
+cat(str0)
+```
+
+```{r oracle-data-size-join-haul, echo = FALSE}
+str0 <- paste0(
+  "RACEBASE_FOSS.JOIN_FOSS_CPUE_HAUL: ", "
+  rows: ", nrow(JOIN_FOSS_CPUE_HAUL), "
+  cols: ", ncol(JOIN_FOSS_CPUE_HAUL), "
+  ", round(file.size(paste0(dir_out, "JOIN_FOSS_CPUE_HAUL.csv"))/1e+9, 3), " GB") 
+cat(str0)
 ```
 
 # Suggestions and comments

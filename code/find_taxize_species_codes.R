@@ -112,7 +112,7 @@ find_taxize <- function(dat,
   names(dat1)[names(dat1) == "id"] <- db0
   names(dat1)[names(dat1) == "notes"] <- paste0("notes_", db0)
   
-  return(list("spp_info" = dat1, 
+  return(list("AFSC_ITIS_WORMS" = dat1, 
               "still_missing" = still_missing ) )
   
 }
@@ -134,14 +134,14 @@ for (i in 1:length(a)){
 # Wrangle ----------------------------------------------------------------------
 
 if (option == 1) { # Take species scientific names from species0
-spp_info0 <- species0 %>%
+AFSC_ITIS_WORMS0 <- species0 %>%
   dplyr::select(species_code, species_name) %>% # ,
   # dplyr::filter(species_name == "Careproctus sp. cf. gilberti (Orr)") %>%
   dplyr::rename(scientific_name = species_name) 
 
 } else if (option == 2) { # Take species scientific names from species_classification0$report_name_scientific
 # Select data you need 
-spp_info0 <- species_classification0 %>% 
+AFSC_ITIS_WORMS0 <- species_classification0 %>% 
   dplyr::select(report_name_scientific, species_code) %>% 
   dplyr::rename(scientific_name = report_name_scientific) %>% 
   dplyr::mutate(scientific_name1 = scientific_name, 
@@ -150,30 +150,30 @@ spp_info0 <- species_classification0 %>%
 } else if (option == 3) { # Take species scientific names from species_classification0$report_name_scientific
   # Select data you need 
   
-  spp_info0 <- species_classification0
+  AFSC_ITIS_WORMS0 <- species_classification0
   
   # remove descriptve parts of names
   remove0 <- c("n. sp. ", " sp.", " spp.",
                " unid.", " new species",
                " cf.", #" n.", 
                " larvae", " egg case", " eggs", " egg")
-  for (i in 1:length(spp_info0)) {
+  for (i in 1:length(AFSC_ITIS_WORMS0)) {
     
-    spp_info0$subspecies_taxon <-
+    AFSC_ITIS_WORMS0$subspecies_taxon <-
       gsub(pattern = remove0[i],
            replacement = "",
-           x = spp_info0$subspecies_taxon,
+           x = AFSC_ITIS_WORMS0$subspecies_taxon,
            fixed = TRUE)
     
-    spp_info0$species_taxon <-
+    AFSC_ITIS_WORMS0$species_taxon <-
       gsub(pattern = remove0[i],
            replacement = "",
-           x = spp_info0$species_taxon,
+           x = AFSC_ITIS_WORMS0$species_taxon,
            fixed = TRUE)
   }
   
   
-  spp_info0 <- spp_info0 %>% 
+  AFSC_ITIS_WORMS0 <- AFSC_ITIS_WORMS0 %>% 
     dplyr::mutate(report_name_scientific = dplyr::case_when(
       !is.na(subspecies_taxon) ~ paste0(genus_taxon, " ", species_taxon, " ", subspecies_taxon), 
       !is.na(species_taxon) ~ paste0(genus_taxon, " ", species_taxon), 
@@ -205,7 +205,7 @@ spp_info0 <- species_classification0 %>%
 
 
 ## Clean data -----------------------------------
-  spp_info0 <- spp_info0 %>% 
+  AFSC_ITIS_WORMS0 <- AFSC_ITIS_WORMS0 %>% 
     dplyr::mutate(
       scientific_name1 = scientific_name, 
       scientific_name = ifelse(is.na(scientific_name), "", scientific_name), 
@@ -231,17 +231,17 @@ remove0 <- c(" sp.", " spp.",
              " cf.", " n.",
              " larvae", " egg case", " eggs", " egg")
 for (i in 1:length(remove0)) {
-  spp_info0$scientific_name1 <-
+  AFSC_ITIS_WORMS0$scientific_name1 <-
     gsub(pattern = remove0[i],
          replacement = "",
-         x = spp_info0$scientific_name1,
+         x = AFSC_ITIS_WORMS0$scientific_name1,
          fixed = TRUE)
 }
 
 # remove singluar letters at the end of names
 remove0 <- paste0(" ", c(LETTERS))
 for (i in 1:length(remove0)) {
-  spp_info0 <- spp_info0 %>%
+  AFSC_ITIS_WORMS0 <- AFSC_ITIS_WORMS0 %>%
     dplyr::mutate(scientific_name1 =
                     ifelse(substr(x = scientific_name1,
                                   start = (nchar(scientific_name1)-1),
@@ -252,7 +252,7 @@ for (i in 1:length(remove0)) {
                            scientific_name1))
 }
 
-spp_info0 <- spp_info0 %>%
+AFSC_ITIS_WORMS0 <- AFSC_ITIS_WORMS0 %>%
   dplyr::mutate(
     scientific_name1 = ifelse(is.na(scientific_name1), "", scientific_name1),
     scientific_name1 = gsub(pattern = "  ", replacement = " ",
@@ -440,33 +440,33 @@ known_worms <- list( # will have to check these each year
 
 # Run function -----------------------------------------------------------------
 
-rnge <- 1:nrow(spp_info0) # rnge <- 329:350
+rnge <- 1:nrow(AFSC_ITIS_WORMS0) # rnge <- 329:350
 
 # ITIS
-spp_info_itis <- find_taxize(
+AFSC_ITIS_WORMS_itis <- find_taxize(
   dat = data.frame(
-    # species_name = spp_info0$scientific_name[rnge], 
-    scientific_name = spp_info0$scientific_name1[rnge], 
-    # common_name = spp_info0$common_name[rnge],
-    species_code = spp_info0$species_code[rnge]), 
+    # species_name = AFSC_ITIS_WORMS0$scientific_name[rnge], 
+    scientific_name = AFSC_ITIS_WORMS0$scientific_name1[rnge], 
+    # common_name = AFSC_ITIS_WORMS0$common_name[rnge],
+    species_code = AFSC_ITIS_WORMS0$species_code[rnge]), 
   known = known_tsn,
     db0 = "itis")
 
 # WoRMS
-spp_info_worms <- find_taxize(
+AFSC_ITIS_WORMS_worms <- find_taxize(
   dat = data.frame(
-    # species_name = spp_info0$scientific_name[rnge], 
-    scientific_name = spp_info0$scientific_name1[rnge], 
-    # common_name = spp_info0$common_name[rnge],
-    species_code = spp_info0$species_code[rnge]), 
+    # species_name = AFSC_ITIS_WORMS0$scientific_name[rnge], 
+    scientific_name = AFSC_ITIS_WORMS0$scientific_name1[rnge], 
+    # common_name = AFSC_ITIS_WORMS0$common_name[rnge],
+    species_code = AFSC_ITIS_WORMS0$species_code[rnge]), 
   known = known_worms,
   db0 = "worms")
 
 # Combine
-spp_info <- 
+AFSC_ITIS_WORMS <- 
   dplyr::full_join(
-    x = spp_info_itis$spp_info, 
-    y = spp_info_worms$spp_info, 
+    x = AFSC_ITIS_WORMS_itis$AFSC_ITIS_WORMS, 
+    y = AFSC_ITIS_WORMS_worms$AFSC_ITIS_WORMS, 
     by = c("scientific_name", "species_code")) %>% 
   dplyr::full_join(
     x = ., 
@@ -478,17 +478,40 @@ spp_info <-
                                    x = trimws(common_name), fixed = TRUE)) 
 
 still_missing <- dplyr::bind_rows(
-  spp_info_itis$still_missing %>% 
+  AFSC_ITIS_WORMS_itis$still_missing %>% 
     dplyr::mutate(db = "itis"), 
-  spp_info_worms$still_missing%>% 
-    dplyr::mutate(db = "worms"))
+  AFSC_ITIS_WORMS_worms$still_missing%>% 
+    dplyr::mutate(db = "worms")) %>% 
+  dplyr::mutate(itis = as.numeric(itis), 
+                worms = as.numeric(worms))
 
 
 # Save
-save(spp_info, still_missing, 
-     file = paste0("./data/spp_info",option,".rdata"))
 
-readr::write_csv(x = spp_info, file = paste0("./data/spp_info",option,".csv"))
+readr::write_csv(x = AFSC_ITIS_WORMS, file = paste0("./data/AFSC_ITIS_WORMS",option,".csv"))
 
 readr::write_csv(x = still_missing, file = paste0("./data/still_missing",option,".csv"))
 
+
+table_metadata <- paste0(
+  "This dataset includes an identification matrix for for all fishes and invertebrates identified ", 
+  metadata_sentence_survey_institution, 
+  "This dataset includes: 
+  AFSC species codes, listed common names, and scientific names (SPECIES_CODE, SCIENTIFIC_NAME, COMMON_NAME, SPECIES_NAME); 
+  species code as identified in the Integrated Taxonomic Information System (https://itis.gov/); and 
+    species code as identified in the World Register of Marine Species (WoRMS) (https://www.marinespecies.org/). ", 
+  metadata_sentence_legal_restrict,  
+  metadata_sentence_github, 
+  metadata_sentence_codebook, 
+  metadata_sentence_last_updated)
+
+readr::write_lines(x = gsub(pattern = "\n", replacement = "", x = table_metadata), 
+                   file = paste0(getwd(), "/data/", "AFSC_ITIS_WORMS_table_metadata.txt"))
+
+column_metadata <- column_metadata[which(column_metadata$colname %in% names(a)),]
+
+save(AFSC_ITIS_WORMS, 
+     still_missing, 
+     table_metadata, 
+     column_metadata, 
+     file = paste0(getwd(), "/data/AFSC_ITIS_WORMS",option,".rdata"))

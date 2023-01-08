@@ -8,11 +8,11 @@
 ## Taxonomic confidence data ---------------------------------------------------
 
   df.ls <- list()
-  a <- list.files(path = here::here("data", "taxon_confidence"))
-  a <- a[a != "taxon_confidence.csv"]
+  a <- list.files(path = here::here("data", "TAXON_CONFIDENCE"))
+  a <- a[a != "TAXON_CONFIDENCE.csv"]
   for (i in 1:length(a)){
     print(a[i])
-    b <- readxl::read_xlsx(path = paste0(here::here("data", "taxon_confidence", a[i])), 
+    b <- readxl::read_xlsx(path = paste0(here::here("data", "TAXON_CONFIDENCE", a[i])), 
                            skip = 1, col_names = TRUE) %>% 
       dplyr::select(where(~!all(is.na(.x)))) %>% # remove empty columns
       janitor::clean_names() %>% 
@@ -23,7 +23,7 @@
     b <- b %>% 
       tidyr::pivot_longer(cols = starts_with("x"), 
                           names_to = "year", 
-                          values_to = "tax_conf") %>% 
+                          values_to = "TAXON_CONFIDENCE") %>% 
       dplyr::mutate(year = gsub(pattern = "[a-z]", 
                                       replacement = "", 
                                       x = year), 
@@ -33,7 +33,7 @@
       dplyr::distinct()
     
     cc <- strsplit(x = gsub(x = gsub(x = a[i], 
-                                     pattern = "Taxon_confidence_", replacement = ""), 
+                                     pattern = "TAXON_CONFIDENCE_", replacement = ""), 
                             pattern = ".xlsx", 
                             replacement = ""), 
                    split = "_")[[1]]
@@ -71,15 +71,15 @@
   # 3 – Low confidence.  Taxonomy is incompletely known, or reliable field  
   #     identification characteristics are unknown.
   
-  tax_conf <- dplyr::bind_rows(df.ls) %>% 
-    dplyr::mutate(tax_conf0 = tax_conf, 
-                  tax_conf = dplyr::case_when(
-                    tax_conf == 1 ~ "High",
-                    tax_conf == 2 ~ "Moderate",
-                    tax_conf == 3 ~ "Low", 
+  TAXON_CONFIDENCE <- dplyr::bind_rows(df.ls) %>% 
+    dplyr::mutate(TAXON_CONFIDENCE0 = TAXON_CONFIDENCE, 
+                  TAXON_CONFIDENCE = dplyr::case_when(
+                    TAXON_CONFIDENCE == 1 ~ "High",
+                    TAXON_CONFIDENCE == 2 ~ "Moderate",
+                    TAXON_CONFIDENCE == 3 ~ "Low", 
                     TRUE ~ "Unassessed"))
   
-  # fill in tax_conf with, if missing, the values from the year before
+  # fill in TAXON_CONFIDENCE with, if missing, the values from the year before
   
   cruises <- read.csv("./data/oracle/v_cruises.csv") %>% 
     janitor::clean_names() %>% 
@@ -88,23 +88,46 @@
       y = ., 
       by  = c("survey_definition_id"))
   comb1 <- unique(cruises[, c("SRVY", "year")] )
-  comb2 <- unique(tax_conf[, c("SRVY", "year")])
+  comb2 <- unique(TAXON_CONFIDENCE[, c("SRVY", "year")])
   # names(comb2) <- names(comb1) <- c("SRVY", "year")
   comb1$comb <- paste0(comb1$SRVY, "_", comb1$year)
   comb2$comb <- paste0(comb2$SRVY, "_", comb2$year)
   comb <- strsplit(x = setdiff(comb1$comb, comb2$comb), split = "_")
   
-  tax_conf <- dplyr::bind_rows(
-    tax_conf, 
-    tax_conf %>% 
+  TAXON_CONFIDENCE <- dplyr::bind_rows(
+    TAXON_CONFIDENCE, 
+    TAXON_CONFIDENCE %>% 
       dplyr::filter(
         SRVY %in% sapply(comb,"[[",1) &
           year == 2021) %>% 
-      dplyr::mutate(year = 2022))
+      dplyr::mutate(year = 2022)) %>% 
+    dplyr::rename(taxon_confidence = TAXON_CONFIDENCE, 
+                  taxon_confidence0 = TAXON_CONFIDENCE0)
   
+  readr::write_csv(x = TAXON_CONFIDENCE, 
+                   file = paste0(getwd(), "/data/TAXON_CONFIDENCE.csv"))
   
-  readr::write_csv(x = tax_conf, 
-                   file = paste0(getwd(), "/data/taxon_confidence.csv"))
+  table_metadata <- paste0(
+    "The quality and specificity of field identifications for many taxa have 
+    fluctuated over the history of the surveys due to changing priorities and resources. 
+    The matrix lists a confidence level for each taxon for each survey year 
+    and is intended to serve as a general guideline for data users interested in 
+    assessing the relative reliability of historical species identifications 
+    on these surveys. This dataset includes an identification confidence matrix 
+    for all fishes and invertebrates identified ", 
+         metadata_sentence_survey_institution, 
+         metadata_sentence_legal_restrict,  
+         metadata_sentence_github, 
+         metadata_sentence_codebook, 
+         metadata_sentence_last_updated)
   
-  save(tax_conf, file = paste0(getwd(), "/data/taxon_confidence.rdata"))
+  readr::write_lines(x = gsub(pattern = "\n", replacement = "", x = table_metadata), 
+                     file = paste0(getwd(), "/data/", "TAXON_CONFIDENCE_table_metadata.txt"))
+  
+  column_metadata <- column_metadata[which(column_metadata$colname %in% names(a)),]
+  
+  save(TAXON_CONFIDENCE, 
+       table_metadata, 
+       column_metadata, 
+       file = paste0(getwd(), "/data/TAXON_CONFIDENCE.rdata"))
   

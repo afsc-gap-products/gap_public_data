@@ -20,10 +20,6 @@
 
 # *** REPORT KNOWNS ------------------------------------------------------------
 
-link_foss <- "https://www.fisheries.noaa.gov/foss/f?p=215:200:13045102793007:Mail:NO:::"
-link_code_books <- "https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual"
-link_repo <- "https://github.com/afsc-gap-products/gap_public_data"
-
 # The surveys we will consider covering in this data are: 
 surveys <- 
   data.frame(survey_definition_id = c(143, 98, 47, 52, 78), 
@@ -41,7 +37,7 @@ taxize0 <- FALSE # incorporate species codes from databases
 # source('./code/data_dl.R')
 source('./code/functions.R')
 
-option <- 3
+option <- 3 # used in find_taxize_species_codes 
 if (taxize0) { # only if you need to rerun {taxize} stuff - very time intensive!
   source('./code/find_taxize_species_codes.R')
   source('./code/find_taxon_confidence.R')
@@ -61,8 +57,11 @@ source('./code/calc_cpue.R')
 
 # Update README ----------------------------------------------------------------
 
-dir_out <- "./output/2022-12-12/"
-load(paste0(dir_out, "cpue_station_0filled.RData"))
+dir_out <- paste0(getwd(), "/output/2023-01-07/")
+
+# load(paste0(dir_out, "FOSS_CPUE_PRESONLY.RData"))
+# load(paste0(dir_out, "FOSS_CPUE_JOIN.RData"))
+load(paste0(dir_out, "FOSS_CPUE_ZEROFILLED.RData"))
 
 rmarkdown::render(paste0("./README.Rmd"),
                   output_dir = "./",
@@ -70,5 +69,4 @@ rmarkdown::render(paste0("./README.Rmd"),
 
 # Share table to oracle --------------------------------------------------------
 
-# cpue_station <- readr::read_csv(file = paste0("./output/2022-06-10/cpue_station.csv"))
 source("./code/load_oracle.R") 
