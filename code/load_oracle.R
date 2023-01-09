@@ -138,7 +138,6 @@ file_paths <- data.frame(
     paste0(dir_out, 
          c("TAXON_CONFIDENCE", 
            "AFSC_ITIS_WORMS",
-           "JOIN_FOSS_CPUE_COMB", 
            "JOIN_FOSS_CPUE_CATCH", 
            "JOIN_FOSS_CPUE_HAUL", 
            # "FOSS_CPUE_PRESONLY", 
@@ -147,7 +146,6 @@ file_paths <- data.frame(
   "table_metadata" = c(
   paste(readLines(con = paste0(dir_out, "TAXON_CONFIDENCE_table_metadata.txt")), collapse="\n"), 
   paste(readLines(con = paste0(dir_out, "AFSC_ITIS_WORMS_table_metadata.txt")), collapse="\n"), 
-  paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_table_metadata.txt")), collapse="\n"), 
   paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_table_metadata.txt")), collapse="\n"), 
   paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_table_metadata.txt")), collapse="\n"), 
   # paste(readLines(con = paste0(dir_out, "FOSS_CPUE_PRESONLY_table_metadata.txt")), collapse="\n"), 

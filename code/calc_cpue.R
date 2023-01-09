@@ -220,14 +220,10 @@ names(FOSS_CPUE_ZEROFILLED) <- stringr::str_to_upper(names(FOSS_CPUE_ZEROFILLED)
 
 # split up data to make smaller join files -------------------------------------
 
-JOIN_FOSS_CPUE_COMB <- FOSS_CPUE_ZEROFILLED %>%  # FOSS_CPUE_ZEROFILLED_comb
-  dplyr::select(SRVY, HAULJOIN, SPECIES_CODE) %>% 
-  dplyr::distinct()
-
 JOIN_FOSS_CPUE_HAUL <- FOSS_CPUE_ZEROFILLED %>%
   dplyr::select(
-    YEAR, HAULJOIN, # Join these
-    SURVEY, SURVEY_ID, CRUISE, 
+    HAULJOIN, # Join these
+    YEAR, SURVEY, SURVEY_ID, CRUISE, 
     HAUL, VESSEL_NAME, VESSEL_ID, STATION, STRATUM, DATE_TIME, 
     BOTTOM_TEMPERATURE_C, SURFACE_TEMPERATURE_C,
     DEPTH_M, LATITUDE_DD_START, LATITUDE_DD_END, LONGITUDE_DD_START, LONGITUDE_DD_END, 
@@ -237,8 +233,8 @@ JOIN_FOSS_CPUE_HAUL <- FOSS_CPUE_ZEROFILLED %>%
 #     dplyr::select(-region) # by = c("hauljoin", "SRVY")) %>% 
 
 JOIN_FOSS_CPUE_CATCH <- FOSS_CPUE_ZEROFILLED %>% 
-  dplyr::select(HAULJOIN, SPECIES_CODE, # join these
-                CPUE_KGHA, CPUE_KGKM2, CPUE_NOHA, CPUE_NOKM2, COUNT, WEIGHT_KG,
+  dplyr::select(HAULJOIN, # join these
+                SPECIES_CODE, CPUE_KGHA, CPUE_KGKM2, CPUE_NOHA, CPUE_NOKM2, COUNT, WEIGHT_KG,
                 TAXON_CONFIDENCE, 
                 SCIENTIFIC_NAME, COMMON_NAME, WORMS, ITIS) %>% 
   dplyr::distinct()
@@ -268,11 +264,9 @@ column_metadata <- column_metadata[match(names(FOSS_CPUE_ZEROFILLED), toupper(co
 # zero-fill join tables
 
 table_metadata <- paste0(
-  "The JOIN_FOSS_CPUE_COMB (a reference dataset of standard stations to which the following tables will be joined to), 
-  JOIN_FOSS_CPUE_CATCH (join using HAULJOIN, SPECIES_CODE), 
-  JOIN_FOSS_CPUE_HAUL (using YEAR, HAULJOIN) datasets 
-  need to be full joined to create zero-filled (presence and absence) observations and 
-  catch-per-unit-effort (CPUE) estimates for all identified species at a standard set of stations ", 
+  "The full join the JOIN_FOSS_CPUE_CATCH and JOIN_FOSS_CPUE_HAUL datasets using HAULJOIN to 
+create zero-filled (presence and absence) observations and 
+catch-per-unit-effort (CPUE) estimates for all identified species at a standard set of stations ", 
   metadata_sentence_survey_institution, 
   metadata_sentence_legal_restrict, 
   metadata_sentence_foss, 
@@ -284,7 +278,6 @@ readr::write_lines(x = gsub(pattern = "\n", replacement = "", x = table_metadata
                    file = paste0(dir_out, "JOIN_FOSS_CPUE_table_metadata.txt"))
 
 base::save(
-  JOIN_FOSS_CPUE_COMB, 
   JOIN_FOSS_CPUE_HAUL, 
   JOIN_FOSS_CPUE_CATCH, 
   column_metadata, 
@@ -329,10 +322,7 @@ base::save(
 
 list_to_save <- c(
   "JOIN_FOSS_CPUE_CATCH", 
-  # "JOIN_FOSS_CPUE_TAXCONF", 
-  # "JOIN_FOSS_CPUE_SPP", 
   "JOIN_FOSS_CPUE_HAUL",
-  "JOIN_FOSS_CPUE_COMB", 
   "FOSS_CPUE_PRESONLY", 
   "FOSS_CPUE_ZEROFILLED")
 
