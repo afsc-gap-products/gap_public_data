@@ -167,7 +167,7 @@ survey of groundfish and invertebrate fauna* \[NOAA Tech. Memo.\].
 
 NOAA Fisheries Alaska Fisheries Science Center. (2023). *Fisheries one
 stop shop public data: RACE division bottom trawl survey data query*.
-https://www.fisheries.noaa.gov/foss/f?p=215:28:14399988521041::::: U.S.
+https://www.fisheries.noaa.gov/foss/f?p=215:28:14399988521041:::::; U.S.
 Dep. Commer.
 
 </div>
