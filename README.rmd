@@ -146,7 +146,7 @@ For questions, comments, and concerns specifically about the [Fisheries One Stop
 ## Column-level metadata
 
 ```{r column-metadata, echo = FALSE}
-column_metadata0 <- column_metadata
+column_metadata0 <- read.csv(file = paste0(dir_out, "column_metadata.csv"))
 names(column_metadata0) <- c("Column name from data", "Descriptive Column Name", "Units", "Description")
 knitr::kable(column_metadata0, row.names = FALSE) 
 ```
