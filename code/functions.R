@@ -54,7 +54,7 @@ link_foss <- trimws(link_foss)
 link_code_books <- "https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual"
 link_repo <- "https://github.com/afsc-gap-products/gap_public_data"
 
-metadata_sentence_survey_institution <- "in the Northern Bering Sea (NBS), Eastern Bering Sea (EBS), Bering Sea Slope (BSS), Gulf of Alaska (GOA), and Aleutian Islands (AI) Surveys conducted by the esource Assessment and Conservation Engineering Division (RACE) Groundfish Assessment Program (GAP) of the Alaska Fisheries Science Center (AFSC). "
+metadata_sentence_survey_institution <- paste0("in the ", paste0(surveys$SRVY_long, "(", surveys$SRVY, ")", collapse = ", "), " Surveys conducted by the Resource Assessment and Conservation Engineering Division (RACE) Groundfish Assessment Program (GAP) of the Alaska Fisheries Science Center (AFSC). ")
 metadata_sentence_legal_restrict <- paste0("There are no legal restrictions on access to the data. ")
 metadata_sentence_foss <- paste0("The data from this dataset are shared on the Fisheries One Stop Stop (FOSS) platform (",link_foss,"). ") 
 metadata_sentence_github <- paste0("The GitHub repository for the scripts that created this code can be found at ",link_repo, ". ")

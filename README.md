@@ -333,7 +333,7 @@ can be found [here](https://www.dataquest.io/blog/r-api-tutorial/).
 library("httr")
 library("jsonlite")
  # link to the API
-api_link <- "https://origin-tst-ods-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/"
+api_link <- "https://apps-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/"
 ```
 
 ### Select all data
@@ -346,13 +346,19 @@ data <- jsonlite::fromJSON(base::rawToChar(res$content))
 knitr::kable(head(data$items, 3)) 
 ```
 
+| year | srvy | survey                               | survey_id | cruise       | haul     | stratum   | station | vessel_name | vessel_id | date_time           | latitude_dd             | longitude_dd             | species_code | common_name       | scientific_name   | taxon_confidence | cpue_kgha               | cpue_kgkm2              | cpue_kg1000km2          | cpue_noha               | cpue_nokm2              | cpue_no1000km2          | weight_kg               | count    | bottom_temperature_c    | surface_temperature_c   | depth_m   | distance_fished_km      | net_width_m             | net_height_m | area_swept_ha           | duration_hr             |    tsn | ak_survey_id | links                                                                              |
+|-----:|:-----|:-------------------------------------|:----------|:-------------|:---------|:----------|:--------|:------------|:----------|:--------------------|:------------------------|:-------------------------|:-------------|:------------------|:------------------|:-----------------|:------------------------|:------------------------|:------------------------|:------------------------|:------------------------|:------------------------|:------------------------|:---------|:------------------------|:------------------------|:----------|:------------------------|:------------------------|:-------------|:------------------------|:------------------------|-------:|-------------:|:-----------------------------------------------------------------------------------|
+| 2002 | AI   | Aleutian Islands Bottom Trawl Survey | 5.2E+001  | 2.00201E+005 | 6.0E+000 | 7.22E+002 | 307-63  | Vesteraalen | 9.4E+001  | 05/17/2002 18:56:58 | 5.3737209999999997E+001 | -1.6701570000000001E+002 | 9.502E+004   | feathery bryozoan | Eucratea loricata | Low              | 1.7493999999999999E-002 | 1.7494449999999999E+000 | 1.7494451079999999E+003 | NA                      | NA                      | NA                      | 4.3999999999999997E-002 | 0        | 4.0999999999999996E+000 | 5.2999999999999998E+000 | 1.87E+002 | 1.5609999999999999E+000 | 1.6111999999999998E+001 | 7.25E+000    | 2.5150831999999994E+000 | 2.8000000000000003E-001 | 155809 |       878821 | self , <https://apps-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/878821> |
+| 2002 | AI   | Aleutian Islands Bottom Trawl Survey | 5.2E+001  | 2.00201E+005 | 6.0E+000 | 7.22E+002 | 307-63  | Vesteraalen | 9.4E+001  | 05/17/2002 18:56:58 | 5.3737209999999997E+001 | -1.6701570000000001E+002 | 7.9E+004     | squid unid.       | Decapodiformes    | High             | 2.2266000000000001E-002 | 2.2265670000000002E+000 | 2.2265665009999998E+003 | 3.180809E+000           | 3.1808092900000003E+002 | 3.1808092869500001E+005 | 5.6000000000000001E-002 | 8.0E+000 | 4.0999999999999996E+000 | 5.2999999999999998E+000 | 1.87E+002 | 1.5609999999999999E+000 | 1.6111999999999998E+001 | 7.25E+000    | 2.5150831999999994E+000 | 2.8000000000000003E-001 |     NA |       878822 | self , <https://apps-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/878822> |
+| 2002 | AI   | Aleutian Islands Bottom Trawl Survey | 5.2E+001  | 2.00201E+005 | 6.0E+000 | 7.22E+002 | 307-63  | Vesteraalen | 9.4E+001  | 05/17/2002 18:56:58 | 5.3737209999999997E+001 | -1.6701570000000001E+002 | 2.4191E+004  | shortfin eelpout  | Lycodes brevipes  | High             | 3.5784000000000003E-002 | 3.5784099999999999E+000 | 3.5784104480000001E+003 | 7.9520199999999996E-001 | 7.9520231999999993E+001 | 7.9520232174000004E+004 | 8.9999999999999997E-002 | 2.0E+000 | 4.0999999999999996E+000 | 5.2999999999999998E+000 | 1.87E+002 | 1.5609999999999999E+000 | 1.6111999999999998E+001 | 7.25E+000    | 2.5150831999999994E+000 | 2.8000000000000003E-001 | 165258 |       878823 | self , <https://apps-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/878823> |
+
 ### Subset data
 
 Here, as an example, we can subset the data for the 2018 Aleutian
 Islands Bottom Trawl Survey.
 
 ``` r
-res <- httr::GET(url = api_link, query = list(year = "2018", srvy = "AI")
+res <- httr::GET(url = api_link, query = list(year = "2018", srvy = "AI"))
 data <- jsonlite::fromJSON(base::rawToChar(res$content))
 x <- data$items
 x <- x[,c("srvy", "year", "stratum", "station", "vessel_name", "latitude_dd", "longitude_dd",

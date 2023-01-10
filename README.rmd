@@ -175,12 +175,12 @@ Select, filter, and package this and other NOAA Fisheries data from the [Fisheri
 library("httr")
 library("jsonlite")
  # link to the API
-api_link <- "https://origin-tst-ods-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/"
+api_link <- "https://apps-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/"
 ```
 
 ### Select all data
 
-```{r api-all-data-ex, echo = TRUE, eval = FALSE}
+```{r api-all-data-ex, echo = TRUE}
 res <- httr::GET(url = api_link)
  # res # Test connection
 data <- jsonlite::fromJSON(base::rawToChar(res$content))
@@ -193,7 +193,7 @@ knitr::kable(head(data$items, 3))
 Here, as an example, we can subset the data for the 2018 Aleutian Islands Bottom Trawl Survey. 
 
 ```{r api-subset-ex, echo = TRUE, eval = FALSE}
-res <- httr::GET(url = api_link, query = list(year = "2018", srvy = "AI")
+res <- httr::GET(url = api_link, query = list(year = "2018", srvy = "AI"))
 data <- jsonlite::fromJSON(base::rawToChar(res$content))
 x <- data$items
 x <- x[,c("srvy", "year", "stratum", "station", "vessel_name", "latitude_dd", "longitude_dd",
