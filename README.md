@@ -17,6 +17,10 @@ Seattle, WA 98195
 ## Table of contents
 
 > - [*Cite this data*](#cite-this-data)
+> - [*\> NOAA Fisheries Alaska Fisheries Science Center. RACE Division
+>   Bottom Trawl Survey Data Query, Available at:
+>   www.fisheries.noaa.gov/foss, Accessed
+>   mm/dd/yyyy*](#%3E-noaa-fisheries-alaska-fisheries-science-center.-race-division-bottom-trawl-survey-data-query,-available-at:-www.fisheries.noaa.gov/foss,-accessed-mm/dd/yyyy)
 > - [*Metadata*](#metadata)
 > - [*Data description*](#data-description)
 > - [*Bottom trawl surveys and
@@ -46,9 +50,22 @@ Seattle, WA 98195
 
 [![](https://img.shields.io/github/last-commit/afsc-gap-products/gap_public_data.svg)](https://github.com/afsc-gap-products/gap_public_data/commits/main)
 
-> NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom
-> Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss,
-> Accessed mm/dd/yyyy
+Use the below bibtext
+[citation](https://github.com/afsc-gap-products/gap_public_data/blob/main/CITATION.bib),
+as cited in our group’s [citation
+repository](https://github.com/afsc-gap-products/citations/blob/main/cite/bibliography.bib)
+for citing the data from this dataportal (NOAA Fisheries Alaska
+Fisheries Science Center, 2023). Add “note = {Accessed: mm/dd/yyyy}” to
+append the day this data was accessed.
+
+    ## @misc{FOSSAFSCData,
+    ##    author = {{NOAA Fisheries Alaska Fisheries Science Center}},
+    ##    year = {2023}, 
+    ##    title = {Fisheries One Stop Shop Public Data: RACE Division Bottom Trawl Survey Data Query},
+    ##    publisher = {{U.S. Dep. Commer.}},
+    ##    copyright = {Public Domain}, 
+    ##    howpublished = {https://www.fisheries.noaa.gov/foss/f?p=215:28:14399988521041:::::}
+    ## }
 
 The code is in development. Refer to
 [releases](https://github.com/afsc-gap-products/gap_public_data/releases)
@@ -142,7 +159,16 @@ Markowitz, E. H., Dawson, E. J., Charriere, N. E., Prohaska, B. K.,
 Rohan, S. K., Stevenson, D. E., and Britt, L. L. (2022). *Results of the
 2021 eastern and northern Bering Sea continental shelf bottom trawl
 survey of groundfish and invertebrate fauna* \[NOAA Tech. Memo.\].
-https://doi.org/<https://doi.org/10.25923/g1ny-y360>
+<https://doi.org/10.25923/g1ny-y360>
+
+</div>
+
+<div id="ref-FOSSAFSCData" class="csl-entry">
+
+NOAA Fisheries Alaska Fisheries Science Center. (2023). *Fisheries one
+stop shop public data: RACE division bottom trawl survey data query*.
+https://www.fisheries.noaa.gov/foss/f?p=215:28:14399988521041::::: U.S.
+Dep. Commer.
 
 </div>
 
@@ -217,11 +243,8 @@ questions specifically about crab data in any region, contact Mike
 Litzow (<Mike.Litzow@noaa.gov>), the Shellfish Assessment Program lead.
 
 For questions, comments, and concerns specifically about the [Fisheries
-One Stop Shop
-(FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:200:13045102793007:Mail:NO:::)
-platform, please contact us using the Comments page on the
-[FOSS](https://www.fisheries.noaa.gov/foss/f?p=215:200:13045102793007:Mail:NO:::)
-webpage.
+One Stop Shop (FOSS)]() platform, please contact us using the Comments
+page on the [FOSS]() webpage.
 
 ## Table short metadata
 
@@ -297,11 +320,9 @@ For reference:
 ## Access data interactively through the FOSS platform
 
 Select, filter, and package this and other NOAA Fisheries data from the
-[Fisheries One Stop Shop
-(FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:200:13045102793007:Mail:NO:::)
-platform. This user-friendly portal is maintained through `Oracle APEX`.
-A useful intro to using APIs in `R` can be found
-[here](https://www.dataquest.io/blog/r-api-tutorial/).
+[Fisheries One Stop Shop (FOSS)]() platform. This user-friendly portal
+is maintained through `Oracle APEX`. A useful intro to using APIs in `R`
+can be found [here](https://www.dataquest.io/blog/r-api-tutorial/).
 
 ### Connect to the API with R
 
@@ -454,9 +475,7 @@ organization](https://github.com/afsc-gap-products/data-requests/issues),
 [submit an issue to the code’s
 repository](https://github.com/afsc-gap-products/gap_public_data/issues),
 reach out the the survey team leads (listed above), or to [Fisheries One
-Stop Shop
-(FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:200:13045102793007:Mail:NO:::)
-platform managers.
+Stop Shop (FOSS)]() platform managers.
 
 ## R version metadata
 
@@ -473,40 +492,29 @@ sessionInfo()
     ## Matrix products: default
     ## 
     ## locale:
-    ## [1] LC_COLLATE=English_United States.utf8  LC_CTYPE=English_United States.utf8   
-    ## [3] LC_MONETARY=English_United States.utf8 LC_NUMERIC=C                          
-    ## [5] LC_TIME=English_United States.utf8    
+    ## [1] LC_COLLATE=English_United States.utf8  LC_CTYPE=English_United States.utf8    LC_MONETARY=English_United States.utf8
+    ## [4] LC_NUMERIC=C                           LC_TIME=English_United States.utf8    
     ## 
     ## attached base packages:
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ##  [1] jsonlite_1.8.4 httr_1.4.4     knitr_1.41     badger_0.2.2   stringr_1.5.0  taxize_0.9.100
-    ##  [7] janitor_2.1.0  here_1.0.1     rmarkdown_2.19 readr_2.1.3    magrittr_2.0.3 dplyr_1.0.10  
-    ## [13] tidyr_1.2.1   
+    ##  [1] jsonlite_1.8.4 httr_1.4.4     knitr_1.41     badger_0.2.2   stringr_1.5.0  taxize_0.9.100 janitor_2.1.0  here_1.0.1     rmarkdown_2.19
+    ## [10] readr_2.1.3    magrittr_2.0.3 dplyr_1.0.10   tidyr_1.2.1   
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] bit64_4.0.5         vroom_1.6.0         foreach_1.5.2       bold_1.2.0         
-    ##  [5] assertthat_0.2.1    askpass_1.1         highr_0.10          BiocManager_1.30.19
-    ##  [9] rvcheck_0.2.1       yulab.utils_0.0.6   cellranger_1.1.0    yaml_2.3.6         
-    ## [13] pillar_1.8.1        lattice_0.20-45     glue_1.6.2          uuid_1.1-0         
-    ## [17] digest_0.6.31       RColorBrewer_1.1-3  snakecase_0.11.0    colorspace_2.0-3   
-    ## [21] htmltools_0.5.4     plyr_1.8.8          pkgconfig_2.0.3     httpcode_0.3.0     
-    ## [25] gitcreds_0.1.2      purrr_1.0.0         scales_1.2.1        tzdb_0.3.0         
-    ## [29] openssl_2.0.5       timechange_0.1.1    tibble_3.1.8        generics_0.1.3     
-    ## [33] ggplot2_3.4.0       usethis_2.1.6       ellipsis_0.3.2      withr_2.5.0        
-    ## [37] credentials_1.3.2   cli_3.5.0           crayon_1.5.2        readxl_1.4.1       
-    ## [41] evaluate_0.19       fs_1.5.2            fansi_1.0.3         nlme_3.1-161       
-    ## [45] xml2_1.3.3          gh_1.3.1            tools_4.2.2         data.table_1.14.6  
-    ## [49] hms_1.1.2           lifecycle_1.0.3     gert_1.9.2          munsell_0.5.0      
-    ## [53] RODBC_1.3-20        compiler_4.2.2      rlang_1.0.6         grid_4.2.2         
-    ## [57] conditionz_0.1.0    sys_3.4.1           iterators_1.0.14    rstudioapi_0.14    
-    ## [61] gtable_0.3.1        codetools_0.2-18    DBI_1.1.3           reshape_0.8.9      
-    ## [65] curl_4.3.3          readtext_0.81       R6_2.5.1            zoo_1.8-11         
-    ## [69] lubridate_1.9.0     fastmap_1.1.0       bit_4.0.5           utf8_1.2.2         
-    ## [73] rprojroot_2.0.3     dlstats_0.1.6       ape_5.6-2           stringi_1.7.8      
-    ## [77] parallel_4.2.2      crul_1.3            Rcpp_1.0.9          vctrs_0.5.1        
-    ## [81] tidyselect_1.2.0    xfun_0.36
+    ##  [1] bit64_4.0.5         vroom_1.6.0         foreach_1.5.2       bold_1.2.0          assertthat_0.2.1    askpass_1.1         highr_0.10         
+    ##  [8] BiocManager_1.30.19 rvcheck_0.2.1       yulab.utils_0.0.6   yaml_2.3.6          pillar_1.8.1        lattice_0.20-45     glue_1.6.2         
+    ## [15] uuid_1.1-0          digest_0.6.31       RColorBrewer_1.1-3  snakecase_0.11.0    colorspace_2.0-3    htmltools_0.5.4     plyr_1.8.8         
+    ## [22] pkgconfig_2.0.3     httpcode_0.3.0      gitcreds_0.1.2      purrr_1.0.0         scales_1.2.1        tzdb_0.3.0          timechange_0.1.1   
+    ## [29] tibble_3.1.8        openssl_2.0.5       generics_0.1.3      ggplot2_3.4.0       usethis_2.1.6       ellipsis_0.3.2      withr_2.5.0        
+    ## [36] credentials_1.3.2   cli_3.5.0           crayon_1.5.2        evaluate_0.19       fs_1.5.2            fansi_1.0.3         nlme_3.1-161       
+    ## [43] xml2_1.3.3          gh_1.3.1            tools_4.2.2         data.table_1.14.6   hms_1.1.2           lifecycle_1.0.3     gert_1.9.2         
+    ## [50] munsell_0.5.0       compiler_4.2.2      rlang_1.0.6         grid_4.2.2          conditionz_0.1.0    iterators_1.0.14    rstudioapi_0.14    
+    ## [57] sys_3.4.1           gtable_0.3.1        codetools_0.2-18    DBI_1.1.3           reshape_0.8.9       curl_4.3.3          readtext_0.81      
+    ## [64] R6_2.5.1            zoo_1.8-11          lubridate_1.9.0     fastmap_1.1.0       bit_4.0.5           utf8_1.2.2          rprojroot_2.0.3    
+    ## [71] dlstats_0.1.6       ape_5.6-2           stringi_1.7.8       parallel_4.2.2      crul_1.3            Rcpp_1.0.9          vctrs_0.5.1        
+    ## [78] tidyselect_1.2.0    xfun_0.36
 
 ## NOAA README
 

@@ -38,7 +38,19 @@ dir.create(dir_out)
 
 # Table Metadata canned sentences ----------------------------------------------
 
-link_foss <- "https://www.fisheries.noaa.gov/foss/f?p=215:200:13045102793007:Mail:NO:::"
+bibfiletext <- readLines(con = "https://raw.githubusercontent.com/afsc-gap-products/citations/main/cite/bibliography.bib")
+find_start <- grep(pattern = "FOSSAFSCData", x = bibfiletext, fixed = TRUE)
+find_end <- which(bibfiletext == "}")
+find_end <- find_end[find_end>find_start][1]
+a <- bibfiletext[find_start:find_end]
+write_file(x = paste0(a, collapse = "\n"), file = "CITATION.bib")
+
+link_foss <- a[grep(pattern = "url = {", x = a, fixed = TRUE)]
+link_foss <- gsub(pattern = "url = {", replacement = "", x = link_foss, fixed = TRUE)
+link_foss <- gsub(pattern = "},", replacement = "", x = link_foss, fixed = TRUE)
+link_foss <- trimws(link_foss)
+
+
 link_code_books <- "https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual"
 link_repo <- "https://github.com/afsc-gap-products/gap_public_data"
 

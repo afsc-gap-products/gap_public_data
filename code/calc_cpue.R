@@ -265,7 +265,7 @@ column_metadata <- column_metadata[match(names(FOSS_CPUE_ZEROFILLED), toupper(co
 
 table_metadata <- paste0(
   "The full join the JOIN_FOSS_CPUE_CATCH and JOIN_FOSS_CPUE_HAUL datasets using HAULJOIN to 
-create zero-filled (presence and absence) observations and 
+create zero-filled (presence and absence) observations and
 catch-per-unit-effort (CPUE) estimates for all identified species at a standard set of stations ", 
   metadata_sentence_survey_institution, 
   metadata_sentence_legal_restrict, 
@@ -274,8 +274,8 @@ catch-per-unit-effort (CPUE) estimates for all identified species at a standard 
   metadata_sentence_codebook, 
   metadata_sentence_last_updated)
 
-readr::write_lines(x = gsub(pattern = "\n", replacement = "", x = table_metadata), 
-                   file = paste0(dir_out, "JOIN_FOSS_CPUE_table_metadata.txt"))
+readr::write_lines(x = gsub(pattern = "  ", replacement = " ", x = gsub(pattern = "\n", replacement = "", x = table_metadata), 
+                   file = paste0(dir_out, "JOIN_FOSS_CPUE_table_metadata.txt")))
 
 base::save(
   JOIN_FOSS_CPUE_HAUL, 

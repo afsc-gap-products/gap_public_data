@@ -57,12 +57,12 @@ source('./code/calc_cpue.R')
 
 # Update README ----------------------------------------------------------------
 
+source('./code/functions.R')
 dir_out <- paste0(getwd(), "/output/2023-01-08/")
 
-# load(paste0(dir_out, "FOSS_CPUE_PRESONLY.RData"))
-# load(paste0(dir_out, "FOSS_CPUE_JOIN.RData"))
+load(paste0(dir_out, "FOSS_CPUE_PRESONLY.RData"))
+load(paste0(dir_out, "FOSS_CPUE_JOIN.RData"))
 load(paste0(dir_out, "FOSS_CPUE_ZEROFILLED.RData"))
-
 rmarkdown::render(paste0("./README.Rmd"),
                   output_dir = "./",
                   output_file = paste0("README.md"))
