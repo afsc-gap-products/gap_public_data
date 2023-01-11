@@ -49,7 +49,6 @@ link_foss <- gsub(pattern = "howpublished = {", replacement = "", x = link_foss,
 link_foss <- gsub(pattern = "},", replacement = "", x = link_foss, fixed = TRUE)
 link_foss <- trimws(link_foss)
 
-
 link_code_books <- "https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual"
 link_repo <- "https://github.com/afsc-gap-products/gap_public_data"
 

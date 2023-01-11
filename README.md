@@ -243,8 +243,11 @@ questions specifically about crab data in any region, contact Mike
 Litzow (<Mike.Litzow@noaa.gov>), the Shellfish Assessment Program lead.
 
 For questions, comments, and concerns specifically about the [Fisheries
-One Stop Shop (FOSS)]() platform, please contact us using the Comments
-page on the [FOSS]() webpage.
+One Stop Shop
+(FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:28:14399988521041:::::)
+platform, please contact us using the Comments page on the
+[FOSS](https://www.fisheries.noaa.gov/foss/f?p=215:28:14399988521041:::::)
+webpage.
 
 ## Table short metadata
 
@@ -256,11 +259,12 @@ Sea Slope (BSS) Surveys conducted by the Resource Assessment and
 Conservation Engineering Division (RACE) Groundfish Assessment Program
 (GAP) of the Alaska Fisheries Science Center (AFSC). There are no legal
 restrictions on access to the data. The data from this dataset are
-shared on the Fisheries One Stop Stop (FOSS) platform (). The GitHub
-repository for the scripts that created this code can be found at
-<https://github.com/afsc-gap-products/gap_public_data>. For more
-information about codes used in the tables, please refer to the survey
-code books
+shared on the Fisheries One Stop Stop (FOSS) platform
+(<https://www.fisheries.noaa.gov/foss/f?p=215:28:14399988521041>:::::).
+The GitHub repository for the scripts that created this code can be
+found at <https://github.com/afsc-gap-products/gap_public_data>. For
+more information about codes used in the tables, please refer to the
+survey code books
 (<https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual>).
 These data were last updated January 08, 2023.
 
@@ -321,9 +325,11 @@ For reference:
 ## Access data interactively through the FOSS platform
 
 Select, filter, and package this and other NOAA Fisheries data from the
-[Fisheries One Stop Shop (FOSS)]() platform. This user-friendly portal
-is maintained through `Oracle APEX`. A useful intro to using APIs in `R`
-can be found [here](https://www.dataquest.io/blog/r-api-tutorial/).
+[Fisheries One Stop Shop
+(FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:28:14399988521041:::::)
+platform. This user-friendly portal is maintained through `Oracle APEX`.
+A useful intro to using APIs in `R` can be found
+[here](https://www.dataquest.io/blog/r-api-tutorial/).
 
 ### Connect to the API with R
 
@@ -455,11 +461,12 @@ Sea Slope (BSS) Surveys conducted by the Resource Assessment and
 Conservation Engineering Division (RACE) Groundfish Assessment Program
 (GAP) of the Alaska Fisheries Science Center (AFSC). There are no legal
 restrictions on access to the data. The data from this dataset are
-shared on the Fisheries One Stop Stop (FOSS) platform (). The GitHub
-repository for the scripts that created this code can be found at
-<https://github.com/afsc-gap-products/gap_public_data>. For more
-information about codes used in the tables, please refer to the survey
-code books
+shared on the Fisheries One Stop Stop (FOSS) platform
+(<https://www.fisheries.noaa.gov/foss/f?p=215:28:14399988521041>:::::).
+The GitHub repository for the scripts that created this code can be
+found at <https://github.com/afsc-gap-products/gap_public_data>. For
+more information about codes used in the tables, please refer to the
+survey code books
 (<https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual>).
 These data were last updated January 08, 2023.
 
@@ -481,7 +488,9 @@ organization](https://github.com/afsc-gap-products/data-requests/issues),
 [submit an issue to the code’s
 repository](https://github.com/afsc-gap-products/gap_public_data/issues),
 reach out the the survey team leads (listed above), or to [Fisheries One
-Stop Shop (FOSS)]() platform managers.
+Stop Shop
+(FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:28:14399988521041:::::)
+platform managers.
 
 ## R version metadata
 
