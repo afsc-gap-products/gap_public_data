@@ -68,9 +68,7 @@ cat(
 Use the below bibtext [citation](https://github.com/afsc-gap-products/gap_public_data/blob/main/CITATION.bib), as cited in our group's [citation repository](https://github.com/afsc-gap-products/citations/blob/main/cite/bibliography.bib) for citing the data from this dataportal [@FOSSAFSCData]. Add "note = {Accessed: mm/dd/yyyy}" to append the day this data was accessed.  
 
 ```{r, echo = FALSE}
-cat(readLines(con = "CITATION.bib"), sep = "\n")
-
-# NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss, Accessed mm/dd/yyyy
+cat(readLines(con = "CITATION.bib"), sep = "\n") # NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss, Accessed mm/dd/yyyy
 ```
 
 The code is in development. Refer to [releases](`r paste0(link_repo, "/releases")`) for finalized products. These data were last ran and pushed to the AFSC oracle on **`r format(x = as.Date(strsplit(x = dir_out, split = "/", fixed = TRUE)[[1]][5]), "%B %d, %Y")`**. *This is not the date that these data were pulled into FOSS and the FOSS dataset may be behind.* 
