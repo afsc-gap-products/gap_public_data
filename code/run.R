@@ -36,6 +36,7 @@ taxize0 <- FALSE # incorporate species codes from databases
 
 # source('./code/data_dl.R')
 source('./code/functions.R')
+source('./code/metadata.R')
 
 option <- 3 # used in find_taxize_species_codes 
 if (taxize0) { # only if you need to rerun {taxize} stuff - very time intensive!

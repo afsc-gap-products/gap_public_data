@@ -66,7 +66,7 @@ append the day this data was accessed.
 The code is in development. Refer to
 [releases](https://github.com/afsc-gap-products/gap_public_data/releases)
 for finalized products. These data were last ran and pushed to the AFSC
-oracle on **January 08, 2023**. *This is not the date that these data
+oracle on **January 11, 2023**. *This is not the date that these data
 were pulled into FOSS and the FOSS dataset may be behind.*
 
 # Metadata
@@ -262,7 +262,7 @@ found at <https://github.com/afsc-gap-products/gap_public_data>. For
 more information about codes used in the tables, please refer to the
 survey code books
 (<https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual>).
-These data were last updated January 08, 2023.
+These data were last updated January 11, 2023.
 
 ## Column-level metadata
 
@@ -464,7 +464,7 @@ found at <https://github.com/afsc-gap-products/gap_public_data>. For
 more information about codes used in the tables, please refer to the
 survey code books
 (<https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual>).
-These data were last updated January 08, 2023.
+These data were last updated January 11, 2023.
 
     ## RACEBASE_FOSS.JOIN_FOSS_CPUE_CATCH: 
     ##   rows: 36308030
