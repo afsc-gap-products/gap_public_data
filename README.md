@@ -250,18 +250,17 @@ page on the [FOSS]() webpage.
 
 This dataset includes zero-filled (presence and absence) observations
 and catch-per-unit-effort (CPUE) estimates for most identified species
-at a standard set of stations in the Northern Bering Sea (NBS), Eastern
-Bering Sea (EBS), Bering Sea Slope (BSS), Gulf of Alaska (GOA), and
-Aleutian Islands (AI) Surveys conducted by the esource Assessment and
+at a standard set of stations in the northern Bering Sea (NBS), eastern
+Bering Sea (EBS), Gulf of Alaska (GOA), Aleutian Islands (AI), Bering
+Sea Slope (BSS) Surveys conducted by the Resource Assessment and
 Conservation Engineering Division (RACE) Groundfish Assessment Program
 (GAP) of the Alaska Fisheries Science Center (AFSC). There are no legal
 restrictions on access to the data. The data from this dataset are
-shared on the Fisheries One Stop Stop (FOSS) platform
-(<https://www.fisheries.noaa.gov/foss/f?p=215:200:13045102793007:Mail:NO>:::).
-The GitHub repository for the scripts that created this code can be
-found at <https://github.com/afsc-gap-products/gap_public_data>. For
-more information about codes used in the tables, please refer to the
-survey code books
+shared on the Fisheries One Stop Stop (FOSS) platform (). The GitHub
+repository for the scripts that created this code can be found at
+<https://github.com/afsc-gap-products/gap_public_data>. For more
+information about codes used in the tables, please refer to the survey
+code books
 (<https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual>).
 These data were last updated January 08, 2023.
 
@@ -448,20 +447,19 @@ If this file is too large, you can join catch and haul data. Pull the
 combine the table locally yourself.
 
 The full join the JOIN_FOSS_CPUE_CATCH and JOIN_FOSS_CPUE_HAUL datasets
-using HAULJOIN to create zero-filled (presence and absence) observations
-and catch-per-unit-effort (CPUE) estimates for all identified species at
-a standard set of stations in the Northern Bering Sea (NBS), Eastern
-Bering Sea (EBS), Bering Sea Slope (BSS), Gulf of Alaska (GOA), and
-Aleutian Islands (AI) Surveys conducted by the esource Assessment and
+using HAULJOIN tocreate zero-filled (presence and absence) observations
+andcatch-per-unit-effort (CPUE) estimates for all identified species at
+a standard set of stations in the northern Bering Sea (NBS), eastern
+Bering Sea (EBS), Gulf of Alaska (GOA), Aleutian Islands (AI), Bering
+Sea Slope (BSS) Surveys conducted by the Resource Assessment and
 Conservation Engineering Division (RACE) Groundfish Assessment Program
 (GAP) of the Alaska Fisheries Science Center (AFSC). There are no legal
 restrictions on access to the data. The data from this dataset are
-shared on the Fisheries One Stop Stop (FOSS) platform
-(<https://www.fisheries.noaa.gov/foss/f?p=215:200:13045102793007:Mail:NO>:::).
-The GitHub repository for the scripts that created this code can be
-found at <https://github.com/afsc-gap-products/gap_public_data>. For
-more information about codes used in the tables, please refer to the
-survey code books
+shared on the Fisheries One Stop Stop (FOSS) platform (). The GitHub
+repository for the scripts that created this code can be found at
+<https://github.com/afsc-gap-products/gap_public_data>. For more
+information about codes used in the tables, please refer to the survey
+code books
 (<https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual>).
 These data were last updated January 08, 2023.
 
@@ -500,35 +498,23 @@ sessionInfo()
     ## Matrix products: default
     ## 
     ## locale:
-    ## [1] LC_COLLATE=English_United States.utf8  LC_CTYPE=English_United States.utf8   
-    ## [3] LC_MONETARY=English_United States.utf8 LC_NUMERIC=C                          
-    ## [5] LC_TIME=English_United States.utf8    
+    ## [1] LC_COLLATE=English_United States.utf8  LC_CTYPE=English_United States.utf8    LC_MONETARY=English_United States.utf8 LC_NUMERIC=C                           LC_TIME=English_United States.utf8    
     ## 
     ## attached base packages:
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ##  [1] jsonlite_1.8.4 httr_1.4.4     stringr_1.5.0  taxize_0.9.100 janitor_2.1.0  rmarkdown_2.19 magrittr_2.0.3
-    ##  [8] dplyr_1.0.10   tidyr_1.2.1    knitr_1.41     badger_0.2.2   readr_2.1.3   
+    ##  [1] jsonlite_1.8.4 httr_1.4.4     stringr_1.5.0  taxize_0.9.100 janitor_2.1.0  rmarkdown_2.19 magrittr_2.0.3 dplyr_1.0.10   tidyr_1.2.1    knitr_1.41     badger_0.2.2   readr_2.1.3   
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] bit64_4.0.5         vroom_1.6.0         foreach_1.5.2       bold_1.2.0          here_1.0.1         
-    ##  [6] assertthat_0.2.1    askpass_1.1         highr_0.10          BiocManager_1.30.19 rvcheck_0.2.1      
-    ## [11] yulab.utils_0.0.6   cellranger_1.1.0    yaml_2.3.6          pillar_1.8.1        lattice_0.20-45    
-    ## [16] glue_1.6.2          uuid_1.1-0          digest_0.6.31       RColorBrewer_1.1-3  snakecase_0.11.0   
-    ## [21] colorspace_2.0-3    htmltools_0.5.4     plyr_1.8.8          pkgconfig_2.0.3     httpcode_0.3.0     
-    ## [26] gitcreds_0.1.2      purrr_1.0.1         scales_1.2.1        tzdb_0.3.0          openssl_2.0.5      
-    ## [31] timechange_0.1.1    tibble_3.1.8        generics_0.1.3      ggplot2_3.4.0       usethis_2.1.6      
-    ## [36] ellipsis_0.3.2      withr_2.5.0         credentials_1.3.2   cli_3.6.0           crayon_1.5.2       
-    ## [41] readxl_1.4.1        evaluate_0.19       fs_1.5.2            fansi_1.0.3         nlme_3.1-161       
-    ## [46] xml2_1.3.3          gh_1.3.1            tools_4.2.2         data.table_1.14.6   hms_1.1.2          
-    ## [51] gert_1.9.2          lifecycle_1.0.3     munsell_0.5.0       RODBC_1.3-20        compiler_4.2.2     
-    ## [56] rlang_1.0.6         grid_4.2.2          conditionz_0.1.0    sys_3.4.1           iterators_1.0.14   
-    ## [61] rstudioapi_0.14     gtable_0.3.1        codetools_0.2-18    DBI_1.1.3           reshape_0.8.9      
-    ## [66] curl_4.3.3          readtext_0.81       R6_2.5.1            zoo_1.8-11          lubridate_1.9.0    
-    ## [71] fastmap_1.1.0       bit_4.0.5           utf8_1.2.2          rprojroot_2.0.3     dlstats_0.1.6      
-    ## [76] ape_5.6-2           stringi_1.7.8       parallel_4.2.2      crul_1.3            Rcpp_1.0.9         
-    ## [81] vctrs_0.5.1         tidyselect_1.2.0    xfun_0.36
+    ##  [1] bit64_4.0.5         vroom_1.6.0         foreach_1.5.2       bold_1.2.0          here_1.0.1          assertthat_0.2.1    askpass_1.1         highr_0.10          BiocManager_1.30.19 rvcheck_0.2.1       yulab.utils_0.0.6  
+    ## [12] cellranger_1.1.0    yaml_2.3.6          pillar_1.8.1        lattice_0.20-45     glue_1.6.2          uuid_1.1-0          digest_0.6.31       RColorBrewer_1.1-3  snakecase_0.11.0    colorspace_2.0-3    htmltools_0.5.4    
+    ## [23] plyr_1.8.8          pkgconfig_2.0.3     httpcode_0.3.0      gitcreds_0.1.2      purrr_1.0.1         scales_1.2.1        tzdb_0.3.0          openssl_2.0.5       timechange_0.1.1    tibble_3.1.8        generics_0.1.3     
+    ## [34] ggplot2_3.4.0       usethis_2.1.6       ellipsis_0.3.2      withr_2.5.0         credentials_1.3.2   cli_3.6.0           crayon_1.5.2        readxl_1.4.1        evaluate_0.19       fs_1.5.2            fansi_1.0.3        
+    ## [45] nlme_3.1-161        xml2_1.3.3          gh_1.3.1            tools_4.2.2         data.table_1.14.6   hms_1.1.2           gert_1.9.2          lifecycle_1.0.3     munsell_0.5.0       RODBC_1.3-20        compiler_4.2.2     
+    ## [56] rlang_1.0.6         grid_4.2.2          conditionz_0.1.0    sys_3.4.1           iterators_1.0.14    rstudioapi_0.14     gtable_0.3.1        codetools_0.2-18    DBI_1.1.3           reshape_0.8.9       curl_4.3.3         
+    ## [67] readtext_0.81       R6_2.5.1            zoo_1.8-11          lubridate_1.9.0     fastmap_1.1.0       bit_4.0.5           utf8_1.2.2          rprojroot_2.0.3     dlstats_0.1.6       ape_5.6-2           stringi_1.7.8      
+    ## [78] parallel_4.2.2      crul_1.3            Rcpp_1.0.9          vctrs_0.5.1         tidyselect_1.2.0    xfun_0.36
 
 ## NOAA README
 

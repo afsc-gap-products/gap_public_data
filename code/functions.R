@@ -44,8 +44,8 @@ find_end <- find_end[find_end>find_start][1]
 a <- bibfiletext[find_start:find_end]
 readr::write_file(x = paste0(a, collapse = "\n"), file = "CITATION.bib")
 
-link_foss <- a[grep(pattern = "howpublished  = {", x = a, fixed = TRUE)]
-link_foss <- gsub(pattern = "howpublished  = {", replacement = "", x = link_foss, fixed = TRUE)
+link_foss <- a[grep(pattern = "howpublished = {", x = a, fixed = TRUE)]
+link_foss <- gsub(pattern = "howpublished = {", replacement = "", x = link_foss, fixed = TRUE)
 link_foss <- gsub(pattern = "},", replacement = "", x = link_foss, fixed = TRUE)
 link_foss <- trimws(link_foss)
 
@@ -53,11 +53,11 @@ link_foss <- trimws(link_foss)
 link_code_books <- "https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual"
 link_repo <- "https://github.com/afsc-gap-products/gap_public_data"
 
-metadata_sentence_survey_institution <- paste0("in the ", paste0(surveys$SRVY_long, "(", surveys$SRVY, ")", collapse = ", "), " Surveys conducted by the Resource Assessment and Conservation Engineering Division (RACE) Groundfish Assessment Program (GAP) of the Alaska Fisheries Science Center (AFSC). ")
+metadata_sentence_survey_institution <- paste0("in the ", paste0(surveys$SRVY_long, " (", surveys$SRVY, ")", collapse = ", "), " Surveys conducted by the Resource Assessment and Conservation Engineering Division (RACE) Groundfish Assessment Program (GAP) of the Alaska Fisheries Science Center (AFSC). ")
 metadata_sentence_legal_restrict <- paste0("There are no legal restrictions on access to the data. ")
 metadata_sentence_foss <- paste0("The data from this dataset are shared on the Fisheries One Stop Stop (FOSS) platform (",link_foss,"). ") 
 metadata_sentence_github <- paste0("The GitHub repository for the scripts that created this code can be found at ",link_repo, ". ")
-metadata_sentence_last_updated <- paste0("These data were last updated ", format(x = as.Date(Sys.Date()), "%B %d, %Y"), ". ")
+metadata_sentence_last_updated <- paste0("These data were last updated ", format(x = as.Date(strsplit(x = dir_out, split = "/", fixed = TRUE)[[1]][length(strsplit(x = dir_out, split = "/", fixed = TRUE)[[1]])]), "%B %d, %Y"), ". ")
 metadata_sentence_codebook <- paste0("For more information about codes used in the tables, please refer to the survey code books (", link_code_books, "). ")
 
 # Column Metadata --------------------------------------------------------------
