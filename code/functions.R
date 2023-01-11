@@ -15,8 +15,7 @@ PKG <- c(
   "magrittr",
   "readr",
   "rmarkdown",
-  "here",
-  
+
   "janitor",
   "taxize",
   
@@ -43,10 +42,10 @@ find_start <- grep(pattern = "FOSSAFSCData", x = bibfiletext, fixed = TRUE)
 find_end <- which(bibfiletext == "}")
 find_end <- find_end[find_end>find_start][1]
 a <- bibfiletext[find_start:find_end]
-write_file(x = paste0(a, collapse = "\n"), file = "CITATION.bib")
+readr::write_file(x = paste0(a, collapse = "\n"), file = "CITATION.bib")
 
-link_foss <- a[grep(pattern = "url = {", x = a, fixed = TRUE)]
-link_foss <- gsub(pattern = "url = {", replacement = "", x = link_foss, fixed = TRUE)
+link_foss <- a[grep(pattern = "howpublished  = {", x = a, fixed = TRUE)]
+link_foss <- gsub(pattern = "howpublished  = {", replacement = "", x = link_foss, fixed = TRUE)
 link_foss <- gsub(pattern = "},", replacement = "", x = link_foss, fixed = TRUE)
 link_foss <- trimws(link_foss)
 
