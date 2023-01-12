@@ -27,13 +27,13 @@ source("Z:/Projects/ConnectToOracle.R")
 upload_to_oracle <- function(
     file_paths, 
     column_metadata, 
-    channel_foss, 
+    channel, 
     update_table = TRUE, 
     update_metadata = TRUE) {
   
   column_metadata$colname <- toupper(column_metadata$colname)
   
-  all_schemas <- RODBC::sqlQuery(channel = channel_foss,
+  all_schemas <- RODBC::sqlQuery(channel = channel,
                                  query = paste0('SELECT * FROM all_users;'))
   
 # Loop through each table to add to oracle -------------------------------------
@@ -56,15 +56,15 @@ upload_to_oracle <- function(
     ## Drop old table from oracle -------------------------------------------------
     # if the table is currently in the schema, drop the table before re-uploading
     if (file_name %in% 
-        unlist(RODBC::sqlQuery(channel = channel_foss, 
+        unlist(RODBC::sqlQuery(channel = channel, 
                                query = "SELECT table_name FROM user_tables;"))) {
-      RODBC::sqlDrop(channel = channel_foss,
+      RODBC::sqlDrop(channel = channel,
                      sqtable = file_name)
     }
     
     ## Add the table to the schema ------------------------------------------------
     eval( parse(
-      text = paste0("RODBC::sqlSave(channel = channel_foss,
+      text = paste0("RODBC::sqlSave(channel = channel,
                  dat = ",file_name,")") ))
     }
     
@@ -80,7 +80,7 @@ upload_to_oracle <- function(
         short_colname <- gsub(pattern = "<sup>2</sup>", replacement = "2",
                               x = column_metadata0$colname[i], fixed = TRUE)
         
-        RODBC::sqlQuery(channel = channel_foss,
+        RODBC::sqlQuery(channel = channel,
                         query = paste0('comment on column RACEBASE_FOSS.',file_name,'.',
                                        short_colname,' is \'',
                                        desc, ". ", # remove markdown/html code
@@ -90,14 +90,14 @@ upload_to_oracle <- function(
       }
     }
     ## Add table metadata ---------------------------------------------------------
-    RODBC::sqlQuery(channel = channel_foss,
+    RODBC::sqlQuery(channel = channel,
                     query = paste0('comment on table RACEBASE_FOSS.',file_name,
                                    ' is \'',
                                    file_paths$table_metadata[ii],'\';'))
     }
     ## grant access to all schemes ------------------------------------------------
     for (iii in 1:length(sort(all_schemas$USERNAME))) {
-      RODBC::sqlQuery(channel = channel_foss,
+      RODBC::sqlQuery(channel = channel,
                       query = paste0('grant select on RACEBASE_FOSS.',file_name,
                                      ' to ', all_schemas$USERNAME[iii],';'))
     }
@@ -156,7 +156,7 @@ file_paths <- data.frame(
 
 upload_to_oracle(
   # update_metadata = FALSE, 
-  update_table = FALSE,
+  # update_table = FALSE,
     file_paths = file_paths, 
     column_metadata = column_metadata, 
-    channel_foss = channel_foss)
+    channel = channel_foss)
