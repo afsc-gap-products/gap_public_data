@@ -36,7 +36,7 @@ taxize0 <- FALSE # incorporate species codes from databases
 
 # source('./code/data_dl.R')
 source('./code/functions.R')
-source('./code/metadata.R')
+source("https://raw.githubusercontent.com/afsc-gap-products/metadata/main/code/functions_oracle.R")
 
 option <- 3 # used in find_taxize_species_codes 
 if (taxize0) { # only if you need to rerun {taxize} stuff - very time intensive!
@@ -59,7 +59,7 @@ source('./code/calc_cpue.R')
 # Update README ----------------------------------------------------------------
 
 source('./code/functions.R')
-dir_out <- paste0(getwd(), "/output/2023-01-11/")
+dir_out <- paste0(getwd(), "/output/2023-01-18/")
 
 load(paste0(dir_out, "FOSS_CPUE_PRESONLY.RData"))
 load(paste0(dir_out, "FOSS_CPUE_JOIN.RData"))

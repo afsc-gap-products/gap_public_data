@@ -29,57 +29,24 @@ source("Z:/Projects/ConnectToOracle.R")
 # odbcGetInfo(channel)
 
 
-##################DOWNLOAD CPUE and BIOMASS EST##################################
+# Dowload oracle data ----------------------------------------------------------
 
 locations <- c(
   #General Tables of data
   "RACEBASE.CATCH", 
   "RACEBASE.HAUL", 
   "RACE_DATA.V_CRUISES",
-  "RACEBASE.SPECIES", 
+  # "RACEBASE.SPECIES", 
   # "RACE_DATA.SPECIES_TAXONOMICS", 
-  "RACEBASE.SPECIES_CLASSIFICATION",
-  "RACE_DATA.VESSELS"
+  # "RACEBASE.SPECIES_CLASSIFICATION",
+  "RACE_DATA.VESSELS", 
+  "GAP_PRODUCTS.METADATA_TABLE", 
+  "GAP_PRODUCTS.METADATA_COLUMN", 
+  "GAP_PRODUCTS.OLD_TAXON_CONFIDENCE"
 )
 
-#sinks the data into connection as text file
-sink("./data/metadata.txt")
-
-print(Sys.Date())
-
-for (i in 1:length(locations)){
-  print(locations[i])
-  if (locations[i] == "RACEBASE.HAUL") { # that way I can also extract TIME
-    
-    a<-RODBC::sqlQuery(channel, paste0("SELECT * FROM ", locations[i]))
-    
-    a<-RODBC::sqlQuery(channel, 
-                       paste0("SELECT ",
-                              paste0(names(a)[names(a) != "START_TIME"], 
-                                     sep = ",", collapse = " "),
-                              " TO_CHAR(START_TIME,'MM/DD/YYYY HH24:MI:SS') START_TIME  FROM ", 
-                              locations[i]))
-  } else {
-    a<-RODBC::sqlQuery(channel, paste0("SELECT * FROM ", locations[i]))
-  }
-  
-  if (locations[i] == "AI.CPUE") {
-    filename <- "cpue_ai"
-  } else if (locations[i] == "GOA.CPUE") {
-    filename <- "cpue_goa"
-  } else {
-    filename <- tolower(strsplit(x = locations[i], 
-                               split = ".", 
-                               fixed = TRUE)[[1]][2])
-  }
-    
-  write.csv(x=a, 
-            paste0("./data/oracle/",
-                   filename,
-                   ".csv"))
-  remove(a)
-}
-
-sink()
-
+oracle_dl(
+  locations = locations, 
+  channel = channel, 
+  dir_out = "./data/oracle/")
 

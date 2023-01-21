@@ -57,7 +57,7 @@ FOSS_CPUE_ZEROFILLED <- FOSS_CPUE_ZEROFILLED_comb %>%
     by = "species_code") %>%
   dplyr::left_join( # Add species info
     x = .,
-    y = TAXON_CONFIDENCE %>% 
+    y = taxon_confidence0 %>% 
       dplyr::select(year, taxon_confidence, SRVY, species_code), 
     by = c("year", "SRVY", "species_code")) %>%
   dplyr::left_join( # overwrite NAs where data exists for CPUE calculation
@@ -254,16 +254,16 @@ FOSS_CPUE_PRESONLY <- FOSS_CPUE_ZEROFILLED %>%
 
 # Metadata ---------------------------------------------------------------------
 
-column_metadata <- column_metadata[match(names(FOSS_CPUE_ZEROFILLED), toupper(column_metadata$colname)),]  
+metadata_column <- metadata_column[match(names(FOSS_CPUE_ZEROFILLED), toupper(metadata_column$colname)),]  
 
-# setdiff(as.character(column_metadata$`Column name from data`), names(FOSS_CPUE_ZEROFILLED))
-# setdiff(names(FOSS_CPUE_ZEROFILLED), as.character(column_metadata$`colname`))
+# setdiff(as.character(metadata_column$`Column name from data`), names(FOSS_CPUE_ZEROFILLED))
+# setdiff(names(FOSS_CPUE_ZEROFILLED), as.character(metadata_column$`colname`))
 
 # Save public data output ------------------------------------------------------
 
 # zero-fill join tables
 
-table_metadata <- paste0(
+table_column <- paste0(
   "The full join the JOIN_FOSS_CPUE_CATCH and JOIN_FOSS_CPUE_HAUL datasets using HAULJOIN to
 create zero-filled (presence and absence) observations and
 catch-per-unit-effort (CPUE) estimates for all identified species at a standard set of stations ", 
@@ -274,19 +274,19 @@ catch-per-unit-effort (CPUE) estimates for all identified species at a standard 
   metadata_sentence_codebook, 
   metadata_sentence_last_updated)
 
-readr::write_lines(x = gsub(pattern = "\n", replacement = "", x = table_metadata), 
-                   file = paste0(dir_out, "JOIN_FOSS_CPUE_table_metadata.txt"))
+readr::write_lines(x = gsub(pattern = "\n", replacement = "", x = table_column), 
+                   file = paste0(dir_out, "JOIN_FOSS_CPUE_table_column.txt"))
 
 base::save(
   JOIN_FOSS_CPUE_HAUL, 
   JOIN_FOSS_CPUE_CATCH, 
-  column_metadata, 
-  table_metadata, 
+  metadata_column, 
+  table_column, 
   file = paste0(dir_out, "FOSS_CPUE_JOIN.RData"))
 
 # Zero filled 
 
-table_metadata <- paste0(
+table_column <- paste0(
   "This dataset includes zero-filled (presence and absence) observations and
   catch-per-unit-effort (CPUE) estimates for most identified species at a standard set of stations ", 
   metadata_sentence_survey_institution, 
@@ -296,28 +296,28 @@ table_metadata <- paste0(
   metadata_sentence_codebook, 
   metadata_sentence_last_updated)
 
-readr::write_lines(x = gsub(pattern = "\n", replacement = "", x = table_metadata), 
-                   file = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_table_metadata.txt"))
+readr::write_lines(x = gsub(pattern = "\n", replacement = "", x = table_column), 
+                   file = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_table_column.txt"))
 
 base::save(
   FOSS_CPUE_ZEROFILLED, 
-  column_metadata, 
-  table_metadata, 
+  metadata_column, 
+  table_column, 
   file = paste0(dir_out, "FOSS_CPUE_ZEROFILLED.RData"))
 
 # PRES ONLY
 
-table_metadata <- gsub(pattern = "zero-filled (presence and absence)", 
+table_column <- gsub(pattern = "zero-filled (presence and absence)", 
      replacement = "presence-only",
-     x = paste(readLines(con = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_table_metadata.txt")), collapse="\n"))
+     x = paste(readLines(con = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_table_column.txt")), collapse="\n"))
 
-readr::write_lines(x = gsub(pattern = "\n", replacement = "", x = table_metadata), 
-                   file = paste0(dir_out, "FOSS_CPUE_PRESONLY_table_metadata.txt"))
+readr::write_lines(x = gsub(pattern = "\n", replacement = "", x = table_column), 
+                   file = paste0(dir_out, "FOSS_CPUE_PRESONLY_table_column.txt"))
 
 base::save(
   FOSS_CPUE_PRESONLY, 
-  column_metadata, 
-  table_metadata, 
+  metadata_column, 
+  table_column, 
   file = paste0(dir_out, "FOSS_CPUE_PRESONLY.RData"))
 
 list_to_save <- c(

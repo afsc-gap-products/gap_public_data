@@ -5,6 +5,15 @@
 #' Notes: 
 #' -----------------------------------------------------------------------------
 
+# Create Citation File ----------------------------------------------
+
+bibfiletext <- readLines(con = "https://raw.githubusercontent.com/afsc-gap-products/citations/main/cite/bibliography.bib")
+find_start <- grep(pattern = "FOSSAFSCData", x = bibfiletext, fixed = TRUE)
+find_end <- which(bibfiletext == "}")
+find_end <- find_end[find_end>find_start][1]
+a <- bibfiletext[find_start:find_end]
+readr::write_file(x = paste0(a, collapse = "\n"), file = "CITATION.bib")
+
 # Load Data --------------------------------------------------------------------
 
 ## Oracle Data -----------------------------------------------------------------
@@ -21,13 +30,35 @@ for (i in 1:length(a)){
   assign(x = gsub(pattern = "\\.csv", replacement = "", x = paste0(a[i], "0")), value = b) # 0 at the end of the name indicates that it is the orig unmodified file
 }
 
+## Metadata ---------------------------------------------------------------------
+
+metadata_column <- gap_products_metadata_column0
+
+link_repo <- "https://github.com/afsc-gap-products/gap_public_data"
+
+for (i in 1:nrow(gap_products_metadata_table0)){
+  assign(x = paste0("metadata_sentence_", gap_products_metadata_table0$metadata_sentence_type[i]), 
+         value = gap_products_metadata_table0$metadata_sentence[i])
+}
+
+metadata_sentence_github <- gsub(
+  x = metadata_sentence_github, 
+  pattern = "INSERT_REPO", 
+  replacement = link_repo)
+
+metadata_sentence_last_updated <- gsub(
+  x = metadata_sentence_last_updated, 
+  pattern = "INSERT_DATE", 
+  replacement = format(x = as.Date(strsplit(x = dir_out, split = "/", fixed = TRUE)[[1]][length(strsplit(x = dir_out, split = "/", fixed = TRUE)[[1]])]), "%B %d, %Y") )
+
 ## ITIS, WoRMS, and Taxon Confidence Data --------------------------------------
 
 # Now available on the RACEBASE_FOSS oracle schema
 
 load(file = paste0("./data/AFSC_ITIS_WORMS",option,".rdata"))
-load(file = "./data/TAXON_CONFIDENCE.rdata")
-
+# read.csv(file = "./data/oracle/gap_products_old_taxon_confidence.csv")
+taxon_confidence0 <- gap_products_old_taxon_confidence0 %>% 
+  dplyr::rename(SRVY = srvy)
 # Wrangle Data -----------------------------------------------------------------
 
 ## Species info ----------------------------------------------------------------
@@ -63,7 +94,7 @@ load(file = "./data/TAXON_CONFIDENCE.rdata")
 cruises <-  
   dplyr::left_join(
     x = surveys, # a data frame of all surveys and survey_definition_ids we want included in the public data, created in the run.R script
-    y = v_cruises0, 
+    y = race_data_v_cruises0, 
     by  = c("survey_definition_id")) %>% 
   dplyr::select(SRVY, SRVY_long, region, cruise_id,  year, survey_name, 
                 vessel_id, cruise, survey_definition_id, 
@@ -93,7 +124,7 @@ cruises <-
 # If you group the data by with `srvy`, `cruise`, `stratum`, `station`, and `vessel_id` (NOT `hauljoin` or `haul`, as done below) you find that there were several stratum-stations appear to be sampled right after the initial haul. This is because the stations in the GOA/AI surveys were regridded. These stations are in fact legit and will be kept in the data. 
 # 
 # # don't include haul/hauljoin
-# haul0 %>% 
+# racebase_haul0 %>% 
 #   dplyr::filter(abundance_haul == "Y" & 
 #                   haul_type == 3 & 
 #                   performance >= 0) %>% 
@@ -104,7 +135,7 @@ cruises <-
 #   dplyr::filter(Freq > 1) 
 # 
 # # include haul/hauljoin
-# haul0 %>% 
+# racebase_haul0 %>% 
 #   dplyr::filter(abundance_haul == "Y" & 
 #                   haul_type == 3 & 
 #                   performance >= 0) %>% 
@@ -114,7 +145,7 @@ cruises <-
 #   data.frame() %>% 
 #   dplyr::filter(Freq > 1) 
 
-haul <- haul0 %>%
+haul <- racebase_haul0 %>%
   dplyr::filter(
     abundance_haul == "Y" & # defined historically as being good tows for abundance estimates
       haul_type == 3 & # standard non-retow or special proj tows
@@ -135,7 +166,7 @@ haul <- haul0 %>%
 # ## I suspect that this is because a species_code was updated or changed, 
 # ## so we will need to sum those counts and weights
 # 
-# catch0 %>%
+# racebase_catch0 %>%
 #     dplyr::filter(region != "WC") %>% 
 #   dplyr::mutate(id = paste0(region, "_", cruisejoin, "_", hauljoin, "_", species_code)) %>%
 #   dplyr::select(id) %>%
@@ -144,7 +175,7 @@ haul <- haul0 %>%
 #   dplyr::rename("id" = ".") %>%
 #   dplyr::filter(Freq > 1)
 
-catch <- catch0 %>% 
+catch <- racebase_catch0 %>% 
   dplyr::group_by(region, cruisejoin, hauljoin, vessel, haul, species_code) %>% 
   dplyr::summarise(weight = sum(weight, na.rm = TRUE), 
                    number_fish = sum(number_fish, na.rm = TRUE)) %>% 
@@ -168,7 +199,7 @@ haul_cruises_vess <- dplyr::inner_join(
   by = c("cruisejoin", "vessel", "region")) %>% 
   dplyr::left_join(
     x = .,
-    y = vessels0 %>%
+    y = race_data_vessels0 %>%
       dplyr::select(vessel_id, name) %>%
       dplyr::rename(vessel_name = name) %>% 
       dplyr::mutate(vessel_name = stringr::str_to_title(vessel_name)), 
