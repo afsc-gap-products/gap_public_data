@@ -14,6 +14,11 @@ find_end <- find_end[find_end>find_start][1]
 a <- bibfiletext[find_start:find_end]
 readr::write_file(x = paste0(a, collapse = "\n"), file = "CITATION.bib")
 
+link_foss <- a[grep(pattern = "howpublished = {", x = a, fixed = TRUE)]
+link_foss <- gsub(pattern = "howpublished = {", replacement = "", x = link_foss, fixed = TRUE)
+link_foss <- gsub(pattern = "},", replacement = "", x = link_foss, fixed = TRUE)
+link_foss <- trimws(link_foss)
+
 # Load Data --------------------------------------------------------------------
 
 ## Oracle Data -----------------------------------------------------------------
@@ -59,6 +64,7 @@ load(file = paste0("./data/AFSC_ITIS_WORMS",option,".rdata"))
 # read.csv(file = "./data/oracle/gap_products_old_taxon_confidence.csv")
 taxon_confidence0 <- gap_products_old_taxon_confidence0 %>% 
   dplyr::rename(SRVY = srvy)
+
 # Wrangle Data -----------------------------------------------------------------
 
 ## Species info ----------------------------------------------------------------
@@ -149,7 +155,7 @@ haul <- racebase_haul0 %>%
   dplyr::filter(
     abundance_haul == "Y" & # defined historically as being good tows for abundance estimates
       haul_type == 3 & # standard non-retow or special proj tows
-      performance >= 0 # &
+      performance >= 0 
     # curious, but not removing, keeping in line with where abundance_haul = Y
     # !(is.null(stationid)) & 
     # !(is.na(stationid)) 

@@ -30,8 +30,8 @@ file.copy(
   overwrite = TRUE)
 
 file.copy(
-  from = paste0(getwd(), "/data/AFSC_ITIS_WORMS_table_metadata.txt"),
-  to = paste0(dir_out, "AFSC_ITIS_WORMS_table_metadata.txt"),
+  from = paste0(getwd(), "/data/AFSC_ITIS_WORMS_metadata_table.txt"),
+  to = paste0(dir_out, "AFSC_ITIS_WORMS_metadata_table.txt"),
   overwrite = TRUE)
 
 file.copy(
@@ -40,11 +40,11 @@ file.copy(
   overwrite = TRUE)
 
 file.copy(
-  from = paste0(getwd(), "/data/TAXON_CONFIDENCE_table_metadata.txt"),
-  to = paste0(dir_out, "TAXON_CONFIDENCE_table_metadata.txt"),
+  from = paste0(getwd(), "/data/TAXON_CONFIDENCE_metadata_table.txt"),
+  to = paste0(dir_out, "TAXON_CONFIDENCE_metadata_table.txt"),
   overwrite = TRUE)
 
-metadata_column <- readr::read_csv(file = paste0(dir_out, "metadata_column.csv"))
+# metadata_column <- readr::read_csv(file = paste0(dir_out, "gap_products_metadata_column0.csv"))
 
 file_paths <- data.frame(
   file_path = 
@@ -53,25 +53,23 @@ file_paths <- data.frame(
   #            paste0("AFSC_ITIS_WORMS", option)), 
   #          ".csv"), 
     paste0(dir_out, 
-         c("TAXON_CONFIDENCE", 
-           "AFSC_ITIS_WORMS",
+         c("AFSC_ITIS_WORMS",
            "JOIN_FOSS_CPUE_CATCH", 
            "JOIN_FOSS_CPUE_HAUL", 
            # "FOSS_CPUE_PRESONLY", 
            "FOSS_CPUE_ZEROFILLED"), 
          ".csv"), 
   "table_metadata" = c(
-  paste(readLines(con = paste0(dir_out, "TAXON_CONFIDENCE_table_metadata.txt")), collapse="\n"), 
   paste(readLines(con = paste0(dir_out, "AFSC_ITIS_WORMS_table_metadata.txt")), collapse="\n"), 
-  paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_table_metadata.txt")), collapse="\n"), 
-  paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_table_metadata.txt")), collapse="\n"), 
-  # paste(readLines(con = paste0(dir_out, "FOSS_CPUE_PRESONLY_table_metadata.txt")), collapse="\n"), 
-    paste(readLines(con = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_table_metadata.txt")), collapse="\n")) 
+  paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_metadata_table.txt")), collapse="\n"), 
+  paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_metadata_table.txt")), collapse="\n"), 
+  # paste(readLines(con = paste0(dir_out, "FOSS_CPUE_PRESONLY_metadata_table.txt")), collapse="\n"), 
+    paste(readLines(con = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_metadata_table.txt")), collapse="\n")) 
 )
 
 # file_paths <- file_paths[-1,]
 
-upload_to_oracle(
+oracle_upload(
   # update_metadata = FALSE, 
   # update_table = FALSE,
     file_paths = file_paths, 

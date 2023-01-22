@@ -59,7 +59,8 @@ source('./code/calc_cpue.R')
 # Update README ----------------------------------------------------------------
 
 source('./code/functions.R')
-dir_out <- paste0(getwd(), "/output/2023-01-18/")
+dir_out <- paste0(getwd(), "/output/2023-01-21/")
+link_code_books <- "https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual"
 
 load(paste0(dir_out, "FOSS_CPUE_PRESONLY.RData"))
 load(paste0(dir_out, "FOSS_CPUE_JOIN.RData"))
