@@ -155,7 +155,7 @@ Markowitz, E. H., Dawson, E. J., Charriere, N. E., Prohaska, B. K.,
 Rohan, S. K., Stevenson, D. E., and Britt, L. L. (2022). *Results of the
 2021 eastern and northern Bering Sea continental shelf bottom trawl
 survey of groundfish and invertebrate fauna* \[NOAA Tech. Memo.\].
-<https://doi.org/10.25923/g1ny-y360>
+*NMFS-F/SPO-452*, 227. <https://doi.org/10.25923/g1ny-y360>
 
 </div>
 
@@ -521,18 +521,20 @@ sessionInfo()
     ## [10] magrittr_2.0.3 dplyr_1.0.10   tidyr_1.2.1   
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] bit64_4.0.5         vroom_1.6.0         foreach_1.5.2       bold_1.2.0          here_1.0.1          assertthat_0.2.1    askpass_1.1        
-    ##  [8] highr_0.10          BiocManager_1.30.19 rvcheck_0.2.1       yulab.utils_0.0.6   yaml_2.3.6          pillar_1.8.1        lattice_0.20-45    
-    ## [15] glue_1.6.2          uuid_1.1-0          digest_0.6.31       RColorBrewer_1.1-3  snakecase_0.11.0    colorspace_2.0-3    htmltools_0.5.4    
-    ## [22] plyr_1.8.8          pkgconfig_2.0.3     httpcode_0.3.0      gitcreds_0.1.2      purrr_1.0.1         scales_1.2.1        tzdb_0.3.0         
-    ## [29] timechange_0.1.1    tibble_3.1.8        openssl_2.0.5       generics_0.1.3      ggplot2_3.4.0       usethis_2.1.6       ellipsis_0.3.2     
-    ## [36] withr_2.5.0         credentials_1.3.2   cli_3.6.0           crayon_1.5.2        evaluate_0.19       fs_1.5.2            fansi_1.0.3        
-    ## [43] nlme_3.1-161        xml2_1.3.3          gh_1.3.1            tools_4.2.2         data.table_1.14.6   hms_1.1.2           lifecycle_1.0.3    
-    ## [50] gert_1.9.2          munsell_0.5.0       compiler_4.2.2      rlang_1.0.6         grid_4.2.2          conditionz_0.1.0    sys_3.4.1          
-    ## [57] iterators_1.0.14    rstudioapi_0.14     gtable_0.3.1        codetools_0.2-18    DBI_1.1.3           reshape_0.8.9       curl_4.3.3         
-    ## [64] readtext_0.81       R6_2.5.1            zoo_1.8-11          lubridate_1.9.0     fastmap_1.1.0       bit_4.0.5           utf8_1.2.2         
-    ## [71] rprojroot_2.0.3     dlstats_0.1.6       ape_5.6-2           stringi_1.7.8       parallel_4.2.2      crul_1.3            Rcpp_1.0.9         
-    ## [78] vctrs_0.5.1         tidyselect_1.2.0    xfun_0.36
+    ##  [1] bit64_4.0.5         vroom_1.6.0         foreach_1.5.2       bold_1.2.0          here_1.0.1          assertthat_0.2.1   
+    ##  [7] askpass_1.1         highr_0.10          BiocManager_1.30.19 rvcheck_0.2.1       yulab.utils_0.0.6   yaml_2.3.6         
+    ## [13] pillar_1.8.1        lattice_0.20-45     glue_1.6.2          uuid_1.1-0          digest_0.6.31       RColorBrewer_1.1-3 
+    ## [19] snakecase_0.11.0    colorspace_2.0-3    cowplot_1.1.1       htmltools_0.5.4     plyr_1.8.8          pkgconfig_2.0.3    
+    ## [25] httpcode_0.3.0      gitcreds_0.1.2      purrr_1.0.1         scales_1.2.1        tzdb_0.3.0          openssl_2.0.5      
+    ## [31] timechange_0.1.1    tibble_3.1.8        generics_0.1.3      ggplot2_3.4.0       usethis_2.1.6       ellipsis_0.3.2     
+    ## [37] withr_2.5.0         credentials_1.3.2   cli_3.6.0           crayon_1.5.2        evaluate_0.19       fs_1.5.2           
+    ## [43] fansi_1.0.3         nlme_3.1-161        xml2_1.3.3          gh_1.3.1            tools_4.2.2         data.table_1.14.6  
+    ## [49] hms_1.1.2           lifecycle_1.0.3     gert_1.9.2          munsell_0.5.0       RODBC_1.3-20        compiler_4.2.2     
+    ## [55] rlang_1.0.6         grid_4.2.2          conditionz_0.1.0    sys_3.4.1           iterators_1.0.14    rstudioapi_0.14    
+    ## [61] gtable_0.3.1        codetools_0.2-18    DBI_1.1.3           reshape_0.8.9       curl_4.3.3          readtext_0.81      
+    ## [67] R6_2.5.1            zoo_1.8-11          lubridate_1.9.0     fastmap_1.1.0       bit_4.0.5           utf8_1.2.2         
+    ## [73] rprojroot_2.0.3     dlstats_0.1.6       ape_5.6-2           stringi_1.7.8       parallel_4.2.2      crul_1.3           
+    ## [79] Rcpp_1.0.9          vctrs_0.5.1         tidyselect_1.2.0    xfun_0.36
 
 ## NOAA README
 

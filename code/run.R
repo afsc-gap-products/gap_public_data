@@ -71,4 +71,4 @@ rmarkdown::render(paste0("./README.Rmd"),
 
 # Share table to oracle --------------------------------------------------------
 
-source("./code/load_oracle.R") 
+source("./code/oracle_upload.R") 
