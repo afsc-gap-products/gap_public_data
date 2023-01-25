@@ -1,5 +1,10 @@
 ---
+title: '`r ifelse(tocTF, "", "AFSC RACE Groundfish and Shellfish Survey Public Data")`'
 output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
   md_document: 
     variant: gfm
 csl: "https://raw.githubusercontent.com/citation-style-language/styles/master/apa-no-ampersand.csl"
@@ -23,7 +28,7 @@ for (p in PKG) {
 }
 ```
 
-# [AFSC RACE Groundfish and Shellfish Survey Public Data](`r link_repo`) <img src="https://avatars.githubusercontent.com/u/91760178?s=96&amp;v=4" alt="Logo." align="right" width="139" height="139"/>
+`r ifelse(tocTF, paste0('# [AFSC RACE Groundfish and Shellfish Survey Public Data](', link_repo,') <img src="https://avatars.githubusercontent.com/u/91760178?s=96&amp;v=4" alt="Logo." align="right" width="139" height="139"/>'), '')`
 
 ## This code is primarily maintained by:
 
@@ -36,15 +41,15 @@ National Marine Fisheries Service,
 National Oceanic and Atmospheric Administration,  
 Seattle, WA 98195
 
-## Table of contents
+`r ifelse(tocTF, "## Table of contents", "")`
 
-```{r toc, echo = FALSE, eval = TRUE}
+```{r toc, echo = FALSE, eval = tocTF}
 toc <- strsplit(x = readtext::readtext(file = "./README.Rmd")[[2]], split = "\n")
 toc <- toc[[1]][substr(x = toc[[1]], start = 1, stop = 1) == "#"]
 toc <- toc[-c(1:3)]
 toc_list <- toc
 toc_list <- gsub(pattern = "### ", replacement = ">      - [*", x = toc_list, fixed = TRUE)
-toc_list <- gsub(pattern = "## ", replacement = ">   - [*", x = toc_list, fixed = TRUE)
+toc_list <- gsub(pattern = "## ", replacement = ">    - [*", x = toc_list, fixed = TRUE)
 toc_list <- gsub(pattern = "# ", replacement = ">  - [*", x = toc_list, fixed = TRUE)
 toc_link <- tolower(gsub(pattern = " ", replacement = "-", 
                           x = gsub(pattern = "#", replacement = "", 
@@ -53,7 +58,7 @@ toc_link <- tolower(gsub(pattern = " ", replacement = "-",
 toc <- paste0(toc_list, "*](#", toc_link, ")", collapse = "\n")
 ```
 
-`r toc`
+`r ifelse(tocTF, toc, "")`
 
 # Cite this data
 
@@ -65,7 +70,7 @@ cat(
 )
 ```
 
-Use the below bibtext [citation](https://github.com/afsc-gap-products/gap_public_data/blob/main/CITATION.bib), as cited in our group's [citation repository](https://github.com/afsc-gap-products/citations/blob/main/cite/bibliography.bib) for citing the data from this dataportal [@FOSSAFSCData]. Add "note = {Accessed: mm/dd/yyyy}" to append the day this data was accessed.  
+Use the below bibtext [citation](`r paste0(link_repo, "/blob/main/CITATION.bib")`), as cited in our group's [citation repository](https://github.com/afsc-gap-products/citations/blob/main/cite/bibliography.bib) for citing the data from this data portal [@FOSSAFSCData]. Add "note = {Accessed: mm/dd/yyyy}" to append the day this data was accessed.  
 
 ```{r, echo = FALSE}
 cat(readLines(con = "CITATION.bib"), sep = "\n") # NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss, Accessed mm/dd/yyyy
@@ -75,7 +80,11 @@ The code is in development. Refer to [releases](`r paste0(link_repo, "/releases"
 
 # Metadata
 
-## Data description
+## Data description (short)
+
+`r readLines(con = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_metadata_table.txt")) `
+
+## Data description (long)
 
 The Resource Assessment and Conservation Engineering Division (RACE) Groundfish Assessment Program (GAP) of the Alaska Fisheries Science Center (AFSC) conducts fisheries-independent bottom trawl surveys to monitor the condition of the demersal fish and crab stocks of Alaska. These data are developed to describe the temporal distribution and abundance of commercially and ecologically important groundfish species, examine the changes in the species composition of the fauna over time and space, and describe the physical environment of the groundfish habitat.
 
@@ -137,16 +146,12 @@ Seattle, WA 98115 USA
 
 For questions, comments, and concerns specifically about the [Fisheries One Stop Shop (FOSS)](`r link_foss `) platform, please contact us using the Comments page on the [FOSS](`r link_foss `) webpage.
 
-## Table short metadata
-
-`r readLines(con = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_metadata_table.txt")) `
-
 ## Column-level metadata
 
 ```{r column-metadata, echo = FALSE}
-column_metadata0 <- read.csv(file = paste0(getwd(), "/data/oracle/gap_products_metadata_column.csv"))
-names(column_metadata0) <- c("Column name from data", "Descriptive Column Name", "Units", "Description")
-knitr::kable(column_metadata0, row.names = FALSE) 
+metadata_column0 <- metadata_column
+names(metadata_column0) <- c("Column name from data", "Descriptive Column Name", "Units", "Description")
+knitr::kable(metadata_column0, row.names = FALSE) 
 ```
 
 # Access the data
@@ -164,7 +169,7 @@ cat(str0)
 
 ## Access data interactively through the FOSS platform
 
-Select, filter, and package this and other NOAA Fisheries data from the [Fisheries One Stop Shop (FOSS)](`r link_foss `) platform. This user-friendly portal is maintained through `Oracle APEX`. A useful intro to using APIs in `R` can be found [here](https://www.dataquest.io/blog/r-api-tutorial/).
+Select, filter, and package this and other NOAA Fisheries data from the [Fisheries One Stop Shop (FOSS)](`r link_foss `) platform. This user-friendly portal is maintained through `Oracle APEX`. A useful intro to using APIs in `R` can be found [here](https://www.dataquest.io/blog/r-api-tutorial/). A user guide for the FOSS platform can be found [here](https://www.fisheries.noaa.gov/foss/f?p=215:7:7542600605674:::::).
 
 ### Connect to the API with R
 

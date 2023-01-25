@@ -32,6 +32,9 @@ for (i in 1:length(a)){
   if (names(b)[1] %in% "x1"){
     b$x1<-NULL
   }
+  if (names(b)[1] %in% "rownames"){
+    b$rownames<-NULL
+  }
   assign(x = gsub(pattern = "\\.csv", replacement = "", x = paste0(a[i], "0")), value = b) # 0 at the end of the name indicates that it is the orig unmodified file
 }
 

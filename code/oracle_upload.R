@@ -72,7 +72,7 @@ file_paths <- data.frame(
 oracle_upload(
   # update_metadata = FALSE, 
   # update_table = FALSE,
-    file_paths = file_paths[4,], 
+    file_paths = file_paths, 
     metadata_column = metadata_column, 
     channel = channel_foss, 
     schema = "RACEBASE_FOSS")
