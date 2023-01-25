@@ -54,17 +54,17 @@ file_paths <- data.frame(
   #          ".csv"), 
     paste0(dir_out, 
          c("AFSC_ITIS_WORMS",
-           "JOIN_FOSS_CPUE_CATCH", 
            "JOIN_FOSS_CPUE_HAUL", 
-           # "FOSS_CPUE_PRESONLY", 
-           "FOSS_CPUE_ZEROFILLED"), 
+           "FOSS_CPUE_ZEROFILLED", 
+           "JOIN_FOSS_CPUE_CATCH"), 
+           # "FOSS_CPUE_PRESONLY"), 
          ".csv"), 
   "table_metadata" = c(
   paste0(Sys.Date()), # paste(readLines(con = paste0(dir_out, "AFSC_ITIS_WORMS_metadata_table.txt")), collapse="\n"), 
   paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_metadata_table.txt")), collapse="\n"), 
-  paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_metadata_table.txt")), collapse="\n"), 
+    paste(readLines(con = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_metadata_table.txt")), collapse="\n"),
+  paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_metadata_table.txt")), collapse="\n")) 
   # paste(readLines(con = paste0(dir_out, "FOSS_CPUE_PRESONLY_metadata_table.txt")), collapse="\n"), 
-    paste(readLines(con = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_metadata_table.txt")), collapse="\n")) 
 )
 
 # file_paths <- file_paths[-1,]
@@ -72,7 +72,7 @@ file_paths <- data.frame(
 oracle_upload(
   # update_metadata = FALSE, 
   # update_table = FALSE,
-    file_paths = file_paths, 
+    file_paths = file_paths[4,], 
     metadata_column = metadata_column, 
     channel = channel_foss, 
     schema = "RACEBASE_FOSS")

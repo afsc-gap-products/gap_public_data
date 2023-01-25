@@ -34,9 +34,9 @@ taxize0 <- FALSE # incorporate species codes from databases
 
 # Support scripts --------------------------------------------------------------
 
+source("https://raw.githubusercontent.com/afsc-gap-products/metadata/main/code/functions_oracle.R")
 # source('./code/data_dl.R')
 source('./code/functions.R')
-source("https://raw.githubusercontent.com/afsc-gap-products/metadata/main/code/functions_oracle.R")
 
 option <- 3 # used in find_taxize_species_codes 
 if (taxize0) { # only if you need to rerun {taxize} stuff - very time intensive!
