@@ -1,5 +1,5 @@
 ---
-title: '`r ifelse(tocTF, "", "AFSC RACE Groundfish and Shellfish Survey Public Data")`'
+title: '`r ifelse(tocTF, "data", "AFSC RACE Groundfish and Shellfish Survey Public Data")`'
 output: 
   html_document:
     toc: true
