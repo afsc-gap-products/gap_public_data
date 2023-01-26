@@ -1,11 +1,12 @@
 ---
+title: '`r ifelse(tocTF, "data", "AFSC RACE Groundfish and Shellfish Survey Public Data")`'
 output: 
+  md_document: 
+    variant: gfm
   html_document:
     toc: true
     toc_depth: 3
     toc_float: true
-  md_document: 
-    variant: gfm
 csl: "https://raw.githubusercontent.com/citation-style-language/styles/master/apa-no-ampersand.csl"
 bibliography: "https://raw.githubusercontent.com/afsc-gap-products/citations/main/cite/bibliography.bib"
 ---
@@ -40,9 +41,9 @@ National Marine Fisheries Service,
 National Oceanic and Atmospheric Administration,  
 Seattle, WA 98195
 
-## Table of contents", "")
+`r ifelse(tocTF, "## Table of contents", "")`
 
-```{r toc, echo = FALSE, eval = TRUE}
+```{r toc, echo = FALSE, eval = tocTF}
 toc <- strsplit(x = readtext::readtext(file = "./README.Rmd")[[2]], split = "\n")
 toc <- toc[[1]][substr(x = toc[[1]], start = 1, stop = 1) == "#"]
 toc <- toc[-c(1:3)]
@@ -57,7 +58,7 @@ toc_link <- tolower(gsub(pattern = " ", replacement = "-",
 toc <- paste0(toc_list, "*](#", toc_link, ")", collapse = "\n")
 ```
 
-toc
+`r ifelse(tocTF, toc, "")`
 
 # Cite this data
 

@@ -68,7 +68,7 @@ load(paste0(dir_out, "FOSS_CPUE_ZEROFILLED.RData"))
 
 tocTF <- TRUE
 rmarkdown::render(paste0("./README.Rmd"),
-                  output_dir = "./",
+                  output_dir = "./", 
                   output_file = paste0("README.md"))
 
 tocTF <- FALSE
