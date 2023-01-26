@@ -28,8 +28,6 @@ for (p in PKG) {
 }
 ```
 
-`r ifelse(tocTF, paste0('# [AFSC RACE Groundfish and Shellfish Survey Public Data](', link_repo,') <img src="https://avatars.githubusercontent.com/u/91760178?s=96&amp;v=4" alt="Logo." align="right" width="139" height="139"/>'), '')`
-
 ## This code is primarily maintained by:
 
 **Emily Markowitz** (Emily.Markowitz AT noaa.gov; [\@EmilyMarkowitz-NOAA](https://github.com/EmilyMarkowitz-NOAA))  
