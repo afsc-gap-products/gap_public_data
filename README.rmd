@@ -174,6 +174,10 @@ Select, filter, and package this and other NOAA Fisheries data from the [Fisheri
 
 ### Connect to the API with R
 
+More information about how to amend API links can be found [here](https://docs.oracle.com/en/database/oracle/oracle-rest-data-services/22.3/books.html#AELIG90103/).
+
+Load the first 25 rows of data
+
 ```{r api-link, echo = TRUE}
  # install.packages(c("httr", "jsonlite"))
 library("httr")
@@ -182,14 +186,58 @@ library("jsonlite")
 api_link <- "https://apps-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/"
 ```
 
-### Select all data
-
 ```{r api-all-data-ex, echo = TRUE}
 res <- httr::GET(url = api_link)
  # res # Test connection
 data <- jsonlite::fromJSON(base::rawToChar(res$content))
  # names(data)
 knitr::kable(head(data$items, 3)) 
+```
+
+Load the first 10000 rows of data
+
+```{r}
+res <- httr::GET(url = paste0(api_link, "?offset=0&limit=10000"))
+data <- jsonlite::fromJSON(base::rawToChar(res$content))
+dim(data$items)
+```
+
+```{r, eval = FALSE, echo = FALSE}
+
+# Filter by Year: Show all the data greater than the year 2020,
+# https://apps-st.fisheries.noaa.gov/ods/foss/trade_data/?q={"year":{"$gt": 2010}}
+
+res <- httr::GET(url = paste0(api_link, '?q={"year":{"$gt": 2020}}'))
+data <- jsonlite::fromJSON(base::rawToChar(res$content))
+knitr::kable(summary(data$items[, c("year", "srvy")], 3))
+```
+
+Filter by Species name: Show all the data where the product name contains pollock Please note that here the word pollock is case sensitive.
+
+The notation for finding a string is to use % around it. Since % is a reserved character in a URL, you have to replace % with %25
+
+```{r}
+res <- httr::GET(url = paste0(api_link, '?q={"common_name":{"$like":"%25pollock%25"}}'))
+data <- jsonlite::fromJSON(base::rawToChar(res$content))
+knitr::kable(head(data$items, 3))
+```
+
+
+```{r, eval = FALSE, echo = FALSE}
+# Combination of year and name filters: Show all the data where years > 2020 and the product name contains pollock
+
+res <- httr::GET(url = paste0(api_link, '?q={"year":{"$gt": 2020},"name":{"$like":"%25pollock%25"}}'))
+data <- jsonlite::fromJSON(base::rawToChar(res$content))
+knitr::kable(head(data$items, 3))
+```
+
+```{r, eval = FALSE, echo = FALSE}
+# Combination of year, srvy, stratum: Show all the data where year = 1989, srvy = "EBS", and stratum is not equal to 81
+# https://apps-st.fisheries.noaa.gov/ods/foss/trade_data/?q={"year":"1989","srvy": "EBS","stratum":{"$ne": "81"}}
+
+res <- httr::GET(url = paste0(api_link, '?q={"year": 1989,"srvy": "EBS","stratum":{"$ne": "81"}}'))
+data <- jsonlite::fromJSON(base::rawToChar(res$content))
+knitr::kable(head(data$items, 3))
 ```
 
 ### Subset data

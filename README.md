@@ -1,6 +1,6 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# [AFSC RACE Groundfish and Shellfish Survey Public Data](https://github.com/afsc-gap-products/gap_public_data) <img src="https://avatars.githubusercontent.com/u/91760178?s=96&amp;v=4" alt="Logo." align="right" width="139" height="139"/>
+# [AFSC RACE Groundfish and Shellfish Survey Public Data](https://github.com/afsc-gap-products/gap_public_data/) <img src="https://avatars.githubusercontent.com/u/91760178?s=96&amp;v=4" alt="Logo." align="right" width="139" height="139"/>
 
 ## This code is primarily maintained by:
 
@@ -16,20 +16,33 @@ Seattle, WA 98195
 
 ## Table of contents
 
-> - [*Data description (short)*](#data-description-(short))
-> - [*Data description (long)*](#data-description-(long))
-> - [*Bottom trawl surveys and
->   regions*](#bottom-trawl-surveys-and-regions)
-> - [*Relevant technical memorandums*](#relevant-technical-memorandums)
-> - [*User resources*](#user-resources)
-> - [*Access constraints*](#access-constraints)
-> - [*Column-level metadata*](#column-level-metadata)
+> - [*Cite this data*](#cite-this-data)
+> - [*Metadata*](#metadata)
+>   - [*Data description (short)*](#data-description-(short))
+>   - [*Data description (long)*](#data-description-(long))
+>   - [*Bottom trawl surveys and
+>     regions*](#bottom-trawl-surveys-and-regions)
+>   - [*Relevant technical
+>     memorandums*](#relevant-technical-memorandums)
+>   - [*User resources*](#user-resources)
+>   - [*Access constraints*](#access-constraints)
+>   - [*Column-level metadata*](#column-level-metadata)
 > - [*Access the data*](#access-the-data)
 >   - [*Access data interactively through the FOSS
 >     platform*](#access-data-interactively-through-the-foss-platform)
 >     - [*Connect to the API with R*](#connect-to-the-api-with-r)
->     - [*Select all data*](#select-all-data)
->     - [*Subset data*](#subset-data)
+> - [*Filter by Year: Show all the data greater than the year
+>   2020,*](#filter-by-year:-show-all-the-data-greater-than-the-year-2020,)
+> - \[\*<https://apps-st.fisheries.noaa.gov/ods/foss/trade_data/?q=>{“year”:{“$gt": 2010}}*](#https://apps-st.fisheries.noaa.gov/ods/foss/trade_data/?q={"year":{"$gt”:-2010}})
+> - [*Combination of year and name filters: Show all the data where
+>   years \> 2020 and the product name contains
+>   pollock*](#combination-of-year-and-name-filters:-show-all-the-data-where-years-%3E-2020-and-the-product-name-contains-pollock)
+> - [*Combination of year, srvy, stratum: Show all the data where year =
+>   1989, srvy = “EBS”, and stratum is not equal to
+>   81*](#combination-of-year,-srvy,-stratum:-show-all-the-data-where-year-=-1989,-srvy-=-%22ebs%22,-and-stratum-is-not-equal-to-81)
+> - \[\*<https://apps-st.fisheries.noaa.gov/ods/foss/trade_data/?q=>{“year”:“1989”,“srvy”:
+>   “EBS”,“stratum”:{“$ne": "81"}}*](#https://apps-st.fisheries.noaa.gov/ods/foss/trade_data/?q={"year":"1989","srvy":-"ebs","stratum":{"$ne”:-“81”}})
+>   - [*Subset data*](#subset-data)
 >   - [*Access data via Oracle*](#access-data-via-oracle)
 >     - [*Connect to Oracle from R*](#connect-to-oracle-from-r)
 >     - [*Select all data*](#select-all-data)
@@ -45,7 +58,7 @@ Seattle, WA 98195
 [![](https://img.shields.io/github/last-commit/afsc-gap-products/gap_public_data.svg)](https://github.com/afsc-gap-products/gap_public_data/commits/main)
 
 Use the below bibtext
-[citation](https://github.com/afsc-gap-products/gap_public_data/blob/main/CITATION.bib),
+[citation](https://github.com/afsc-gap-products/gap_public_data//blob/main/CITATION.bib),
 as cited in our group’s [citation
 repository](https://github.com/afsc-gap-products/citations/blob/main/cite/bibliography.bib)
 for citing the data from this data portal (NOAA Fisheries Alaska
@@ -62,7 +75,7 @@ append the day this data was accessed.
     ## }
 
 The code is in development. Refer to
-[releases](https://github.com/afsc-gap-products/gap_public_data/releases)
+[releases](https://github.com/afsc-gap-products/gap_public_data//releases)
 for finalized products. These data were last ran and pushed to the AFSC
 oracle on **January 25, 2023**. *This is not the date that these data
 were pulled into FOSS and the FOSS dataset may be behind.*
@@ -223,7 +236,7 @@ islands bottom trawl survey* \[NOAA Tech. Memo.\]. *NMFS-AFSC-409*.
   reports](http://apps-afsc.fisheries.noaa.gov/RACE/surveys/cruise_results.htm)
   about these surveys.
 - [GitHub
-  repository](https://github.com/afsc-gap-products/gap_public_data).
+  repository](https://github.com/afsc-gap-products/gap_public_data/).
 - Learn more about other [Research Surveys conducted at
   AFSC](https://www.fisheries.noaa.gov/alaska/ecosystems/alaska-fish-research-surveys).
 
@@ -327,6 +340,11 @@ the FOSS platform can be found
 
 ### Connect to the API with R
 
+More information about how to amend API links can be found
+[here](https://docs.oracle.com/en/database/oracle/oracle-rest-data-services/22.3/books.html#AELIG90103/).
+
+Load the first 25 rows of data
+
 ``` r
  # install.packages(c("httr", "jsonlite"))
 library("httr")
@@ -334,8 +352,6 @@ library("jsonlite")
  # link to the API
 api_link <- "https://apps-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/"
 ```
-
-### Select all data
 
 ``` r
 res <- httr::GET(url = api_link)
@@ -350,6 +366,35 @@ knitr::kable(head(data$items, 3))
 | 2002 | AI   | Aleutian Islands Bottom Trawl Survey | 5.2E+001  | 2.00201E+005 | 6.0E+000 | 7.22E+002 | 307-63  | Vesteraalen | 9.4E+001  | 05/17/2002 18:56:58 | 5.3737209999999997E+001 | -1.6701570000000001E+002 | 9.502E+004   | feathery bryozoan | Eucratea loricata | Low              | 1.7493999999999999E-002 | 1.7494449999999999E+000 | 1.7494451079999999E+003 | NA                      | NA                      | NA                      | 4.3999999999999997E-002 | 0        | 4.0999999999999996E+000 | 5.2999999999999998E+000 | 1.87E+002 | 1.5609999999999999E+000 | 1.6111999999999998E+001 | 7.25E+000    | 2.5150831999999994E+000 | 2.8000000000000003E-001 | 155809 |       878821 | self , <https://apps-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/878821> |
 | 2002 | AI   | Aleutian Islands Bottom Trawl Survey | 5.2E+001  | 2.00201E+005 | 6.0E+000 | 7.22E+002 | 307-63  | Vesteraalen | 9.4E+001  | 05/17/2002 18:56:58 | 5.3737209999999997E+001 | -1.6701570000000001E+002 | 7.9E+004     | squid unid.       | Decapodiformes    | High             | 2.2266000000000001E-002 | 2.2265670000000002E+000 | 2.2265665009999998E+003 | 3.180809E+000           | 3.1808092900000003E+002 | 3.1808092869500001E+005 | 5.6000000000000001E-002 | 8.0E+000 | 4.0999999999999996E+000 | 5.2999999999999998E+000 | 1.87E+002 | 1.5609999999999999E+000 | 1.6111999999999998E+001 | 7.25E+000    | 2.5150831999999994E+000 | 2.8000000000000003E-001 |     NA |       878822 | self , <https://apps-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/878822> |
 | 2002 | AI   | Aleutian Islands Bottom Trawl Survey | 5.2E+001  | 2.00201E+005 | 6.0E+000 | 7.22E+002 | 307-63  | Vesteraalen | 9.4E+001  | 05/17/2002 18:56:58 | 5.3737209999999997E+001 | -1.6701570000000001E+002 | 2.4191E+004  | shortfin eelpout  | Lycodes brevipes  | High             | 3.5784000000000003E-002 | 3.5784099999999999E+000 | 3.5784104480000001E+003 | 7.9520199999999996E-001 | 7.9520231999999993E+001 | 7.9520232174000004E+004 | 8.9999999999999997E-002 | 2.0E+000 | 4.0999999999999996E+000 | 5.2999999999999998E+000 | 1.87E+002 | 1.5609999999999999E+000 | 1.6111999999999998E+001 | 7.25E+000    | 2.5150831999999994E+000 | 2.8000000000000003E-001 | 165258 |       878823 | self , <https://apps-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/878823> |
+
+Load the first 10000 rows of data
+
+``` r
+res <- httr::GET(url = paste0(api_link, "?offset=0&limit=10000"))
+data <- jsonlite::fromJSON(base::rawToChar(res$content))
+dim(data$items)
+```
+
+    ## [1] 10000    36
+
+Filter by Species name: Show all the data where the product name
+contains pollock Please note that here the word pollock is case
+sensitive.
+
+The notation for finding a string is to use % around it. Since % is a
+reserved character in a URL, you have to replace % with %25
+
+``` r
+res <- httr::GET(url = paste0(api_link, '?q={"common_name":{"$like":"%25pollock%25"}}'))
+data <- jsonlite::fromJSON(base::rawToChar(res$content))
+knitr::kable(head(data$items, 3))
+```
+
+| year | srvy | survey                               | survey_id | cruise       | haul     | stratum   | station | vessel_name | vessel_id | date_time           | latitude_dd             | longitude_dd             | species_code | common_name     | scientific_name     | taxon_confidence | cpue_kgha               | cpue_kgkm2              | cpue_kg1000km2          | cpue_noha               | cpue_nokm2              | cpue_no1000km2          | weight_kg               | count     | bottom_temperature_c    | surface_temperature_c   | depth_m   | distance_fished_km      | net_width_m             | net_height_m            | area_swept_ha           | duration_hr             |    tsn | ak_survey_id | links                                                                              |
+|-----:|:-----|:-------------------------------------|:----------|:-------------|:---------|:----------|:--------|:------------|:----------|:--------------------|:------------------------|:-------------------------|:-------------|:----------------|:--------------------|:-----------------|:------------------------|:------------------------|:------------------------|:------------------------|:------------------------|:------------------------|:------------------------|:----------|:------------------------|:------------------------|:----------|:------------------------|:------------------------|:------------------------|:------------------------|:------------------------|-------:|-------------:|:-----------------------------------------------------------------------------------|
+| 2002 | AI   | Aleutian Islands Bottom Trawl Survey | 5.2E+001  | 2.00201E+005 | 5.0E+000 | 7.21E+002 | 306-64  | Vesteraalen | 9.4E+001  | 05/17/2002 16:39:57 | 5.3768709999999999E+001 | -1.6707259999999999E+002 | 2.174E+004   | walleye pollock | Gadus chalcogrammus | High             | 6.3990000000000002E-003 | 6.3989099999999999E-001 | 6.3989137200000005E+002 | 3.9993200000000001E-001 | 3.9993211000000002E+001 | 3.9993210752999999E+004 | 1.6E-002                | 1.0E+000  | 4.4000000000000004E+000 | 5.0999999999999996E+000 | 6.5E+001  | 1.6759999999999999E+000 | 1.4919E+001             | 7.9009999999999998E+000 | 2.5004244E+000          | 3.1E-001                | 934083 |       878884 | self , <https://apps-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/878884> |
+| 2002 | AI   | Aleutian Islands Bottom Trawl Survey | 5.2E+001  | 2.00201E+005 | 6.0E+000 | 7.22E+002 | 307-63  | Vesteraalen | 9.4E+001  | 05/17/2002 18:56:58 | 5.3737209999999997E+001 | -1.6701570000000001E+002 | 2.174E+004   | walleye pollock | Gadus chalcogrammus | High             | 7.7532230000000002E+000 | 7.7532226400000002E+002 | 7.7532226369299996E+005 | 1.1530434E+001          | 1.153043367E+003        | 1.1530433665179999E+006 | 1.95E+001               | 2.9E+001  | 4.0999999999999996E+000 | 5.2999999999999998E+000 | 1.87E+002 | 1.5609999999999999E+000 | 1.6111999999999998E+001 | 7.25E+000               | 2.5150831999999994E+000 | 2.8000000000000003E-001 | 934083 |       878838 | self , <https://apps-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/878838> |
+| 2002 | AI   | Aleutian Islands Bottom Trawl Survey | 5.2E+001  | 2.00201E+005 | 2.0E+000 | 7.22E+002 | 303-64  | Vesteraalen | 9.4E+001  | 05/17/2002 10:20:08 | 5.3790370000000003E+001 | -1.6725810000000001E+002 | 2.174E+004   | walleye pollock | Gadus chalcogrammus | High             | 1.06858064E+002         | 1.0685806397E+004       | 1.0685806397293E+007    | 1.2519113900000001E+002 | 1.2519113928999999E+004 | 1.251911392852E+007     | 2.5180000000000001E+002 | 2.95E+002 | 4.0999999999999996E+000 | 5.0E+000                | 1.64E+002 | 1.488E+000              | 1.5836E+001             | 7.1589999999999998E+000 | 2.3563968000000002E+000 | 2.7000000000000002E-001 | 934083 |       878858 | self , <https://apps-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/878858> |
 
 ### Subset data
 
@@ -480,7 +525,7 @@ If the data or metadata can be improved, please create a pull request,
 [submit an issue to the GitHub
 organization](https://github.com/afsc-gap-products/data-requests/issues),
 [submit an issue to the code’s
-repository](https://github.com/afsc-gap-products/gap_public_data/issues),
+repository](https://github.com/afsc-gap-products/gap_public_data//issues),
 reach out the the survey team leads (listed above), or to [Fisheries One
 Stop Shop
 (FOSS)](https://www.fisheries.noaa.gov/foss/f?p=215:28:2283554735243:::::)
@@ -508,24 +553,26 @@ sessionInfo()
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ##  [1] RODBC_1.3-20   jsonlite_1.8.4 httr_1.4.4     knitr_1.41     badger_0.2.2   stringr_1.5.0  taxize_0.9.100 janitor_2.1.0 
-    ##  [9] rmarkdown_2.19 readr_2.1.3    magrittr_2.0.3 dplyr_1.0.10   tidyr_1.2.1   
+    ##  [1] knitr_1.41     badger_0.2.2   jsonlite_1.8.4 httr_1.4.4     stringr_1.5.0  taxize_0.9.100 janitor_2.1.0 
+    ##  [8] rmarkdown_2.19 readr_2.1.3    magrittr_2.0.3 dplyr_1.0.10   tidyr_1.2.1   
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] sass_0.4.4          bit64_4.0.5         vroom_1.6.0         foreach_1.5.2       bold_1.2.0          here_1.0.1         
-    ##  [7] bslib_0.4.2         assertthat_0.2.1    askpass_1.1         BiocManager_1.30.19 rvcheck_0.2.1       highr_0.10         
-    ## [13] yulab.utils_0.0.6   yaml_2.3.6          pillar_1.8.1        lattice_0.20-45     glue_1.6.2          uuid_1.1-0         
-    ## [19] digest_0.6.31       RColorBrewer_1.1-3  snakecase_0.11.0    colorspace_2.0-3    htmltools_0.5.4     plyr_1.8.8         
-    ## [25] pkgconfig_2.0.3     httpcode_0.3.0      gitcreds_0.1.2      purrr_1.0.1         scales_1.2.1        tzdb_0.3.0         
-    ## [31] openssl_2.0.5       timechange_0.1.1    tibble_3.1.8        generics_0.1.3      ggplot2_3.4.0       usethis_2.1.6      
-    ## [37] ellipsis_0.3.2      cachem_1.0.6        withr_2.5.0         credentials_1.3.2   cli_3.6.0           crayon_1.5.2       
-    ## [43] evaluate_0.19       fs_1.5.2            fansi_1.0.3         nlme_3.1-161        xml2_1.3.3          gh_1.3.1           
-    ## [49] tools_4.2.2         data.table_1.14.6   hms_1.1.2           gert_1.9.2          lifecycle_1.0.3     munsell_0.5.0      
-    ## [55] compiler_4.2.2      jquerylib_0.1.4     rlang_1.0.6         grid_4.2.2          conditionz_0.1.0    sys_3.4.1          
-    ## [61] iterators_1.0.14    rstudioapi_0.14     gtable_0.3.1        codetools_0.2-18    DBI_1.1.3           reshape_0.8.9      
-    ## [67] curl_4.3.3          readtext_0.81       R6_2.5.1            zoo_1.8-11          lubridate_1.9.0     fastmap_1.1.0      
-    ## [73] bit_4.0.5           utf8_1.2.2          rprojroot_2.0.3     dlstats_0.1.6       ape_5.6-2           stringi_1.7.8      
-    ## [79] parallel_4.2.2      crul_1.3            Rcpp_1.0.9          vctrs_0.5.1         tidyselect_1.2.0    xfun_0.36
+    ##  [1] foreach_1.5.2       bold_1.2.0          here_1.0.1          assertthat_0.2.1    askpass_1.1        
+    ##  [6] BiocManager_1.30.19 rvcheck_0.2.1       highr_0.10          yulab.utils_0.0.6   yaml_2.3.6         
+    ## [11] pillar_1.8.1        lattice_0.20-45     glue_1.6.2          uuid_1.1-0          digest_0.6.31      
+    ## [16] RColorBrewer_1.1-3  snakecase_0.11.0    colorspace_2.0-3    htmltools_0.5.4     plyr_1.8.8         
+    ## [21] pkgconfig_2.0.3     httpcode_0.3.0      purrr_1.0.1         gitcreds_0.1.2      scales_1.2.1       
+    ## [26] tzdb_0.3.0          timechange_0.1.1    tibble_3.1.8        openssl_2.0.5       generics_0.1.3     
+    ## [31] ggplot2_3.4.0       usethis_2.1.6       ellipsis_0.3.2      credentials_1.3.2   cli_3.6.0          
+    ## [36] crayon_1.5.2        evaluate_0.19       fs_1.5.2            fansi_1.0.3         nlme_3.1-161       
+    ## [41] xml2_1.3.3          tools_4.2.2         gh_1.3.1            data.table_1.14.6   hms_1.1.2          
+    ## [46] lifecycle_1.0.3     gert_1.9.2          munsell_0.5.0       RODBC_1.3-20        compiler_4.2.2     
+    ## [51] rlang_1.0.6         grid_4.2.2          conditionz_0.1.0    iterators_1.0.14    rstudioapi_0.14    
+    ## [56] sys_3.4.1           gtable_0.3.1        codetools_0.2-18    DBI_1.1.3           reshape_0.8.9      
+    ## [61] curl_4.3.3          readtext_0.81       R6_2.5.1            zoo_1.8-11          lubridate_1.9.0    
+    ## [66] fastmap_1.1.0       utf8_1.2.2          rprojroot_2.0.3     dlstats_0.1.6       ape_5.6-2          
+    ## [71] stringi_1.7.8       parallel_4.2.2      crul_1.3            Rcpp_1.0.9          vctrs_0.5.1        
+    ## [76] tidyselect_1.2.0    xfun_0.36
 
 ## NOAA README
 
