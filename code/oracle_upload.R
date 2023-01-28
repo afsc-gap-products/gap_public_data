@@ -55,15 +55,15 @@ file_paths <- data.frame(
     paste0(dir_out, 
          c("AFSC_ITIS_WORMS",
            "JOIN_FOSS_CPUE_HAUL", 
-           "FOSS_CPUE_ZEROFILLED", 
-           "JOIN_FOSS_CPUE_CATCH"), 
+           "JOIN_FOSS_CPUE_CATCH", 
+           "FOSS_CPUE_ZEROFILLED"), 
            # "FOSS_CPUE_PRESONLY"), 
          ".csv"), 
   "table_metadata" = c(
   paste0(Sys.Date()), # paste(readLines(con = paste0(dir_out, "AFSC_ITIS_WORMS_metadata_table.txt")), collapse="\n"), 
+  paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_metadata_table.txt")), collapse="\n"),
   paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_metadata_table.txt")), collapse="\n"), 
-    paste(readLines(con = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_metadata_table.txt")), collapse="\n"),
-  paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_metadata_table.txt")), collapse="\n")) 
+    paste(readLines(con = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_metadata_table.txt")), collapse="\n")) 
   # paste(readLines(con = paste0(dir_out, "FOSS_CPUE_PRESONLY_metadata_table.txt")), collapse="\n"), 
 )
 
@@ -77,3 +77,108 @@ oracle_upload(
     channel = channel_foss, 
     schema = "RACEBASE_FOSS")
 
+
+oracle_upload <- function(
+    file_paths, 
+    metadata_column, 
+    channel, 
+    schema, 
+    update_table = TRUE, 
+    update_metadata = TRUE,
+    share_with_all_users = TRUE) {
+  
+  metadata_column$metadata_colname <- toupper(metadata_column$metadata_colname)
+  
+  all_schemas <- RODBC::sqlQuery(channel = channel,
+                                 query = paste0('SELECT * FROM all_users;'))
+  
+  # Loop through each table to add to oracle -------------------------------------
+  
+  for (ii in 1:nrow(file_paths)) {
+    
+    print(file_paths$file_path[ii])
+    file_name <- trimws(toupper(file_paths$file_path[ii]))
+    file_name <- strsplit(x = file_name, split = "/", fixed = TRUE)[[1]]
+    file_name <- strsplit(x = file_name[length(file_name)], split = ".", fixed = TRUE)
+    file_name <- file_name[[1]][1]
+    
+    a <- read.csv(file_paths$file_path[ii])
+    names(a) <- toupper(names(a))
+    
+    if (names(a)[1] %in% "X") {
+      a$X<-NULL
+    }
+    
+    rownames(a) <- NULL
+    names(a) <- toupper(names(a))
+    
+    assign(x = file_name, value = a)
+    
+    if (update_table) {
+      
+      ## Drop old table from oracle -------------------------------------------------
+      # if the table is currently in the schema, drop the table before re-uploading
+      if (file_name %in% 
+          unlist(RODBC::sqlQuery(channel = channel, 
+                                 query = "SELECT table_name FROM user_tables;"))) {
+        
+        RODBC::sqlDrop(channel = channel,
+                       sqtable = file_name)
+      }
+      
+      ## Add the table to the schema ------------------------------------------------
+      
+      col_types <- list(
+        dummy = "VARCHAR2(225 BYTE)"
+      )  
+      
+      # find columns that need special data type help
+      cc <- c()
+      if (sum(names(col_types) %in% names(a))>0) {
+        cc <- col_types[(names(col_types) %in% names(a))]
+      }
+      
+      eval( parse(text = 
+                    paste0("RODBC::sqlSave(channel = channel, dat = ",
+                           file_name, 
+                           ifelse(length(cc)<1, 
+                                  ")", 
+                                  paste0(", varTypes = cc)") )) ) ) 
+    }
+    
+    if (update_metadata) {
+      ## Add column metadata --------------------------------------------------------
+      metadata_column0 <- metadata_column[which(metadata_column$metadata_colname %in% names(a)),]
+      if (nrow(metadata_column0)>0) {
+        for (i in 1:nrow(metadata_column0)) {
+          
+          desc <- gsub(pattern = "<sup>2</sup>",
+                       replacement = "2",
+                       x = metadata_column0$metadata_colname_long[i], fixed = TRUE)
+          short_colname <- gsub(pattern = "<sup>2</sup>", replacement = "2",
+                                x = metadata_column0$metadata_colname[i], fixed = TRUE)
+          
+          RODBC::sqlQuery(channel = channel,
+                          query = paste0('comment on column ',schema,'.',file_name,'.',
+                                         short_colname,' is \'',
+                                         desc, ". ", # remove markdown/html code
+                                         gsub(pattern = "'", replacement ='\"',
+                                              x = metadata_column0$metadata_colname_desc[i]),'\';'))
+          
+        }
+      }
+      ## Add table metadata ---------------------------------------------------------
+      RODBC::sqlQuery(channel = channel,
+                      query = paste0('comment on table ',schema,'.', file_name,
+                                     ' is \'',
+                                     file_paths$table_metadata[ii],'\';'))
+    }
+    ## grant access to all schemes ------------------------------------------------
+    for (iii in 1:length(sort(all_schemas$USERNAME))) {
+      RODBC::sqlQuery(channel = channel,
+                      query = paste0('grant select on ',schema,'.',file_name,
+                                     ' to ', all_schemas$USERNAME[iii],';'))
+    }
+    
+  }
+}

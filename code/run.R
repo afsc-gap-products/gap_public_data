@@ -72,7 +72,7 @@ rmarkdown::render(paste0("./README.Rmd"),
                   output_file = paste0("README.md"))
 
 tocTF <- FALSE
-rmarkdown::render(paste0("./README0.Rmd"),
+rmarkdown::render(paste0("./README.Rmd"),
                   output_dir = "./",
                   output_file = paste0("README.html"))
 
