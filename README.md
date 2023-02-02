@@ -85,20 +85,20 @@ were pulled into FOSS and the FOSS dataset may be behind.*
 ## Data description (short)
 
 This dataset includes zero-filled (presence and absence) observations
-and catch-per-unit-effort (CPUE) estimates for most identified species
-at a standard set of stations in the northern Bering Sea (NBS), eastern
+of catch-per-unit-effort (CPUE) for all identified species for index stations
+in the northern Bering Sea (NBS), eastern
 Bering Sea (EBS), Gulf of Alaska (GOA), Aleutian Islands (AI), Bering
 Sea Slope (BSS) Surveys conducted by the Resource Assessment and
 Conservation Engineering Division (RACE) Groundfish Assessment Program
-(GAP) oThere are no legal restrictions on access to the data.The data
+(GAP). There are no legal restrictions on access to the data. The data
 from this dataset are shared on the Fisheries One Stop Stop (FOSS)
 platform
-(<https://www.fisheries.noaa.gov/foss/f?p=215:28:2283554735243>:::::).The
+(<https://www.fisheries.noaa.gov/foss/f?p=215:28:2283554735243>:::::). The
 GitHub repository for the scripts that created this code can be found at
-<https://github.com/afsc-gap-products/gap_public_data.For> more
+<https://github.com/afsc-gap-products/gap_public_data>. For more
 information about codes used in the tables, please refer to the survey
 code books
-(<https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual>).These
+(<https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual>). These
 data were last updated January 25, 2023.
 
 ## Data description (long)
@@ -491,22 +491,22 @@ If this file is too large, you can join catch and haul data. Pull the
 `RACEBASE_FOSS.JOIN_FOSS_CPUE_HAUL` tables, which are much smaller, and
 combine the table locally yourself.
 
-The full join the JOIN_FOSS_CPUE_CATCH and JOIN_FOSS_CPUE_HAUL datasets
-using HAULJOIN to create zero-filled (presence and absence) observations
-and catch-per-unit-effort (CPUE) estimates for all identified species at
-a standard set of stations in the northern Bering Sea (NBS), eastern
+The full join of the JOIN_FOSS_CPUE_CATCH and JOIN_FOSS_CPUE_HAUL datasets
+by the HAULJOIN variable creates zero-filled (presence and absence) observations
+of catch-per-unit-effort (CPUE) for all identified species for index stations
+in the northern Bering Sea (NBS), eastern
 Bering Sea (EBS), Gulf of Alaska (GOA), Aleutian Islands (AI), Bering
 Sea Slope (BSS) Surveys conducted by the Resource Assessment and
 Conservation Engineering Division (RACE) Groundfish Assessment Program
-(GAP) oThere are no legal restrictions on access to the data.The data
+(GAP). There are no legal restrictions on access to the data.The data
 from this dataset are shared on the Fisheries One Stop Stop (FOSS)
 platform
-(<https://www.fisheries.noaa.gov/foss/f?p=215:28:2283554735243>:::::).The
+(<https://www.fisheries.noaa.gov/foss/f?p=215:28:2283554735243>:::::). The
 GitHub repository for the scripts that created this code can be found at
-<https://github.com/afsc-gap-products/gap_public_data.For> more
+<https://github.com/afsc-gap-products/gap_public_data>. For more
 information about codes used in the tables, please refer to the survey
 code books
-(<https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual>).These
+(<https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual>). These
 data were last updated January 25, 2023.
 
     ## RACEBASE_FOSS.JOIN_FOSS_CPUE_CATCH: 
