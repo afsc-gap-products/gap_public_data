@@ -41,6 +41,17 @@ National Marine Fisheries Service,
 National Oceanic and Atmospheric Administration,  
 Seattle, WA 98195
 
+
+```{r badge, echo = FALSE, results='asis', message=FALSE}
+cat(
+  # badge_devel("afsc-gap-products/gap_public_data", "blue"),
+  # badge_lifecycle("maturing", "blue"),
+  badge_last_commit("afsc-gap-products/gap_public_data")
+)
+```
+
+> The code is in development. Refer to [releases](`r paste0(link_repo, "/releases")`) for finalized products. These data were last ran and pushed to the AFSC oracle on **`r format(x = as.Date(strsplit(x = dir_out, split = "/", fixed = TRUE)[[1]][5]), "%B %d, %Y")`**. *This is not the date that these data were pulled into FOSS and the FOSS dataset may be behind.*
+
 `r ifelse(tocTF, "## Table of contents", "")`
 
 ```{r toc, echo = FALSE, eval = tocTF}
@@ -53,9 +64,9 @@ toc_list <- gsub(pattern = "### ", replacement = ">      - [*", x = toc_list, fi
 toc_list <- gsub(pattern = "## ", replacement = ">    - [*", x = toc_list, fixed = TRUE)
 toc_list <- gsub(pattern = "# ", replacement = ">  - [*", x = toc_list, fixed = TRUE)
 toc_link <- tolower(gsub(pattern = " ", replacement = "-", 
-                          x = gsub(pattern = "#", replacement = "", 
-                                   x = gsub(pattern = "# ", replacement = "", 
-                                            x = toc, fixed = TRUE), fixed = TRUE)))
+                         x = gsub(pattern = "#", replacement = "", 
+                                  x = gsub(pattern = "# ", replacement = "", 
+                                           x = toc, fixed = TRUE), fixed = TRUE)))
 toc <- paste0(toc_list, "*](#", toc_link, ")", collapse = "\n")
 ```
 
@@ -63,21 +74,12 @@ toc <- paste0(toc_list, "*](#", toc_link, ")", collapse = "\n")
 
 # Cite this data
 
-```{r badge, echo = FALSE, results='asis', message=FALSE}
-cat(
-  # badge_devel("afsc-gap-products/gap_public_data", "blue"),
-  # badge_lifecycle("maturing", "blue"),
-  badge_last_commit("afsc-gap-products/gap_public_data")
-)
-```
-
 Use the below bibtext [citation](`r paste0(link_repo, "/blob/main/CITATION.bib")`), as cited in our group's [citation repository](https://github.com/afsc-gap-products/citations/blob/main/cite/bibliography.bib) for citing the data from this data portal [@FOSSAFSCData]. Add "note = {Accessed: mm/dd/yyyy}" to append the day this data was accessed.  
 
 ```{r, echo = FALSE}
-cat(readLines(con = "CITATION.bib"), sep = "\n") # NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss, Accessed mm/dd/yyyy
+cat(readLines(con = "CITATION.bib"), sep = "\n") 
+ # NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss, Accessed mm/dd/yyyy
 ```
-
-The code is in development. Refer to [releases](`r paste0(link_repo, "/releases")`) for finalized products. These data were last ran and pushed to the AFSC oracle on **`r format(x = as.Date(strsplit(x = dir_out, split = "/", fixed = TRUE)[[1]][5]), "%B %d, %Y")`**. *This is not the date that these data were pulled into FOSS and the FOSS dataset may be behind.* 
 
 # Metadata
 
@@ -91,7 +93,7 @@ The Resource Assessment and Conservation Engineering Division (RACE) Groundfish 
 
 There are no legal restrictions on access to the data. They reside in the public domain and can be freely distributed. Users must read and fully comprehend the metadata prior to use. Data should not be used beyond the limits of the source scale. Acknowledgement of NOAA, as the source from which these data were obtained, in any publications and/or other representations of these data, is suggested. These data are compiled and approved annually after each summer survey season. The data from previous years are unlikely to change substantially once published.
 
-These data are zero-filled (presence and absence) observations from surveys conducted on fishing vessels. These surveys monitor trends in distribution and abundance of groundfish, crab, and bottom-dwelling species in Alaska’s marine ecosystems. These data include estimates and catch-per-unit-effort (CPUE) for all identified species for index stations. Some survey data are excluded, such as non-standard stations, surveys completed in earlier years using different/non-standard gear, and special tows and non-standard data collections.
+These data are zero-filled (presence and absence) observations from surveys conducted on fishing vessels. These surveys monitor trends in distribution and abundance of groundfish, crab, and bottom-dwelling species in Alaska’s marine ecosystems. These data include estimates of catch-per-unit-effort (CPUE) for all identified species for index stations. Some survey data are excluded, such as non-standard stations, surveys completed in earlier years using different/non-standard gear, and special tows and non-standard data collections.
 
 Though not included in the public data, these surveys also collect oceanographic and environmental data, and biological data such as length, weight, stomach contents (to learn more about diet), otoliths (fish ear bones to learn about age), and tissue samples for genetic analysis, all of which can be shared upon special request. Also not included in the public data are estimated biomass (average total weight of all fish and crabs sampled) of crabs and groundfish that support the creation of annual stock assessments.
 
@@ -103,20 +105,20 @@ Though not included in the public data, these surveys also collect oceanographic
 
 
 -   **Eastern Bering Sea Shelf (EBS)** [@2021NEBS2022]
-    -   Annual
-    -   Fixed stations at center of 20 x 20 nm grid
+-   Annual
+-   Fixed stations at center of 20 x 20 nm grid
 -   **Northern Bering Sea (NBS)** [@2021NEBS2022]
-    -   Biennial/Annual
-    -   Fixed stations at center of 20 x 20 nm grid
+-   Biennial/Annual
+-   Fixed stations at center of 20 x 20 nm grid
 -   **Eastern Bering Sea Slope (BSS)** [@RN979]
-    -   Intermittent (funding dependent)
-    -   Modified Index-Stratified Random of Successful Stations Survey Design
+-   Intermittent (funding dependent)
+-   Modified Index-Stratified Random of Successful Stations Survey Design
 -   **Aleutian Islands (AI)** [@AI2018]
-    -   Triennial (1990s)/Biennial since 2000 in even years
-    -   Modified Index-Stratified Random of Successful Stations Survey Design
+-   Triennial (1990s)/Biennial since 2000 in even years
+-   Modified Index-Stratified Random of Successful Stations Survey Design
 -   **Gulf of Alaska (GOA)** [@GOA2018]
-    -   Triennial (1990s)/Biennial since 2001 in odd years
-    -   Stratified Random Survey Design
+-   Triennial (1990s)/Biennial since 2001 in odd years
+-   Stratified Random Survey Design
 
 ## Relevant technical memorandums
 
@@ -150,8 +152,13 @@ For questions, comments, and concerns specifically about the [Fisheries One Stop
 ## Column-level metadata
 
 ```{r column-metadata, echo = FALSE}
-metadata_column0 <- metadata_column
-names(metadata_column0) <- c("Column name from data", "Descriptive Column Name", "Units", "Description")
+metadata_column0 <- metadata_column %>% 
+  dplyr::select(
+    "Column name" = metadata_colname, 
+    "Column name (long) " = metadata_colname_long, 
+    "Units" = metadata_units, 
+    # "Oracle data type" = metadata_datatype, 
+    "Description" = metadata_colname_desc)
 knitr::kable(metadata_column0, row.names = FALSE) 
 ```
 
@@ -203,10 +210,8 @@ dim(data$items)
 ```
 
 ```{r, eval = FALSE, echo = FALSE}
-
-# Filter by Year: Show all the data greater than the year 2020,
-# https://apps-st.fisheries.noaa.gov/ods/foss/trade_data/?q={"year":{"$gt": 2010}}
-
+ # Filter by Year: Show all the data greater than the year 2020,
+ # https://apps-st.fisheries.noaa.gov/ods/foss/trade_data/?q={"year":{"$gt": 2010}}
 res <- httr::GET(url = paste0(api_link, '?q={"year":{"$gt": 2020}}'))
 data <- jsonlite::fromJSON(base::rawToChar(res$content))
 knitr::kable(summary(data$items[, c("year", "srvy")], 3))
@@ -224,16 +229,15 @@ knitr::kable(head(data$items, 3))
 
 
 ```{r, eval = FALSE, echo = FALSE}
-# Combination of year and name filters: Show all the data where years > 2020 and the product name contains pollock
-
+ # Combination of year and name filters: Show all the data where years > 2020 and the product name contains pollock
 res <- httr::GET(url = paste0(api_link, '?q={"year":{"$gt": 2020},"name":{"$like":"%25pollock%25"}}'))
 data <- jsonlite::fromJSON(base::rawToChar(res$content))
 knitr::kable(head(data$items, 3))
 ```
 
 ```{r, eval = FALSE, echo = FALSE}
-# Combination of year, srvy, stratum: Show all the data where year = 1989, srvy = "EBS", and stratum is not equal to 81
-# https://apps-st.fisheries.noaa.gov/ods/foss/trade_data/?q={"year":"1989","srvy": "EBS","stratum":{"$ne": "81"}}
+ # Combination of year, srvy, stratum: Show all the data where year = 1989, srvy = "EBS", and stratum is not equal to 81
+ # https://apps-st.fisheries.noaa.gov/ods/foss/trade_data/?q={"year":"1989","srvy": "EBS","stratum":{"$ne": "81"}}
 
 res <- httr::GET(url = paste0(api_link, '?q={"year": 1989,"srvy": "EBS","stratum":{"$ne": "81"}}'))
 data <- jsonlite::fromJSON(base::rawToChar(res$content))
@@ -263,31 +267,41 @@ If the user has access to the AFSC `Oracle` database, the user can use `SQL deve
 
 Many users will want to access the data from `Oracle` using `R`. The user will need to install the `RODBC` `R` package and ask OFIS (IT) connect `R` to `Oracle`. Then, use the following code in `R` to establish a connection from `R` to `Oracle`: 
 
-Here, the user can write in their username and password directly into the `RODBC` connect function. Never save usernames or passwords in scripts that may be intentionally or unintentionally shared with others. 
-
-```{r oracle-connect-1, echo = TRUE, eval = FALSE}
-library("RODBC")
- # Define RODBC connection to ORACLE
-channel<-odbcConnect(dsn = "AFSC",
-                     uid = "USERS_USERNAME", # change
-                     pwd = "USERS_PASSWORD", # change
-                     believeNRows = FALSE)
-odbcGetInfo(channel) # Execute the connection
-```
-
-Or have the script prompt the user for the connection info. Here, pop-ups will appear on the screen asking for the username and password. 
+Here, the user can write in their username and password directly into the `RODBC` connect function. Never save usernames or passwords in scripts that may be intentionally or unintentionally shared with others. If no username and password is entered in the function, pop-ups will appear on the screen asking for the username and password. 
 
 ```{r oracle-connect-2, echo = TRUE, eval = FALSE}
-library("RODBC")
-library("getPass")
- # Define RODBC connection to ORACLE
-get.connected <- function(schema='AFSC'){(echo=FALSE)
-  username <- getPass(msg = "Enter your ORACLE Username: ")
-  password <- getPass(msg = "Enter your ORACLE Password: ")
-  channel  <- RODBC::odbcConnect(paste(schema),paste(username),paste(password), 
-                                 believeNRows=FALSE)
+ #' Define RODBC connection to ORACLE
+ #'
+ #' @param schema default = 'AFSC'. 
+ #'
+ #' @return oracle channel connection
+ #' @export
+ #'
+ #' @examples
+ #' # Not run
+ #' # channel <- oracle_connect()
+oracle_connect <- function(
+    schema='AFSC', 
+    username = NULL, 
+    passowrd = NULL){(echo=FALSE)
+  
+  library("RODBC")
+  library("getPass")
+  if (is.null(username)) {
+    username <- getPass(msg = "Enter your ORACLE Username: ")
+  }
+  if (is.null(password)) {
+    password <- getPass(msg = "Enter your ORACLE Password: ")
+  }
+  channel  <- RODBC::odbcConnect(
+    paste(schema),
+    paste(username),
+    paste(password), 
+    believeNRows=FALSE)
+  return(channel)
 }
-channel <- get.connected() # Execute the connection
+
+channel <- oracle_connect()
 ```
 
 ### Select all data
@@ -295,7 +309,7 @@ channel <- get.connected() # Execute the connection
 Once connected, pull and save (if needed) the table into the `R` environment. 
 
 ```{r oracle-data-pull, echo = TRUE, eval = FALSE}
- # pull table from oracle into R environment
+ # Pull table from oracle into R environment
 a <- RODBC::sqlQuery(channel, "SELECT * FROM RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED")
  # Save table to local directory
 write.csv(x = a, file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED.csv")

@@ -214,8 +214,8 @@ FOSS_CPUE_ZEROFILLED <- FOSS_CPUE_ZEROFILLED %>%
     cpue_kgkm2 = cpue_kgha * 100, 
     cpue_nokm2 = cpue_noha * 100, 
     date_time = base::as.POSIXlt(x = date_time, 
-                     format = "%m/%d/%Y %H:%M:%OS", 
-                     tz = "America/Nome"), 
+                                 format = "%m/%d/%Y %H:%M:%OS", 
+                                 tz = "America/Nome"), 
     dplyr::across(dplyr::starts_with("cpue_"), round, digits = 6), 
     weight_kg = round(weight_kg, digits = 6)) %>% 
   dplyr::select(any_of(
@@ -229,8 +229,8 @@ FOSS_CPUE_ZEROFILLED <- FOSS_CPUE_ZEROFILLED %>%
       bottom_temperature_c, surface_temperature_c, depth_m, #environmental data
       distance_fished_km, net_width_m, net_height_m, area_swept_ha, duration_hr, performance # gear data
     ))))) %>% 
-  dplyr::arrange(srvy, date_time, cpue_kgha) 
-              
+  dplyr::arrange(date_time, srvy, cpue_kgha) 
+
 names(FOSS_CPUE_ZEROFILLED) <- toupper(names(FOSS_CPUE_ZEROFILLED))
 
 # 
@@ -379,13 +379,16 @@ print("save data")
 
 ## Metadata maintenance --------------------------------------------------------
 metadata_column <- gap_products_metadata_column0[match(names(FOSS_CPUE_ZEROFILLED), 
-                                         toupper(gap_products_metadata_column0$metadata_colname)),]  
+                                                       toupper(gap_products_metadata_column0$metadata_colname)),]  
 metadata_column$metadata_colname <- toupper(metadata_column$metadata_colname)
 
-fix_metadata_table <- function(metadata_table0, name0) {
+fix_metadata_table <- function(metadata_table0, name0, dir_out) {
   metadata_table0 <- gsub(pattern = "\n", replacement = " ", x = metadata_table0)
   metadata_table0 <- gsub(pattern = "   ", replacement = " ", x = metadata_table0)
   metadata_table0 <- gsub(pattern = "  ", replacement = " ", x = metadata_table0)
+  # metadata_table0 <- gsub(pattern = "\\.([A-Za-z])", 
+  #                         replacement = ". ",
+  #                         x = metadata_table0)
   
   readr::write_lines(x = metadata_table0,
                      file = paste0(dir_out, name0, "_metadata_table.txt"))
@@ -395,12 +398,11 @@ fix_metadata_table <- function(metadata_table0, name0) {
 
 ## Zero-fill join tables -------------------------------------------------------
 metadata_table <- paste(
-  "This dataset includes zero-filled (presence and absence) observations and
-catch-per-unit-effort (CPUE) estimates for all identified species at a standard set of stations ", 
+  "These datasets, JOIN_FOSS_CPUE_CATCH and JOIN_FOSS_CPUE_HAUL, 
+when full joined by the HAULJOIN variable, 
+includes zero-filled (presence and absence) observations and
+catch-per-unit-effort (CPUE) estimates for all identified species at for index stations ", 
   metadata_sentence_survey_institution, 
-  "Join the JOIN_FOSS_CPUE_CATCH and JOIN_FOSS_CPUE_HAUL datasets using HAULJOIN column to obtain 
-the full zero-filled (presence and absence) data for all of the surveys conducted ", 
-  metadata_sentence_survey_institution,
   metadata_sentence_legal_restrict, 
   metadata_sentence_foss, 
   metadata_sentence_github, 
@@ -409,7 +411,8 @@ the full zero-filled (presence and absence) data for all of the surveys conducte
   collapse = " ", sep = " ")
 metadata_table <- fix_metadata_table(
   metadata_table0 = metadata_table, 
-  name0 = "JOIN_FOSS_CPUE")
+  name0 = "JOIN_FOSS_CPUE", 
+  dir_out = dir_out)
 
 base::save(
   JOIN_FOSS_CPUE_HAUL, 
@@ -419,18 +422,20 @@ base::save(
   file = paste0(dir_out, "FOSS_CPUE_JOIN.RData"))
 
 ## Zero filled full table ------------------------------------------------------
-metadata_table <- paste0(
+metadata_table <- paste(
   "This dataset includes zero-filled (presence and absence) observations and
-catch-per-unit-effort (CPUE) estimates for all identified species at a standard set of stations ", 
-  metadata_sentence_survey_institution, 
+catch-per-unit-effort (CPUE) estimates for all identified species at for index stations ", 
+  metadata_sentence_survey_institution,
   metadata_sentence_legal_restrict, 
   metadata_sentence_foss, 
   metadata_sentence_github, 
   metadata_sentence_codebook, 
-  metadata_sentence_last_updated)
+  metadata_sentence_last_updated, 
+  collapse = " ", sep = " ")
 metadata_table <- fix_metadata_table(
   metadata_table0 = metadata_table, 
-  name0 = "FOSS_CPUE_ZEROFILLED")
+  name0 = "FOSS_CPUE_ZEROFILLED", 
+  dir_out = dir_out)
 
 base::save(
   FOSS_CPUE_ZEROFILLED, 
@@ -448,11 +453,12 @@ FOSS_CPUE_PRESONLY <- FOSS_CPUE_ZEROFILLED %>%
           CPUE_NOKM2 %in% c(NA, 0)) ) # which shouldn't happen, but good to double check
 
 metadata_table <- gsub(pattern = "zero-filled (presence and absence)", 
-     replacement = "presence-only",
-     x = paste(readLines(con = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_metadata_table.txt")), collapse="\n"))
+                       replacement = "presence-only",
+                       x = paste(readLines(con = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_metadata_table.txt")), collapse="\n"))
 metadata_table <- fix_metadata_table(
   metadata_table0 = metadata_table, 
-  name0 = "FOSS_CPUE_PRESONLY")
+  name0 = "FOSS_CPUE_PRESONLY", 
+  dir_out = dir_out)
 
 base::save(
   FOSS_CPUE_PRESONLY, 
