@@ -5,12 +5,12 @@
 #' Notes: 
 #' ---------------------------------------------
 
-
-
 # This has a specific username and password because I DONT want people to have access to this!
-# source("C:/Users/emily.markowitz/Work/Projects/ConnectToOracle.R")
-# source("C:/Users/emily.markowitz/Documents/Projects/ConnectToOracle.R")
-source("Z:/Projects/ConnectToOracle.R")
+locations <- c("Z:/Projects/ConnectToOracle.R", 
+               "C:/Users/emily.markowitz/Documents/Projects/ConnectToOracle.R")
+for (i in 1:length(locations)){
+  if (file.exists(locations[i])) {source(locations[i])}
+}
 
 # I set up a ConnectToOracle.R that looks like this: 
 #   
@@ -29,10 +29,9 @@ source("Z:/Projects/ConnectToOracle.R")
 # odbcGetInfo(channel)
 
 
-##################DOWNLOAD CPUE and BIOMASS EST##################################
+# DOWNLOAD CPUE ----------------------------------------------------------------
 
 locations<-c(
-  # Tbles to compare to
   "GOA.CPUE", 
   "AI.CPUE", 
   "HAEHNR.cpue_nbs", 
@@ -40,44 +39,7 @@ locations<-c(
   "HAEHNR.cpue_ebs_plusnw_grouped"
 )
 
-#sinks the data into connection as text file
-sink("./data/metadata.txt")
-
-print(Sys.Date())
-
-for (i in 1:length(locations)){
-  print(locations[i])
-  if (locations[i] == "RACEBASE.HAUL") { # that way I can also extract TIME
-    
-    a<-RODBC::sqlQuery(channel, paste0("SELECT * FROM ", locations[i]))
-    
-    a<-RODBC::sqlQuery(channel, 
-                       paste0("SELECT ",
-                              paste0(names(a)[names(a) != "START_TIME"], 
-                                     sep = ",", collapse = " "),
-                              " TO_CHAR(START_TIME,'MM/DD/YYYY HH24:MI:SS') START_TIME  FROM ", 
-                              locations[i]))
-  } else {
-    a<-RODBC::sqlQuery(channel, paste0("SELECT * FROM ", locations[i]))
-  }
-  
-  if (locations[i] == "AI.CPUE") {
-    filename <- "cpue_ai"
-  } else if (locations[i] == "GOA.CPUE") {
-    filename <- "cpue_goa"
-  } else {
-    filename <- tolower(strsplit(x = locations[i], 
-                                 split = ".", 
-                                 fixed = TRUE)[[1]][2])
-  }
-  
-  write.csv(x=a, 
-            paste0("./data/oracle/",
-                   filename,
-                   ".csv"))
-  remove(a)
-}
-
-sink()
-
-
+oracle_dl(
+  locations = locations, 
+  channel = channel, 
+  dir_out = paste0(dir_data, "/oracle_check/"))

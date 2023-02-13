@@ -51,6 +51,7 @@ link_repo <- "https://github.com/afsc-gap-products/gap_public_data/"
 
 dir_out <- paste0(getwd(), "/output/", Sys.Date(),"/")
 dir.create(dir_out)
+dir_data <- paste0(getwd(), "/data/")
 
 # Save scripts from each run to output -----------------------------------------
 # Just for safe keeping

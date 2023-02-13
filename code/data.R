@@ -24,14 +24,36 @@ for (i in 1:length(a)){
   assign(x = gsub(pattern = "\\.csv", replacement = "", x = paste0(a[i], "0")), value = b) # 0 at the end of the name indicates that it is the orig unmodified file
 }
 
-## Metadata ---------------------------------------------------------------------
+## Taxonomy and ITIS and WoRMS Data --------------------------------------------
 
-metadata_column <- gap_products_metadata_column0
+worms <- "https://docs.google.com/spreadsheets/d/1BF9cBLtGkFt9TYttp2wEyph_fI3yMY8fHjp_ckJ9pQ8"
+googledrive::drive_download(file = googledrive::as_id(worms),
+                            type = "csv",
+                            overwrite = TRUE,
+                            path = paste0(dir_data, "/taxonomy_worms.csv"))
 
+taxon_id <- dplyr::full_join(
+  readr::read_csv(file = paste0(dir_data, "/taxonomy_worms.csv")) %>% 
+    dplyr::select(species_code, scientific_name = accepted_name, common_name, worms = database_id), 
+  readr::read_csv(file = paste0(dir_data, "/2023_taxonomy_updates_itis.csv")) %>% 
+    dplyr::select(species_code, itis = database_id), 
+  by = "species_code")
+
+# Make sure there are no duplicate species_codes
+# > sum(duplicated(taxon_id$species_code))
+# [1] 0
+
+# Metadata prep ----------------------------------------------------------------
+
+# column metadata
+# metadata_column <- gap_products_metadata_column0
+
+# table metadata
 link_repo <- "https://github.com/afsc-gap-products/gap_public_data"
 
 for (i in 1:nrow(gap_products_metadata_table0)){
-  assign(x = paste0("metadata_sentence_", gap_products_metadata_table0$metadata_sentence_type[i]), 
+  print(paste0("metadata_sentence_", gap_products_metadata_table0$metadata_sentence_name[i]))
+  assign(x = paste0("metadata_sentence_", gap_products_metadata_table0$metadata_sentence_name[i]), 
          value = gap_products_metadata_table0$metadata_sentence[i])
 }
 
@@ -45,45 +67,20 @@ metadata_sentence_last_updated <- gsub(
   pattern = "INSERT_DATE", 
   replacement = format(x = as.Date(strsplit(x = dir_out, split = "/", fixed = TRUE)[[1]][length(strsplit(x = dir_out, split = "/", fixed = TRUE)[[1]])]), "%B %d, %Y") )
 
-## ITIS, WoRMS, and Taxon Confidence Data --------------------------------------
+# Wrangle Data -----------------------------------------------------------------
 
-# Now available on the RACEBASE_FOSS oracle schema
+## Taxon Confidence Data -------------------------------------------------------
 
-load(file = paste0("./data/AFSC_ITIS_WORMS",option,".rdata"))
-# read.csv(file = "./data/oracle/gap_products_old_taxon_confidence.csv")
 taxon_confidence0 <- gap_products_old_taxon_confidence0 %>% 
   dplyr::rename(SRVY = srvy)
 
-# Wrangle Data -----------------------------------------------------------------
-
-## Species info ----------------------------------------------------------------
-
-# if (FALSE) { # if itis/worms codes have not been run yet
-#   AFSC_ITIS_WORMS <-
-#     # dplyr::left_join(
-#       # x =
-#     species0 %>%
-#         dplyr::select(species_code, common_name, species_name) %>% # ,
-#       # y = species_taxonomics0 %>%
-#         # dplyr::select(),
-#       # by = c("")) %>%
-#     dplyr::rename(scientific_name = species_name) %>%
-#     dplyr::mutate( # fix rouge spaces in species names
-#       common_name = ifelse(is.na(common_name), "", common_name),
-#       common_name = gsub(pattern = "  ", replacement = " ",
-#                          x = trimws(common_name), fixed = TRUE),
-#       scientific_name = ifelse(is.na(scientific_name), "", scientific_name),
-#       scientific_name = gsub(pattern = "  ", replacement = " ",
-#                              x = trimws(scientific_name), fixed = TRUE), 
-#       itis = NA, 
-#       worms = NA) # made if taxize0 == TRUE
-# } else {
-# AFSC_ITIS_WORMS <- AFSC_ITIS_WORMS %>% 
-#   dplyr::select(-notes_itis, -notes_worms) %>% 
-#   dplyr::mutate(itis = as.numeric(itis), 
-#                 worms = as.numeric(worms))
-# }
-
+# > head(taxon_confidence0)
+# # A tibble: 6 × 5
+# species_code  year taxon_confidence SRVY  taxon_confidence_code
+# <dbl> <dbl> <chr>            <chr>                 <dbl>
+#   1          435  1997 Low              AI                        3
+# 2          435  2000 High             AI                        1
+# 3          435  2002 High             AI                        1
 
 ## cruises ---------------------------------------------------------------------
 cruises <-  
@@ -96,8 +93,8 @@ cruises <-
                 vessel_name, start_date, end_date, cruisejoin) %>% 
   dplyr::filter(year != 2020 & # no surveys happened this year because of COVID
                   (year >= 1982 & SRVY %in% c("EBS", "NBS") | # 1982 BS inclusive - much more standardized after this year
-                     SRVY %in% "BSS" | # keep all years of the BSS
-                     year >= 1991 & SRVY %in% c("AI", "GOA")) & # 1991 AI and GOA (1993) inclusive - much more standardized after this year
+                  SRVY %in% "BSS" | # keep all years of the BSS
+                  year >= 1991 & SRVY %in% c("AI", "GOA")) & # 1991 AI and GOA (1993) inclusive - much more standardized after this year
                   survey_definition_id %in% surveys$survey_definition_id) %>% 
   dplyr::rename(vessel = "vessel_id")
 
@@ -110,65 +107,73 @@ cruises <-
 # # GOA    0    0    0    0    0    0    0    0    0    0    0    4    0   ...
 # # NBS    0    0    0    0    0    0    0    0    0    0    0    0    0   ...
 # 
-# dim(cruises)
-# # > dim(cruises)
-# # [1] 156  13
+# > dim(cruises)
+# [1] 156  13 # 2021
+# [1] 167  13 # 2022
 
 ## haul ------------------------------------------------------------------------
 
 # If you group the data by with `srvy`, `cruise`, `stratum`, `station`, and `vessel_id` (NOT `hauljoin` or `haul`, as done below) you find that there were several stratum-stations appear to be sampled right after the initial haul. This is because the stations in the GOA/AI surveys were regridded. These stations are in fact legit and will be kept in the data. 
 # 
 # # don't include haul/hauljoin
-# racebase_haul0 %>% 
-#   dplyr::filter(abundance_haul == "Y" & 
-#                   haul_type == 3 & 
-#                   performance >= 0) %>% 
+# racebase_haul0 %>%
+#   dplyr::filter(abundance_haul == "Y" &
+#                   haul_type == 3 &
+#                   performance >= 0) %>%
 #   dplyr::mutate(id = paste0(region,"_",cruise,"_",stratum,"_",stationid,"_",vessel)) %>%
 #   dplyr::select(id) %>%
-#   table() %>% 
-#   data.frame() %>% 
-#   dplyr::filter(Freq > 1) 
+#   table() %>%
+#   data.frame() %>%
+#   dplyr::filter(Freq > 1)
+# # 139 result rows
 # 
 # # include haul/hauljoin
-# racebase_haul0 %>% 
-#   dplyr::filter(abundance_haul == "Y" & 
-#                   haul_type == 3 & 
-#                   performance >= 0) %>% 
+# racebase_haul0 %>%
+#   dplyr::filter(abundance_haul == "Y" &
+#                   haul_type == 3 &
+#                   performance >= 0) %>%
 #   dplyr::mutate(id = paste0(region,"_",cruise,"_",stratum,"_",stationid,"_",vessel,"_",haul)) %>%
 #   dplyr::select(id) %>%
-#   table() %>% 
-#   data.frame() %>% 
-#   dplyr::filter(Freq > 1) 
+#   table() %>%
+#   data.frame() %>%
+#   dplyr::filter(Freq > 1)
+# [1] id   Freq
+# <0 rows> (or 0-length row.names)
 
 haul <- racebase_haul0 %>%
   dplyr::filter(
     abundance_haul == "Y" & # defined historically as being good tows for abundance estimates
       haul_type == 3 & # standard non-retow or special proj tows
-      performance >= 0 
+      performance >= 0 #&
+      # !(year == 2018 & region == "BS" & stratum %in% c(70, 71, 81)) # remove 2018 NBS (actually called EBS in data!!!)
     # curious, but not removing, keeping in line with where abundance_haul = Y
     # !(is.null(stationid)) & 
     # !(is.na(stationid)) 
   ) %>% 
   dplyr::select(-auditjoin, -net_measured) # not valuable to us, here
 
-# > dim(haul) # 2021
-# [1] 34231    29
+# > dim(haul)
+# [1] 34231    29 # 2021
+# [1] 35096    29 # 2022
 
 ## catch -----------------------------------------------------------------------
 
 # ## there should only be one species_code observation per haul event, however
-# ## there are occassionally multiple (with unique catchjoins). 
+# ## there are occasionally multiple (with unique catchjoins). 
 # ## I suspect that this is because a species_code was updated or changed, 
 # ## so we will need to sum those counts and weights
 # 
 # racebase_catch0 %>%
-#     dplyr::filter(region != "WC") %>% 
+#     dplyr::filter(region != "WC") %>%
 #   dplyr::mutate(id = paste0(region, "_", cruisejoin, "_", hauljoin, "_", species_code)) %>%
 #   dplyr::select(id) %>%
 #   table() %>%
 #   data.frame() %>%
-#   dplyr::rename("id" = ".") %>%
 #   dplyr::filter(Freq > 1)
+# id Freq
+# 1 BS_104_3915_69010    2
+# 2 BS_104_3916_69010    2
+# 3 BS_104_3919_69010    2
 
 catch <- racebase_catch0 %>% 
   dplyr::group_by(region, cruisejoin, hauljoin, vessel, haul, species_code) %>% 
@@ -176,8 +181,9 @@ catch <- racebase_catch0 %>%
                    number_fish = sum(number_fish, na.rm = TRUE)) %>% 
   dplyr::ungroup()
 
-# dim(catch) # 2021
-# [1] 1613670       8
+# dim(catch)
+# [1] 1613670       8 # 2021
+# [1] 1641255       8 # 2022
 
 ## haul_cruises_vess ----------------------------------------------------------
 
@@ -200,8 +206,52 @@ haul_cruises_vess <- dplyr::inner_join(
       dplyr::mutate(vessel_name = stringr::str_to_title(vessel_name)), 
     by = c("vessel" = "vessel_id"))
 
+# > dim(haul_cruises_vess)
+# [1] 31608    28 # 2022
+
 # Check 
 # a <- unique(haul_cruises_vess[,c("SRVY", "year", "stationid", "haul_type")]); table(a$year, a$SRVY, a$haul_type)
+#       AI BSS EBS GOA NBS # 2022
+# 1982   0   0 334   0   0
+# 1983   0   0 353   0   0
+# 1984   0   0 355   0   0
+# 1985   0   0 356   0   0
+# 1986   0   0 354   0   0
+# 1987   0   0 357   0   0
+# 1988   0   0 372   0   0
+# 1989   0   0 374   0   0
+# 1990   0   0 371   0   0
+# 1991 283   0 372   0   0
+# 1992   0   0 356   0   0
+# 1993   0   0 375 767   0
+# 1994 339   0 375   0   0
+# 1995   0   0 376   0   0
+# 1996   0   0 375 795   0
+# 1997 348   0 376   0   0
+# 1998   0   0 375   0   0
+# 1999   0   0 373 757   0
+# 2000 358   0 372   0   0
+# 2001   0   0 375 486   0
+# 2002 354 141 375   0   0
+# 2003   0   0 376 804   0
+# 2004 375 230 375   0   0
+# 2005   0   0 373 831   0
+# 2006 335   0 376   0   0
+# 2007   0   0 376 805   0
+# 2008   0 200 375   0   0
+# 2009   0   0 376 821   0
+# 2010 384 200 376   0 141
+# 2011   0   0 376 669   0
+# 2012 386 189 376   0   0
+# 2013   0   0 376 547   0
+# 2014 381   0 376   0   0
+# 2015   0   0 376 768   0
+# 2016 383 175 376   0   0
+# 2017   0   0 376 534 143
+# 2018 390   0 376   0   0
+# 2019   0   0 376 541 144
+# 2021   0   0 376 529 144
+# 2022 375   0 376   0 144
 
 ## catch_haul_cruises_vess -----------------------------------------------------
 
@@ -212,3 +262,6 @@ catch_haul_cruises_vess <- dplyr::left_join(
     dplyr::select(hauljoin, #cruisejoin, region, vessel, haul, 
                   species_code, weight, number_fish), 
   by = c("hauljoin"))
+
+# > dim(catch_haul_cruises_vess)
+# [1] 905770     31 # 2022

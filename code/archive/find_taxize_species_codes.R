@@ -105,7 +105,7 @@ find_taxize <- function(dat,
   still_missing <- 
     data.frame(dat1[is.na(dat1[,"id"]), ]) %>% 
     dplyr::select(#-species_name, -common_name, 
-                  -species_code) %>%
+      -species_code) %>%
     dplyr::distinct() %>% 
     dplyr::arrange(scientific_name, notes)
   
@@ -134,19 +134,19 @@ for (i in 1:length(a)){
 # Wrangle ----------------------------------------------------------------------
 
 if (option == 1) { # Take species scientific names from species0
-AFSC_ITIS_WORMS0 <- species0 %>%
-  dplyr::select(species_code, species_name) %>% # ,
-  # dplyr::filter(species_name == "Careproctus sp. cf. gilberti (Orr)") %>%
-  dplyr::rename(scientific_name = species_name) 
-
+  AFSC_ITIS_WORMS0 <- species0 %>%
+    dplyr::select(species_code, species_name) %>% # ,
+    # dplyr::filter(species_name == "Careproctus sp. cf. gilberti (Orr)") %>%
+    dplyr::rename(scientific_name = species_name) 
+  
 } else if (option == 2) { # Take species scientific names from species_classification0$report_name_scientific
-# Select data you need 
-AFSC_ITIS_WORMS0 <- species_classification0 %>% 
-  dplyr::select(report_name_scientific, species_code) %>% 
-  dplyr::rename(scientific_name = report_name_scientific) %>% 
-  dplyr::mutate(scientific_name1 = scientific_name, 
-                scientific_name = ifelse(is.na(scientific_name), "", scientific_name))
-
+  # Select data you need 
+  AFSC_ITIS_WORMS0 <- species_classification0 %>% 
+    dplyr::select(report_name_scientific, species_code) %>% 
+    dplyr::rename(scientific_name = report_name_scientific) %>% 
+    dplyr::mutate(scientific_name1 = scientific_name, 
+                  scientific_name = ifelse(is.na(scientific_name), "", scientific_name))
+  
 } else if (option == 3) { # Take species scientific names from species_classification0$report_name_scientific
   # Select data you need 
   
@@ -197,31 +197,31 @@ AFSC_ITIS_WORMS0 <- species_classification0 %>%
       !is.na(phylum_taxon) ~ paste0(phylum_taxon),       
       !is.na(subkingdom_taxon) ~ paste0(subkingdom_taxon),       
       !is.na(kingdom_taxon) ~ paste0(kingdom_taxon)      
-      )) %>% 
-  dplyr::select(report_name_scientific, species_code) %>% 
-  dplyr::rename(scientific_name = report_name_scientific)
+    )) %>% 
+    dplyr::select(report_name_scientific, species_code) %>% 
+    dplyr::rename(scientific_name = report_name_scientific)
   
 } 
 
 
 ## Clean data -----------------------------------
-  AFSC_ITIS_WORMS0 <- AFSC_ITIS_WORMS0 %>% 
-    dplyr::mutate(
-      scientific_name1 = scientific_name, 
-      scientific_name = ifelse(is.na(scientific_name), "", scientific_name), 
-              scientific_name = gsub(pattern = "  ", replacement = " ",
-                                       x = trimws(scientific_name), fixed = TRUE),
-                
-                scientific_name1 = scientific_name,
-                scientific_name1 = gsub(pattern = "\\s*\\([^\\)]+\\)", # remove parentheses and anything within
-                                        replacement = "",
-                                        x = scientific_name1),
-                scientific_name1 = gsub(pattern = "[0-9]+", # remove all numbers
-                                        replacement = "",
-                                        x = scientific_name1),
-                scientific_name1 = ifelse(is.na(scientific_name1), "", scientific_name1),
-                scientific_name1 = gsub(pattern = "  ", replacement = " ",
-                                        x = trimws(scientific_name1), fixed = TRUE)) %>% 
+AFSC_ITIS_WORMS0 <- AFSC_ITIS_WORMS0 %>% 
+  dplyr::mutate(
+    scientific_name1 = scientific_name, 
+    scientific_name = ifelse(is.na(scientific_name), "", scientific_name), 
+    scientific_name = gsub(pattern = "  ", replacement = " ",
+                           x = trimws(scientific_name), fixed = TRUE),
+    
+    scientific_name1 = scientific_name,
+    scientific_name1 = gsub(pattern = "\\s*\\([^\\)]+\\)", # remove parentheses and anything within
+                            replacement = "",
+                            x = scientific_name1),
+    scientific_name1 = gsub(pattern = "[0-9]+", # remove all numbers
+                            replacement = "",
+                            x = scientific_name1),
+    scientific_name1 = ifelse(is.na(scientific_name1), "", scientific_name1),
+    scientific_name1 = gsub(pattern = "  ", replacement = " ",
+                            x = trimws(scientific_name1), fixed = TRUE)) %>% 
   dplyr::arrange(scientific_name1)
 
 
@@ -307,7 +307,7 @@ known_itis <- list( # will have to check these each year
   'Tellina modesta' = c(81086, more_than_one_opt),
   'Weberella' = c(659295, more_than_one_opt), 
   #   "Polychaete" = c(64358, more_than_one_opt), 
-
+  
   #   "Admete virdula" = c(205086, "Code for Admete viridula (Fabricius, 1780) (slight misspelling)"), 
   #   "Alaskagorgia aleutiana" = c(NA, "Not available in ITIS."), 
   #   "Argentiformes" = c(553133, "Used code for Osmeriformes, as this is likely what this name is refering to."),
@@ -450,7 +450,7 @@ AFSC_ITIS_WORMS_itis <- find_taxize(
     # common_name = AFSC_ITIS_WORMS0$common_name[rnge],
     species_code = AFSC_ITIS_WORMS0$species_code[rnge]), 
   known = known_tsn,
-    db0 = "itis")
+  db0 = "itis")
 
 # WoRMS
 AFSC_ITIS_WORMS_worms <- find_taxize(
@@ -471,8 +471,8 @@ AFSC_ITIS_WORMS <-
   dplyr::full_join(
     x = ., 
     y = species0 %>% 
-           dplyr::select(species_code, species_name, common_name), 
-     by = "species_code") %>% 
+      dplyr::select(species_code, species_name, common_name), 
+    by = "species_code") %>% 
   dplyr::mutate(common_name = ifelse(is.na(common_name), "", common_name), 
                 common_name = gsub(pattern = "  ", replacement = " ",
                                    x = trimws(common_name), fixed = TRUE)) 

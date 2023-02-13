@@ -5,12 +5,12 @@
 #' Notes: 
 #' ---------------------------------------------
 
-
-
 # This has a specific username and password because I DONT want people to have access to this!
-# source("C:/Users/emily.markowitz/Work/Projects/ConnectToOracle.R")
-# source("C:/Users/emily.markowitz/Documents/Projects/ConnectToOracle.R")
-source("Z:/Projects/ConnectToOracle.R")
+locations <- c("Z:/Projects/ConnectToOracle.R", 
+               "C:/Users/emily.markowitz/Documents/Projects/ConnectToOracle.R")
+for (i in 1:length(locations)){
+  if (file.exists(locations[i])) {source(locations[i])}
+}
 
 # I set up a ConnectToOracle.R that looks like this: 
 #   
@@ -32,13 +32,10 @@ source("Z:/Projects/ConnectToOracle.R")
 # Dowload oracle data ----------------------------------------------------------
 
 locations <- c(
-  #General Tables of data
   "RACEBASE.CATCH", 
   "RACEBASE.HAUL", 
   "RACE_DATA.V_CRUISES",
-  # "RACEBASE.SPECIES", 
-  # "RACE_DATA.SPECIES_TAXONOMICS", 
-  # "RACEBASE.SPECIES_CLASSIFICATION",
+  # "RACEBASE.SPECIES", "RACE_DATA.SPECIES_TAXONOMICS", "RACEBASE.SPECIES_CLASSIFICATION", # replaced with new taxonomic tables
   "RACE_DATA.VESSELS", 
   "GAP_PRODUCTS.METADATA_TABLE", 
   "GAP_PRODUCTS.METADATA_COLUMN", 
@@ -48,5 +45,5 @@ locations <- c(
 oracle_dl(
   locations = locations, 
   channel = channel, 
-  dir_out = "./data/oracle/")
+  dir_out = paste0(dir_data, "/oracle/"))
 
