@@ -24,25 +24,6 @@ for (i in 1:length(a)){
   assign(x = gsub(pattern = "\\.csv", replacement = "", x = paste0(a[i], "0")), value = b) # 0 at the end of the name indicates that it is the orig unmodified file
 }
 
-## Taxonomy and ITIS and WoRMS Data --------------------------------------------
-
-worms <- "https://docs.google.com/spreadsheets/d/1BF9cBLtGkFt9TYttp2wEyph_fI3yMY8fHjp_ckJ9pQ8"
-googledrive::drive_download(file = googledrive::as_id(worms),
-                            type = "csv",
-                            overwrite = TRUE,
-                            path = paste0(dir_data, "/taxonomy_worms.csv"))
-
-taxon_id <- dplyr::full_join(
-  readr::read_csv(file = paste0(dir_data, "/taxonomy_worms.csv")) %>% 
-    dplyr::select(species_code, scientific_name = accepted_name, common_name, worms = database_id), 
-  readr::read_csv(file = paste0(dir_data, "/2023_taxonomy_updates_itis.csv")) %>% 
-    dplyr::select(species_code, itis = database_id), 
-  by = "species_code")
-
-# Make sure there are no duplicate species_codes
-# > sum(duplicated(taxon_id$species_code))
-# [1] 0
-
 # Metadata prep ----------------------------------------------------------------
 
 # column metadata
@@ -52,7 +33,7 @@ taxon_id <- dplyr::full_join(
 link_repo <- "https://github.com/afsc-gap-products/gap_public_data"
 
 for (i in 1:nrow(gap_products_metadata_table0)){
-  print(paste0("metadata_sentence_", gap_products_metadata_table0$metadata_sentence_name[i]))
+  # print(paste0("metadata_sentence_", gap_products_metadata_table0$metadata_sentence_name[i]))
   assign(x = paste0("metadata_sentence_", gap_products_metadata_table0$metadata_sentence_name[i]), 
          value = gap_products_metadata_table0$metadata_sentence[i])
 }
@@ -82,12 +63,20 @@ taxon_confidence0 <- gap_products_old_taxon_confidence0 %>%
 # 2          435  2000 High             AI                        1
 # 3          435  2002 High             AI                        1
 
+
+## Taxonomy and ITIS and WoRMS Data --------------------------------------------
+
+# Make sure there are no duplicate species_codes
+# > sum(duplicated(gap_products_old_v_taxonomics0$species_code))
+# [1] 0
+
 ## cruises ---------------------------------------------------------------------
 cruises <-  
   dplyr::left_join(
-    x = surveys, # a data frame of all surveys and survey_definition_ids we want included in the public data, created in the run.R script
-    y = race_data_v_cruises0, 
+    y = surveys, # a data frame of all surveys and survey_definition_ids we want included in the public data, created in the run.R script
+    x = race_data_v_cruises0, 
     by  = c("survey_definition_id")) %>% 
+  dplyr::filter(survey_definition_id %in% surveys$survey_definition_id) %>% 
   dplyr::select(SRVY, SRVY_long, region, cruise_id,  year, survey_name, 
                 vessel_id, cruise, survey_definition_id, 
                 vessel_name, start_date, end_date, cruisejoin) %>% 
@@ -188,15 +177,16 @@ catch <- racebase_catch0 %>%
 ## haul_cruises_vess ----------------------------------------------------------
 
 haul_cruises_vess <- dplyr::inner_join(
-  x = cruises %>% 
+  y = cruises %>% 
     dplyr::select(cruisejoin, vessel, region,  
                   survey_definition_id, SRVY, SRVY_long, survey_name, year, cruise),  
-  y = haul %>% 
+  x = haul %>% 
     dplyr::select(cruisejoin, vessel, region, haul_type, 
                   hauljoin, stationid, stratum, haul, start_time, 
                   start_latitude, start_longitude, end_latitude, end_longitude, 
                   bottom_depth, gear_temperature, surface_temperature, performance, 
-                  duration, distance_fished, net_width, net_height), 
+                  duration, distance_fished, net_width, net_height) %>% 
+    dplyr::filter(cruisejoin %in% cruises$cruisejoin), 
   by = c("cruisejoin", "vessel", "region")) %>% 
   dplyr::left_join(
     x = .,
@@ -257,11 +247,12 @@ haul_cruises_vess <- dplyr::inner_join(
 
 # Essentially our presence-only data
 catch_haul_cruises_vess <- dplyr::left_join(
-  x = haul_cruises_vess, 
-  y = catch %>% 
+  y = haul_cruises_vess, 
+  x = catch %>% 
     dplyr::select(hauljoin, #cruisejoin, region, vessel, haul, 
-                  species_code, weight, number_fish), 
+                  species_code, weight, number_fish) %>% 
+    dplyr::filter(hauljoin %in% haul_cruises_vess$hauljoin), 
   by = c("hauljoin"))
 
 # > dim(catch_haul_cruises_vess)
-# [1] 905770     31 # 2022
+# [1] 905770     31 # 2022 data

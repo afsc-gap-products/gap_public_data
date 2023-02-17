@@ -31,9 +31,6 @@ source("https://raw.githubusercontent.com/afsc-gap-products/metadata/main/code/f
 source('./code/functions.R')
 # source('./code/data_dl.R')
 
-googledrive::drive_deauth()
-googledrive::drive_auth()
-1
 source('./code/data.R')
 
 source('./code/calc_cpue.R')
@@ -49,7 +46,7 @@ source('./code/calc_cpue.R')
 # Update README ----------------------------------------------------------------
 
 source('./code/functions.R')
-dir_out <- paste0(getwd(), "/output/2023-02-13/")
+dir_out <- paste0(getwd(), "/output/2023-02-17/")
 
 load(paste0(dir_out, "FOSS_CPUE_PRESONLY.RData"))
 load(paste0(dir_out, "FOSS_CPUE_JOIN.RData"))

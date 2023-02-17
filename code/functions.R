@@ -17,7 +17,7 @@ PKG <- c(
   "rmarkdown",
 
   "janitor",
-  "taxize",
+  # "taxize",
   
   # Text Management
   "stringr")
