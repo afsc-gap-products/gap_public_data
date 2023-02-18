@@ -357,6 +357,14 @@ str0 <- paste0(
 cat(str0)
 ```
 
+To join these tables in Oracle, you may use a variant of the following code: 
+
+```{sql, eval = FALSE}
+SELECT * FROM RACEBASE_FOSS.JOIN_FOSS_CPUE_HAUL
+FULL JOIN RACEBASE_FOSS.JOIN_FOSS_CPUE_CATCH
+ON RACEBASE_FOSS.JOIN_FOSS_CPUE_HAUL.HAULJOIN = RACEBASE_FOSS.JOIN_FOSS_CPUE_CATCH.HAULJOIN;
+```
+
 # Suggestions and comments
 
 If the data or metadata can be improved, please create a pull request, [submit an issue to the GitHub organization](`r "https://github.com/afsc-gap-products/data-requests/issues"`), [submit an issue to the code's repository](`r paste0(link_repo, "/issues")`), reach out the the survey team leads (listed above), or to [Fisheries One Stop Shop (FOSS)](`r link_foss `) platform managers.

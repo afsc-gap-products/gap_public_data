@@ -514,6 +514,15 @@ These data were last updated February 17, 2023.
     ##   cols: 25
     ##   0.007 GB
 
+To join these tables in Oracle, you may use a variant of the following
+code:
+
+``` sql
+SELECT * FROM RACEBASE_FOSS.JOIN_FOSS_CPUE_HAUL
+FULL JOIN RACEBASE_FOSS.JOIN_FOSS_CPUE_CATCH
+ON RACEBASE_FOSS.JOIN_FOSS_CPUE_HAUL.HAULJOIN = RACEBASE_FOSS.JOIN_FOSS_CPUE_CATCH.HAULJOIN;
+```
+
 # Suggestions and comments
 
 If the data or metadata can be improved, please create a pull request,
@@ -553,16 +562,15 @@ sessionInfo()
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] tidyselect_1.2.0    xfun_0.37           purrr_1.0.1         snakecase_0.11.0    colorspace_2.1-0    vctrs_0.5.2        
-    ##  [7] generics_0.1.3      htmltools_0.5.4     usethis_2.1.6       yaml_2.3.7          readtext_0.81       utf8_1.2.3         
-    ## [13] rlang_1.0.6         gert_1.9.2          pillar_1.8.1        glue_1.6.2          withr_2.5.0         bit64_4.0.5        
-    ## [19] RColorBrewer_1.1-3  rvcheck_0.2.1       lifecycle_1.0.3     dlstats_0.1.6       munsell_0.5.0       gtable_0.3.1       
-    ## [25] evaluate_0.20       tzdb_0.3.0          fastmap_1.1.0       curl_5.0.0          sys_3.4.1           parallel_4.2.2     
-    ## [31] fansi_1.0.4         openssl_2.0.5       scales_1.2.1        BiocManager_1.30.19 vroom_1.6.1         fs_1.6.1           
-    ## [37] bit_4.0.5           credentials_1.3.2   ggplot2_3.4.1       hms_1.1.2           askpass_1.1         digest_0.6.31      
-    ## [43] stringi_1.7.12      gh_1.3.1            rprojroot_2.0.3     grid_4.2.2          here_1.0.1          cli_3.6.0          
-    ## [49] tools_4.2.2         yulab.utils_0.0.6   tibble_3.1.8        crayon_1.5.2        pkgconfig_2.0.3     ellipsis_0.3.2     
-    ## [55] data.table_1.14.6   timechange_0.2.0    lubridate_1.9.2     rstudioapi_0.14     gitcreds_0.1.2      R6_2.5.1           
-    ## [61] compiler_4.2.2
+    ##  [7] generics_0.1.3      htmltools_0.5.4     usethis_2.1.6       yaml_2.3.7          utf8_1.2.3          rlang_1.0.6        
+    ## [13] readtext_0.81       gert_1.9.2          pillar_1.8.1        withr_2.5.0         glue_1.6.2          RColorBrewer_1.1-3 
+    ## [19] rvcheck_0.2.1       lifecycle_1.0.3     dlstats_0.1.6       munsell_0.5.0       gtable_0.3.1        evaluate_0.20      
+    ## [25] tzdb_0.3.0          fastmap_1.1.0       curl_5.0.0          sys_3.4.1           fansi_1.0.4         openssl_2.0.5      
+    ## [31] scales_1.2.1        BiocManager_1.30.19 fs_1.6.1            credentials_1.3.2   ggplot2_3.4.1       hms_1.1.2          
+    ## [37] askpass_1.1         digest_0.6.31       stringi_1.7.12      gh_1.3.1            grid_4.2.2          rprojroot_2.0.3    
+    ## [43] here_1.0.1          cli_3.6.0           tools_4.2.2         yulab.utils_0.0.6   tibble_3.1.8        crayon_1.5.2       
+    ## [49] pkgconfig_2.0.3     ellipsis_0.3.2      data.table_1.14.6   lubridate_1.9.2     timechange_0.2.0    rstudioapi_0.14    
+    ## [55] gitcreds_0.1.2      R6_2.5.1            compiler_4.2.2
 
 ## NOAA README
 
