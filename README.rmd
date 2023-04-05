@@ -99,10 +99,13 @@ Though not included in the public data, these surveys also collect oceanographic
 
 ## Bottom trawl surveys and regions
 
-<img src="img/_grid_bs.png" alt="Eastern and Northern Bering Sea Shelf" align="right" width="250"/> 
+<img src="img/current_grid_bs.png" alt="Eastern and Northern Bering Sea Shelf" align="right" width="400"/> 
 
-<img src="img/_grid_ai.png" alt="Aleutian Islands" align="right" width="400"/>
+<img src="img/current_grid_ai.png" alt="Aleutian Islands" align="right" width="400"/>
 
+<img src="img/current_grid_goa.png" alt="Gulf of Alaska" align="right" width="400"/> 
+
+### Survey Details
 
 -   **Eastern Bering Sea Shelf (EBS)** [@2021NEBS2022]
 -   Annual
