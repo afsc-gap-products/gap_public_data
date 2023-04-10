@@ -187,7 +187,7 @@ lookup <- c(station = "stationid",
             count = "number_fish", 
             srvy = "SRVY",
             survey = "survey_name",
-            survey_id = "survey_definition_id", 
+            # survey_id = "survey_definition_id", 
             vessel_id = "vessel",
             date_time = "start_time", 
             latitude_dd_start = "start_latitude", # latitude_dd = "start_latitude", 
@@ -220,7 +220,7 @@ FOSS_CPUE_ZEROFILLED <- FOSS_CPUE_ZEROFILLED %>%
     weight_kg = round(weight_kg, digits = 6)) %>% 
   dplyr::select(any_of(
     c(as.character(expression(
-      year, srvy, survey, survey_id, cruise, haul, hauljoin, stratum, station, vessel_name, vessel_id, # survey data
+      year, srvy, survey, survey_definition_id, cruise, haul, hauljoin, stratum, station, vessel_name, vessel_id, # survey data
       date_time, latitude_dd, longitude_dd, latitude_dd_start, longitude_dd_start, latitude_dd_end, longitude_dd_end, # when/where
       species_code, itis, worms, common_name, scientific_name, taxon_confidence, # species info
       cpue_kgha, cpue_kgkm2, # cpue weight
@@ -243,7 +243,7 @@ names(FOSS_CPUE_ZEROFILLED) <- toupper(names(FOSS_CPUE_ZEROFILLED))
 # # Make sure that there are no NAs
 # # summary(FOSS_CPUE_ZEROFILLED %>% dplyr::mutate(SRVY = factor(SRVY), TAXON_CONFIDENCE = factor(TAXON_CONFIDENCE)))
 # 2023-01-21
-# YEAR       SRVY             SURVEY            SURVEY_ID          CRUISE            HAUL          HAULJOIN          STRATUM     
+# YEAR       SRVY             SURVEY            SURVEY_DEFINITION_ID          CRUISE            HAUL          HAULJOIN          STRATUM     
 # Min.   :1982   AI : 7224189   Length:36317744    Min.   : 47.00   Min.   :198201   Min.   :  1.0   Min.   : -22026   Min.   : 10.0  
 # 1st Qu.:1997   BSS:  865632   Class :character   1st Qu.: 47.00   1st Qu.:199701   1st Qu.: 59.0   1st Qu.: -12959   1st Qu.: 31.0  
 # Median :2005   EBS:13371741   Mode  :character   Median : 52.00   Median :200501   Median :117.0   Median :  -4004   Median : 61.0  
@@ -285,7 +285,7 @@ names(FOSS_CPUE_ZEROFILLED) <- toupper(names(FOSS_CPUE_ZEROFILLED))
 #                                                   NA's   :2954949      
 
 # # 2023-02-17
-# YEAR       SRVY             SURVEY            SURVEY_ID          CRUISE            HAUL          HAULJOIN          STRATUM     
+# YEAR       SRVY             SURVEY            SURVEY_DEFINITION_ID          CRUISE            HAUL          HAULJOIN          STRATUM     
 # Min.   :1982   AI : 7224189   Length:36342299    Min.   : 47.00   Min.   :198201   Min.   :  1.0   Min.   : -22026   Min.   : 10.0  
 # 1st Qu.:1997   BSS:  865632   Class :character   1st Qu.: 47.00   1st Qu.:199701   1st Qu.: 59.0   1st Qu.: -12959   1st Qu.: 31.0  
 # Median :2005   EBS:13386582   Mode  :character   Median : 52.00   Median :200501   Median :117.0   Median :  -4003   Median : 61.0  
@@ -340,7 +340,7 @@ print("Split up data to make smaller join files")
 JOIN_FOSS_CPUE_HAUL <- FOSS_CPUE_ZEROFILLED %>%
   dplyr::select(
     HAULJOIN, # Join these
-    YEAR, SRVY, SURVEY, SURVEY_ID, CRUISE, 
+    YEAR, SRVY, SURVEY, SURVEY_DEFINITION_ID, CRUISE, 
     HAUL, VESSEL_NAME, VESSEL_ID, STATION, STRATUM, DATE_TIME, 
     BOTTOM_TEMPERATURE_C, SURFACE_TEMPERATURE_C,
     DEPTH_M, LATITUDE_DD_START, LATITUDE_DD_END, LONGITUDE_DD_START, LONGITUDE_DD_END, 
@@ -403,7 +403,7 @@ when full joined by the HAULJOIN variable,
 includes zero-filled (presence and absence) observations and
 catch-per-unit-effort (CPUE) estimates for all identified species at for index stations ", 
   metadata_sentence_survey_institution, 
-  metadata_sentence_legal_restrict_none_none, 
+  metadata_sentence_legal_restrict_none, 
   metadata_sentence_foss, 
   metadata_sentence_github, 
   metadata_sentence_codebook, 
@@ -480,3 +480,50 @@ for (i in 1:length(list_to_save)) {
     file = paste0(dir_out, list_to_save[i], ".csv"), 
     col_names = TRUE)
 }
+
+## Make Taxonomic grouping table -----------------------------------------------
+
+taxon_search_groups <- gap_products_old_taxonomics_worms0 %>% 
+  dplyr::select(species_code, genus, family, order, class, phylum, kingdom) %>% 
+  tidyr::pivot_longer(data = ., 
+                      cols = c("genus", "family", "order", "class", "phylum", "kingdom"), 
+                      names_to = "category", values_to = "subcategory") %>% 
+  dplyr::relocate(category, subcategory, species_code) %>% 
+  dplyr::arrange(category, subcategory, species_code) %>% 
+  dplyr::filter(!is.na(subcategory))
+
+# only keep groups that have more than one member
+taxon_search_groups <- taxon_search_groups[duplicated(x = taxon_search_groups$subcategory),]
+
+# taxon_search_groups %>% 
+#   dplyr::select(category, subcategory) %>% 
+#   dplyr::distinct()
+
+paste0("Taxon searching groups, created on ", Sys.Date(), ". "),
+
+metadata_table <- paste(
+  "This dataset includes zero-filled (presence and absence) observations and
+catch-per-unit-effort (CPUE) estimates for all identified species at for index stations ", 
+  metadata_sentence_survey_institution,
+  metadata_sentence_legal_restrict_none, 
+  metadata_sentence_foss, 
+  metadata_sentence_github, 
+  metadata_sentence_codebook, 
+  metadata_sentence_last_updated, 
+  collapse = " ", sep = " ")
+metadata_table <- fix_metadata_table(
+  metadata_table0 = metadata_table, 
+  name0 = "taxon_search_groups", 
+  dir_out = dir_out)
+
+base::save(
+  taxon_search_groups, 
+  # metadata_column, 
+  metadata_table, 
+  file = paste0(dir_out, "taxon_search_groups.RData"))
+
+readr::write_csv(
+  x = taxon_search_groups, 
+  file = paste0(dir_out, "taxon_search_groups.csv"), 
+  col_names = TRUE)
+

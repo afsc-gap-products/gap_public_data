@@ -1,12 +1,12 @@
 ---
 title: '`r ifelse(tocTF, "data", "AFSC RACE Groundfish and Shellfish Survey Public Data")`'
 output: 
-  md_document: 
-    variant: gfm
   html_document:
     toc: true
     toc_depth: 3
     toc_float: true
+  md_document: 
+    variant: gfm
 csl: "https://raw.githubusercontent.com/citation-style-language/styles/master/apa-no-ampersand.csl"
 bibliography: "https://raw.githubusercontent.com/afsc-gap-products/citations/main/cite/bibliography.bib"
 ---
@@ -50,7 +50,7 @@ cat(
 )
 ```
 
-> The code is in development. Refer to [releases](`r paste0(link_repo, "/releases")`) for finalized products. These data were last ran and pushed to the AFSC oracle on **`r format(x = as.Date(strsplit(x = dir_out, split = "/", fixed = TRUE)[[1]][5]), "%B %d, %Y")`**. *This is not the date that these data were pulled into FOSS and the FOSS dataset may be behind.*
+> The code in this repository is regularly being updated and improved. Please refer to [releases](`r paste0(link_repo, "/releases")`) for finalized products and project milestones. *The FOSS dataset is only updated once a year and may be slightly behind the GitHub repository.* This metadata is regarding scripts and data last ran and pushed to the AFSC oracle on **`r format(x = as.Date(strsplit(x = dir_out, split = "/", fixed = TRUE)[[1]][5]), "%B %d, %Y")`**. 
 
 `r ifelse(tocTF, "## Table of contents", "")`
 
@@ -76,9 +76,44 @@ toc <- paste0(toc_list, "*](#", toc_link, ")", collapse = "\n")
 
 Use the below bibtext [citation](`r paste0(link_repo, "/blob/main/CITATION.bib")`), as cited in our group's [citation repository](https://github.com/afsc-gap-products/citations/blob/main/cite/bibliography.bib) for citing the data from this data portal [@FOSSAFSCData]. Add "note = {Accessed: mm/dd/yyyy}" to append the day this data was accessed.  
 
-```{r, echo = FALSE}
+```{r load_citation, echo = FALSE}
 cat(readLines(con = "CITATION.bib"), sep = "\n") 
- # NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss, Accessed mm/dd/yyyy
+# NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss, Accessed mm/dd/yyyy
+```
+
+# Collabrators and data users
+
+Below are a few packages and products currently using this data. If you have developed a product, performed an analysis, or exhibited this data in any way, reach out so we can showcase your hard work. 
+
+```{r citing-us, echo = FALSE}
+
+library(gt)
+library(gtExtras)
+library(purrr)
+
+# DisMAP
+df <- data.frame(    
+    url = c("https://www.noaa.gov/sites/default/files/2022-03/noaa_emblem_logo-2022.png"), 
+    Description = c("<a href = 'https://apps-st.fisheries.noaa.gov/dismap'>NOAA Fisheries Distribution Mapping and Analysis Portal</a>"), 
+    Contacts = c("<a href = 'https://www.fisheries.noaa.gov/contact/office-science-and-technology'>NOAA Fisheries Office of Science and Technology</a>"))
+
+# DSE
+df <- df %>% 
+  dplyr::add_row(
+    url = c("https://dse.berkeley.edu/sites/default/files/styles/openberkeley_image_full/public/general/dse_logostack.png"), 
+                 Description = c("<a href = 'https://pyafscgap.org/'>Pull data with python</a> and explore the <a href = 'https://app.pyafscgap.org/'>in-browser visualization tool</a>. Reference their <a href = 'https://mybinder.org/v2/gh/SchmidtDSE/afscgap/main?urlpath=/tree/index.ipynb'>example Python notebook</a>"), 
+                 Contacts = c("<a href = 'https://dse.berkeley.edu/'>The Eric and Wendy Schmidt Center for Data Science and the Environment at UC Berkeley</a>; <a href = 'mailto: sam.pottinger@berkeley.edu'>Sam Pottinger</a>, <a href = 'mailto: ccmartinez@berkeley.edu'>Ciera Martinez</a>, <a href = 'mailto: gzarpellon@berkeley.edu'>Giulia Zarpellon</a>, and <a href = 'mailto: kkoy@berkeley.edu'>Kevin Koy</a>"))
+
+
+df <- df %>%
+  dplyr::select(url, Description, Contacts) %>%
+  dplyr::mutate(Contacts = map(Contacts, gt::html)) %>%
+  dplyr::mutate(Description = map(Description, gt::html)) %>%
+  gt::gt() %>%
+  gtExtras::gt_img_rows(columns = url, img_source = "web") %>%
+  gt::tab_options(data_row.padding = px(1)) %>% 
+  cols_align(align = c("left"), columns = everything())
+df
 ```
 
 # Metadata
@@ -99,29 +134,97 @@ Though not included in the public data, these surveys also collect oceanographic
 
 ## Bottom trawl surveys and regions
 
-<img src="img/current_grid_bs.png" alt="Eastern and Northern Bering Sea Shelf" align="right" width="400"/> 
+```{r survey-map, echo=FALSE}
 
-<img src="img/current_grid_ai.png" alt="Aleutian Islands" align="right" width="400"/>
+library(ggplot2)
+library(viridis)
+library(akgfmaps)
+library(sf)
 
-<img src="img/current_grid_goa.png" alt="Gulf of Alaska" align="right" width="400"/> 
+shp_ebs <- akgfmaps::get_base_layers(select.region = "bs.south", set.crs = "auto")
+shp_nbs <- akgfmaps::get_base_layers(select.region = "bs.north", set.crs = "auto")
+shp_ai <- akgfmaps::get_base_layers(select.region = "ai", set.crs = "auto")
+shp_goa <- akgfmaps::get_base_layers(select.region = "goa", set.crs = "auto")
+shp_bss <- akgfmaps::get_base_layers(select.region = "ebs.slope", set.crs = "auto")
 
-### Survey Details
+shp <- dplyr::bind_rows(list(
+  shp_ebs$survey.area %>% 
+    sf::st_transform(crs = "EPSG:3338") %>% 
+    dplyr::mutate(SURVEY = "EBS"), 
+  shp_nbs$survey.area  %>% 
+    sf::st_transform(crs = "EPSG:3338") %>% 
+    dplyr::mutate(SURVEY = "NBS"), 
+  shp_ai$survey.area %>% 
+    sf::st_transform(crs = "EPSG:3338") %>% 
+    dplyr::mutate(SURVEY = "AI"), 
+  shp_goa$survey.area %>% 
+    sf::st_transform(crs = "EPSG:3338") %>% 
+    dplyr::mutate(SURVEY = "GOA"), 
+  shp_bss$survey.area %>% 
+    sf::st_transform(crs = "EPSG:3338") %>% 
+    dplyr::mutate(SURVEY = "BSS"))) %>% 
+  dplyr::select(Survey = SURVEY, geometry)
 
--   **Eastern Bering Sea Shelf (EBS)** [@2021NEBS2022]
--   Annual
--   Fixed stations at center of 20 x 20 nm grid
--   **Northern Bering Sea (NBS)** [@2021NEBS2022]
--   Biennial/Annual
--   Fixed stations at center of 20 x 20 nm grid
--   **Eastern Bering Sea Slope (BSS)** [@RN979]
--   Intermittent (funding dependent)
--   Modified Index-Stratified Random of Successful Stations Survey Design
--   **Aleutian Islands (AI)** [@AI2018]
--   Triennial (1990s)/Biennial since 2000 in even years
--   Modified Index-Stratified Random of Successful Stations Survey Design
--   **Gulf of Alaska (GOA)** [@GOA2018]
--   Triennial (1990s)/Biennial since 2001 in odd years
--   Stratified Random Survey Design
+gg <- ggplot() +
+  ggplot2::geom_sf(data = shp_bss$akland, 
+                   fill = "dark grey", 
+                   color = "transparent") + 
+  ggplot2::geom_sf(data = shp_nbs$graticule,
+                   color = "grey90",
+                   alpha = 0.5) +
+  ggplot2::geom_sf(data = shp_ai$graticule,
+                   color = "grey90",
+                   alpha = 0.5) +
+  ggplot2::geom_sf(data = shp_goa$graticule,
+                   color = "grey90",
+                   alpha = 0.5) +
+  ggplot2::scale_x_continuous(name = "Longitude",
+                              breaks = c(-180, -170, -160, -150, -140)) + # shp_bss$lon.breaks) +
+  # ggplot2::scale_y_continuous(name = "Latitude", breaks = shp_bss$lat.breaks) +
+  ggplot2::ggtitle(label = "Bottom Trawl Survey Regions",
+                   subtitle = "AFSC RACE Groundfish and Shellfish Public Data Coverage") +
+  ggplot2::theme_classic() + 
+  ggplot2::theme(
+    panel.background = element_rect(fill = "transparent"), #grey95
+    plot.title = element_text(size = 20, face = "bold"), 
+    plot.subtitle = element_text(size=14), 
+    legend.text=element_text(size=12), 
+    legend.position="right",
+    legend.direction="vertical",
+    legend.justification="left",
+    legend.background = element_blank(),
+    legend.title=element_text(size=14),
+    axis.text = element_text(size=14), 
+    legend.box.background = element_blank(),
+    legend.key = element_blank(), 
+    legend.key.size=(unit(.3,"cm")), 
+    axis.title=element_text(size=14) ) +
+  ggplot2::geom_sf(data = shp, 
+                   mapping = aes(fill = Survey),
+                   color = "grey20", 
+                   show.legend = TRUE) +
+  ggplot2::scale_fill_viridis_d(option = "G", end = 0.9) +
+  ggplot2::coord_sf(xlim = c(-1394658,  2566293), # range(shp_ai$plot.boundary$x, shp_bs$plot.boundary$x, shp_goa$plot.boundary$x, shp_bss$plot.boundary$x),
+                    ylim = c(-1028565.1,  1125549.7)) # range(shp_ai$plot.boundary$y, shp_bs$plot.boundary$y, shp_goa$plot.boundary$y, shp_bss$plot.boundary$y))
+gg
+```
+
+
+- **Eastern Bering Sea Shelf (EBS)** [@2021NEBS2022]
+- Annual
+- Fixed stations at center of 20 x 20 nm grid
+- **Northern Bering Sea (NBS)** [@2021NEBS2022]
+- Biennial/Annual
+- Fixed stations at center of 20 x 20 nm grid
+- **Eastern Bering Sea Slope (BSS)** [@RN979]
+- Intermittent (funding dependent)
+- Modified Index-Stratified Random of Successful Stations Survey Design
+- **Aleutian Islands (AI)** [@AI2018]
+- Triennial (1990s)/Biennial since 2000 in even years
+- Modified Index-Stratified Random of Successful Stations Survey Design
+- **Gulf of Alaska (GOA)** [@GOA2018]
+- Triennial (1990s)/Biennial since 2001 in odd years
+- Stratified Random Survey Design
 
 ## Relevant technical memorandums
 
@@ -129,11 +232,12 @@ Though not included in the public data, these surveys also collect oceanographic
 
 ## User resources
 
--   [AFSC’s Resource Assessment and Conservation Engineering Division](https://www.fisheries.noaa.gov/about/resource-assessment-and-conservation-engineering-division).
+-   [AFSC RACE Groundfish Assessment Program (GAP)](https://www.fisheries.noaa.gov/contact/groundfish-assessment-program).
+-   [AFSC Resource Assessment and Conservation Engineering Division (RACE)](https://www.fisheries.noaa.gov/about/resource-assessment-and-conservation-engineering-division).
 -   For more information about codes used in the tables, please refer to the [survey code books](`r link_code_books `) [@cb2021].
--   Find [past reports](http://apps-afsc.fisheries.noaa.gov/RACE/surveys/cruise_results.htm) about these surveys.
+-   Find [past reports](https://www.fisheries.noaa.gov/resource/publication-database/noaa-institutional-repository) about these surveys.
 -   [GitHub repository](`r link_repo`).
--   Learn more about other [Research Surveys conducted at AFSC](https://www.fisheries.noaa.gov/alaska/ecosystems/alaska-fish-research-surveys).
+-   Learn more about other [research surveys conducted at AFSC](https://www.fisheries.noaa.gov/alaska/ecosystems/alaska-fish-research-surveys).
 
 ## Access constraints
 
@@ -189,32 +293,32 @@ More information about how to amend API links can be found [here](https://docs.o
 Load the first 25 rows of data
 
 ```{r api-link, echo = TRUE}
- # install.packages(c("httr", "jsonlite"))
+# install.packages(c("httr", "jsonlite"))
 library("httr")
 library("jsonlite")
- # link to the API
+# link to the API
 api_link <- "https://apps-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/"
 ```
 
 ```{r api-all-data-ex, echo = TRUE}
 res <- httr::GET(url = api_link)
- # res # Test connection
+# res # Test connection
 data <- jsonlite::fromJSON(base::rawToChar(res$content))
- # names(data)
+# names(data)
 knitr::kable(head(data$items, 3)) 
 ```
 
 Load the first 10000 rows of data
 
-```{r}
+```{r test-1}
 res <- httr::GET(url = paste0(api_link, "?offset=0&limit=10000"))
 data <- jsonlite::fromJSON(base::rawToChar(res$content))
 dim(data$items)
 ```
 
-```{r, eval = FALSE, echo = FALSE}
- # Filter by Year: Show all the data greater than the year 2020,
- # https://apps-st.fisheries.noaa.gov/ods/foss/trade_data/?q={"year":{"$gt": 2010}}
+```{r test-2, eval = FALSE, echo = FALSE}
+# Filter by Year: Show all the data greater than the year 2020,
+# https://apps-st.fisheries.noaa.gov/ods/foss/trade_data/?q={"year":{"$gt": 2010}}
 res <- httr::GET(url = paste0(api_link, '?q={"year":{"$gt": 2020}}'))
 data <- jsonlite::fromJSON(base::rawToChar(res$content))
 knitr::kable(summary(data$items[, c("year", "srvy")], 3))
@@ -222,25 +326,25 @@ knitr::kable(summary(data$items[, c("year", "srvy")], 3))
 
 Filter by Species name: Show all the data where the product name contains pollock Please note that here the word pollock is case sensitive.
 
-The notation for finding a string is to use % around it. Since % is a reserved character in a URL, you have to replace % with %25
+The notation for finding a string is to use % around it. Since % is a reserved character in a URL, you have to replace `%` with `%25`. 
 
-```{r}
+```{r test-3}
 res <- httr::GET(url = paste0(api_link, '?q={"common_name":{"$like":"%25pollock%25"}}'))
 data <- jsonlite::fromJSON(base::rawToChar(res$content))
 knitr::kable(head(data$items, 3))
 ```
 
 
-```{r, eval = FALSE, echo = FALSE}
- # Combination of year and name filters: Show all the data where years > 2020 and the product name contains pollock
+```{r test-4, eval = FALSE, echo = FALSE}
+# Combination of year and name filters: Show all the data where years > 2020 and the product name contains pollock
 res <- httr::GET(url = paste0(api_link, '?q={"year":{"$gt": 2020},"name":{"$like":"%25pollock%25"}}'))
 data <- jsonlite::fromJSON(base::rawToChar(res$content))
 knitr::kable(head(data$items, 3))
 ```
 
-```{r, eval = FALSE, echo = FALSE}
- # Combination of year, srvy, stratum: Show all the data where year = 1989, srvy = "EBS", and stratum is not equal to 81
- # https://apps-st.fisheries.noaa.gov/ods/foss/trade_data/?q={"year":"1989","srvy": "EBS","stratum":{"$ne": "81"}}
+```{r test-5, eval = FALSE, echo = FALSE}
+# Combination of year, srvy, stratum: Show all the data where year = 1989, srvy = "EBS", and stratum is not equal to 81
+# https://apps-st.fisheries.noaa.gov/ods/foss/trade_data/?q={"year":"1989","srvy": "EBS","stratum":{"$ne": "81"}}
 
 res <- httr::GET(url = paste0(api_link, '?q={"year": 1989,"srvy": "EBS","stratum":{"$ne": "81"}}'))
 data <- jsonlite::fromJSON(base::rawToChar(res$content))
@@ -273,16 +377,16 @@ Many users will want to access the data from `Oracle` using `R`. The user will n
 Here, the user can write in their username and password directly into the `RODBC` connect function. Never save usernames or passwords in scripts that may be intentionally or unintentionally shared with others. If no username and password is entered in the function, pop-ups will appear on the screen asking for the username and password. 
 
 ```{r oracle-connect-2, echo = TRUE, eval = FALSE}
- #' Define RODBC connection to ORACLE
- #'
- #' @param schema default = 'AFSC'. 
- #'
- #' @return oracle channel connection
- #' @export
- #'
- #' @examples
- #' # Not run
- #' # channel <- oracle_connect()
+#' Define RODBC connection to ORACLE
+#'
+#' @param schema default = 'AFSC'. 
+#'
+#' @return oracle channel connection
+#' @export
+#'
+#' @examples
+#' # Not run
+#' # channel <- oracle_connect()
 oracle_connect <- function(
     schema='AFSC', 
     username = NULL, 
@@ -312,9 +416,9 @@ channel <- oracle_connect()
 Once connected, pull and save (if needed) the table into the `R` environment. 
 
 ```{r oracle-data-pull, echo = TRUE, eval = FALSE}
- # Pull table from oracle into R environment
+# Pull table from oracle into R environment
 a <- RODBC::sqlQuery(channel, "SELECT * FROM RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED")
- # Save table to local directory
+# Save table to local directory
 write.csv(x = a, file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED.csv")
 ```
 
@@ -324,13 +428,13 @@ write.csv(x = a, file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED.csv")
 To pull a small subset of the data (especially since files like `RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED` are so big), use a variation of the following code. Here, we are pulling EBS Pacific cod from 2010 - 2021: 
 
 ```{r oracle-data-pull-subset, echo = TRUE, eval = FALSE}
- # Pull data
+# Pull data
 a <- RODBC::sqlQuery(channel, "SELECT * FROM RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED 
 WHERE SRVY = 'EBS' 
 AND COMMON_NAME = 'Pacific cod' 
 AND YEAR >= 2010 
 AND YEAR < 2021")
- # Save table to local directory
+# Save table to local directory
 write.csv(x = a, file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED-ebs_pcod_2010-2020.csv")
 ```
 
