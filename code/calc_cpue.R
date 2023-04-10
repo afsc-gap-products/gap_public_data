@@ -481,7 +481,7 @@ for (i in 1:length(list_to_save)) {
     col_names = TRUE)
 }
 
-## Make Taxonomic grouping table -----------------------------------------------
+## Make Taxonomic grouping searching table -----------------------------------------------
 
 taxon_search_groups <- gap_products_old_taxonomics_worms0 %>% 
   dplyr::select(species_code, genus, family, order, class, phylum, kingdom) %>% 
@@ -499,11 +499,8 @@ taxon_search_groups <- taxon_search_groups[duplicated(x = taxon_search_groups$su
 #   dplyr::select(category, subcategory) %>% 
 #   dplyr::distinct()
 
-paste0("Taxon searching groups, created on ", Sys.Date(), ". "),
-
 metadata_table <- paste(
-  "This dataset includes zero-filled (presence and absence) observations and
-catch-per-unit-effort (CPUE) estimates for all identified species at for index stations ", 
+  "This dataset contains suggested search groups for simplifying species selection in the FOSS data platform. This was developed ", 
   metadata_sentence_survey_institution,
   metadata_sentence_legal_restrict_none, 
   metadata_sentence_foss, 

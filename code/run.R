@@ -60,11 +60,13 @@ link_code_books <- link_code_books[grep(pattern = "manual-and-data", x = link_co
 tocTF <- TRUE
 rmarkdown::render(paste0("./README.Rmd"),
                   output_dir = "./", 
+                  output_format = 'md_document', 
                   output_file = paste0("README.md"))
 
 tocTF <- FALSE
 rmarkdown::render(paste0("./README.Rmd"),
-                  output_dir = "./",
+                  output_dir = "./", 
+                  output_format = 'html_document', 
                   output_file = paste0("README.html"))
 
 # Share table to oracle --------------------------------------------------------

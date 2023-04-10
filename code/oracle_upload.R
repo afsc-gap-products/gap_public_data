@@ -29,29 +29,29 @@ for (i in 1:length(locations)){
 file_paths <- data.frame(
   file_path = 
     paste0(dir_out,
-         c("taxon_search_groups", 
-           "JOIN_FOSS_CPUE_HAUL",
-           "JOIN_FOSS_CPUE_CATCH",
-           "FOSS_CPUE_ZEROFILLED", 
-           "TAXONOMICS_ITIS", 
-           "TAXONOMICS_WORMS"),
-         ".csv"), 
+           c("taxon_search_groups", 
+             "JOIN_FOSS_CPUE_HAUL",
+             "JOIN_FOSS_CPUE_CATCH",
+             "FOSS_CPUE_ZEROFILLED", 
+             "TAXONOMICS_ITIS", 
+             "TAXONOMICS_WORMS"),
+           ".csv"), 
   "table_metadata" = c(
-    paste(readLines(con = paste0(dir_out, "taxon_search_groups.txt")), collapse="\n")
-  paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_metadata_table.txt")), collapse="\n"),
-  paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_metadata_table.txt")), collapse="\n"),
-  paste(readLines(con = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_metadata_table.txt")), collapse="\n"),
-  paste0("DUPLICATE, added to schema on ", Sys.Date(), ". "),
-  paste0("DUPLICATE, added to schema on ", Sys.Date(), ". ") 
+    paste(readLines(con = paste0(dir_out, "taxon_search_groups_metadata_table.txt")), collapse="\n"),
+    paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_metadata_table.txt")), collapse="\n"),
+    paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_metadata_table.txt")), collapse="\n"),
+    paste(readLines(con = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_metadata_table.txt")), collapse="\n"),
+    paste0("DUPLICATE, added to schema on ", Sys.Date(), ". "),
+    paste0("DUPLICATE, added to schema on ", Sys.Date(), ". ") 
   ) 
 )
 
 metadata_column <- readr::read_csv(paste0(dir_data, "/oracle/gap_products_metadata_column.csv")) 
 
 for (i in 1:nrow(file_paths)){
-oracle_upload(
-  # update_metadata = FALSE, 
-  # update_table = FALSE,
+  oracle_upload(
+    # update_metadata = FALSE, 
+    # update_table = FALSE,
     file_path = file_paths$file_path[i], 
     metadata_table = file_paths$metadata_table[i], 
     metadata_column = metadata_column, 
