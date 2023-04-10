@@ -28,15 +28,21 @@ for (i in 1:length(locations)){
 
 file_paths <- data.frame(
   file_path = 
-    paste0(dir_out, 
-         c("JOIN_FOSS_CPUE_HAUL", 
-           "JOIN_FOSS_CPUE_CATCH", 
-           "FOSS_CPUE_ZEROFILLED"), 
+    paste0(dir_out,
+         c(
+           "JOIN_FOSS_CPUE_HAUL",
+           "JOIN_FOSS_CPUE_CATCH",
+           "FOSS_CPUE_ZEROFILLED", 
+           "TAXONOMICS_ITIS", 
+           "TAXONOMICS_WORMS"),
          ".csv"), 
   "table_metadata" = c(
   paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_metadata_table.txt")), collapse="\n"),
-  paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_metadata_table.txt")), collapse="\n"), 
-    paste(readLines(con = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_metadata_table.txt")), collapse="\n")) 
+  paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_metadata_table.txt")), collapse="\n"),
+  paste(readLines(con = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_metadata_table.txt")), collapse="\n"),
+  paste0("DUPLICATE, added to schema on ", Sys.Date()),
+  paste0("DUPLICATE, added to schema on ", Sys.Date()) 
+  ) 
 )
 
 metadata_column <- readr::read_csv(paste0(dir_data, "/oracle/gap_products_metadata_column.csv")) 

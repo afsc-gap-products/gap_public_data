@@ -39,7 +39,9 @@ locations <- c(
   "GAP_PRODUCTS.METADATA_TABLE", 
   "GAP_PRODUCTS.METADATA_COLUMN", 
   "GAP_PRODUCTS.OLD_V_TAXONOMICS",  # "RACEBASE.SPECIES", "RACE_DATA.SPECIES_TAXONOMICS", "RACEBASE.SPECIES_CLASSIFICATION", # replaced with new taxonomic tables
-  "GAP_PRODUCTS.OLD_TAXON_CONFIDENCE"
+  "GAP_PRODUCTS.OLD_TAXON_CONFIDENCE", 
+  "GAP_PRODUCTS.OLD_TAXONOMICS_WORMS", 
+  "GAP_PRODUCTS.OLD_TAXONOMICS_ITIS"
 )
 
 oracle_dl(
@@ -47,3 +49,10 @@ oracle_dl(
   channel = channel, 
   dir_out = paste0(dir_data, "/oracle/"))
 
+locations <- c("GAP_PRODUCTS.OLD_TAXONOMICS_WORMS", 
+               "GAP_PRODUCTS.OLD_TAXONOMICS_ITIS")
+
+oracle_dl_metadata(
+  locations = locations, 
+  channel = channel, 
+  dir_out = paste0(dir_data, "/oracle/"))
