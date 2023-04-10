@@ -62,10 +62,10 @@ rmarkdown::render(paste0("./README.Rmd"),
                   output_dir = "./", 
                   output_file = paste0("README.md"))
 
-# tocTF <- FALSE
-# rmarkdown::render(paste0("./README.Rmd"),
-#                   output_dir = "./",
-#                   output_file = paste0("README.html"))
+tocTF <- FALSE
+rmarkdown::render(paste0("./README.Rmd"),
+                  output_dir = "./",
+                  output_file = paste0("README.html"))
 
 # Share table to oracle --------------------------------------------------------
 

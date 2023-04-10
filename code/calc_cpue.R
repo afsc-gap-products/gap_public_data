@@ -403,7 +403,7 @@ when full joined by the HAULJOIN variable,
 includes zero-filled (presence and absence) observations and
 catch-per-unit-effort (CPUE) estimates for all identified species at for index stations ", 
   metadata_sentence_survey_institution, 
-  metadata_sentence_legal_restrict, 
+  metadata_sentence_legal_restrict_none_none, 
   metadata_sentence_foss, 
   metadata_sentence_github, 
   metadata_sentence_codebook, 
@@ -426,7 +426,7 @@ metadata_table <- paste(
   "This dataset includes zero-filled (presence and absence) observations and
 catch-per-unit-effort (CPUE) estimates for all identified species at for index stations ", 
   metadata_sentence_survey_institution,
-  metadata_sentence_legal_restrict, 
+  metadata_sentence_legal_restrict_none, 
   metadata_sentence_foss, 
   metadata_sentence_github, 
   metadata_sentence_codebook, 
