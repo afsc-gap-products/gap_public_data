@@ -15,10 +15,9 @@ PKG <- c(
   "magrittr",
   "readr",
   "rmarkdown",
-  "here",
-  
+
   "janitor",
-  "taxize",
+  # "taxize",
   
   # Text Management
   "stringr")
@@ -31,10 +30,28 @@ for (p in PKG) {
     require(p,character.only = TRUE)}
 }
 
+
+# Create Citation File ----------------------------------------------
+
+bibfiletext <- readLines(con = "https://raw.githubusercontent.com/afsc-gap-products/citations/main/cite/bibliography.bib")
+find_start <- grep(pattern = "FOSSAFSCData", x = bibfiletext, fixed = TRUE)
+find_end <- which(bibfiletext == "}")
+find_end <- find_end[find_end>find_start][1]
+a <- bibfiletext[find_start:find_end]
+readr::write_file(x = paste0(a, collapse = "\n"), file = "CITATION.bib")
+
+link_foss <- a[grep(pattern = "howpublished = {", x = a, fixed = TRUE)]
+link_foss <- gsub(pattern = "howpublished = {", replacement = "", x = link_foss, fixed = TRUE)
+link_foss <- gsub(pattern = "},", replacement = "", x = link_foss, fixed = TRUE)
+link_foss <- trimws(link_foss)
+
+link_repo <- "https://github.com/afsc-gap-products/gap_public_data/"
+
 # Set output directory ---------------------------------------------------------
 
-dir_out <- paste0("./output/", Sys.Date(),"/")
+dir_out <- paste0(getwd(), "/output/", Sys.Date(),"/")
 dir.create(dir_out)
+dir_data <- paste0(getwd(), "/data/")
 
 # Save scripts from each run to output -----------------------------------------
 # Just for safe keeping
@@ -55,34 +72,3 @@ for (i in 1:length(listfiles0)){
 
 # General Functions ------------------------------------------------------------
 
-SameColNames<-function(df.ls) {
-  #All column names
-  colnames0<-c()
-  for (i in 1:length(df.ls)){
-    df0<-df.ls[[i]]
-    # colnames(df0)<-toupper(colnames(df0))
-    df0<-janitor::clean_names(df0)
-    df.ls[[i]]<-df0
-    colnames0<-c(colnames0, (colnames(df0)))
-  }
-  colnames0<-sort(unique(colnames0), decreasing = T)
-  
-  #New df's
-  df.ls0<-list()
-  df.rbind0<-c()
-  for (i in 1:length(df.ls)){
-    df0<-df.ls[[i]]
-    colnames.out<-colnames0[!(colnames0 %in% colnames(df0))]
-    if (length(colnames.out) != 0) {
-      for (ii in 1:length(colnames.out)){
-        df0[,(ncol(df0)+1)]<-NA
-        names(df0)[ncol(df0)]<-colnames.out[ii]
-      }
-    }
-    df0<-df0[,match(table =  colnames(df0), x = colnames0)]
-    df.ls0[[i]]<-df0
-    names(df.ls0)[i]<-names(df.ls)[i]
-    df.rbind0<-rbind.data.frame(df.rbind0, df0)
-  }
-  return(df.rbind0)
-}

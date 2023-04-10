@@ -1,28 +1,19 @@
 #' -----------------------------------------------------------------------------
 #' title: Create public data 
 #' author: EH Markowitz (emily.markowitz AT noaa.gov)
-#' start date: 2022-01-01
-#' last modified: 2022-04-01
 #' Notes: 
+#' # Each year you will need to: 
+#' # - download the new data using the data_dl.R script
+#' # - aquire the new taxonomic_confidence tables. Contact D Stevenson. 
+#' # - run the find_taxize_species_codes.R script to find the appropriate and most up to date ITIS and WoRMS codes for species. 
+#' # - run the check to compare this year's data to last years. Make sure the data are similar and look right! 
 #' -----------------------------------------------------------------------------
-
-# source("./code/run.R")
-
-# NOTES -----------------------------------------------------------------------
-
-# Each year you will need to: 
-# - download the new data using the data_dl.R script
-# - aquire the new taxonomic_confidence tables. Contact D Stevenson. 
-# - run the find_taxize_species_codes.R script to find the appropriate and most up to date ITIS and WoRMS codes for species. 
-# - run the check to compare this year's data to last years. Make sure the data are similar and look right! 
 
 # START ------------------------------------------------------------------------
 
-# *** REPORT KNOWNS ------------------------------------------------------------
+# source("./code/run.R")
 
-link_foss <- "https://www.fisheries.noaa.gov/foss/f?p=215:200:13045102793007:Mail:NO:::"
-link_code_books <- "https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual"
-link_repo <- "https://github.com/afsc-gap-products/gap_public_data"
+# *** REPORT KNOWNS ------------------------------------------------------------
 
 # The surveys we will consider covering in this data are: 
 surveys <- 
@@ -34,40 +25,48 @@ surveys <-
                            "Aleutian Islands", 
                            "Bering Sea Slope") )
 
-taxize0 <- FALSE# incorporate species codes from databases
-
 # Support scripts --------------------------------------------------------------
 
-# source('./code/data_dl.R')
+source("https://raw.githubusercontent.com/afsc-gap-products/metadata/main/code/functions_oracle.R")
 source('./code/functions.R')
-if (taxize0) { # only if you need to rerun {taxize} stuff - very time intensive!
-  source('./code/find_taxize_species_codes.R')
-}
-taxize0 <- TRUE
+# source('./code/data_dl.R')
+
 source('./code/data.R')
 
-# Run analysis -----------------------------------------------------------------
-
-source('./code/analysis.R')
+source('./code/calc_cpue.R')
 
 # Check work -------------------------------------------------------------------
 
 # source('./code/data_dl_check.R')
+# dir.create(path = paste0(dir_out, "/check/"))
+# rmarkdown::render(paste0("./code/check.Rmd"),
+#                   output_dir = dir_out,
+#                   output_file = paste0("./check/check.docx"))
 
-dir.create(path = paste0(dir_out, "/check/"))
-rmarkdown::render(paste0("./code/check.Rmd"),
-                  output_dir = dir_out,
-                  output_file = paste0("./check/check.docx"))
+# Update README ----------------------------------------------------------------
+
+source('./code/functions.R')
+dir_out <- paste0(getwd(), "/output/2023-02-17/")
+
+load(paste0(dir_out, "FOSS_CPUE_PRESONLY.RData"))
+load(paste0(dir_out, "FOSS_CPUE_JOIN.RData"))
+load(paste0(dir_out, "FOSS_CPUE_ZEROFILLED.RData"))
+
+link_code_books <- gsub("[\\(\\)]", "", 
+                        regmatches(metadata_table, 
+                                   gregexpr("\\(.*?\\)", metadata_table))[[1]])
+link_code_books <- link_code_books[grep(pattern = "manual-and-data", x = link_code_books)]
+
+tocTF <- TRUE
+rmarkdown::render(paste0("./README.Rmd"),
+                  output_dir = "./", 
+                  output_file = paste0("README.md"))
+
+tocTF <- FALSE
+rmarkdown::render(paste0("./README.Rmd"),
+                  output_dir = "./",
+                  output_file = paste0("README.html"))
 
 # Share table to oracle --------------------------------------------------------
 
-dir_out <- "./output/2022-10-18/"
-
-
-# cpue_station <- readr::read_csv(file = paste0("./output/2022-06-10/cpue_station.csv"))
-source("./code/load_oracle.R")
-
-rmarkdown::render(paste0("./README.Rmd"),
-                  output_dir = "./",
-                  output_file = paste0("README.md"))
-
+source("./code/oracle_upload.R") 
