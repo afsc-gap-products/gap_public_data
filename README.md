@@ -28,7 +28,6 @@ Seattle, WA 98195
 
 > - [*Cite this data*](#cite-this-data)
 > - [*Collabrators and data users*](#collabrators-and-data-users)
-> - [*df \<- ““*](#df-%3C--%22%22)
 > - [*Metadata*](#metadata)
 >   - [*Data description (short)*](#data-description-(short))
 >   - [*Data description (long)*](#data-description-(long))
