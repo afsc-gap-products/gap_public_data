@@ -85,7 +85,7 @@ cat(readLines(con = "CITATION.bib"), sep = "\n")
 
 Below are a few packages and products currently using this data. If you have developed a product, performed an analysis, or exhibited this data in any way, reach out so we can showcase your hard work. 
 
-```{r citing-us, echo = FALSE}
+```{r citing-us, echo = FALSE, results='asis'}
 
 library(gt)
 library(gtExtras)
@@ -105,19 +105,29 @@ df <- df %>%
                  Contacts = c("<a href = 'https://dse.berkeley.edu/'>The Eric and Wendy Schmidt Center for Data Science and the Environment at UC Berkeley</a>; <a href = 'mailto: sam.pottinger@berkeley.edu'>Sam Pottinger</a>, <a href = 'mailto: ccmartinez@berkeley.edu'>Ciera Martinez</a>, <a href = 'mailto: gzarpellon@berkeley.edu'>Giulia Zarpellon</a>, and <a href = 'mailto: kkoy@berkeley.edu'>Kevin Koy</a>"))
 
 
+if (tocTF == TRUE)  {
 df <- df %>%
-  dplyr::select(url, Description, Contacts) %>%
+  dplyr::select(#url, 
+                Description, Contacts) %>%
+  dplyr::mutate(Contacts = map(Contacts, gt::html)) %>%
+  dplyr::mutate(Description = map(Description, gt::html)) %>%
+  gt::gt() %>%
+  # gtExtras::gt_img_rows(columns = url, img_source = "web") %>%
+  gt::tab_options(data_row.padding = px(1)) %>%
+  # gt::cols_label(url = "     ") %>%
+  cols_align(align = c("left"), columns = everything()) %>%
+    gt::fmt_markdown()
+} else if (tocTF == FALSE)  { 
+  df <- df %>%
+  dplyr::select(url, 
+                Description, Contacts) %>%
   dplyr::mutate(Contacts = map(Contacts, gt::html)) %>%
   dplyr::mutate(Description = map(Description, gt::html)) %>%
   gt::gt() %>%
   gtExtras::gt_img_rows(columns = url, img_source = "web") %>%
-  gt::tab_options(data_row.padding = px(1)) %>% 
+  gt::tab_options(data_row.padding = px(1)) %>%
   gt::cols_label(url = "     ") %>%
   cols_align(align = c("left"), columns = everything())
-
-if (tocTF == TRUE)  {
-  df <- df %>% 
-    gt::fmt_markdown()
 }
 
 df
@@ -177,13 +187,16 @@ gg <- ggplot() +
                    fill = "dark grey", 
                    color = "transparent") + 
   ggplot2::geom_sf(data = shp_nbs$graticule,
-                   color = "grey90",
+                   color = "grey90", 
+                   size = 1, 
                    alpha = 0.5) +
   ggplot2::geom_sf(data = shp_ai$graticule,
                    color = "grey90",
+                   size = 1, 
                    alpha = 0.5) +
   ggplot2::geom_sf(data = shp_goa$graticule,
                    color = "grey90",
+                   size = 1, 
                    alpha = 0.5) +
   ggplot2::scale_x_continuous(name = "Longitude",
                               breaks = c(-180, -170, -160, -150, -140)) + # shp_bss$lon.breaks) +
@@ -214,8 +227,10 @@ gg <- ggplot() +
   ggplot2::coord_sf(xlim = c(-1394658,  2566293), # range(shp_ai$plot.boundary$x, shp_bs$plot.boundary$x, shp_goa$plot.boundary$x, shp_bss$plot.boundary$x),
                     ylim = c(-1028565.1,  1125549.7)) # range(shp_ai$plot.boundary$y, shp_bs$plot.boundary$y, shp_goa$plot.boundary$y, shp_bss$plot.boundary$y))
 
-gg
+ggsave(filename = "survey_plot.png", plot = gg, path = "img", width = 7, height = 3)
 ```
+
+![](img/survey_plot.png)
 
 - **Aleutian Islands (AI)** [@AI2018]
   - Triennial (1990s)/Biennial since 2000 in even years

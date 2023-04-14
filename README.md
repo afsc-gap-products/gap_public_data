@@ -78,23 +78,23 @@ Below are a few packages and products currently using this data. If you
 have developed a product, performed an analysis, or exhibited this data
 in any way, reach out so we can showcase your hard work.
 
-<div id="qctvmwlgqa" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#qctvmwlgqa table {
+<div id="zpyzatzkoy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#zpyzatzkoy table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#qctvmwlgqa thead, #qctvmwlgqa tbody, #qctvmwlgqa tfoot, #qctvmwlgqa tr, #qctvmwlgqa td, #qctvmwlgqa th {
+#zpyzatzkoy thead, #zpyzatzkoy tbody, #zpyzatzkoy tfoot, #zpyzatzkoy tr, #zpyzatzkoy td, #zpyzatzkoy th {
   border-style: none;
 }
 
-#qctvmwlgqa p {
+#zpyzatzkoy p {
   margin: 0;
   padding: 0;
 }
 
-#qctvmwlgqa .gt_table {
+#zpyzatzkoy .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -120,12 +120,12 @@ in any way, reach out so we can showcase your hard work.
   border-left-color: #D3D3D3;
 }
 
-#qctvmwlgqa .gt_caption {
+#zpyzatzkoy .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#qctvmwlgqa .gt_title {
+#zpyzatzkoy .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -137,7 +137,7 @@ in any way, reach out so we can showcase your hard work.
   border-bottom-width: 0;
 }
 
-#qctvmwlgqa .gt_subtitle {
+#zpyzatzkoy .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -149,7 +149,7 @@ in any way, reach out so we can showcase your hard work.
   border-top-width: 0;
 }
 
-#qctvmwlgqa .gt_heading {
+#zpyzatzkoy .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -161,13 +161,13 @@ in any way, reach out so we can showcase your hard work.
   border-right-color: #D3D3D3;
 }
 
-#qctvmwlgqa .gt_bottom_border {
+#zpyzatzkoy .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#qctvmwlgqa .gt_col_headings {
+#zpyzatzkoy .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -182,7 +182,7 @@ in any way, reach out so we can showcase your hard work.
   border-right-color: #D3D3D3;
 }
 
-#qctvmwlgqa .gt_col_heading {
+#zpyzatzkoy .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -202,7 +202,7 @@ in any way, reach out so we can showcase your hard work.
   overflow-x: hidden;
 }
 
-#qctvmwlgqa .gt_column_spanner_outer {
+#zpyzatzkoy .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -214,15 +214,15 @@ in any way, reach out so we can showcase your hard work.
   padding-right: 4px;
 }
 
-#qctvmwlgqa .gt_column_spanner_outer:first-child {
+#zpyzatzkoy .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#qctvmwlgqa .gt_column_spanner_outer:last-child {
+#zpyzatzkoy .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#qctvmwlgqa .gt_column_spanner {
+#zpyzatzkoy .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -234,11 +234,11 @@ in any way, reach out so we can showcase your hard work.
   width: 100%;
 }
 
-#qctvmwlgqa .gt_spanner_row {
+#zpyzatzkoy .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#qctvmwlgqa .gt_group_heading {
+#zpyzatzkoy .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -264,7 +264,7 @@ in any way, reach out so we can showcase your hard work.
   text-align: left;
 }
 
-#qctvmwlgqa .gt_empty_group_heading {
+#zpyzatzkoy .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -279,15 +279,15 @@ in any way, reach out so we can showcase your hard work.
   vertical-align: middle;
 }
 
-#qctvmwlgqa .gt_from_md > :first-child {
+#zpyzatzkoy .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#qctvmwlgqa .gt_from_md > :last-child {
+#zpyzatzkoy .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#qctvmwlgqa .gt_row {
+#zpyzatzkoy .gt_row {
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 5px;
@@ -306,7 +306,7 @@ in any way, reach out so we can showcase your hard work.
   overflow-x: hidden;
 }
 
-#qctvmwlgqa .gt_stub {
+#zpyzatzkoy .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -319,7 +319,7 @@ in any way, reach out so we can showcase your hard work.
   padding-right: 5px;
 }
 
-#qctvmwlgqa .gt_stub_row_group {
+#zpyzatzkoy .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -333,15 +333,15 @@ in any way, reach out so we can showcase your hard work.
   vertical-align: top;
 }
 
-#qctvmwlgqa .gt_row_group_first td {
+#zpyzatzkoy .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#qctvmwlgqa .gt_row_group_first th {
+#zpyzatzkoy .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#qctvmwlgqa .gt_summary_row {
+#zpyzatzkoy .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -351,16 +351,16 @@ in any way, reach out so we can showcase your hard work.
   padding-right: 5px;
 }
 
-#qctvmwlgqa .gt_first_summary_row {
+#zpyzatzkoy .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#qctvmwlgqa .gt_first_summary_row.thick {
+#zpyzatzkoy .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#qctvmwlgqa .gt_last_summary_row {
+#zpyzatzkoy .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -370,7 +370,7 @@ in any way, reach out so we can showcase your hard work.
   border-bottom-color: #D3D3D3;
 }
 
-#qctvmwlgqa .gt_grand_summary_row {
+#zpyzatzkoy .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -380,7 +380,7 @@ in any way, reach out so we can showcase your hard work.
   padding-right: 5px;
 }
 
-#qctvmwlgqa .gt_first_grand_summary_row {
+#zpyzatzkoy .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -390,7 +390,7 @@ in any way, reach out so we can showcase your hard work.
   border-top-color: #D3D3D3;
 }
 
-#qctvmwlgqa .gt_last_grand_summary_row_top {
+#zpyzatzkoy .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -400,11 +400,11 @@ in any way, reach out so we can showcase your hard work.
   border-bottom-color: #D3D3D3;
 }
 
-#qctvmwlgqa .gt_striped {
+#zpyzatzkoy .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#qctvmwlgqa .gt_table_body {
+#zpyzatzkoy .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -413,7 +413,7 @@ in any way, reach out so we can showcase your hard work.
   border-bottom-color: #D3D3D3;
 }
 
-#qctvmwlgqa .gt_footnotes {
+#zpyzatzkoy .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -427,7 +427,7 @@ in any way, reach out so we can showcase your hard work.
   border-right-color: #D3D3D3;
 }
 
-#qctvmwlgqa .gt_footnote {
+#zpyzatzkoy .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -436,7 +436,7 @@ in any way, reach out so we can showcase your hard work.
   padding-right: 5px;
 }
 
-#qctvmwlgqa .gt_sourcenotes {
+#zpyzatzkoy .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -450,7 +450,7 @@ in any way, reach out so we can showcase your hard work.
   border-right-color: #D3D3D3;
 }
 
-#qctvmwlgqa .gt_sourcenote {
+#zpyzatzkoy .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -458,63 +458,63 @@ in any way, reach out so we can showcase your hard work.
   padding-right: 5px;
 }
 
-#qctvmwlgqa .gt_left {
+#zpyzatzkoy .gt_left {
   text-align: left;
 }
 
-#qctvmwlgqa .gt_center {
+#zpyzatzkoy .gt_center {
   text-align: center;
 }
 
-#qctvmwlgqa .gt_right {
+#zpyzatzkoy .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#qctvmwlgqa .gt_font_normal {
+#zpyzatzkoy .gt_font_normal {
   font-weight: normal;
 }
 
-#qctvmwlgqa .gt_font_bold {
+#zpyzatzkoy .gt_font_bold {
   font-weight: bold;
 }
 
-#qctvmwlgqa .gt_font_italic {
+#zpyzatzkoy .gt_font_italic {
   font-style: italic;
 }
 
-#qctvmwlgqa .gt_super {
+#zpyzatzkoy .gt_super {
   font-size: 65%;
 }
 
-#qctvmwlgqa .gt_footnote_marks {
+#zpyzatzkoy .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#qctvmwlgqa .gt_asterisk {
+#zpyzatzkoy .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#qctvmwlgqa .gt_indent_1 {
+#zpyzatzkoy .gt_indent_1 {
   text-indent: 5px;
 }
 
-#qctvmwlgqa .gt_indent_2 {
+#zpyzatzkoy .gt_indent_2 {
   text-indent: 10px;
 }
 
-#qctvmwlgqa .gt_indent_3 {
+#zpyzatzkoy .gt_indent_3 {
   text-indent: 15px;
 }
 
-#qctvmwlgqa .gt_indent_4 {
+#zpyzatzkoy .gt_indent_4 {
   text-indent: 20px;
 }
 
-#qctvmwlgqa .gt_indent_5 {
+#zpyzatzkoy .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -522,21 +522,16 @@ in any way, reach out so we can showcase your hard work.
   <thead>
     
     <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="     ">     </th>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Description">Description</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Contacts">Contacts</th>
     </tr>
   </thead>
   <tbody class="gt_table_body">
-    <tr><td headers="url" class="gt_row gt_left"><img src="<div class='gt_from_md'><p><a href="https://www.noaa.gov/sites/default/files/2022-03/noaa_emblem_logo-2022.png">https://www.noaa.gov/sites/default/files/2022-03/noaa_emblem_logo-2022.png</a></p>
-</div>" style="height:30px;"></td>
-<td headers="Description" class="gt_row gt_left"><div class='gt_from_md'><p><a href = 'https://apps-st.fisheries.noaa.gov/dismap'>NOAA Fisheries Distribution Mapping and Analysis Portal</a></p>
+    <tr><td headers="Description" class="gt_row gt_left"><div class='gt_from_md'><p><a href = 'https://apps-st.fisheries.noaa.gov/dismap'>NOAA Fisheries Distribution Mapping and Analysis Portal</a></p>
 </div></td>
 <td headers="Contacts" class="gt_row gt_left"><div class='gt_from_md'><p><a href = 'https://www.fisheries.noaa.gov/contact/office-science-and-technology'>NOAA Fisheries Office of Science and Technology</a></p>
 </div></td></tr>
-    <tr><td headers="url" class="gt_row gt_left"><img src="<div class='gt_from_md'><p><a href="https://dse.berkeley.edu/sites/default/files/styles/openberkeley_image_full/public/general/dse_logostack.png">https://dse.berkeley.edu/sites/default/files/styles/openberkeley_image_full/public/general/dse_logostack.png</a></p>
-</div>" style="height:30px;"></td>
-<td headers="Description" class="gt_row gt_left"><div class='gt_from_md'><p><a href = 'https://pyafscgap.org/'>Pull data with python</a> and explore the <a href = 'https://app.pyafscgap.org/'>in-browser visualization tool</a>. Reference their <a href = 'https://mybinder.org/v2/gh/SchmidtDSE/afscgap/main?urlpath=/tree/index.ipynb'>example Python notebook</a></p>
+    <tr><td headers="Description" class="gt_row gt_left"><div class='gt_from_md'><p><a href = 'https://pyafscgap.org/'>Pull data with python</a> and explore the <a href = 'https://app.pyafscgap.org/'>in-browser visualization tool</a>. Reference their <a href = 'https://mybinder.org/v2/gh/SchmidtDSE/afscgap/main?urlpath=/tree/index.ipynb'>example Python notebook</a></p>
 </div></td>
 <td headers="Contacts" class="gt_row gt_left"><div class='gt_from_md'><p><a href = 'https://dse.berkeley.edu/'>The Eric and Wendy Schmidt Center for Data Science and the Environment at UC Berkeley</a>; <a href = 'mailto: sam.pottinger@berkeley.edu'>Sam Pottinger</a>, <a href = 'mailto: ccmartinez@berkeley.edu'>Ciera Martinez</a>, <a href = 'mailto: gzarpellon@berkeley.edu'>Giulia Zarpellon</a>, and <a href = 'mailto: kkoy@berkeley.edu'>Kevin Koy</a></p>
 </div></td></tr>
@@ -606,7 +601,7 @@ creation of annual stock assessments.
 
 ## Bottom trawl surveys and regions
 
-![](Z:/Projects/gap_public_data/README_files/figure-gfm/survey-map-1.png)<!-- -->
+![](img/survey_plot.png)
 
 - **Aleutian Islands (AI)** (Von Szalay and Raring, 2020)
   - Triennial (1990s)/Biennial since 2000 in even years
@@ -1036,29 +1031,36 @@ sessionInfo()
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ##  [1] RODBC_1.3-20      jsonlite_1.8.4    httr_1.4.5        akgfmaps_2.3.1    stars_0.6-0       abind_1.4-5       shadowtext_0.1.2 
-    ##  [8] sf_1.0-9          raster_3.6-20     sp_1.6-0          rmapshaper_0.4.6  gstat_2.1-0       ggspatial_1.1.7   classInt_0.4-9   
-    ## [15] viridis_0.6.2     viridisLite_0.4.1 ggplot2_3.4.1     purrr_1.0.1       gtExtras_0.4.5    gt_0.9.0          knitr_1.42       
-    ## [22] badger_0.2.3      stringr_1.5.0     janitor_2.2.0     rmarkdown_2.20    readr_2.1.4       magrittr_2.0.3    dplyr_1.1.0      
-    ## [29] tidyr_1.3.0      
+    ##  [1] flextable_0.8.6   RODBC_1.3-20      jsonlite_1.8.4    httr_1.4.5        akgfmaps_2.3.1    stars_0.6-0       abind_1.4-5      
+    ##  [8] shadowtext_0.1.2  sf_1.0-9          raster_3.6-20     sp_1.6-0          rmapshaper_0.4.6  gstat_2.1-0       ggspatial_1.1.7  
+    ## [15] classInt_0.4-9    viridis_0.6.2     viridisLite_0.4.1 ggplot2_3.4.1     purrr_1.0.1       gtExtras_0.4.5    gt_0.9.0         
+    ## [22] knitr_1.42        badger_0.2.3      stringr_1.5.0     janitor_2.2.0     rmarkdown_2.20    readr_2.1.4       magrittr_2.0.3   
+    ## [29] dplyr_1.1.0       tidyr_1.3.0      
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] colorspace_2.1-0    ellipsis_0.3.2      class_7.3-20        gitcreds_0.1.2      readtext_0.81       rprojroot_2.0.3    
-    ##  [7] snakecase_0.11.0    markdown_1.5        fs_1.6.1            rstudioapi_0.14     httpcode_0.3.0      proxy_0.4-27       
-    ## [13] farver_2.1.1        gh_1.4.0            bit64_4.0.5         fansi_1.0.4         lubridate_1.9.2     xml2_1.3.3         
-    ## [19] codetools_0.2-18    cachem_1.0.6        geojsonlint_0.4.0   BiocManager_1.30.20 compiler_4.2.2      rvcheck_0.2.1      
-    ## [25] fastmap_1.1.0       cli_3.6.0           htmltools_0.5.4     tools_4.2.2         gtable_0.3.1        glue_1.6.2         
-    ## [31] rappdirs_0.3.3      V8_4.2.2            Rcpp_1.0.10         jquerylib_0.1.4     vctrs_0.5.2         crul_1.3           
-    ## [37] lwgeom_0.2-11       xfun_0.37           timechange_0.2.0    lifecycle_1.0.3     dlstats_0.1.6       sys_3.4.1          
-    ## [43] terra_1.7-18        zoo_1.8-11          scales_1.2.1        vroom_1.6.1         hms_1.1.2           credentials_1.3.2  
-    ## [49] parallel_4.2.2      rematch2_2.1.2      httr2_0.2.2         RColorBrewer_1.1-3  gert_1.9.2          yaml_2.3.7         
-    ## [55] curl_5.0.0          gridExtra_2.3       yulab.utils_0.0.6   sass_0.4.5          stringi_1.7.12      jsonvalidate_1.3.2 
-    ## [61] highr_0.10          paletteer_1.5.0     e1071_1.7-13        commonmark_1.8.1    intervals_0.15.2    rlang_1.0.6        
-    ## [67] pkgconfig_2.0.3     evaluate_0.20       lattice_0.20-45     fontawesome_0.5.0   bit_4.0.5           tidyselect_1.2.0   
-    ## [73] here_1.0.1          R6_2.5.1            generics_0.1.3      DBI_1.1.3           pillar_1.8.1        withr_2.5.0        
-    ## [79] units_0.8-1         xts_0.13.0          tibble_3.1.8        spacetime_1.2-8     crayon_1.5.2        KernSmooth_2.23-20 
-    ## [85] utf8_1.2.3          tzdb_0.3.0          usethis_2.1.6       grid_4.2.2          data.table_1.14.6   FNN_1.1.3.1        
-    ## [91] digest_0.6.31       openssl_2.0.5       munsell_0.5.0       bslib_0.4.2         askpass_1.1
+    ##   [1] uuid_1.1-0              systemfonts_1.0.4       lwgeom_0.2-11           usethis_2.1.6           geojsonlint_0.4.0      
+    ##   [6] digest_0.6.31           yulab.utils_0.0.6       htmltools_0.5.4         fansi_1.0.4             memoise_2.0.1          
+    ##  [11] paletteer_1.5.0         gert_1.9.2              tzdb_0.3.0              credentials_1.3.2       officer_0.6.1          
+    ##  [16] vroom_1.6.1             xts_0.13.0              askpass_1.1             timechange_0.2.0        gfonts_0.2.0           
+    ##  [21] colorspace_2.1-0        rappdirs_0.3.3          jsonvalidate_1.3.2      gitcreds_0.1.2          textshaping_0.3.6      
+    ##  [26] xfun_0.37               crayon_1.5.2            dlstats_0.1.6           zoo_1.8-11              glue_1.6.2             
+    ##  [31] gtable_0.3.1            V8_4.2.2                scales_1.2.1            fontquiver_0.2.1        DBI_1.1.3              
+    ##  [36] Rcpp_1.0.10             xtable_1.8-4            units_0.8-1             bit_4.0.5               proxy_0.4-27           
+    ##  [41] readtext_0.81           intervals_0.15.2        fontLiberation_0.1.0    FNN_1.1.3.1             RColorBrewer_1.1-3     
+    ##  [46] ellipsis_0.3.2          pkgconfig_2.0.3         farver_2.1.1            sass_0.4.5              utf8_1.2.3             
+    ##  [51] here_1.0.1              httr2_0.2.2             crul_1.3                tidyselect_1.2.0        rlang_1.0.6            
+    ##  [56] later_1.3.0             munsell_0.5.0           tools_4.2.2             cachem_1.0.6            cli_3.6.0              
+    ##  [61] generics_0.1.3          evaluate_0.20           fastmap_1.1.0           ragg_1.2.5              yaml_2.3.7             
+    ##  [66] sys_3.4.1               rematch2_2.1.2          bit64_4.0.5             fs_1.6.1                zip_2.2.2              
+    ##  [71] gh_1.4.0                mime_0.12               xml2_1.3.3              compiler_4.2.2          rstudioapi_0.14        
+    ##  [76] curl_5.0.0              e1071_1.7-13            spacetime_1.2-8         tibble_3.1.8            bslib_0.4.2            
+    ##  [81] stringi_1.7.12          highr_0.10              gdtools_0.3.1           lattice_0.20-45         commonmark_1.8.1       
+    ##  [86] fontBitstreamVera_0.1.1 markdown_1.5            vctrs_0.5.2             pillar_1.8.1            lifecycle_1.0.3        
+    ##  [91] BiocManager_1.30.20     jquerylib_0.1.4         data.table_1.14.6       httpuv_1.6.9            R6_2.5.1               
+    ##  [96] promises_1.2.0.1        KernSmooth_2.23-20      gridExtra_2.3           codetools_0.2-18        fontawesome_0.5.0      
+    ## [101] openssl_2.0.5           rprojroot_2.0.3         withr_2.5.0             httpcode_0.3.0          parallel_4.2.2         
+    ## [106] hms_1.1.2               terra_1.7-18            grid_4.2.2              class_7.3-20            rvcheck_0.2.1          
+    ## [111] snakecase_0.11.0        shiny_1.7.4             lubridate_1.9.2
 
 ## NOAA README
 
