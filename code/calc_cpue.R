@@ -487,7 +487,7 @@ taxon_search_groups <- gap_products_old_taxonomics_worms0 %>%
   dplyr::select(species_code, genus, family, order, class, phylum, kingdom) %>% 
   tidyr::pivot_longer(data = ., 
                       cols = c("genus", "family", "order", "class", "phylum", "kingdom"), 
-                      names_to = "category", values_to = "subcategory") %>% 
+                      names_to = "rank", values_to = "classification") %>% 
   dplyr::relocate(category, subcategory, species_code) %>% 
   dplyr::arrange(category, subcategory, species_code) %>% 
   dplyr::filter(!is.na(subcategory))

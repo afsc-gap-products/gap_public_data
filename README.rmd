@@ -91,13 +91,13 @@ library(gt)
 library(gtExtras)
 library(purrr)
 
-# DisMAP
+ # DisMAP
 df <- data.frame(    
     url = c("https://www.noaa.gov/sites/default/files/2022-03/noaa_emblem_logo-2022.png"), 
     Description = c("<a href = 'https://apps-st.fisheries.noaa.gov/dismap'>NOAA Fisheries Distribution Mapping and Analysis Portal</a>"), 
     Contacts = c("<a href = 'https://www.fisheries.noaa.gov/contact/office-science-and-technology'>NOAA Fisheries Office of Science and Technology</a>"))
 
-# DSE
+ # DSE
 df <- df %>% 
   dplyr::add_row(
     url = c("https://dse.berkeley.edu/sites/default/files/styles/openberkeley_image_full/public/general/dse_logostack.png"), 
@@ -112,6 +112,7 @@ df <- df %>%
   gt::gt() %>%
   gtExtras::gt_img_rows(columns = url, img_source = "web") %>%
   gt::tab_options(data_row.padding = px(1)) %>% 
+  gt::cols_label(url = "     ") %>%
   cols_align(align = c("left"), columns = everything())
 df
 ```
@@ -209,22 +210,21 @@ gg <- ggplot() +
 gg
 ```
 
-
-- **Eastern Bering Sea Shelf (EBS)** [@2021NEBS2022]
-- Annual
-- Fixed stations at center of 20 x 20 nm grid
-- **Northern Bering Sea (NBS)** [@2021NEBS2022]
-- Biennial/Annual
-- Fixed stations at center of 20 x 20 nm grid
-- **Eastern Bering Sea Slope (BSS)** [@RN979]
-- Intermittent (funding dependent)
-- Modified Index-Stratified Random of Successful Stations Survey Design
 - **Aleutian Islands (AI)** [@AI2018]
-- Triennial (1990s)/Biennial since 2000 in even years
-- Modified Index-Stratified Random of Successful Stations Survey Design
+  - Triennial (1990s)/Biennial since 2000 in even years
+  - Modified Index-Stratified Random of Successful Stations Survey Design
+- **Eastern Bering Sea Slope (BSS)** [@RN979]
+  - Intermittent (funding dependent)
+  - Modified Index-Stratified Random of Successful Stations Survey Design
+- **Eastern Bering Sea Shelf (EBS)** [@2021NEBS2022]
+  - Annual
+  - Fixed stations at center of 20 x 20 nm grid
 - **Gulf of Alaska (GOA)** [@GOA2018]
-- Triennial (1990s)/Biennial since 2001 in odd years
-- Stratified Random Survey Design
+  - Triennial (1990s)/Biennial since 2001 in odd years
+  - Stratified Random Survey Design
+- **Northern Bering Sea (NBS)** [@2021NEBS2022]
+  - Biennial/Annual
+  - Fixed stations at center of 20 x 20 nm grid
 
 ## Relevant technical memorandums
 
@@ -241,7 +241,7 @@ gg
 
 ## Access constraints
 
-There are no legal restrictions on access to the data. They reside in the public domain and can be freely distributed.
+**There are no legal restrictions on access to the data. They reside in the public domain and can be freely distributed.**
 
 **User Constraints:** Users must read and fully comprehend the metadata prior to use. Data should not be used beyond the limits of the source scale. Acknowledgement of AFSC Groundfish Assessment Program, as the source from which these data were obtained, in any publications and/or other representations of these data, is suggested.
 
@@ -259,14 +259,18 @@ For questions, comments, and concerns specifically about the [Fisheries One Stop
 ## Column-level metadata
 
 ```{r column-metadata, echo = FALSE}
-metadata_column0 <- metadata_column %>% 
+metadata_column %>% 
+  janitor::clean_names() %>%
+  dplyr::mutate(metadata_colname = tolower(metadata_colname)) %>% 
+  dplyr::filter(metadata_colname %in% tolower(names(FOSS_CPUE_PRESONLY))) %>% 
+  dplyr::arrange(match(metadata_colname, tolower(names(FOSS_CPUE_PRESONLY)))) %>% 
   dplyr::select(
     "Column name" = metadata_colname, 
     "Column name (long) " = metadata_colname_long, 
     "Units" = metadata_units, 
     # "Oracle data type" = metadata_datatype, 
-    "Description" = metadata_colname_desc)
-knitr::kable(metadata_column0, row.names = FALSE) 
+    "Description" = metadata_colname_desc) %>%
+  knitr::kable(x = ., row.names = FALSE) 
 ```
 
 # Access the data
@@ -285,6 +289,8 @@ cat(str0)
 ## Access data interactively through the FOSS platform
 
 Select, filter, and package this and other NOAA Fisheries data from the [Fisheries One Stop Shop (FOSS)](`r link_foss `) platform. This user-friendly portal is maintained through `Oracle APEX`. A useful intro to using APIs in `R` can be found [here](https://www.dataquest.io/blog/r-api-tutorial/). A user guide for the FOSS platform can be found [here](https://www.fisheries.noaa.gov/foss/f?p=215:7:7542600605674:::::).
+
+![FOSS data platform](img/foss.png)
 
 ### Connect to the API with R
 
