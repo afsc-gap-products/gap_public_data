@@ -15,6 +15,8 @@ bibliography: "https://raw.githubusercontent.com/afsc-gap-products/citations/mai
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, message = FALSE)
 ```
 
+> [Return to main page](https://afsc-gap-products.github.io/gap_public_data/)
+
 ## Access data via Oracle
 
 If the user has access to the AFSC `Oracle` database, the user can use `SQL developer` to view and pull the FOSS public data directly from the `RACEBASE_FOSS` `Oracle` schema. 

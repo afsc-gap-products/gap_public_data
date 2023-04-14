@@ -320,12 +320,13 @@ please contact us using the Comments page on the
 Here are a few resources made by our scientists in house and keen
 contributors:
 
-- [General information](Z:/Projects/gap_public_data/docs/index.html)
+- [General
+  information](https://afsc-gap-products.github.io/gap_public_data/)
 - [Access data via the FOSS Interactive
-  Platform](Z:/Projects/gap_public_data/docs/access-foss.html)
+  Platform](https://afsc-gap-products.github.io/gap_public_data/access-foss.html)
 - [Access data via the API in
-  R](Z:/Projects/gap_public_data/docs/access-api-r.html)
+  R](https://afsc-gap-products.github.io/gap_public_data/access-api-r.html)
 - [Access data via the API in
-  Python](Z:/Projects/gap_public_data/docs/access-api-py.html)
+  Python](https://afsc-gap-products.github.io/gap_public_data/access-api-py.html)
 - [Access data via the AFSC Oracle Database (AFSC
-  only)](Z:/Projects/gap_public_data/docs/access-afsc-oracle.html)
+  only)](https://afsc-gap-products.github.io/gap_public_data/access-afsc-oracle-r.html)

@@ -15,6 +15,8 @@ bibliography: "https://raw.githubusercontent.com/afsc-gap-products/citations/mai
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, message = FALSE)
 ```
 
+> [Return to main page](https://afsc-gap-products.github.io/gap_public_data/)
+
 ### Connect to the API with R
 
 More information about how to amend API links can be found [here](https://docs.oracle.com/en/database/oracle/oracle-rest-data-services/22.3/books.html#AELIG90103/).
