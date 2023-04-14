@@ -305,7 +305,7 @@ metadata_column %>%
 
 Here are a few resources made by our scientists in house and keen contributors:
 
- - [General information](`r here::here("docs", "README.html")`)
+ - [General information](`r here::here("docs", "index.html")`)
  - [Access data via the FOSS Interactive Platform](`r here::here("docs", "access-foss.html")`)
  - [Access data via the API in R](`r here::here("docs", "access-api-r.html")`)
  - [Access data via the API in Python](`r here::here("docs", "access-api-py.html")`)

@@ -321,7 +321,7 @@ please contact us using the Comments page on the
 Here are a few resources made by our scientists in house and keen
 contributors:
 
-- [General information](Z:/Projects/gap_public_data/docs/README.html)
+- [General information](Z:/Projects/gap_public_data/docs/index.html)
 - [Access data via the FOSS Interactive
   Platform](Z:/Projects/gap_public_data/docs/access-foss.html)
 - [Access data via the API in

@@ -62,14 +62,19 @@ comb <- comb[comb != "footer.Rmd"]
 comb <- gsub(pattern = ".Rmd", replacement = "", x = comb, ignore.case = TRUE)
 for (i in 1:length(comb)) {
   tocTF <- FALSE
-  rmarkdown::render(input = here::here("docs", paste0(comb[i],".Rmd")),
+  file_in <- here::here("docs", paste0(comb[i],".Rmd"))
+  file_out <- here::here("docs", 
+                         ifelse(comb[i] == "README", "index.html", paste0(comb[i], ".html")))
+  file_out_main <- here::here(ifelse(comb[i] == "README", "index.html", paste0(comb[i], ".html")))
+  
+  rmarkdown::render(input = file_in,
                     output_dir = "./", 
                     output_format = 'html_document', 
-                    output_file = here::here("docs", paste0(comb[i],".html")))
-  file.copy(from = here::here(paste0(comb[i],".html")), 
-            to = here::here("docs", paste0(comb[i],".html")), 
+                    output_file = file_out)
+  file.copy(from = file_out_main, 
+            to = file_out, 
             overwrite = TRUE)
-  file.remove(here::here(paste0(comb[i],".html")))
+  file.remove(file_out_main)
   
 }
 
