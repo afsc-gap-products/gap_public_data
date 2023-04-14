@@ -15,6 +15,7 @@ PKG <- c(
   "magrittr",
   "readr",
   "rmarkdown",
+  "here", 
 
   "janitor",
   # "taxize",

@@ -46,7 +46,7 @@ source('./code/calc_cpue.R')
 # Update README ----------------------------------------------------------------
 
 source('./code/functions.R')
-dir_out <- paste0(getwd(), "/output/2023-02-17/")
+dir_out <- paste0(getwd(), "/output/2023-04-10/")
 
 load(paste0(dir_out, "FOSS_CPUE_PRESONLY.RData"))
 load(paste0(dir_out, "FOSS_CPUE_JOIN.RData"))
@@ -57,15 +57,32 @@ link_code_books <- gsub("[\\(\\)]", "",
                                    gregexpr("\\(.*?\\)", metadata_table))[[1]])
 link_code_books <- link_code_books[grep(pattern = "manual-and-data", x = link_code_books)]
 
-tocTF <- TRUE
-rmarkdown::render(paste0("./README.Rmd"),
-                  output_dir = "./", 
-                  output_file = paste0("README.md"))
+comb <- list.files(path = "docs/", pattern = ".Rmd", ignore.case = TRUE)
+comb <- comb[comb != "footer.Rmd"]
+comb <- gsub(pattern = ".Rmd", replacement = "", x = comb, ignore.case = TRUE)
+for (i in 1:length(comb)) {
+  tocTF <- FALSE
+  file_in <- here::here("docs", paste0(comb[i],".Rmd"))
+  file_out <- here::here("docs", 
+                         ifelse(comb[i] == "README", "index.html", paste0(comb[i], ".html")))
+  file_out_main <- here::here(ifelse(comb[i] == "README", "index.html", paste0(comb[i], ".html")))
+  
+  rmarkdown::render(input = file_in,
+                    output_dir = "./", 
+                    output_format = 'html_document', 
+                    output_file = file_out)
+  file.copy(from = file_out_main, 
+            to = file_out, 
+            overwrite = TRUE)
+  file.remove(file_out_main)
+  
+}
 
-tocTF <- FALSE
-rmarkdown::render(paste0("./README.Rmd"),
-                  output_dir = "./",
-                  output_file = paste0("README.html"))
+tocTF <- TRUE
+rmarkdown::render(input = "./docs/README.Rmd",
+                  output_dir = "./", 
+                  output_format = 'md_document', 
+                  output_file = "./README.md")
 
 # Share table to oracle --------------------------------------------------------
 

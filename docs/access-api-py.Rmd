@@ -1,0 +1,21 @@
+---
+title: 'Access public data using the API and Python'
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+  md_document: 
+    variant: gfm
+csl: "https://raw.githubusercontent.com/citation-style-language/styles/master/apa-no-ampersand.csl"
+bibliography: "https://raw.githubusercontent.com/afsc-gap-products/citations/main/cite/bibliography.bib"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, message = FALSE)
+```
+
+Content coming!
+
+```{r child-footer, child=here::here("docs","footer.Rmd")}
+```
