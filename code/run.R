@@ -57,17 +57,29 @@ link_code_books <- gsub("[\\(\\)]", "",
                                    gregexpr("\\(.*?\\)", metadata_table))[[1]])
 link_code_books <- link_code_books[grep(pattern = "manual-and-data", x = link_code_books)]
 
+comb <- list.files(path = "docs/", pattern = ".Rmd", ignore.case = TRUE)
+comb <- comb[comb != "footer.Rmd"]
+comb <- gsub(pattern = ".Rmd", replacement = "", x = comb, ignore.case = TRUE)
+for (i in 1:length(comb)) {
+  tocTF <- FALSE
+  rmarkdown::render(input = here::here("docs", paste0(comb[i],".Rmd")),
+                    output_dir = "./", 
+                    output_format = 'html_document', 
+                    output_file = here::here("docs", paste0(comb[i],".html")))
+  file.copy(from = here::here(paste0(comb[i],".html")), 
+            to = here::here("docs", paste0(comb[i],".html")), 
+            overwrite = TRUE)
+  file.remove(here::here(paste0(comb[i],".html")))
+  
+}
+
 tocTF <- TRUE
-rmarkdown::render(paste0("./README.Rmd"),
+rmarkdown::render(input = "./docs/README.Rmd",
                   output_dir = "./", 
                   output_format = 'md_document', 
-                  output_file = paste0("README.md"))
+                  output_file = "./README.md")
 
-tocTF <- FALSE
-rmarkdown::render(paste0("./README.Rmd"),
-                  output_dir = "./", 
-                  output_format = 'html_document', 
-                  output_file = paste0("README.html"))
+file.copy(from = "./docs/README.md", to = "./README.md", overwrite = TRUE)
 
 # Share table to oracle --------------------------------------------------------
 

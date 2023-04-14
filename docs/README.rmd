@@ -1,0 +1,311 @@
+---
+title: '`r ifelse(tocTF, "data", "AFSC RACE Groundfish and Shellfish Survey Public Data")`'
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+  md_document: 
+    variant: gfm
+csl: "https://raw.githubusercontent.com/citation-style-language/styles/master/apa-no-ampersand.csl"
+bibliography: "https://raw.githubusercontent.com/afsc-gap-products/citations/main/cite/bibliography.bib"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, message = FALSE)
+```
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r packages, echo=FALSE, results="hide", message=FALSE, include=FALSE, echo = FALSE}
+PKG <- c("badger", 
+         "knitr")
+PKG <- unique(PKG)
+for (p in PKG) {
+  if(!require(p,character.only = TRUE)) {
+    install.packages(p)
+    require(p,character.only = TRUE)}
+}
+```
+
+`r ifelse(tocTF, paste0('# [AFSC RACE Groundfish and Shellfish Survey Public Data](', link_repo,') <img src="https://avatars.githubusercontent.com/u/91760178?s=96&amp;v=4" alt="Logo." align="right" width="139" height="139"/>'), '')`
+
+## This code is primarily maintained by:
+
+**Emily Markowitz** (Emily.Markowitz AT noaa.gov; [\@EmilyMarkowitz-NOAA](https://github.com/EmilyMarkowitz-NOAA))  
+Research Fisheries Biologist  
+*Bering Sea Groundfish Survey Team*
+
+Alaska Fisheries Science Center,  
+National Marine Fisheries Service,  
+National Oceanic and Atmospheric Administration,  
+Seattle, WA 98195
+
+
+```{r badge, echo = FALSE, results='asis', message=FALSE}
+cat(
+  # badge_devel("afsc-gap-products/gap_public_data", "blue"),
+  # badge_lifecycle("maturing", "blue"),
+  badge_last_commit("afsc-gap-products/gap_public_data")
+)
+```
+
+> The code in this repository is regularly being updated and improved. Please refer to [releases](`r paste0(link_repo, "/releases")`) for finalized products and project milestones. *The FOSS dataset is only updated once a year and may be slightly behind the GitHub repository.* This metadata is regarding scripts and data last ran and pushed to the AFSC oracle on **`r format(x = as.Date(strsplit(x = dir_out, split = "/", fixed = TRUE)[[1]][5]), "%B %d, %Y")`**. 
+
+`r ifelse(tocTF, "## Table of contents", "")`
+
+```{r toc, echo = FALSE, eval = tocTF}
+toc <- strsplit(x = readtext::readtext(file = "./README.rmd")[[2]], split = "\n")
+toc <- toc[[1]][substr(x = toc[[1]], start = 1, stop = 1) == "#"]
+toc <- toc[-c(1)]
+toc_list <- toc
+toc_list <- gsub(pattern = "#### ", replacement = ">        - [*", x = toc_list, fixed = TRUE)
+toc_list <- gsub(pattern = "### ", replacement = ">      - [*", x = toc_list, fixed = TRUE)
+toc_list <- gsub(pattern = "## ", replacement = ">    - [*", x = toc_list, fixed = TRUE)
+toc_list <- gsub(pattern = "# ", replacement = ">  - [*", x = toc_list, fixed = TRUE)
+toc_link <- tolower(gsub(pattern = " ", replacement = "-", 
+                         x = gsub(pattern = "#", replacement = "", 
+                                  x = gsub(pattern = "# ", replacement = "", 
+                                           x = toc, fixed = TRUE), fixed = TRUE)))
+toc <- paste0(toc_list, "*](#", toc_link, ")", collapse = "\n")
+```
+
+`r ifelse(tocTF, toc, "")`
+
+# Cite this data
+
+Use the below bibtext [citation](`r paste0(link_repo, "/blob/main/CITATION.bib")`), as cited in our group's [citation repository](https://github.com/afsc-gap-products/citations/blob/main/cite/bibliography.bib) for citing the data from this data portal [@FOSSAFSCData]. Add "note = {Accessed: mm/dd/yyyy}" to append the day this data was accessed.  
+
+```{r load_citation, echo = FALSE}
+cat(readLines(con = here::here("CITATION.bib")), sep = "\n") 
+ # NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss, Accessed mm/dd/yyyy
+```
+
+# Collabrators and data users
+
+Below are a few packages and products currently using this data. If you have developed a product, performed an analysis, or exhibited this data in any way, reach out so we can showcase your hard work. 
+
+```{r citing-us, echo = FALSE, results='markup'}
+
+str0 <- ""
+df <- ""
+
+if (tocTF == TRUE)  { # github markdown
+  
+str0 <- paste0("**[NOAA Fisheries Distribution Mapping and Analysis Portal](https://apps-st.fisheries.noaa.gov/dismap)**; [NOAA Fisheries Office of Science and Technology](https://www.fisheries.noaa.gov/contact/office-science-and-technology)
+               
+               
+**[Pull data with python](https://pyafscgap.org/) and explore the [in-browser visualization tool](https://app.pyafscgap.org/'). Reference their [example Python notebook](https://mybinder.org/v2/gh/SchmidtDSE/afscgap/main?urlpath=/tree/index.ipynb)**; [The Eric and Wendy Schmidt Center for Data Science and the Environment at UC Berkeley](https://dse.berkeley.edu/), including sam.pottinger@berkeley.edu, ccmartinez@berkeley.edu, gzarpellon@berkeley.edu, and kkoy@berkeley.edu. ")
+  
+} else if (tocTF == FALSE)  { # html
+
+ # DisMAP
+df <- data.frame(    
+    url = c("https://www.noaa.gov/sites/default/files/2022-03/noaa_emblem_logo-2022.png"), 
+    Description = c("<a href = 'https://apps-st.fisheries.noaa.gov/dismap'>NOAA Fisheries Distribution Mapping and Analysis Portal</a>"), 
+    Contacts = c("<a href = 'https://www.fisheries.noaa.gov/contact/office-science-and-technology'>NOAA Fisheries Office of Science and Technology</a>"))
+
+ # DSE
+df <- df %>% 
+  dplyr::add_row(
+    url = c("https://dse.berkeley.edu/sites/default/files/styles/openberkeley_image_full/public/general/dse_logostack.png"), 
+                 Description = c("<a href = 'https://pyafscgap.org/'>Pull data with python</a> and explore the <a href = 'https://app.pyafscgap.org/'>in-browser visualization tool</a>. Reference their <a href = 'https://mybinder.org/v2/gh/SchmidtDSE/afscgap/main?urlpath=/tree/index.ipynb'>example Python notebook</a>"), 
+                 Contacts = c("<a href = 'https://dse.berkeley.edu/'>The Eric and Wendy Schmidt Center for Data Science and the Environment at UC Berkeley</a>; <a href = 'mailto: sam.pottinger@berkeley.edu'>Sam Pottinger</a>, <a href = 'mailto: ccmartinez@berkeley.edu'>Ciera Martinez</a>, <a href = 'mailto: gzarpellon@berkeley.edu'>Giulia Zarpellon</a>, and <a href = 'mailto: kkoy@berkeley.edu'>Kevin Koy</a>"))
+
+library(gt)
+library(gtExtras)
+library(purrr)
+  
+  df <- df %>%
+  dplyr::select(url, 
+                Description, Contacts) %>%
+  dplyr::mutate(Contacts = map(Contacts, gt::html)) %>%
+  dplyr::mutate(Description = map(Description, gt::html)) %>%
+  gt::gt() %>%
+  gtExtras::gt_img_rows(columns = url, img_source = "web") %>%
+  gt::tab_options(data_row.padding = px(1)) %>%
+  gt::cols_label(url = "     ") %>%
+  cols_align(align = c("left"), columns = everything())
+}
+
+df
+```
+
+`r str0`
+
+# Metadata
+
+## Data description (short)
+
+`r readLines(con = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_metadata_table.txt")) `
+
+## Data description (long)
+
+The Resource Assessment and Conservation Engineering Division (RACE) Groundfish Assessment Program (GAP) of the Alaska Fisheries Science Center (AFSC) conducts fisheries-independent bottom trawl surveys to monitor the condition of the demersal fish and crab stocks of Alaska. These data are developed to describe the temporal distribution and abundance of commercially and ecologically important groundfish species, examine the changes in the species composition of the fauna over time and space, and describe the physical environment of the groundfish habitat.
+
+There are no legal restrictions on access to the data. They reside in the public domain and can be freely distributed. Users must read and fully comprehend the metadata prior to use. Data should not be used beyond the limits of the source scale. Acknowledgement of NOAA, as the source from which these data were obtained, in any publications and/or other representations of these data, is suggested. These data are compiled and approved annually after each summer survey season. The data from previous years are unlikely to change substantially once published.
+
+These data are zero-filled (presence and absence) observations from surveys conducted on fishing vessels. These surveys monitor trends in distribution and abundance of groundfish, crab, and bottom-dwelling species in Alaska’s marine ecosystems. These data include estimates of catch-per-unit-effort (CPUE) for all identified species for index stations. Some survey data are excluded, such as non-standard stations, surveys completed in earlier years using different/non-standard gear, and special tows and non-standard data collections.
+
+Though not included in the public data, these surveys also collect oceanographic and environmental data, and biological data such as length, weight, stomach contents (to learn more about diet), otoliths (fish ear bones to learn about age), and tissue samples for genetic analysis, all of which can be shared upon special request. Also not included in the public data are estimated biomass (average total weight of all fish and crabs sampled) of crabs and groundfish that support the creation of annual stock assessments.
+
+## Bottom trawl surveys and regions
+
+```{r survey-map, echo=FALSE, results='asis'}
+
+library(ggplot2)
+library(viridis)
+library(akgfmaps)
+library(sf)
+
+shp_ebs <- akgfmaps::get_base_layers(select.region = "bs.south", set.crs = "auto")
+shp_nbs <- akgfmaps::get_base_layers(select.region = "bs.north", set.crs = "auto")
+shp_ai <- akgfmaps::get_base_layers(select.region = "ai", set.crs = "auto")
+shp_goa <- akgfmaps::get_base_layers(select.region = "goa", set.crs = "auto")
+shp_bss <- akgfmaps::get_base_layers(select.region = "ebs.slope", set.crs = "auto")
+
+shp <- dplyr::bind_rows(list(
+  shp_ebs$survey.area %>% 
+    sf::st_transform(crs = "EPSG:3338") %>% 
+    dplyr::mutate(SURVEY = "EBS"), 
+  shp_nbs$survey.area  %>% 
+    sf::st_transform(crs = "EPSG:3338") %>% 
+    dplyr::mutate(SURVEY = "NBS"), 
+  shp_ai$survey.area %>% 
+    sf::st_transform(crs = "EPSG:3338") %>% 
+    dplyr::mutate(SURVEY = "AI"), 
+  shp_goa$survey.area %>% 
+    sf::st_transform(crs = "EPSG:3338") %>% 
+    dplyr::mutate(SURVEY = "GOA"), 
+  shp_bss$survey.area %>% 
+    sf::st_transform(crs = "EPSG:3338") %>% 
+    dplyr::mutate(SURVEY = "BSS"))) %>% 
+  dplyr::select(Survey = SURVEY, geometry)
+
+gg <- ggplot() +
+  ggplot2::geom_sf(data = shp_bss$akland, 
+                   fill = "dark grey", 
+                   color = "transparent") + 
+  ggplot2::geom_sf(data = shp_nbs$graticule,
+                   color = "grey90", 
+                   size = 1, 
+                   alpha = 0.5) +
+  ggplot2::geom_sf(data = shp_ai$graticule,
+                   color = "grey90",
+                   size = 1, 
+                   alpha = 0.5) +
+  ggplot2::geom_sf(data = shp_goa$graticule,
+                   color = "grey90",
+                   size = 1, 
+                   alpha = 0.5) +
+  ggplot2::scale_x_continuous(name = "Longitude",
+                              breaks = c(-180, -170, -160, -150, -140)) + # shp_bss$lon.breaks) +
+  # ggplot2::scale_y_continuous(name = "Latitude", breaks = shp_bss$lat.breaks) +
+  ggplot2::ggtitle(label = "Bottom Trawl Survey Regions",
+                   subtitle = "AFSC RACE Groundfish and Shellfish Public Data Coverage") +
+  ggplot2::theme_classic() + 
+  ggplot2::theme(
+    panel.background = element_rect(fill = "transparent"), #grey95
+    plot.title = element_text(size = 20, face = "bold"), 
+    plot.subtitle = element_text(size=14), 
+    legend.text=element_text(size=12), 
+    legend.position="right",
+    legend.direction="vertical",
+    legend.justification="left",
+    legend.background = element_blank(),
+    legend.title=element_text(size=14),
+    axis.text = element_text(size=14), 
+    legend.box.background = element_blank(),
+    legend.key = element_blank(), 
+    legend.key.size=(unit(.3,"cm")), 
+    axis.title=element_text(size=14) ) +
+  ggplot2::geom_sf(data = shp, 
+                   mapping = aes(fill = Survey),
+                   color = "grey20", 
+                   show.legend = TRUE) +
+  ggplot2::scale_fill_viridis_d(option = "G", end = 0.9) +
+  ggplot2::coord_sf(xlim = c(-1394658,  2566293), # range(shp_ai$plot.boundary$x, shp_bs$plot.boundary$x, shp_goa$plot.boundary$x, shp_bss$plot.boundary$x),
+                    ylim = c(-1028565.1,  1125549.7)) # range(shp_ai$plot.boundary$y, shp_bs$plot.boundary$y, shp_goa$plot.boundary$y, shp_bss$plot.boundary$y))
+
+ggsave(filename = "survey_plot.png", 
+       plot = gg,
+       path = here::here("img"), 
+       width = 7, 
+       height = 3)
+
+```
+
+![](`r here::here("img", "survey_plot.png")`)
+
+- **Aleutian Islands (AI)** [@AI2018]
+  - Triennial (1990s)/Biennial since 2000 in even years
+  - Modified Index-Stratified Random of Successful Stations Survey Design
+- **Eastern Bering Sea Slope (BSS)** [@RN979]
+  - Intermittent (funding dependent)
+  - Modified Index-Stratified Random of Successful Stations Survey Design
+- **Eastern Bering Sea Shelf (EBS)** [@2021NEBS2022]
+  - Annual
+  - Fixed stations at center of 20 x 20 nm grid
+- **Gulf of Alaska (GOA)** [@GOA2018]
+  - Triennial (1990s)/Biennial since 2001 in odd years
+  - Stratified Random Survey Design
+- **Northern Bering Sea (NBS)** [@2021NEBS2022]
+  - Biennial/Annual
+  - Fixed stations at center of 20 x 20 nm grid
+
+## Relevant technical memorandums
+
+<div id="refs"></div>
+
+## User resources
+
+-   [AFSC RACE Groundfish Assessment Program (GAP)](https://www.fisheries.noaa.gov/contact/groundfish-assessment-program).
+-   [AFSC Resource Assessment and Conservation Engineering Division (RACE)](https://www.fisheries.noaa.gov/about/resource-assessment-and-conservation-engineering-division).
+-   For more information about codes used in the tables, please refer to the [survey code books](`r link_code_books `) [@cb2021].
+-   Find [past reports](https://www.fisheries.noaa.gov/resource/publication-database/noaa-institutional-repository) about these surveys.
+-   [GitHub repository](`r link_repo`).
+-   Learn more about other [research surveys conducted at AFSC](https://www.fisheries.noaa.gov/alaska/ecosystems/alaska-fish-research-surveys).
+
+## Access constraints
+
+**There are no legal restrictions on access to the data. They reside in the public domain and can be freely distributed.**
+
+**User Constraints:** Users must read and fully comprehend the metadata prior to use. Data should not be used beyond the limits of the source scale. Acknowledgement of AFSC Groundfish Assessment Program, as the source from which these data were obtained, in any publications and/or other representations of these data, is suggested.
+
+**Address:** 
+Alaska Fisheries Science Center (AFSC)
+National Oceanic and Atmospheric Administration (NOAA)  
+Resource Assessment and Conservation Engineering Division (RACE)  
+Groundfish Assessment Program (GAP) 7600 Sand Point Way, N.E. bldg. 4  
+Seattle, WA 98115 USA
+
+**General questions and more specific data requests** can be sent to [afsc.gap.metadata\@noaa.gov](mailto:afsc.gap.metadata@noaa.gov) or submitted as an [issue on our GitHub Organization](https://github.com/afsc-gap-products/data-requests). The version of this data used for stock assessments can be found through the Alaska Fisheries Information Network (AKFIN). For questions about the eastern Bering Sea surveys, contact Duane Stevenson ([Duane.Stevenson\@noaa.gov](mailto:Duane.Stevenson@noaa.gov)). For questions about the Gulf of Alaska or Aleutian Islands surveys, contact Ned Laman ([Ned.Laman\@noaa.gov](mailto:Ned.Laman@noaa.gov)). For questions specifically about crab data in any region, contact Mike Litzow ([Mike.Litzow\@noaa.gov](mailto:Mike.Litzow@noaa.gov)), the Shellfish Assessment Program lead.
+
+For questions, comments, and concerns specifically about the [Fisheries One Stop Shop (FOSS)](`r link_foss `) platform, please contact us using the Comments page on the [FOSS](`r link_foss `) webpage.
+
+## Column-level metadata
+
+```{r column-metadata, echo = FALSE}
+metadata_column %>% 
+  janitor::clean_names() %>%
+  dplyr::mutate(metadata_colname = tolower(metadata_colname)) %>% 
+  dplyr::filter(metadata_colname %in% tolower(names(FOSS_CPUE_PRESONLY))) %>% 
+  dplyr::arrange(match(metadata_colname, tolower(names(FOSS_CPUE_PRESONLY)))) %>% 
+  dplyr::select(
+    "Column name" = metadata_colname, 
+    "Column name (long) " = metadata_colname_long, 
+    "Units" = metadata_units, 
+    # "Oracle data type" = metadata_datatype, 
+    "Description" = metadata_colname_desc) %>%
+  knitr::kable(x = ., row.names = FALSE) 
+```
+
+# Access the data
+
+Here are a few resources made by our scientists in house and keen contributors:
+
+ - [Access data via the FOSS Interactive Platform](`r here::here("docs", "access-foss.html")`)
+ - [Access data via the API in R](`r here::here("docs", "access-api-r.html")`)
+ - [Access data via the API in Python](`r here::here("docs", "access-api-p.html")`)
+ - [Access data via the AFSC Oracle Database (AFSC only)](`r here::here("docs", "access-afsc-oracle.html")`)
+
