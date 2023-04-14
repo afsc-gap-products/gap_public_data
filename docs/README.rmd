@@ -85,10 +85,10 @@ cat(readLines(con = here::here("CITATION.bib")), sep = "\n")
 
 Below are a few packages and products currently using this data. If you have developed a product, performed an analysis, or exhibited this data in any way, reach out so we can showcase your hard work. 
 
-```{r citing-us, echo = FALSE, results='markup'}
+```{r citing-us, echo = FALSE}
 
 str0 <- ""
-df <- ""
+# df <- ""
 
 if (tocTF == TRUE)  { # github markdown
   
@@ -126,9 +126,10 @@ library(purrr)
   gt::tab_options(data_row.padding = px(1)) %>%
   gt::cols_label(url = "     ") %>%
   cols_align(align = c("left"), columns = everything())
+df
 }
 
-df
+
 ```
 
 `r str0`
@@ -304,8 +305,9 @@ metadata_column %>%
 
 Here are a few resources made by our scientists in house and keen contributors:
 
+ - [General information](`r here::here("docs", "README.html")`)
  - [Access data via the FOSS Interactive Platform](`r here::here("docs", "access-foss.html")`)
  - [Access data via the API in R](`r here::here("docs", "access-api-r.html")`)
- - [Access data via the API in Python](`r here::here("docs", "access-api-p.html")`)
+ - [Access data via the API in Python](`r here::here("docs", "access-api-py.html")`)
  - [Access data via the AFSC Oracle Database (AFSC only)](`r here::here("docs", "access-afsc-oracle.html")`)
 

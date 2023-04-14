@@ -28,6 +28,7 @@ Seattle, WA 98195
 
 > - [*Cite this data*](#cite-this-data)
 > - [*Collabrators and data users*](#collabrators-and-data-users)
+> - [*df \<- ““*](#df-%3C--%22%22)
 > - [*Metadata*](#metadata)
 >   - [*Data description (short)*](#data-description-(short))
 >   - [*Data description (long)*](#data-description-(long))
@@ -64,8 +65,6 @@ append the day this data was accessed.
 Below are a few packages and products currently using this data. If you
 have developed a product, performed an analysis, or exhibited this data
 in any way, reach out so we can showcase your hard work.
-
-    ## [1] ""
 
 **[NOAA Fisheries Distribution Mapping and Analysis
 Portal](https://apps-st.fisheries.noaa.gov/dismap)**; [NOAA Fisheries
@@ -322,11 +321,12 @@ please contact us using the Comments page on the
 Here are a few resources made by our scientists in house and keen
 contributors:
 
+- [General information](Z:/Projects/gap_public_data/docs/README.html)
 - [Access data via the FOSS Interactive
   Platform](Z:/Projects/gap_public_data/docs/access-foss.html)
 - [Access data via the API in
   R](Z:/Projects/gap_public_data/docs/access-api-r.html)
 - [Access data via the API in
-  Python](Z:/Projects/gap_public_data/docs/access-api-p.html)
+  Python](Z:/Projects/gap_public_data/docs/access-api-py.html)
 - [Access data via the AFSC Oracle Database (AFSC
   only)](Z:/Projects/gap_public_data/docs/access-afsc-oracle.html)

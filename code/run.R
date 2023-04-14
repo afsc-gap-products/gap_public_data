@@ -79,8 +79,6 @@ rmarkdown::render(input = "./docs/README.Rmd",
                   output_format = 'md_document', 
                   output_file = "./README.md")
 
-file.copy(from = "./docs/README.md", to = "./README.md", overwrite = TRUE)
-
 # Share table to oracle --------------------------------------------------------
 
 source("./code/oracle_upload.R") 
