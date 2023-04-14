@@ -305,9 +305,9 @@ metadata_column %>%
 
 Here are a few resources made by our scientists in house and keen contributors:
 
- - [General information](`r here::here("docs", "index.html")`)
- - [Access data via the FOSS Interactive Platform](`r here::here("docs", "access-foss.html")`)
- - [Access data via the API in R](`r here::here("docs", "access-api-r.html")`)
- - [Access data via the API in Python](`r here::here("docs", "access-api-py.html")`)
- - [Access data via the AFSC Oracle Database (AFSC only)](`r here::here("docs", "access-afsc-oracle.html")`)
+ - [General information](https://afsc-gap-products.github.io/gap_public_data/)
+ - [Access data via the FOSS Interactive Platform](https://afsc-gap-products.github.io/gap_public_data/access-foss.html)
+ - [Access data via the API in R](https://afsc-gap-products.github.io/gap_public_data/access-api-r.html)
+ - [Access data via the API in Python](https://afsc-gap-products.github.io/gap_public_data/access-api-py.html)
+ - [Access data via the AFSC Oracle Database (AFSC only)](https://afsc-gap-products.github.io/gap_public_data/access-afsc-oracle-r.html)
 

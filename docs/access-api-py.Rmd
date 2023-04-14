@@ -15,6 +15,9 @@ bibliography: "https://raw.githubusercontent.com/afsc-gap-products/citations/mai
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, message = FALSE)
 ```
 
+> [Return to main page](https://afsc-gap-products.github.io/gap_public_data/)
+
+
 Content coming!
 
 ```{r child-footer, child=here::here("docs","footer.Rmd")}

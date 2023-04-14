@@ -15,6 +15,8 @@ bibliography: "https://raw.githubusercontent.com/afsc-gap-products/citations/mai
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, message = FALSE)
 ```
 
+> [Return to main page](https://afsc-gap-products.github.io/gap_public_data/)
+
 ## Access data interactively through the FOSS platform
 
 Select, filter, and package this and other NOAA Fisheries data from the [Fisheries One Stop Shop (FOSS)](`r link_foss `) platform. This user-friendly portal is maintained through `Oracle APEX`. A useful intro to using APIs in `R` can be found [here](https://www.dataquest.io/blog/r-api-tutorial/). A user guide for the FOSS platform can be found [here](https://www.fisheries.noaa.gov/foss/f?p=215:7:7542600605674:::::).
