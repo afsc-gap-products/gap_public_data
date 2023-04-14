@@ -78,7 +78,7 @@ Use the below bibtext [citation](`r paste0(link_repo, "/blob/main/CITATION.bib")
 
 ```{r load_citation, echo = FALSE}
 cat(readLines(con = "CITATION.bib"), sep = "\n") 
-# NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss, Accessed mm/dd/yyyy
+ # NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss, Accessed mm/dd/yyyy
 ```
 
 # Collabrators and data users
@@ -114,6 +114,12 @@ df <- df %>%
   gt::tab_options(data_row.padding = px(1)) %>% 
   gt::cols_label(url = "     ") %>%
   cols_align(align = c("left"), columns = everything())
+
+if (tocTF == TRUE)  {
+  df <- df %>% 
+    gt::fmt_markdown()
+}
+
 df
 ```
 
@@ -135,7 +141,7 @@ Though not included in the public data, these surveys also collect oceanographic
 
 ## Bottom trawl surveys and regions
 
-```{r survey-map, echo=FALSE}
+```{r survey-map, echo=FALSE, results='asis'}
 
 library(ggplot2)
 library(viridis)
@@ -207,6 +213,7 @@ gg <- ggplot() +
   ggplot2::scale_fill_viridis_d(option = "G", end = 0.9) +
   ggplot2::coord_sf(xlim = c(-1394658,  2566293), # range(shp_ai$plot.boundary$x, shp_bs$plot.boundary$x, shp_goa$plot.boundary$x, shp_bss$plot.boundary$x),
                     ylim = c(-1028565.1,  1125549.7)) # range(shp_ai$plot.boundary$y, shp_bs$plot.boundary$y, shp_goa$plot.boundary$y, shp_bss$plot.boundary$y))
+
 gg
 ```
 
@@ -299,18 +306,18 @@ More information about how to amend API links can be found [here](https://docs.o
 Load the first 25 rows of data
 
 ```{r api-link, echo = TRUE}
-# install.packages(c("httr", "jsonlite"))
+ # install.packages(c("httr", "jsonlite"))
 library("httr")
 library("jsonlite")
-# link to the API
+ # link to the API
 api_link <- "https://apps-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/"
 ```
 
 ```{r api-all-data-ex, echo = TRUE}
 res <- httr::GET(url = api_link)
-# res # Test connection
+ # res # Test connection
 data <- jsonlite::fromJSON(base::rawToChar(res$content))
-# names(data)
+ # names(data)
 knitr::kable(head(data$items, 3)) 
 ```
 
@@ -323,8 +330,8 @@ dim(data$items)
 ```
 
 ```{r test-2, eval = FALSE, echo = FALSE}
-# Filter by Year: Show all the data greater than the year 2020,
-# https://apps-st.fisheries.noaa.gov/ods/foss/trade_data/?q={"year":{"$gt": 2010}}
+ # Filter by Year: Show all the data greater than the year 2020,
+ # https://apps-st.fisheries.noaa.gov/ods/foss/trade_data/?q={"year":{"$gt": 2010}}
 res <- httr::GET(url = paste0(api_link, '?q={"year":{"$gt": 2020}}'))
 data <- jsonlite::fromJSON(base::rawToChar(res$content))
 knitr::kable(summary(data$items[, c("year", "srvy")], 3))
@@ -342,15 +349,15 @@ knitr::kable(head(data$items, 3))
 
 
 ```{r test-4, eval = FALSE, echo = FALSE}
-# Combination of year and name filters: Show all the data where years > 2020 and the product name contains pollock
+ # Combination of year and name filters: Show all the data where years > 2020 and the product name contains pollock
 res <- httr::GET(url = paste0(api_link, '?q={"year":{"$gt": 2020},"name":{"$like":"%25pollock%25"}}'))
 data <- jsonlite::fromJSON(base::rawToChar(res$content))
 knitr::kable(head(data$items, 3))
 ```
 
 ```{r test-5, eval = FALSE, echo = FALSE}
-# Combination of year, srvy, stratum: Show all the data where year = 1989, srvy = "EBS", and stratum is not equal to 81
-# https://apps-st.fisheries.noaa.gov/ods/foss/trade_data/?q={"year":"1989","srvy": "EBS","stratum":{"$ne": "81"}}
+ # Combination of year, srvy, stratum: Show all the data where year = 1989, srvy = "EBS", and stratum is not equal to 81
+ # https://apps-st.fisheries.noaa.gov/ods/foss/trade_data/?q={"year":"1989","srvy": "EBS","stratum":{"$ne": "81"}}
 
 res <- httr::GET(url = paste0(api_link, '?q={"year": 1989,"srvy": "EBS","stratum":{"$ne": "81"}}'))
 data <- jsonlite::fromJSON(base::rawToChar(res$content))
@@ -383,16 +390,16 @@ Many users will want to access the data from `Oracle` using `R`. The user will n
 Here, the user can write in their username and password directly into the `RODBC` connect function. Never save usernames or passwords in scripts that may be intentionally or unintentionally shared with others. If no username and password is entered in the function, pop-ups will appear on the screen asking for the username and password. 
 
 ```{r oracle-connect-2, echo = TRUE, eval = FALSE}
-#' Define RODBC connection to ORACLE
-#'
-#' @param schema default = 'AFSC'. 
-#'
-#' @return oracle channel connection
-#' @export
-#'
-#' @examples
-#' # Not run
-#' # channel <- oracle_connect()
+ #' Define RODBC connection to ORACLE
+ #'
+ #' @param schema default = 'AFSC'. 
+ #'
+ #' @return oracle channel connection
+ #' @export
+ #'
+ #' @examples
+ #' # Not run
+ #' # channel <- oracle_connect()
 oracle_connect <- function(
     schema='AFSC', 
     username = NULL, 
@@ -422,9 +429,9 @@ channel <- oracle_connect()
 Once connected, pull and save (if needed) the table into the `R` environment. 
 
 ```{r oracle-data-pull, echo = TRUE, eval = FALSE}
-# Pull table from oracle into R environment
+ # Pull table from oracle into R environment
 a <- RODBC::sqlQuery(channel, "SELECT * FROM RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED")
-# Save table to local directory
+ # Save table to local directory
 write.csv(x = a, file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED.csv")
 ```
 
@@ -434,13 +441,13 @@ write.csv(x = a, file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED.csv")
 To pull a small subset of the data (especially since files like `RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED` are so big), use a variation of the following code. Here, we are pulling EBS Pacific cod from 2010 - 2021: 
 
 ```{r oracle-data-pull-subset, echo = TRUE, eval = FALSE}
-# Pull data
+ # Pull data
 a <- RODBC::sqlQuery(channel, "SELECT * FROM RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED 
 WHERE SRVY = 'EBS' 
 AND COMMON_NAME = 'Pacific cod' 
 AND YEAR >= 2010 
 AND YEAR < 2021")
-# Save table to local directory
+ # Save table to local directory
 write.csv(x = a, file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED-ebs_pcod_2010-2020.csv")
 ```
 
@@ -448,7 +455,6 @@ write.csv(x = a, file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED-ebs_pcod_2010-2020.c
 ### Join catch and haul data
 
 If this file is too large, you can join catch and haul data. Pull the `RACEBASE_FOSS.JOIN_FOSS_CPUE_CATCH` and  `RACEBASE_FOSS.JOIN_FOSS_CPUE_HAUL` tables, which are much smaller, and combine the table locally yourself. 
-
 
 `r paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_metadata_table.txt")), collapse="\n") `
 

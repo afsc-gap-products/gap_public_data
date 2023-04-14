@@ -27,10 +27,6 @@ Seattle, WA 98195
 ## Table of contents
 
 > - [*Cite this data*](#cite-this-data)
-> - [*NOAA Fisheries Alaska Fisheries Science Center. RACE Division
->   Bottom Trawl Survey Data Query, Available at:
->   www.fisheries.noaa.gov/foss, Accessed
->   mm/dd/yyyy*](#noaa-fisheries-alaska-fisheries-science-center.-race-division-bottom-trawl-survey-data-query,-available-at:-www.fisheries.noaa.gov/foss,-accessed-mm/dd/yyyy)
 > - [*Collabrators and data users*](#collabrators-and-data-users)
 > - [*Metadata*](#metadata)
 >   - [*Data description (short)*](#data-description-(short))
@@ -46,43 +42,12 @@ Seattle, WA 98195
 >   - [*Access data interactively through the FOSS
 >     platform*](#access-data-interactively-through-the-foss-platform)
 >     - [*Connect to the API with R*](#connect-to-the-api-with-r)
-> - [*install.packages(c(“httr”,
->   “jsonlite”))*](#install.packages(c(%22httr%22,-%22jsonlite%22)))
-> - [*link to the API*](#link-to-the-api)
-> - \[\*res \> - [*Test connection*](#res-test-connection)
-> - [*names(data)*](#names(data))
-> - [*Filter by Year: Show all the data greater than the year
->   2020,*](#filter-by-year:-show-all-the-data-greater-than-the-year-2020,)
-> - \[\*<https://apps-st.fisheries.noaa.gov/ods/foss/trade_data/?q=>{“year”:{“$gt": 2010}}*](#https://apps-st.fisheries.noaa.gov/ods/foss/trade_data/?q={"year":{"$gt”:-2010}})
-> - [*Combination of year and name filters: Show all the data where
->   years \> 2020 and the product name contains
->   pollock*](#combination-of-year-and-name-filters:-show-all-the-data-where-years-%3E-2020-and-the-product-name-contains-pollock)
-> - [*Combination of year, srvy, stratum: Show all the data where year =
->   1989, srvy = “EBS”, and stratum is not equal to
->   81*](#combination-of-year,-srvy,-stratum:-show-all-the-data-where-year-=-1989,-srvy-=-%22ebs%22,-and-stratum-is-not-equal-to-81)
-> - \[\*<https://apps-st.fisheries.noaa.gov/ods/foss/trade_data/?q=>{“year”:“1989”,“srvy”:
->   “EBS”,“stratum”:{“$ne": "81"}}*](#https://apps-st.fisheries.noaa.gov/ods/foss/trade_data/?q={"year":"1989","srvy":-"ebs","stratum":{"$ne”:-“81”}})
->   - [*Subset data*](#subset-data)
+>     - [*Subset data*](#subset-data)
 >   - [*Access data via Oracle*](#access-data-via-oracle)
->     - [*Connect to Oracle from R*](#connect-to-oracle-from-r) \#’
->       Define RODBC connection to
->       ORACLE*\](#‘-define-rodbc-connection-to-oracle) \#’*\](#‘) \#’
->       (**param?**) schema default = ‘AFSC’.
->       *\](#‘-(**param-schema-default?**)-=-’afsc’.-) \#‘*\](#’) \#’
->       (**return?**) oracle channel
->       connection*\](#’-(**return-oracle-channel-connection?**)) \#’
->       (**export?**)*\](#‘-(**export?**)) \#’*\](#‘) \#’
->       (**examples?**)*\](#‘-(**examples?**)) \#’ \> - [*Not
->       run*](#'-not-run) \#’ \> - [*channel \<-
->       oracle_connect()*](#'-channel-%3C--oracle_connect())
+>     - [*Connect to Oracle from R*](#connect-to-oracle-from-r)
 >     - [*Select all data*](#select-all-data)
-> - [*Pull table from oracle into R
->   environment*](#pull-table-from-oracle-into-r-environment)
-> - [*Save table to local directory*](#save-table-to-local-directory)
->   - [*Subset data*](#subset-data)
-> - [*Pull data*](#pull-data)
-> - [*Save table to local directory*](#save-table-to-local-directory)
->   - [*Join catch and haul data*](#join-catch-and-haul-data)
+>     - [*Subset data*](#subset-data)
+>     - [*Join catch and haul data*](#join-catch-and-haul-data)
 > - [*Suggestions and comments*](#suggestions-and-comments)
 >   - [*R version metadata*](#r-version-metadata)
 >   - [*NOAA README*](#noaa-readme)
@@ -113,23 +78,23 @@ Below are a few packages and products currently using this data. If you
 have developed a product, performed an analysis, or exhibited this data
 in any way, reach out so we can showcase your hard work.
 
-<div id="ficdzgangv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ficdzgangv table {
+<div id="qctvmwlgqa" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#qctvmwlgqa table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ficdzgangv thead, #ficdzgangv tbody, #ficdzgangv tfoot, #ficdzgangv tr, #ficdzgangv td, #ficdzgangv th {
+#qctvmwlgqa thead, #qctvmwlgqa tbody, #qctvmwlgqa tfoot, #qctvmwlgqa tr, #qctvmwlgqa td, #qctvmwlgqa th {
   border-style: none;
 }
 
-#ficdzgangv p {
+#qctvmwlgqa p {
   margin: 0;
   padding: 0;
 }
 
-#ficdzgangv .gt_table {
+#qctvmwlgqa .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -155,12 +120,12 @@ in any way, reach out so we can showcase your hard work.
   border-left-color: #D3D3D3;
 }
 
-#ficdzgangv .gt_caption {
+#qctvmwlgqa .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ficdzgangv .gt_title {
+#qctvmwlgqa .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -172,7 +137,7 @@ in any way, reach out so we can showcase your hard work.
   border-bottom-width: 0;
 }
 
-#ficdzgangv .gt_subtitle {
+#qctvmwlgqa .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -184,7 +149,7 @@ in any way, reach out so we can showcase your hard work.
   border-top-width: 0;
 }
 
-#ficdzgangv .gt_heading {
+#qctvmwlgqa .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -196,13 +161,13 @@ in any way, reach out so we can showcase your hard work.
   border-right-color: #D3D3D3;
 }
 
-#ficdzgangv .gt_bottom_border {
+#qctvmwlgqa .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ficdzgangv .gt_col_headings {
+#qctvmwlgqa .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -217,7 +182,7 @@ in any way, reach out so we can showcase your hard work.
   border-right-color: #D3D3D3;
 }
 
-#ficdzgangv .gt_col_heading {
+#qctvmwlgqa .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -237,7 +202,7 @@ in any way, reach out so we can showcase your hard work.
   overflow-x: hidden;
 }
 
-#ficdzgangv .gt_column_spanner_outer {
+#qctvmwlgqa .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -249,15 +214,15 @@ in any way, reach out so we can showcase your hard work.
   padding-right: 4px;
 }
 
-#ficdzgangv .gt_column_spanner_outer:first-child {
+#qctvmwlgqa .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ficdzgangv .gt_column_spanner_outer:last-child {
+#qctvmwlgqa .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ficdzgangv .gt_column_spanner {
+#qctvmwlgqa .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -269,11 +234,11 @@ in any way, reach out so we can showcase your hard work.
   width: 100%;
 }
 
-#ficdzgangv .gt_spanner_row {
+#qctvmwlgqa .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ficdzgangv .gt_group_heading {
+#qctvmwlgqa .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -299,7 +264,7 @@ in any way, reach out so we can showcase your hard work.
   text-align: left;
 }
 
-#ficdzgangv .gt_empty_group_heading {
+#qctvmwlgqa .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -314,15 +279,15 @@ in any way, reach out so we can showcase your hard work.
   vertical-align: middle;
 }
 
-#ficdzgangv .gt_from_md > :first-child {
+#qctvmwlgqa .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ficdzgangv .gt_from_md > :last-child {
+#qctvmwlgqa .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ficdzgangv .gt_row {
+#qctvmwlgqa .gt_row {
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 5px;
@@ -341,7 +306,7 @@ in any way, reach out so we can showcase your hard work.
   overflow-x: hidden;
 }
 
-#ficdzgangv .gt_stub {
+#qctvmwlgqa .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -354,7 +319,7 @@ in any way, reach out so we can showcase your hard work.
   padding-right: 5px;
 }
 
-#ficdzgangv .gt_stub_row_group {
+#qctvmwlgqa .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -368,15 +333,15 @@ in any way, reach out so we can showcase your hard work.
   vertical-align: top;
 }
 
-#ficdzgangv .gt_row_group_first td {
+#qctvmwlgqa .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ficdzgangv .gt_row_group_first th {
+#qctvmwlgqa .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ficdzgangv .gt_summary_row {
+#qctvmwlgqa .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -386,16 +351,16 @@ in any way, reach out so we can showcase your hard work.
   padding-right: 5px;
 }
 
-#ficdzgangv .gt_first_summary_row {
+#qctvmwlgqa .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ficdzgangv .gt_first_summary_row.thick {
+#qctvmwlgqa .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ficdzgangv .gt_last_summary_row {
+#qctvmwlgqa .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -405,7 +370,7 @@ in any way, reach out so we can showcase your hard work.
   border-bottom-color: #D3D3D3;
 }
 
-#ficdzgangv .gt_grand_summary_row {
+#qctvmwlgqa .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -415,7 +380,7 @@ in any way, reach out so we can showcase your hard work.
   padding-right: 5px;
 }
 
-#ficdzgangv .gt_first_grand_summary_row {
+#qctvmwlgqa .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -425,7 +390,7 @@ in any way, reach out so we can showcase your hard work.
   border-top-color: #D3D3D3;
 }
 
-#ficdzgangv .gt_last_grand_summary_row_top {
+#qctvmwlgqa .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -435,11 +400,11 @@ in any way, reach out so we can showcase your hard work.
   border-bottom-color: #D3D3D3;
 }
 
-#ficdzgangv .gt_striped {
+#qctvmwlgqa .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ficdzgangv .gt_table_body {
+#qctvmwlgqa .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -448,7 +413,7 @@ in any way, reach out so we can showcase your hard work.
   border-bottom-color: #D3D3D3;
 }
 
-#ficdzgangv .gt_footnotes {
+#qctvmwlgqa .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -462,7 +427,7 @@ in any way, reach out so we can showcase your hard work.
   border-right-color: #D3D3D3;
 }
 
-#ficdzgangv .gt_footnote {
+#qctvmwlgqa .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -471,7 +436,7 @@ in any way, reach out so we can showcase your hard work.
   padding-right: 5px;
 }
 
-#ficdzgangv .gt_sourcenotes {
+#qctvmwlgqa .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -485,7 +450,7 @@ in any way, reach out so we can showcase your hard work.
   border-right-color: #D3D3D3;
 }
 
-#ficdzgangv .gt_sourcenote {
+#qctvmwlgqa .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -493,63 +458,63 @@ in any way, reach out so we can showcase your hard work.
   padding-right: 5px;
 }
 
-#ficdzgangv .gt_left {
+#qctvmwlgqa .gt_left {
   text-align: left;
 }
 
-#ficdzgangv .gt_center {
+#qctvmwlgqa .gt_center {
   text-align: center;
 }
 
-#ficdzgangv .gt_right {
+#qctvmwlgqa .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ficdzgangv .gt_font_normal {
+#qctvmwlgqa .gt_font_normal {
   font-weight: normal;
 }
 
-#ficdzgangv .gt_font_bold {
+#qctvmwlgqa .gt_font_bold {
   font-weight: bold;
 }
 
-#ficdzgangv .gt_font_italic {
+#qctvmwlgqa .gt_font_italic {
   font-style: italic;
 }
 
-#ficdzgangv .gt_super {
+#qctvmwlgqa .gt_super {
   font-size: 65%;
 }
 
-#ficdzgangv .gt_footnote_marks {
+#qctvmwlgqa .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ficdzgangv .gt_asterisk {
+#qctvmwlgqa .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ficdzgangv .gt_indent_1 {
+#qctvmwlgqa .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ficdzgangv .gt_indent_2 {
+#qctvmwlgqa .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ficdzgangv .gt_indent_3 {
+#qctvmwlgqa .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ficdzgangv .gt_indent_4 {
+#qctvmwlgqa .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ficdzgangv .gt_indent_5 {
+#qctvmwlgqa .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -563,12 +528,18 @@ in any way, reach out so we can showcase your hard work.
     </tr>
   </thead>
   <tbody class="gt_table_body">
-    <tr><td headers="url" class="gt_row gt_left"><img src="https://www.noaa.gov/sites/default/files/2022-03/noaa_emblem_logo-2022.png" style="height:30px;"></td>
-<td headers="Description" class="gt_row gt_left"><a href = 'https://apps-st.fisheries.noaa.gov/dismap'>NOAA Fisheries Distribution Mapping and Analysis Portal</a></td>
-<td headers="Contacts" class="gt_row gt_left"><a href = 'https://www.fisheries.noaa.gov/contact/office-science-and-technology'>NOAA Fisheries Office of Science and Technology</a></td></tr>
-    <tr><td headers="url" class="gt_row gt_left"><img src="https://dse.berkeley.edu/sites/default/files/styles/openberkeley_image_full/public/general/dse_logostack.png" style="height:30px;"></td>
-<td headers="Description" class="gt_row gt_left"><a href = 'https://pyafscgap.org/'>Pull data with python</a> and explore the <a href = 'https://app.pyafscgap.org/'>in-browser visualization tool</a>. Reference their <a href = 'https://mybinder.org/v2/gh/SchmidtDSE/afscgap/main?urlpath=/tree/index.ipynb'>example Python notebook</a></td>
-<td headers="Contacts" class="gt_row gt_left"><a href = 'https://dse.berkeley.edu/'>The Eric and Wendy Schmidt Center for Data Science and the Environment at UC Berkeley</a>; <a href = 'mailto: sam.pottinger@berkeley.edu'>Sam Pottinger</a>, <a href = 'mailto: ccmartinez@berkeley.edu'>Ciera Martinez</a>, <a href = 'mailto: gzarpellon@berkeley.edu'>Giulia Zarpellon</a>, and <a href = 'mailto: kkoy@berkeley.edu'>Kevin Koy</a></td></tr>
+    <tr><td headers="url" class="gt_row gt_left"><img src="<div class='gt_from_md'><p><a href="https://www.noaa.gov/sites/default/files/2022-03/noaa_emblem_logo-2022.png">https://www.noaa.gov/sites/default/files/2022-03/noaa_emblem_logo-2022.png</a></p>
+</div>" style="height:30px;"></td>
+<td headers="Description" class="gt_row gt_left"><div class='gt_from_md'><p><a href = 'https://apps-st.fisheries.noaa.gov/dismap'>NOAA Fisheries Distribution Mapping and Analysis Portal</a></p>
+</div></td>
+<td headers="Contacts" class="gt_row gt_left"><div class='gt_from_md'><p><a href = 'https://www.fisheries.noaa.gov/contact/office-science-and-technology'>NOAA Fisheries Office of Science and Technology</a></p>
+</div></td></tr>
+    <tr><td headers="url" class="gt_row gt_left"><img src="<div class='gt_from_md'><p><a href="https://dse.berkeley.edu/sites/default/files/styles/openberkeley_image_full/public/general/dse_logostack.png">https://dse.berkeley.edu/sites/default/files/styles/openberkeley_image_full/public/general/dse_logostack.png</a></p>
+</div>" style="height:30px;"></td>
+<td headers="Description" class="gt_row gt_left"><div class='gt_from_md'><p><a href = 'https://pyafscgap.org/'>Pull data with python</a> and explore the <a href = 'https://app.pyafscgap.org/'>in-browser visualization tool</a>. Reference their <a href = 'https://mybinder.org/v2/gh/SchmidtDSE/afscgap/main?urlpath=/tree/index.ipynb'>example Python notebook</a></p>
+</div></td>
+<td headers="Contacts" class="gt_row gt_left"><div class='gt_from_md'><p><a href = 'https://dse.berkeley.edu/'>The Eric and Wendy Schmidt Center for Data Science and the Environment at UC Berkeley</a>; <a href = 'mailto: sam.pottinger@berkeley.edu'>Sam Pottinger</a>, <a href = 'mailto: ccmartinez@berkeley.edu'>Ciera Martinez</a>, <a href = 'mailto: gzarpellon@berkeley.edu'>Giulia Zarpellon</a>, and <a href = 'mailto: kkoy@berkeley.edu'>Kevin Koy</a></p>
+</div></td></tr>
   </tbody>
   
   
@@ -841,18 +812,18 @@ More information about how to amend API links can be found
 Load the first 25 rows of data
 
 ``` r
-# install.packages(c("httr", "jsonlite"))
+ # install.packages(c("httr", "jsonlite"))
 library("httr")
 library("jsonlite")
-# link to the API
+ # link to the API
 api_link <- "https://apps-st.fisheries.noaa.gov/ods/foss/afsc_groundfish_survey/"
 ```
 
 ``` r
 res <- httr::GET(url = api_link)
-# res # Test connection
+ # res # Test connection
 data <- jsonlite::fromJSON(base::rawToChar(res$content))
-# names(data)
+ # names(data)
 knitr::kable(head(data$items, 3)) 
 ```
 
@@ -927,16 +898,16 @@ If no username and password is entered in the function, pop-ups will
 appear on the screen asking for the username and password.
 
 ``` r
-#' Define RODBC connection to ORACLE
-#'
-#' @param schema default = 'AFSC'. 
-#'
-#' @return oracle channel connection
-#' @export
-#'
-#' @examples
-#' # Not run
-#' # channel <- oracle_connect()
+ #' Define RODBC connection to ORACLE
+ #'
+ #' @param schema default = 'AFSC'. 
+ #'
+ #' @return oracle channel connection
+ #' @export
+ #'
+ #' @examples
+ #' # Not run
+ #' # channel <- oracle_connect()
 oracle_connect <- function(
     schema='AFSC', 
     username = NULL, 
@@ -967,9 +938,9 @@ Once connected, pull and save (if needed) the table into the `R`
 environment.
 
 ``` r
-# Pull table from oracle into R environment
+ # Pull table from oracle into R environment
 a <- RODBC::sqlQuery(channel, "SELECT * FROM RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED")
-# Save table to local directory
+ # Save table to local directory
 write.csv(x = a, file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED.csv")
 ```
 
@@ -980,13 +951,13 @@ To pull a small subset of the data (especially since files like
 following code. Here, we are pulling EBS Pacific cod from 2010 - 2021:
 
 ``` r
-# Pull data
+ # Pull data
 a <- RODBC::sqlQuery(channel, "SELECT * FROM RACEBASE_FOSS.FOSS_CPUE_ZEROFILLED 
 WHERE SRVY = 'EBS' 
 AND COMMON_NAME = 'Pacific cod' 
 AND YEAR >= 2010 
 AND YEAR < 2021")
-# Save table to local directory
+ # Save table to local directory
 write.csv(x = a, file = "RACEBASE_FOSS-FOSS_CPUE_ZEROFILLED-ebs_pcod_2010-2020.csv")
 ```
 
@@ -1073,21 +1044,21 @@ sessionInfo()
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] colorspace_2.1-0    ellipsis_0.3.2      class_7.3-20        gitcreds_0.1.2      readtext_0.81       rprojroot_2.0.3    
-    ##  [7] snakecase_0.11.0    fs_1.6.1            rstudioapi_0.14     httpcode_0.3.0      proxy_0.4-27        farver_2.1.1       
-    ## [13] gh_1.4.0            bit64_4.0.5         fansi_1.0.4         lubridate_1.9.2     xml2_1.3.3          codetools_0.2-18   
-    ## [19] cachem_1.0.6        geojsonlint_0.4.0   BiocManager_1.30.20 compiler_4.2.2      rvcheck_0.2.1       fastmap_1.1.0      
-    ## [25] cli_3.6.0           htmltools_0.5.4     tools_4.2.2         gtable_0.3.1        glue_1.6.2          rappdirs_0.3.3     
-    ## [31] V8_4.2.2            Rcpp_1.0.10         jquerylib_0.1.4     vctrs_0.5.2         crul_1.3            lwgeom_0.2-11      
-    ## [37] xfun_0.37           timechange_0.2.0    lifecycle_1.0.3     dlstats_0.1.6       sys_3.4.1           terra_1.7-18       
-    ## [43] zoo_1.8-11          scales_1.2.1        vroom_1.6.1         hms_1.1.2           credentials_1.3.2   parallel_4.2.2     
-    ## [49] rematch2_2.1.2      httr2_0.2.2         RColorBrewer_1.1-3  gert_1.9.2          yaml_2.3.7          curl_5.0.0         
-    ## [55] gridExtra_2.3       yulab.utils_0.0.6   sass_0.4.5          stringi_1.7.12      jsonvalidate_1.3.2  highr_0.10         
-    ## [61] paletteer_1.5.0     e1071_1.7-13        intervals_0.15.2    rlang_1.0.6         pkgconfig_2.0.3     evaluate_0.20      
-    ## [67] lattice_0.20-45     fontawesome_0.5.0   bit_4.0.5           tidyselect_1.2.0    here_1.0.1          R6_2.5.1           
-    ## [73] generics_0.1.3      DBI_1.1.3           pillar_1.8.1        withr_2.5.0         units_0.8-1         xts_0.13.0         
-    ## [79] tibble_3.1.8        spacetime_1.2-8     crayon_1.5.2        KernSmooth_2.23-20  utf8_1.2.3          tzdb_0.3.0         
-    ## [85] usethis_2.1.6       grid_4.2.2          data.table_1.14.6   FNN_1.1.3.1         digest_0.6.31       openssl_2.0.5      
-    ## [91] munsell_0.5.0       bslib_0.4.2         askpass_1.1
+    ##  [7] snakecase_0.11.0    markdown_1.5        fs_1.6.1            rstudioapi_0.14     httpcode_0.3.0      proxy_0.4-27       
+    ## [13] farver_2.1.1        gh_1.4.0            bit64_4.0.5         fansi_1.0.4         lubridate_1.9.2     xml2_1.3.3         
+    ## [19] codetools_0.2-18    cachem_1.0.6        geojsonlint_0.4.0   BiocManager_1.30.20 compiler_4.2.2      rvcheck_0.2.1      
+    ## [25] fastmap_1.1.0       cli_3.6.0           htmltools_0.5.4     tools_4.2.2         gtable_0.3.1        glue_1.6.2         
+    ## [31] rappdirs_0.3.3      V8_4.2.2            Rcpp_1.0.10         jquerylib_0.1.4     vctrs_0.5.2         crul_1.3           
+    ## [37] lwgeom_0.2-11       xfun_0.37           timechange_0.2.0    lifecycle_1.0.3     dlstats_0.1.6       sys_3.4.1          
+    ## [43] terra_1.7-18        zoo_1.8-11          scales_1.2.1        vroom_1.6.1         hms_1.1.2           credentials_1.3.2  
+    ## [49] parallel_4.2.2      rematch2_2.1.2      httr2_0.2.2         RColorBrewer_1.1-3  gert_1.9.2          yaml_2.3.7         
+    ## [55] curl_5.0.0          gridExtra_2.3       yulab.utils_0.0.6   sass_0.4.5          stringi_1.7.12      jsonvalidate_1.3.2 
+    ## [61] highr_0.10          paletteer_1.5.0     e1071_1.7-13        commonmark_1.8.1    intervals_0.15.2    rlang_1.0.6        
+    ## [67] pkgconfig_2.0.3     evaluate_0.20       lattice_0.20-45     fontawesome_0.5.0   bit_4.0.5           tidyselect_1.2.0   
+    ## [73] here_1.0.1          R6_2.5.1            generics_0.1.3      DBI_1.1.3           pillar_1.8.1        withr_2.5.0        
+    ## [79] units_0.8-1         xts_0.13.0          tibble_3.1.8        spacetime_1.2-8     crayon_1.5.2        KernSmooth_2.23-20 
+    ## [85] utf8_1.2.3          tzdb_0.3.0          usethis_2.1.6       grid_4.2.2          data.table_1.14.6   FNN_1.1.3.1        
+    ## [91] digest_0.6.31       openssl_2.0.5       munsell_0.5.0       bslib_0.4.2         askpass_1.1
 
 ## NOAA README
 
