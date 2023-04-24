@@ -46,7 +46,7 @@ source('./code/calc_cpue.R')
 # Update README ----------------------------------------------------------------
 
 source('./code/functions.R')
-dir_out <- paste0(getwd(), "/output/2023-04-10/")
+dir_out <- paste0(getwd(), "/output/2023-04-24/")
 
 load(paste0(dir_out, "FOSS_CPUE_PRESONLY.RData"))
 load(paste0(dir_out, "FOSS_CPUE_JOIN.RData"))

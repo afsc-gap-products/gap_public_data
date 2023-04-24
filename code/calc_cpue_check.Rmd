@@ -1,0 +1,57 @@
+---
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Check data outputs
+
+Make sure that future version of this data in this script do not change the number of rows
+
+```{r}
+dim(FOSS_CPUE_ZEROFILLED)
+```
+
+Make sure that there are no NAs in columns that should be 0-filled
+
+```{r}
+# The only columns with NAs should be: 
+# end_latitude   end_longitude gear_temperature  surface_temperature net_height   worms   itis
+summary(FOSS_CPUE_ZEROFILLED %>% 
+          dplyr::mutate(SRVY = factor(SRVY), TAXON_CONFIDENCE = factor(TAXON_CONFIDENCE)))
+```
+
+Are all of the surveys for all of the years in the data?
+
+```{r}
+table(FOSS_CPUE_ZEROFILLED$SRVY, FOSS_CPUE_ZEROFILLED$CRUISE)
+```
+
+```{r}
+dim(JOIN_FOSS_CPUE_HAUL)
+# [1] 31608    24 # 2023-01-21
+# [1] 31608    25 # 2023-02-12 - column change ok bc moved SRVY from catch
+```
+
+
+```{r}
+dim(JOIN_FOSS_CPUE_CATCH)
+# [1] 36317744       13 # 2023-01-21
+# [1] 36342299       13 # 2023-02-12
+```
+
+Are all of the columns represented in these two join tables?
+
+```{r}
+setdiff(names(FOSS_CPUE_ZEROFILLED), unique(c(names(JOIN_FOSS_CPUE_HAUL), names(JOIN_FOSS_CPUE_CATCH))))
+# character(0) 
+```
+
+
+```{r}
+check <- dplyr::right_join(x = JOIN_FOSS_CPUE_HAUL,
+                          y = JOIN_FOSS_CPUE_CATCH,
+                          by = c("HAULJOIN"))
+```
