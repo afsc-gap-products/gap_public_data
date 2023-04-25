@@ -81,6 +81,18 @@ cat(readLines(con = here::here("CITATION.bib")), sep = "\n")
  # NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss, Accessed mm/dd/yyyy
 ```
 
+
+# Access the data
+
+Here are a few resources made by our scientists in house and keen contributors:
+
+ - [General information](https://afsc-gap-products.github.io/gap_public_data/)
+ - [Access data via the FOSS Interactive Platform](https://afsc-gap-products.github.io/gap_public_data/access-foss.html)
+ - [Access data via the API in R](https://afsc-gap-products.github.io/gap_public_data/access-api-r.html)
+ - [Access data via the API in Python](https://afsc-gap-products.github.io/gap_public_data/access-api-py.html); by Sam Pottinger (sam.pottinger@berkeley.edu)
+ - [Access data via the AFSC Oracle Database (AFSC only)](https://afsc-gap-products.github.io/gap_public_data/access-afsc-oracle-r.html)
+
+
 # Collabrators and data users
 
 Below are a few packages and products currently using this data. If you have developed a product, performed an analysis, or exhibited this data in any way, reach out so we can showcase your hard work. 
@@ -134,22 +146,6 @@ df
 
 `r str0`
 
-# Metadata
-
-## Data description (short)
-
-`r readLines(con = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_metadata_table.txt")) `
-
-## Data description (long)
-
-The Resource Assessment and Conservation Engineering Division (RACE) Groundfish Assessment Program (GAP) of the Alaska Fisheries Science Center (AFSC) conducts fisheries-independent bottom trawl surveys to monitor the condition of the demersal fish and crab stocks of Alaska. These data are developed to describe the temporal distribution and abundance of commercially and ecologically important groundfish species, examine the changes in the species composition of the fauna over time and space, and describe the physical environment of the groundfish habitat.
-
-There are no legal restrictions on access to the data. They reside in the public domain and can be freely distributed. Users must read and fully comprehend the metadata prior to use. Data should not be used beyond the limits of the source scale. Acknowledgement of NOAA, as the source from which these data were obtained, in any publications and/or other representations of these data, is suggested. These data are compiled and approved annually after each summer survey season. The data from previous years are unlikely to change substantially once published.
-
-These data are zero-filled (presence and absence) observations from surveys conducted on fishing vessels. These surveys monitor trends in distribution and abundance of groundfish, crab, and bottom-dwelling species in Alaska’s marine ecosystems. These data include estimates of catch-per-unit-effort (CPUE) for all identified species for index stations. Some survey data are excluded, such as non-standard stations, surveys completed in earlier years using different/non-standard gear, and special tows and non-standard data collections.
-
-Though not included in the public data, these surveys also collect oceanographic and environmental data, and biological data such as length, weight, stomach contents (to learn more about diet), otoliths (fish ear bones to learn about age), and tissue samples for genetic analysis, all of which can be shared upon special request. Also not included in the public data are estimated biomass (average total weight of all fish and crabs sampled) of crabs and groundfish that support the creation of annual stock assessments.
-
 ## Bottom trawl surveys and regions
 
 ```{r survey-map, echo=FALSE, results='asis'}
@@ -189,15 +185,15 @@ gg <- ggplot() +
                    color = "transparent") + 
   ggplot2::geom_sf(data = shp_nbs$graticule,
                    color = "grey90", 
-                   size = 1, 
+                   size = 0.5, 
                    alpha = 0.5) +
   ggplot2::geom_sf(data = shp_ai$graticule,
                    color = "grey90",
-                   size = 1, 
+                   size = 0.5, 
                    alpha = 0.5) +
   ggplot2::geom_sf(data = shp_goa$graticule,
                    color = "grey90",
-                   size = 1, 
+                   size = 0.5, 
                    alpha = 0.5) +
   ggplot2::scale_x_continuous(name = "Longitude",
                               breaks = c(-180, -170, -160, -150, -140)) + # shp_bss$lon.breaks) +
@@ -254,6 +250,24 @@ ggsave(filename = "survey_plot.png",
   - Biennial/Annual
   - Fixed stations at center of 20 x 20 nm grid
 
+
+# Metadata
+
+## Data description (short)
+
+`r readLines(con = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_metadata_table.txt")) `
+
+## Data description (long)
+
+The Resource Assessment and Conservation Engineering Division (RACE) Groundfish Assessment Program (GAP) of the Alaska Fisheries Science Center (AFSC) conducts fisheries-independent bottom trawl surveys to monitor the condition of the demersal fish and crab stocks of Alaska. These data are developed to describe the temporal distribution and abundance of commercially and ecologically important groundfish species, examine the changes in the species composition of the fauna over time and space, and describe the physical environment of the groundfish habitat.
+
+There are no legal restrictions on access to the data. They reside in the public domain and can be freely distributed. Users must read and fully comprehend the metadata prior to use. Data should not be used beyond the limits of the source scale. Acknowledgement of NOAA, as the source from which these data were obtained, in any publications and/or other representations of these data, is suggested. These data are compiled and approved annually after each summer survey season. The data from previous years are unlikely to change substantially once published.
+
+These data are zero-filled (presence and absence) observations from surveys conducted on fishing vessels. These surveys monitor trends in distribution and abundance of groundfish, crab, and bottom-dwelling species in Alaska’s marine ecosystems. These data include estimates of catch-per-unit-effort (CPUE) for all identified species for index stations. Some survey data are excluded, such as non-standard stations, surveys completed in earlier years using different/non-standard gear, and special tows and non-standard data collections.
+
+Though not included in the public data, these surveys also collect oceanographic and environmental data, and biological data such as length, weight, stomach contents (to learn more about diet), otoliths (fish ear bones to learn about age), and tissue samples for genetic analysis, all of which can be shared upon special request. Also not included in the public data are estimated biomass (average total weight of all fish and crabs sampled) of crabs and groundfish that support the creation of annual stock assessments.
+
+
 ## Relevant technical memorandums
 
 <div id="refs"></div>
@@ -300,14 +314,4 @@ metadata_column %>%
     "Description" = metadata_colname_desc) %>%
   knitr::kable(x = ., row.names = FALSE) 
 ```
-
-# Access the data
-
-Here are a few resources made by our scientists in house and keen contributors:
-
- - [General information](https://afsc-gap-products.github.io/gap_public_data/)
- - [Access data via the FOSS Interactive Platform](https://afsc-gap-products.github.io/gap_public_data/access-foss.html)
- - [Access data via the API in R](https://afsc-gap-products.github.io/gap_public_data/access-api-r.html)
- - [Access data via the API in Python](https://afsc-gap-products.github.io/gap_public_data/access-api-py.html)
- - [Access data via the AFSC Oracle Database (AFSC only)](https://afsc-gap-products.github.io/gap_public_data/access-afsc-oracle-r.html)
 

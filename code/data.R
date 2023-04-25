@@ -70,18 +70,6 @@ taxon_confidence0 <- gap_products_old_taxon_confidence0 %>%
 # > sum(duplicated(gap_products_old_v_taxonomics0$species_code))
 # [1] 0
 
-## Taxon data ------------------------------------------------------------------
-
-locations <- c("gap_products_old_taxonomics_itis", 
-               "gap_products_old_taxonomics_worms")
-
-for (i in 1:length(locations)) {
-  file.copy(
-    from = paste0(dir_data, "oracle/", locations[i], ".csv"),
-    to = paste0(dir_out, toupper(gsub(pattern = "gap_products_old_", replacement = "", x = locations[i], fixed = TRUE)), ".csv"), 
-    overwrite = TRUE)
-}
-
 ## cruises ---------------------------------------------------------------------
 cruises <-  
   dplyr::left_join(

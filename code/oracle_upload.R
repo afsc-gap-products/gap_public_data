@@ -29,20 +29,18 @@ for (i in 1:length(locations)){
 file_paths <- data.frame(
   file_path = 
     paste0(dir_out,
-           c("taxon_search_groups", 
+           c("TAXON_GROUPS", 
+             "FOSS_CPUE_PRESONLY",
              "JOIN_FOSS_CPUE_HAUL",
              "JOIN_FOSS_CPUE_CATCH",
-             "FOSS_CPUE_ZEROFILLED", 
-             "TAXONOMICS_ITIS", 
-             "TAXONOMICS_WORMS"),
+             "FOSS_CPUE_ZEROFILLED"),
            ".csv"), 
-  "table_metadata" = c(
-    paste(readLines(con = paste0(dir_out, "taxon_search_groups_metadata_table.txt")), collapse="\n"),
+  "metadata_table" = c(
+    paste(readLines(con = paste0(dir_out, "TAXON_GROUPS_metadata_table.txt")), collapse="\n"),
+    paste(readLines(con = paste0(dir_out, "FOSS_CPUE_PRESONLY_metadata_table.txt")), collapse="\n"),
     paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_metadata_table.txt")), collapse="\n"),
     paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_metadata_table.txt")), collapse="\n"),
-    paste(readLines(con = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_metadata_table.txt")), collapse="\n"),
-    paste0("DUPLICATE, added to schema on ", Sys.Date(), ". "),
-    paste0("DUPLICATE, added to schema on ", Sys.Date(), ". ") 
+    paste(readLines(con = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_metadata_table.txt")), collapse="\n")
   ) 
 )
 
