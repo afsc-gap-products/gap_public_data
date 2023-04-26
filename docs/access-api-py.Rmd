@@ -17,8 +17,97 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, message = FAL
 
 > [Return to main page](https://afsc-gap-products.github.io/gap_public_data/)
 
+### Overview and installation
+The third-party `afscgap` Python package interfaces with FOSS to access AFSC GAP data. It can be installed via pip:
 
-Content coming!
+```
+pip install afscgap
+```
+
+For more information on installation and deployment, see the [project website](https://pyafscgap.org).
+
+### Basic query
+This first example queries for Pacific cod (*Pasiphaea pacifica*) in the Gulf of Alaska in 2021. The library will automatically generate HTTP queries, converting from Python types to [ORDS](https://www.oracle.com/database/technologies/appdev/rest.html) query syntax.
+
+```
+import afscgap
+
+query = afscgap.Query()
+query.filter_year(eq=2021)
+query.filter_srvy(eq='GOA')
+query.filter_scientific_name(eq='Pasiphaea pacifica')
+
+results = query.execute()
+```
+
+The `results` variable in this example is an iterator that will automatically perform pagination behind the scenes.
+
+### Iterating with a for loop
+The easiest way to interact with results is a simple for loop. This next example determines the frequency of different catch per unit effort where the species was reported:
+
+```
+import afscgap
+
+# Mapping from CPUE to count
+count_by_cpue = {}
+
+# Build query
+query = afscgap.Query()
+query.filter_year(eq=2021)
+query.filter_srvy(eq='GOA')
+query.filter_scientific_name(eq='Pasiphaea pacifica')
+results = query.execute()
+
+# Iterate through results and count
+for record in results:
+  cpue = record.get_cpue_weight(units='kg/ha')
+  cpue_rounded = round(cpue, 1)
+  count = count_by_cpue.get(cpue_rounded, 0) + 1
+  count_by_cpue[cpue_rounded] = count
+
+# Print the result
+print(count_by_cpue)
+```
+
+Note that [different units are available](https://pyafscgap.org/devdocs/afscgap.html#data-structure) and can be passed to `get_cpue_weight`. Note that, in this example, only records with Pacific cod reported are included. See zero catch inference below.
+
+### Iterating with functional programming
+A for loop is not the only option. List comprehensions and other functional programming methods can be used on results as well.
+
+```
+import statistics
+
+import afscgap
+
+# Build query
+query = afscgap.Query()
+query.filter_year(eq=2021)
+query.filter_srvy(eq='GOA')
+query.filter_scientific_name(eq='Pasiphaea pacifica')
+results = query.execute()
+
+# Get temperatures in Celsius
+temperatures = [record.get_bottom_temperature(units='c') for record in results]
+
+# Take the median
+print(statistics.median(temperatures))
+```
+
+This example reports the median temperature in Celcius for when Pacific cod was reported.
+
+### Load into Pandas
+The results from the `afscgap` package are serializable and can be loaded into other tools like Pandas.
+
+This example
+
+### Range filtering
+
+### ORDS filtering
+
+### Zero-catch inference
+So far, these examples use presence-only data. However, the `afscgap` package can infer negative or "zero catch" records as well.
+
+### More information
 
 ```{r child-footer, child=here::here("docs","footer.Rmd")}
 ```
