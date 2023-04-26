@@ -61,7 +61,7 @@ results = query.execute()
 # Iterate through results and count
 for record in results:
   cpue = record.get_cpue_weight(units='kg/ha')
-  cpue_rounded = round(cpue, 1)
+  cpue_rounded = round(cpue)
   count = count_by_cpue.get(cpue_rounded, 0) + 1
   count_by_cpue[cpue_rounded] = count
 
@@ -155,7 +155,7 @@ results = query.execute()
 # Iterate through results and count
 for record in results:
   cpue = record.get_cpue_weight(units='kg/ha')
-  cpue_rounded = round(cpue, 1)
+  cpue_rounded = round(cpue)
   count = count_by_cpue.get(cpue_rounded, 0) + 1
   count_by_cpue[cpue_rounded] = count
 
@@ -163,7 +163,15 @@ for record in results:
 print(count_by_cpue)
 ```
 
-This example revisits the earlier example but `set_presence_only(False)` directs the library to look at data on hauls to determine which hauls did not have Pacific cod. This lets the library return records for hauls in which Pacific cod were not found. Therefore, while the earlier example showed CPUE counts for hauls in which Pacific cod were seen, this revised example reports for all hauls in the Gulf of Alaska in 2021.
+This example revisits the earlier example but `set_presence_only(False)` directs the library to look at data on hauls to determine which hauls did not have Pacific cod. This lets the library return records for hauls in which Pacific cod were not found. This can be seen in differences in counts reported:
+
+| Rounded CPUE | Count with set_presence_only(True) | Count with set_presence_only(False) |
+|--------------|------------------------------------|-------------------------------------|
+| 0 kg/ha      | 44                                 | 521                                 |
+| 1 kg/ha      | 7                                  | 7                                   |
+| 2 kg/ha      | 1                                  | 1                                   |
+
+Put simply, while the earlier example showed CPUE counts for hauls in which Pacific cod were seen, this revised example reports for all hauls in the Gulf of Alaska in 2021.
 
 ### More information
 Please see the [API documentation](https://pyafscgap.org/devdocs/afscgap.html) for the Python library for additional details.
