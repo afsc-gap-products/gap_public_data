@@ -17,14 +17,14 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, message = FAL
 
 > [Return to main page](https://afsc-gap-products.github.io/gap_public_data/)
 
-### Overview and installation
+### Installation
 The third-party `afscgap` Python package interfaces with FOSS to access AFSC GAP data. It can be installed via pip:
 
 ```
 pip install afscgap
 ```
 
-For more information on installation and deployment, see the [project website](https://pyafscgap.org).
+For more information on installation and deployment, see the [library documentation](https://pyafscgap.org).
 
 ### Basic query
 This first example queries for Pacific cod (*Pasiphaea pacifica*) in the Gulf of Alaska in 2021. The library will automatically generate HTTP queries, converting from Python types to [ORDS](https://www.oracle.com/database/technologies/appdev/rest.html) query syntax.
@@ -43,7 +43,7 @@ results = query.execute()
 The `results` variable in this example is an iterator that will automatically perform pagination behind the scenes.
 
 ### Iterating with a for loop
-The easiest way to interact with results is a simple for loop. This next example determines the frequency of different catch per unit effort where the species was reported:
+The easiest way to interact with results is a simple for loop. This next example determines the frequency of different catch per unit effort where Pacific cod were reported:
 
 ```
 import afscgap
@@ -69,10 +69,10 @@ for record in results:
 print(count_by_cpue)
 ```
 
-Note that [different units are available](https://pyafscgap.org/devdocs/afscgap.html#data-structure) and can be passed to `get_cpue_weight`. Also, in this example, only records with Pacific cod reported are included ("presence-only" data). See zero catch inference below. In other words, it reports on CPUE only for hauls in which Pacific cod were recorded, excluding some hauls like those in which Pacific cod were not found at all.
+Note that, in this example, only records with Pacific cod are included ("presence-only" data). See zero catch inference below. In other words, it reports on CPUE only for hauls in which Pacific cod were recorded, excluding some hauls like those in which Pacific cod were not found at all.
 
 ### Iterating with functional programming
-A for loop is not the only option. List comprehensions and other functional programming methods can be used on results as well.
+A for loop is not the only option for iterating through results. List comprehensions and other functional programming methods can be used \as well.
 
 ```
 import statistics
@@ -96,7 +96,7 @@ print(statistics.median(temperatures))
 This example reports the median temperature in Celcius for when Pacific cod was reported.
 
 ### Load into Pandas
-The results from the `afscgap` package are serializable and can be loaded into other tools like [Pandas](https://pandas.pydata.org/). This example will load Pacific cod from 2021 Gulf of Alaska into a data frame.
+The results from the `afscgap` package are serializable and can be loaded into other tools like [Pandas](https://pandas.pydata.org/). This example loads Pacific cod from 2021 Gulf of Alaska into a data frame.
 
 ```
 import pandas
@@ -163,7 +163,7 @@ for record in results:
 print(count_by_cpue)
 ```
 
-This example revisits the earlier example but `set_presence_only(False)` directs the library to look at data on hauls to determine which hauls did not have Pacific cod. This lets the library return records for hauls in which Pacific cod were not found. This can be seen in differences in counts reported:
+This example revisits the earlier snippet for CPUE counts but `set_presence_only(False)` directs the library to look at additional data on hauls, determining which hauls did not have Pacific cod. This lets the library return records for hauls in which Pacific cod were not found. This can be seen in differences in counts reported:
 
 | Rounded CPUE | Count with set_presence_only(True) | Count with set_presence_only(False) |
 |--------------|------------------------------------|-------------------------------------|
