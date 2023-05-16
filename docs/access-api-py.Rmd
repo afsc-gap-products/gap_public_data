@@ -1,5 +1,7 @@
 ---
 title: 'Access public data using the API and Python'
+author: Sam Pottinger (sam.pottinger@berkeley.edu; GitHub::sampottinger)
+date: May 13, 2023
 output: 
   html_document:
     toc: true
@@ -12,24 +14,27 @@ bibliography: "https://raw.githubusercontent.com/afsc-gap-products/citations/mai
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, message = FALSE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, message = FALSE, eval = FALSE)
+library(reticulate)
 ```
 
 > [Return to main page](https://afsc-gap-products.github.io/gap_public_data/)
 
 ### Installation
+
 The third-party `afscgap` Python package interfaces with FOSS to access AFSC GAP data. It can be installed via pip:
 
-```
+```{python install-afscgap}
 pip install afscgap
 ```
 
 For more information on installation and deployment, see the [library documentation](https://pyafscgap.org).
 
 ### Basic query
-This first example queries for Pacific cod (*Pasiphaea pacifica*) in the Gulf of Alaska in 2021. The library will automatically generate HTTP queries, converting from Python types to [ORDS](https://www.oracle.com/database/technologies/appdev/rest.html) query syntax.
 
-```
+This first example queries for Pacific glass shrimp (*Pasiphaea pacifica*) in the Gulf of Alaska in 2021. The library will automatically generate HTTP queries, converting from Python types to [ORDS](https://www.oracle.com/database/technologies/appdev/rest.html) query syntax.
+
+```{python query1}
 import afscgap
 
 query = afscgap.Query()
@@ -43,9 +48,10 @@ results = query.execute()
 The `results` variable in this example is an iterator that will automatically perform pagination behind the scenes.
 
 ### Iterating with a for loop
-The easiest way to interact with results is a simple for loop. This next example determines the frequency of different catch per unit effort where Pacific cod were reported:
 
-```
+The easiest way to interact with results is a simple for loop. This next example determines the frequency of different catch per unit effort where Pacific glass shrimp were reported:
+
+```{python query2}
 import afscgap
 
 # Mapping from CPUE to count
@@ -69,12 +75,13 @@ for record in results:
 print(count_by_cpue)
 ```
 
-Note that, in this example, only records with Pacific cod are included ("presence-only" data). See zero catch inference below. In other words, it reports on CPUE only for hauls in which Pacific cod were recorded, excluding some hauls like those in which Pacific cod were not found at all.
+Note that, in this example, only records with Pacific glass shrimp are included ("presence-only" data). See zero catch inference below. In other words, it reports on CPUE only for hauls in which Pacific glass shrimp were recorded, excluding some hauls like those in which Pacific glass shrimp were not found at all.
 
 ### Iterating with functional programming
+
 A for loop is not the only option for iterating through results. List comprehensions and other functional programming methods can be used \as well.
 
-```
+```{python query3}
 import statistics
 
 import afscgap
@@ -93,12 +100,13 @@ temperatures = [record.get_bottom_temperature(units='c') for record in results]
 print(statistics.median(temperatures))
 ```
 
-This example reports the median temperature in Celcius for when Pacific cod was reported.
+This example reports the median temperature in Celcius for when Pacific glass shrimp was reported.
 
 ### Load into Pandas
-The results from the `afscgap` package are serializable and can be loaded into other tools like [Pandas](https://pandas.pydata.org/). This example loads Pacific cod from 2021 Gulf of Alaska into a data frame.
 
-```
+The results from the `afscgap` package are serializable and can be loaded into other tools like [Pandas](https://pandas.pydata.org/). This example loads Pacific glass shrimp from 2021 Gulf of Alaska into a data frame.
+
+```{python query4}
 import pandas
 
 import afscgap
@@ -115,9 +123,10 @@ pandas.DataFrame(results.to_dicts())
 Specifically, `to_dicts` provides an iterator over a dictionary form of the data that can be read into tools like Pandas.
 
 ### Advanced filtering
+
 Queries so far have focused on filters requiring equality but range queries can be built as well.
 
-```
+```{python query5}
 import afscgap
 
 # Build query
@@ -133,12 +142,13 @@ total_weight = sum(weights)
 print(total_weight)
 ```
 
-This example queries for Pacific cod data between 2015 and 2019, summing the total weight caught. Note that most users will likely take advantage of built-in Python to [ORDS](https://www.oracle.com/database/technologies/appdev/rest.html) query generation which dictates how the library communicates with the API service. However, users can provide raw ORDS queries as well using [manual filtering](https://pyafscgap.org/devdocs/afscgap.html#manual-filtering).
+This example queries for Pacific glass shrimp data between 2015 and 2019, summing the total weight caught. Note that most users will likely take advantage of built-in Python to [ORDS](https://www.oracle.com/database/technologies/appdev/rest.html) query generation which dictates how the library communicates with the API service. However, users can provide raw ORDS queries as well using [manual filtering](https://pyafscgap.org/devdocs/afscgap.html#manual-filtering).
 
 ### Zero-catch inference
+
 Until this point, these examples use presence-only data. However, the `afscgap` package can infer negative or "zero catch" records as well.
 
-```
+```{python query6}
 import afscgap
 
 # Mapping from CPUE to count
@@ -163,7 +173,7 @@ for record in results:
 print(count_by_cpue)
 ```
 
-This example revisits the earlier snippet for CPUE counts but `set_presence_only(False)` directs the library to look at additional data on hauls, determining which hauls did not have Pacific cod. This lets the library return records for hauls in which Pacific cod were not found. This can be seen in differences in counts reported:
+This example revisits the earlier snippet for CPUE counts but `set_presence_only(False)` directs the library to look at additional data on hauls, determining which hauls did not have Pacific glass shrimp. This lets the library return records for hauls in which Pacific glass shrimp were not found. This can be seen in differences in counts reported:
 
 | Rounded CPUE | Count with set_presence_only(True) | Count with set_presence_only(False) |
 |--------------|------------------------------------|-------------------------------------|
@@ -171,9 +181,10 @@ This example revisits the earlier snippet for CPUE counts but `set_presence_only
 | 1 kg/ha      | 7                                  | 7                                   |
 | 2 kg/ha      | 1                                  | 1                                   |
 
-Put simply, while the earlier example showed CPUE counts for hauls in which Pacific cod were seen, this revised example reports for all hauls in the Gulf of Alaska in 2021.
+Put simply, while the earlier example showed CPUE counts for hauls in which Pacific glass shrimp were seen, this revised example reports for all hauls in the Gulf of Alaska in 2021.
 
 ### More information
+
 Please see the [API documentation](https://pyafscgap.org/devdocs/afscgap.html) for the Python library for additional details.
 
 ```{r child-footer, child=here::here("docs","footer.Rmd")}

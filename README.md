@@ -16,13 +16,19 @@ Seattle, WA 98195
 
 [![](https://img.shields.io/github/last-commit/afsc-gap-products/gap_public_data.svg)](https://github.com/afsc-gap-products/gap_public_data/commits/main)
 
+``` r
+date0 <- strsplit(x = dir_out, split = '/', fixed = TRUE)[[1]]
+date0 <- date0[length(date0)]
+date0 <- format(x = as.Date(date0), "%B %d, %Y")
+```
+
 > The code in this repository is regularly being updated and improved.
 > Please refer to
 > [releases](https://github.com/afsc-gap-products/gap_public_data//releases)
 > for finalized products and project milestones. *The FOSS dataset is
 > only updated once a year and may be slightly behind the GitHub
 > repository.* This metadata is regarding scripts and data last ran and
-> pushed to the AFSC oracle on **April 24, 2023**.
+> pushed to the AFSC oracle on **May 15, 2023**.
 
 ## Table of contents
 
@@ -51,12 +57,12 @@ Fisheries Science Center, 2023). Add “note = {Accessed: mm/dd/yyyy}” to
 append the day this data was accessed.
 
     ## @misc{FOSSAFSCData,
-    ##    author = {{NOAA Fisheries Alaska Fisheries Science Center}},
-    ##    year = {2023}, 
-    ##    title = {Fisheries One Stop Shop Public Data: RACE Division Bottom Trawl Survey Data Query},
-    ##    howpublished = {https://www.fisheries.noaa.gov/foss},
-    ##    publisher = {{U.S. Dep. Commer.}},
-    ##    copyright = {Public Domain} 
+    ##   author = {{NOAA Fisheries Alaska Fisheries Science Center}},
+    ##   year = {2023}, 
+    ##   title = {Fisheries One Stop Shop Public Data: RACE Division Bottom Trawl Survey Data Query},
+    ##   howpublished = {https://www.fisheries.noaa.gov/foss},
+    ##   publisher = {{U.S. Dep. Commer.}},
+    ##   copyright = {Public Domain} 
     ## }
 
 # Access the data
@@ -70,8 +76,8 @@ contributors:
   Platform](https://afsc-gap-products.github.io/gap_public_data/access-foss.html)
 - [Access data via the API in
   R](https://afsc-gap-products.github.io/gap_public_data/access-api-r.html)
-- [Access data via the API in
-  Python](https://afsc-gap-products.github.io/gap_public_data/access-api-py.html);
+- [Access data via the API in Python with the {afscgap}
+  library](https://afsc-gap-products.github.io/gap_public_data/access-api-py.html);
   by Sam Pottinger (<sam.pottinger@berkeley.edu>)
 - [Access data via the AFSC Oracle Database (AFSC
   only)](https://afsc-gap-products.github.io/gap_public_data/access-afsc-oracle-r.html)
@@ -98,7 +104,7 @@ at UC Berkeley](https://dse.berkeley.edu/), including
 
 ## Bottom trawl surveys and regions
 
-![](Z:/Projects/gap_public_data/img/survey_plot.png)
+![](C:/Users/emily.markowitz/Work/projects/gap_public_data/img/survey_plot.png)
 
 - **Aleutian Islands (AI)** (Von Szalay and Raring, 2020)
   - Triennial (1990s)/Biennial since 2000 in even years
@@ -135,7 +141,7 @@ scripts that created this code can be found at
 information about codes used in the tables, please refer to the survey
 code books
 (<https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual>).
-These data were last updated April 24, 2023.
+These data were last updated May 15, 2023.
 
 ## Data description (long)
 
@@ -213,7 +219,7 @@ https://www.fisheries.noaa.gov/foss; U.S. Dep. Commer.
 
 Resource Assessment, A. F. S. C. (U.S.)., and Division, C. E. (2021).
 *Groundfish survey data codes and forms*.
-https://doi.org/<https://doi.org/10.25923/kp5e-1g02>
+<https://doi.org/10.25923/kp5e-1g02>
 
 </div>
 
@@ -231,7 +237,7 @@ https://doi.org/[http://doi.org/10.7289/V5/TM-AFSC-374
 
 Von Szalay, P. G., and Raring, N. W. (2020). *Data report: 2018 Aleutian
 Islands bottom trawl survey* (NOAA Tech. Memo. NMFS-AFSC-409). U.S. Dep.
-Commer. https://doi.org/<https://doi.org/10.25923/qe5v-fz70>
+Commer. <https://doi.org/10.25923/qe5v-fz70>
 
 </div>
 
@@ -325,5 +331,5 @@ please contact us using the Comments page on the
 | net_width_m           | Net Width (m)                                            | meters                           | Measured or estimated distance (meters) between wingtips of the trawl.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | net_height_m          | Net Height (m)                                           | meters                           | Measured or estimated distance (meters) between footrope and headrope of the trawl.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | area_swept_km2        | Area Swept (km)                                          | kilometers                       | The area the net covered while the net was fishing (kilometers squared), defined as the distance fished times the net width.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| duration_hr           | Tow Duration (decimal hr)                                | hours, tenths resolution         | This is the elapsed time between start and end of a haul (decimal hours).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| duration_hr           | Tow Duration (decimal hr)                                | hours                            | This is the elapsed time between start and end of a haul (decimal hours).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | performance           | Haul Performance Code                                    | category                         | This denotes what, if any, issues arose during the haul. For more information, review the [code books](https://www.fisheries.noaa.gov/resource/document/groundfish-survey-species-code-manual-and-data-codes-manual).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |

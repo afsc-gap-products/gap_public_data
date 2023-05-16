@@ -49,8 +49,13 @@ cat(
   badge_last_commit("afsc-gap-products/gap_public_data")
 )
 ```
+```{r}
+date0 <- strsplit(x = dir_out, split = '/', fixed = TRUE)[[1]]
+date0 <- date0[length(date0)]
+date0 <- format(x = as.Date(date0), "%B %d, %Y")
+```
 
-> The code in this repository is regularly being updated and improved. Please refer to [releases](`r paste0(link_repo, "/releases")`) for finalized products and project milestones. *The FOSS dataset is only updated once a year and may be slightly behind the GitHub repository.* This metadata is regarding scripts and data last ran and pushed to the AFSC oracle on **`r format(x = as.Date(strsplit(x = dir_out, split = "/", fixed = TRUE)[[1]][5]), "%B %d, %Y")`**. 
+> The code in this repository is regularly being updated and improved. Please refer to [releases](`r paste0(link_repo, '/releases')`) for finalized products and project milestones. *The FOSS dataset is only updated once a year and may be slightly behind the GitHub repository.* This metadata is regarding scripts and data last ran and pushed to the AFSC oracle on **`r date0`**. 
 
 `r ifelse(tocTF, "## Table of contents", "")`
 
@@ -89,7 +94,7 @@ Here are a few resources made by our scientists in house and keen contributors:
  - [General information](https://afsc-gap-products.github.io/gap_public_data/)
  - [Access data via the FOSS Interactive Platform](https://afsc-gap-products.github.io/gap_public_data/access-foss.html)
  - [Access data via the API in R](https://afsc-gap-products.github.io/gap_public_data/access-api-r.html)
- - [Access data via the API in Python](https://afsc-gap-products.github.io/gap_public_data/access-api-py.html); by Sam Pottinger (sam.pottinger@berkeley.edu)
+ - [Access data via the API in Python with the {afscgap} library](https://afsc-gap-products.github.io/gap_public_data/access-api-py.html); by Sam Pottinger (sam.pottinger@berkeley.edu)
  - [Access data via the AFSC Oracle Database (AFSC only)](https://afsc-gap-products.github.io/gap_public_data/access-afsc-oracle-r.html)
 
 

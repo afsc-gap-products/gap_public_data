@@ -35,18 +35,17 @@ source('./code/data.R')
 
 source('./code/calc_cpue.R')
 
-# Check work -------------------------------------------------------------------
+# Check report -----------------------------------------------------------------
 
-# source('./code/data_dl_check.R')
-# dir.create(path = paste0(dir_out, "/check/"))
-# rmarkdown::render(paste0("./code/check.Rmd"),
-#                   output_dir = dir_out,
-#                   output_file = paste0("./check/check.docx"))
+rmarkdown::render(input = here::here("code", "calc_cpue_check.rmd"),
+                  output_dir = dir_out, 
+                  output_format = 'pdf_document', 
+                  output_file = "calc_cpue_check.pdf")
 
 # Update README ----------------------------------------------------------------
 
 source('./code/functions.R')
-dir_out <- paste0(getwd(), "/output/2023-04-24/")
+dir_out <- paste0(getwd(), "/output/2023-05-15/")
 
 load(paste0(dir_out, "FOSS_CPUE_PRESONLY.RData"))
 load(paste0(dir_out, "FOSS_CPUE_JOIN.RData"))
@@ -86,4 +85,4 @@ rmarkdown::render(input = "./docs/README.Rmd",
 
 # Share table to oracle --------------------------------------------------------
 
-source("./code/oracle_upload.R") 
+source("./code/oracle_upload.R")

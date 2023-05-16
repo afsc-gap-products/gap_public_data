@@ -195,6 +195,7 @@ base::save(
   file = paste0(dir_out, "FOSS_CPUE_JOIN.RData"))
 
 ## Zero filled full table ------------------------------------------------------
+
 metadata_table <- paste(
   "This dataset includes zero-filled (presence and absence) observations and
 catch-per-unit-effort (CPUE) estimates for all identified species at for index stations ", 
@@ -297,9 +298,3 @@ readr::write_csv(
   file = paste0(dir_out, "TAXON_GROUPS.csv"), 
   col_names = TRUE)
 
-# Check report -----------------------------------------------------------------
-
-rmarkdown::render(input = here::here("code", "calc_cpue_check.rmd"),
-                  output_dir = dir_out, 
-                  output_format = 'pdf_document', 
-                  output_file = "calc_cpue_check.pdf")

@@ -33,7 +33,8 @@ file_paths <- data.frame(
              "FOSS_CPUE_PRESONLY",
              "JOIN_FOSS_CPUE_HAUL",
              "JOIN_FOSS_CPUE_CATCH",
-             "FOSS_CPUE_ZEROFILLED"),
+             "FOSS_CPUE_ZEROFILLED"
+             ),
            ".csv"), 
   "metadata_table" = c(
     paste(readLines(con = paste0(dir_out, "TAXON_GROUPS_metadata_table.txt")), collapse="\n"),
