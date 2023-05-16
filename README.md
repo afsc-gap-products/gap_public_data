@@ -16,12 +16,6 @@ Seattle, WA 98195
 
 [![](https://img.shields.io/github/last-commit/afsc-gap-products/gap_public_data.svg)](https://github.com/afsc-gap-products/gap_public_data/commits/main)
 
-``` r
-date0 <- strsplit(x = dir_out, split = '/', fixed = TRUE)[[1]]
-date0 <- date0[length(date0)]
-date0 <- format(x = as.Date(date0), "%B %d, %Y")
-```
-
 > The code in this repository is regularly being updated and improved.
 > Please refer to
 > [releases](https://github.com/afsc-gap-products/gap_public_data//releases)
@@ -114,13 +108,13 @@ at UC Berkeley](https://dse.berkeley.edu/), including
   - Intermittent (funding dependent)
   - Modified Index-Stratified Random of Successful Stations Survey
     Design
-- **Eastern Bering Sea Shelf (EBS)** (Markowitz et al., 2022)
+- **Eastern Bering Sea Shelf (EBS)** (Markowitz et al., 2023)
   - Annual
   - Fixed stations at center of 20 x 20 nm grid
 - **Gulf of Alaska (GOA)** (Von Szalay and Raring, 2018)
   - Triennial (1990s)/Biennial since 2001 in odd years
   - Stratified Random Survey Design
-- **Northern Bering Sea (NBS)** (Markowitz et al., 2022)
+- **Northern Bering Sea (NBS)** (Markowitz et al., 2023)
   - Biennial/Annual
   - Fixed stations at center of 20 x 20 nm grid
 
@@ -196,14 +190,13 @@ continental slope survey of groundfishes and invertebrate resources*
 
 </div>
 
-<div id="ref-2021NEBS2022" class="csl-entry">
+<div id="ref-2022NEBS2023" class="csl-entry">
 
-Markowitz, E. H., Dawson, E. J., Charriere, N. E., Prohaska, B. K.,
-Rohan, S. K., Stevenson, D. E., and Britt, L. L. (2022). *Results of the
-2021 eastern and northern Bering Sea continental shelf bottom trawl
-survey of groundfish and invertebrate fauna* (NOAA Tech. Memo.
-NMFS-F/SPO-452; p. 227). U.S. Dep. Commer.
-<https://doi.org/10.25923/g1ny-y360>
+Markowitz, E. H., Dawson, E. J., Anderson, A. B., Rohan, S. K.,
+Charriere, N. E., Prohaska, B. K., and Stevenson, D. E. (2023). *Results
+of the 2022 eastern and northern Bering Sea continental shelf bottom
+trawl survey of groundfish and invertebrate fauna* (NOAA Tech. Memo.
+NMFS-AFSC-469; p. 213). U.S. Dep. Commer.
 
 </div>
 

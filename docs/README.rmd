@@ -49,7 +49,7 @@ cat(
   badge_last_commit("afsc-gap-products/gap_public_data")
 )
 ```
-```{r}
+```{r date-version, echo = FALSE}
 date0 <- strsplit(x = dir_out, split = '/', fixed = TRUE)[[1]]
 date0 <- date0[length(date0)]
 date0 <- format(x = as.Date(date0), "%B %d, %Y")
@@ -96,7 +96,6 @@ Here are a few resources made by our scientists in house and keen contributors:
  - [Access data via the API in R](https://afsc-gap-products.github.io/gap_public_data/access-api-r.html)
  - [Access data via the API in Python with the {afscgap} library](https://afsc-gap-products.github.io/gap_public_data/access-api-py.html); by Sam Pottinger (sam.pottinger@berkeley.edu)
  - [Access data via the AFSC Oracle Database (AFSC only)](https://afsc-gap-products.github.io/gap_public_data/access-afsc-oracle-r.html)
-
 
 # Collabrators and data users
 
@@ -245,13 +244,13 @@ ggsave(filename = "survey_plot.png",
 - **Eastern Bering Sea Slope (BSS)** [@RN979]
   - Intermittent (funding dependent)
   - Modified Index-Stratified Random of Successful Stations Survey Design
-- **Eastern Bering Sea Shelf (EBS)** [@2021NEBS2022]
+- **Eastern Bering Sea Shelf (EBS)** [@2022NEBS2023]
   - Annual
   - Fixed stations at center of 20 x 20 nm grid
 - **Gulf of Alaska (GOA)** [@GOA2018]
   - Triennial (1990s)/Biennial since 2001 in odd years
   - Stratified Random Survey Design
-- **Northern Bering Sea (NBS)** [@2021NEBS2022]
+- **Northern Bering Sea (NBS)** [@2022NEBS2023]
   - Biennial/Annual
   - Fixed stations at center of 20 x 20 nm grid
 
