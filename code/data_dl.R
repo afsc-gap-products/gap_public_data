@@ -32,15 +32,16 @@ for (i in 1:length(locations)){
 # Dowload oracle data ----------------------------------------------------------
 
 locations <- c(
-  "RACEBASE.CATCH",
-  "RACEBASE.HAUL",
-  "RACE_DATA.V_CRUISES",
-  "RACE_DATA.VESSELS",
-  "GAP_PRODUCTS.METADATA_TABLE", 
-  "GAP_PRODUCTS.METADATA_COLUMN", 
-  "GAP_PRODUCTS.OLD_V_TAXONOMICS",  # "RACEBASE.SPECIES", "RACE_DATA.SPECIES_TAXONOMICS", "RACEBASE.SPECIES_CLASSIFICATION", # replaced with new taxonomic tables
-  "GAP_PRODUCTS.OLD_TAXON_CONFIDENCE", 
-  "GAP_PRODUCTS.OLD_TAXONOMICS_WORMS"#,  "GAP_PRODUCTS.OLD_TAXONOMICS_ITIS"
+  # "RACEBASE.CATCH",
+  # "RACEBASE.HAUL",
+  # "RACE_DATA.V_CRUISES",
+  # "RACE_DATA.VESSELS",
+  "GAP_PRODUCTS.CPUE"#,
+  # "GAP_PRODUCTS.METADATA_TABLE",
+  # "GAP_PRODUCTS.METADATA_COLUMN",
+  # "GAP_PRODUCTS.V_TAXONOMICS"#,  # "RACEBASE.SPECIES", "RACE_DATA.SPECIES_TAXONOMICS", "RACEBASE.SPECIES_CLASSIFICATION", # replaced with new taxonomic tables
+  # "GAP_PRODUCTS.TAXON_CONFIDENCE", 
+  # "GAP_PRODUCTS.TAXONOMICS_WORMS"#,  "GAP_PRODUCTS.OLD_TAXONOMICS_ITIS"
 )
 
 oracle_dl(
@@ -48,8 +49,8 @@ oracle_dl(
   channel = channel, 
   dir_out = paste0(dir_data, "/oracle/"))
 
-locations <- c("GAP_PRODUCTS.OLD_TAXONOMICS_WORMS", 
-               "GAP_PRODUCTS.OLD_TAXONOMICS_ITIS")
+locations <- c("GAP_PRODUCTS.TAXONOMICS_WORMS", 
+               "GAP_PRODUCTS.TAXONOMICS_ITIS")
 
 oracle_dl_metadata(
   locations = locations, 

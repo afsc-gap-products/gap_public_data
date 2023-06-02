@@ -52,17 +52,17 @@ surveys <-
   data.frame(SURVEY_DEFINITION_ID = c(143, 98, 47, 52, 78), 
              SRVY = c("NBS", "EBS", "GOA", "AI", "BSS"),
              SURVEY = c("northern Bering Sea", 
-                        "eastern Bering Sea", 
-                        "Gulf of Alaska", 
-                        "Aleutian Islands", 
-                        "Bering Sea Slope") )
+                           "eastern Bering Sea", 
+                           "Gulf of Alaska", 
+                           "Aleutian Islands", 
+                           "Bering Sea Slope") )
 
 a <- c("gap_products_metadata_table", 
        "gap_products_metadata_column", 
-       # "gap_products_old_taxonomics_worms",
+       "gap_products_old_taxonomics_worms",
        "race_data_vessels",
-       "gap_products_v_taxonomics", 
-       "gap_products_taxon_confidence")
+       "gap_products_old_v_taxonomics", 
+       "gap_products_old_taxon_confidence")
 
 for (i in 1:length(a)){
   print(a[i])
@@ -114,7 +114,7 @@ JOIN_FOSS_CPUE_CATCH_gi <- data_cpue0 %>%
                   (YEAR >= 1982 & SRVY %in% c("EBS", "NBS") | # 1982 BS inclusive - much more standardized after this year
                      SRVY %in% "BSS" | # keep all years of the BSS
                      YEAR >= 1991 & SRVY %in% c("AI", "GOA")) ) %>% # 1991 AI and GOA (1993) inclusive - much more standardized after this year
-  
+
   dplyr::left_join( # Add worms + species info
     x = .,
     y = gap_products_old_v_taxonomics0, 
@@ -169,7 +169,7 @@ JOIN_FOSS_CPUE_HAUL_gi <- data_haul0 %>%
       dplyr::select(VESSEL_ID, VESSEL_NAME = NAME) %>% 
       dplyr::mutate(VESSEL_NAME = paste0("F/V ", stringr::str_to_sentence(VESSEL_NAME))), 
     by = "VESSEL_ID") %>% 
-  dplyr::arrange(DATE_TIME) %>% 
+    dplyr::arrange(DATE_TIME) %>% 
   dplyr::distinct()
 
 JOIN_FOSS_CPUE_CATCH_gi <- JOIN_FOSS_CPUE_CATCH_gi %>% 

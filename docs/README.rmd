@@ -233,24 +233,27 @@ ggsave(filename = "survey_plot.png",
        path = here::here("img"), 
        width = 7, 
        height = 3)
+```
 
+```{r}
+source("https://raw.githubusercontent.com/afsc-gap-products/citations/main/cite/current_data_tm.r")
 ```
 
 ![](`r here::here("img", "survey_plot.png")`)
 
-- **Aleutian Islands (AI)** [@AI2018]
+- **Aleutian Islands (AI)** [@`r srvy_cite$CITE[srvy_cite$SRVY == "AI"]`]
   - Triennial (1990s)/Biennial since 2000 in even years
   - Modified Index-Stratified Random of Successful Stations Survey Design
-- **Eastern Bering Sea Slope (BSS)** [@RN979]
+- **Eastern Bering Sea Slope (BSS)** [@`r srvy_cite$CITE[srvy_cite$SRVY == "BSS"]`]
   - Intermittent (funding dependent)
   - Modified Index-Stratified Random of Successful Stations Survey Design
-- **Eastern Bering Sea Shelf (EBS)** [@2022NEBS2023]
+- **Eastern Bering Sea Shelf (EBS)** [@`r srvy_cite$CITE[srvy_cite$SRVY == "EBS"]`]
   - Annual
   - Fixed stations at center of 20 x 20 nm grid
-- **Gulf of Alaska (GOA)** [@GOA2018]
+- **Gulf of Alaska (GOA)** [@`r srvy_cite$CITE[srvy_cite$SRVY == "GOA"]`]
   - Triennial (1990s)/Biennial since 2001 in odd years
   - Stratified Random Survey Design
-- **Northern Bering Sea (NBS)** [@2022NEBS2023]
+- **Northern Bering Sea (NBS)** [@`r srvy_cite$CITE[srvy_cite$SRVY == "NBS"]`]
   - Biennial/Annual
   - Fixed stations at center of 20 x 20 nm grid
 
