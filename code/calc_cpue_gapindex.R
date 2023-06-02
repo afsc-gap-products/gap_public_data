@@ -61,6 +61,7 @@ a <- c("gap_products_metadata_table",
        "gap_products_metadata_column", 
        "gap_products_old_taxonomics_worms",
        "race_data_vessels",
+       "racebase_catch",
        "gap_products_old_v_taxonomics", 
        "gap_products_old_taxon_confidence")
 
@@ -82,6 +83,9 @@ maxyr <- (substr(x = Sys.Date(), start = 1, stop = 4))
 surveys0 <- c("GOA", "AI", "EBS", "NBS", "EBS_SLOPE")
 data_cpue0 <- data_haul0 <- data.frame()
 
+# spp <- racebase_catch0 %>% 
+#   dplyr::left_join(y = )
+
 for (i in 1:length(surveys0)) {
   
   print(surveys0[i])
@@ -90,7 +94,7 @@ for (i in 1:length(surveys0)) {
   data <- gapindex::get_data( 
     year_set = c(1982:maxyr),
     survey_set = surveys0[i], 
-    spp_codes = unique(gap_products_old_taxonomics_worms0$species_code), 
+    # spp_codes = unique(racebase_catch0$SPECIES_CODE[racebase_catch0$ == surveys0[i]]), 
     haul_type = 3,
     abundance_haul = "Y",
     sql_channel = channel_foss)
@@ -381,19 +385,19 @@ rmarkdown::render(input = here::here("code", "calc_cpue_check.rmd"),
 file_paths <- data.frame(
   file_path = 
     paste0(dir_out,
-           c("TAXON_GROUPS", 
-             "FOSS_CPUE_PRESONLY_gi",
+           c(#"TAXON_GROUPS", 
+             # "FOSS_CPUE_PRESONLY_gi",
              "JOIN_FOSS_CPUE_HAUL_gi",
-             "JOIN_FOSS_CPUE_CATCH_gi",
-             "FOSS_CPUE_ZEROFILLED_gi"
+             "JOIN_FOSS_CPUE_CATCH_gi"#,
+             # "FOSS_CPUE_ZEROFILLED_gi"
            ),
            ".csv"), 
   "metadata_table" = c(
-    paste(readLines(con = paste0(dir_out, "TAXON_GROUPS_metadata_table.txt")), collapse="\n"),
-    paste(readLines(con = paste0(dir_out, "FOSS_CPUE_PRESONLY_gi_metadata_table.txt")), collapse="\n"),
-    paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_metadata_table.txt")), collapse="\n"),
-    paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_metadata_table.txt")), collapse="\n"),
-    paste(readLines(con = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_gi_metadata_table.txt")), collapse="\n")
+    # paste(readLines(con = paste0(dir_out, "TAXON_GROUPS_metadata_table.txt")), collapse="\n"),
+    # paste(readLines(con = paste0(dir_out, "FOSS_CPUE_PRESONLY_gi_metadata_table.txt")), collapse="\n"),
+    paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_gi_metadata_table.txt")), collapse="\n"),
+    paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_gi_metadata_table.txt")), collapse="\n")#,
+    # paste(readLines(con = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_gi_metadata_table.txt")), collapse="\n")
   ) 
 )
 

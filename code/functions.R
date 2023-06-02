@@ -19,7 +19,7 @@ PKG <- c(
 
   "janitor",
   # "taxize",
-  
+  # devtools::install_github("sean-rohan-noaa/akgfmaps", build_vignettes = TRUE)
   # Text Management
   "stringr")
 

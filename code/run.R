@@ -45,7 +45,7 @@ rmarkdown::render(input = here::here("code", "calc_cpue_check.rmd"),
 # Update README ----------------------------------------------------------------
 
 source('./code/functions.R')
-dir_out <- paste0(getwd(), "/output/2023-05-15/")
+dir_out <- paste0(getwd(), "/output/2023-06-01/")
 
 load(paste0(dir_out, "FOSS_CPUE_PRESONLY.RData"))
 load(paste0(dir_out, "FOSS_CPUE_JOIN.RData"))
