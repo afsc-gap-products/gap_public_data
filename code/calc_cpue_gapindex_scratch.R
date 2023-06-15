@@ -52,23 +52,17 @@ surveys <-
   data.frame(SURVEY_DEFINITION_ID = c(143, 98, 47, 52, 78), 
              SRVY = c("NBS", "EBS", "GOA", "AI", "BSS"),
              SURVEY = c("northern Bering Sea", 
-                        "eastern Bering Sea", 
-                        "Gulf of Alaska", 
-                        "Aleutian Islands", 
-                        "Bering Sea Slope") )
+                           "eastern Bering Sea", 
+                           "Gulf of Alaska", 
+                           "Aleutian Islands", 
+                           "Bering Sea Slope") )
 
 a <- c("gap_products_metadata_table", 
        "gap_products_metadata_column", 
-       # "gap_products_old_taxonomics_worms",
+       "gap_products_old_taxonomics_worms",
        "race_data_vessels",
-<<<<<<< HEAD
-       "gap_products_v_taxonomics", 
-       "gap_products_taxon_confidence")
-=======
-       "racebase_catch",
        "gap_products_old_v_taxonomics", 
        "gap_products_old_taxon_confidence")
->>>>>>> 727785e12f3aebd787c115daa00034656d1be695
 
 for (i in 1:length(a)){
   print(a[i])
@@ -88,9 +82,6 @@ maxyr <- (substr(x = Sys.Date(), start = 1, stop = 4))
 surveys0 <- c("GOA", "AI", "EBS", "NBS", "EBS_SLOPE")
 data_cpue0 <- data_haul0 <- data.frame()
 
-# spp <- racebase_catch0 %>% 
-#   dplyr::left_join(y = )
-
 for (i in 1:length(surveys0)) {
   
   print(surveys0[i])
@@ -99,7 +90,7 @@ for (i in 1:length(surveys0)) {
   data <- gapindex::get_data( 
     year_set = c(1982:maxyr),
     survey_set = surveys0[i], 
-    # spp_codes = unique(racebase_catch0$SPECIES_CODE[racebase_catch0$ == surveys0[i]]), 
+    spp_codes = unique(gap_products_old_taxonomics_worms0$species_code), 
     haul_type = 3,
     abundance_haul = "Y",
     sql_channel = channel_foss)
@@ -123,7 +114,7 @@ JOIN_FOSS_CPUE_CATCH_gi <- data_cpue0 %>%
                   (YEAR >= 1982 & SRVY %in% c("EBS", "NBS") | # 1982 BS inclusive - much more standardized after this year
                      SRVY %in% "BSS" | # keep all years of the BSS
                      YEAR >= 1991 & SRVY %in% c("AI", "GOA")) ) %>% # 1991 AI and GOA (1993) inclusive - much more standardized after this year
-  
+
   dplyr::left_join( # Add worms + species info
     x = .,
     y = gap_products_old_v_taxonomics0, 
@@ -178,7 +169,7 @@ JOIN_FOSS_CPUE_HAUL_gi <- data_haul0 %>%
       dplyr::select(VESSEL_ID, VESSEL_NAME = NAME) %>% 
       dplyr::mutate(VESSEL_NAME = paste0("F/V ", stringr::str_to_sentence(VESSEL_NAME))), 
     by = "VESSEL_ID") %>% 
-  dplyr::arrange(DATE_TIME) %>% 
+    dplyr::arrange(DATE_TIME) %>% 
   dplyr::distinct()
 
 JOIN_FOSS_CPUE_CATCH_gi <- JOIN_FOSS_CPUE_CATCH_gi %>% 
@@ -390,19 +381,19 @@ rmarkdown::render(input = here::here("code", "calc_cpue_check.rmd"),
 file_paths <- data.frame(
   file_path = 
     paste0(dir_out,
-           c(#"TAXON_GROUPS", 
-             # "FOSS_CPUE_PRESONLY_gi",
+           c("TAXON_GROUPS", 
+             "FOSS_CPUE_PRESONLY_gi",
              "JOIN_FOSS_CPUE_HAUL_gi",
-             "JOIN_FOSS_CPUE_CATCH_gi"#,
-             # "FOSS_CPUE_ZEROFILLED_gi"
+             "JOIN_FOSS_CPUE_CATCH_gi",
+             "FOSS_CPUE_ZEROFILLED_gi"
            ),
            ".csv"), 
   "metadata_table" = c(
-    # paste(readLines(con = paste0(dir_out, "TAXON_GROUPS_metadata_table.txt")), collapse="\n"),
-    # paste(readLines(con = paste0(dir_out, "FOSS_CPUE_PRESONLY_gi_metadata_table.txt")), collapse="\n"),
-    paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_gi_metadata_table.txt")), collapse="\n"),
-    paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_gi_metadata_table.txt")), collapse="\n")#,
-    # paste(readLines(con = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_gi_metadata_table.txt")), collapse="\n")
+    paste(readLines(con = paste0(dir_out, "TAXON_GROUPS_metadata_table.txt")), collapse="\n"),
+    paste(readLines(con = paste0(dir_out, "FOSS_CPUE_PRESONLY_gi_metadata_table.txt")), collapse="\n"),
+    paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_metadata_table.txt")), collapse="\n"),
+    paste(readLines(con = paste0(dir_out, "JOIN_FOSS_CPUE_metadata_table.txt")), collapse="\n"),
+    paste(readLines(con = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_gi_metadata_table.txt")), collapse="\n")
   ) 
 )
 

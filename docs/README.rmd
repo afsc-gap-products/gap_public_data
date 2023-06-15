@@ -233,7 +233,10 @@ ggsave(filename = "survey_plot.png",
        path = here::here("img"), 
        width = 7, 
        height = 3)
+```
 
+```{r}
+source("https://raw.githubusercontent.com/afsc-gap-products/citations/main/cite/current_data_tm.r")
 ```
 
 ![](`r here::here("img", "survey_plot.png")`)

@@ -98,6 +98,10 @@ in any way, reach out so we can showcase your hard work.
 
 ## Bottom trawl surveys and regions
 
+``` r
+source("https://raw.githubusercontent.com/afsc-gap-products/citations/main/cite/current_data_tm.r")
+```
+
 ![](Z:/Projects/gap_public_data/img/survey_plot.png)
 
 ``` r
