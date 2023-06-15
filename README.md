@@ -82,23 +82,27 @@ Below are a few packages and products currently using this data. If you
 have developed a product, performed an analysis, or exhibited this data
 in any way, reach out so we can showcase your hard work.
 
-**[NOAA Fisheries Distribution Mapping and Analysis
-Portal](https://apps-st.fisheries.noaa.gov/dismap)**; [NOAA Fisheries
-Office of Science and
-Technology](https://www.fisheries.noaa.gov/contact/office-science-and-technology)
+- **[NOAA Fisheries Distribution Mapping and Analysis
+  Portal](https://apps-st.fisheries.noaa.gov/dismap)**; *[NOAA Fisheries
+  Office of Science and
+  Technology](https://www.fisheries.noaa.gov/contact/office-science-and-technology)*
 
-**[Pull data with python](https://pyafscgap.org/) and explore the
-[in-browser visualization tool](https://app.pyafscgap.org/'). Reference
-their [example Python
-notebook](https://mybinder.org/v2/gh/SchmidtDSE/afscgap/main?urlpath=/tree/index.ipynb)**;
-[The Eric and Wendy Schmidt Center for Data Science and the Environment
-at UC Berkeley](https://dse.berkeley.edu/), including
-<sam.pottinger@berkeley.edu>, <ccmartinez@berkeley.edu>,
-<gzarpellon@berkeley.edu>, and <kkoy@berkeley.edu>.
+- **[Pull data with python](https://pyafscgap.org/) and explore the
+  [in-browser visualization tool](https://app.pyafscgap.org/').
+  Reference their [example Python
+  notebook](https://mybinder.org/v2/gh/SchmidtDSE/afscgap/main?urlpath=/tree/index.ipynb)**;
+  *[The Eric and Wendy Schmidt Center for Data Science and the
+  Environment at UC Berkeley](https://dse.berkeley.edu/), including
+  <sam.pottinger@berkeley.edu>, <ccmartinez@berkeley.edu>,
+  <gzarpellon@berkeley.edu>, and <kkoy@berkeley.edu>.*
 
 ## Bottom trawl surveys and regions
 
 ![](Z:/Projects/gap_public_data/img/survey_plot.png)
+
+``` r
+source("https://raw.githubusercontent.com/afsc-gap-products/citations/main/cite/current_data_tm.r")
+```
 
 - **Aleutian Islands (AI)** (Von Szalay and Raring, 2020)
   - Triennial (1990s)/Biennial since 2000 in even years
@@ -221,8 +225,7 @@ Resource Assessment, A. F. S. C. (U.S.)., and Division, C. E. (2021).
 Von Szalay, P. G., and Raring, N. W. (2018). *Data report: 2017 <span
 class="nocase">Gulf of Alaska</span> bottom trawl survey* (NOAA Tech.
 Memo. NMFS-AFSC-374). U.S. Dep. Commer.
-https://doi.org/[http://doi.org/10.7289/V5/TM-AFSC-374
-](http://doi.org/10.7289/V5/TM-AFSC-374 )
+<https://doi.org/10.7289/V5/TM-AFSC-374>
 
 </div>
 

@@ -108,10 +108,10 @@ str0 <- ""
 
 if (tocTF == TRUE)  { # github markdown
   
-str0 <- paste0("**[NOAA Fisheries Distribution Mapping and Analysis Portal](https://apps-st.fisheries.noaa.gov/dismap)**; [NOAA Fisheries Office of Science and Technology](https://www.fisheries.noaa.gov/contact/office-science-and-technology)
+str0 <- paste0(" - **[NOAA Fisheries Distribution Mapping and Analysis Portal](https://apps-st.fisheries.noaa.gov/dismap)**; *[NOAA Fisheries Office of Science and Technology](https://www.fisheries.noaa.gov/contact/office-science-and-technology)*
                
                
-**[Pull data with python](https://pyafscgap.org/) and explore the [in-browser visualization tool](https://app.pyafscgap.org/'). Reference their [example Python notebook](https://mybinder.org/v2/gh/SchmidtDSE/afscgap/main?urlpath=/tree/index.ipynb)**; [The Eric and Wendy Schmidt Center for Data Science and the Environment at UC Berkeley](https://dse.berkeley.edu/), including sam.pottinger@berkeley.edu, ccmartinez@berkeley.edu, gzarpellon@berkeley.edu, and kkoy@berkeley.edu. ")
+ - **[Pull data with python](https://pyafscgap.org/) and explore the [in-browser visualization tool](https://app.pyafscgap.org/'). Reference their [example Python notebook](https://mybinder.org/v2/gh/SchmidtDSE/afscgap/main?urlpath=/tree/index.ipynb)**; *[The Eric and Wendy Schmidt Center for Data Science and the Environment at UC Berkeley](https://dse.berkeley.edu/), including sam.pottinger@berkeley.edu, ccmartinez@berkeley.edu, gzarpellon@berkeley.edu, and kkoy@berkeley.edu.* ")
   
 } else if (tocTF == FALSE)  { # html
 
@@ -238,22 +238,25 @@ ggsave(filename = "survey_plot.png",
 
 ![](`r here::here("img", "survey_plot.png")`)
 
-- **Aleutian Islands (AI)** [@AI2018]
+```{r source-current-tm}
+source("https://raw.githubusercontent.com/afsc-gap-products/citations/main/cite/current_data_tm.r")
+```
+
+- **Aleutian Islands (AI)** [@`r srvy_cite$CITE[srvy_cite$SRVY == "AI"]`]
   - Triennial (1990s)/Biennial since 2000 in even years
   - Modified Index-Stratified Random of Successful Stations Survey Design
-- **Eastern Bering Sea Slope (BSS)** [@RN979]
+- **Eastern Bering Sea Slope (BSS)** [@`r srvy_cite$CITE[srvy_cite$SRVY == "BSS"]`]
   - Intermittent (funding dependent)
   - Modified Index-Stratified Random of Successful Stations Survey Design
-- **Eastern Bering Sea Shelf (EBS)** [@2022NEBS2023]
+- **Eastern Bering Sea Shelf (EBS)** [@`r srvy_cite$CITE[srvy_cite$SRVY == "EBS"]`]
   - Annual
   - Fixed stations at center of 20 x 20 nm grid
-- **Gulf of Alaska (GOA)** [@GOA2018]
+- **Gulf of Alaska (GOA)** [@`r srvy_cite$CITE[srvy_cite$SRVY == "GOA"]`]
   - Triennial (1990s)/Biennial since 2001 in odd years
   - Stratified Random Survey Design
-- **Northern Bering Sea (NBS)** [@2022NEBS2023]
+- **Northern Bering Sea (NBS)** [@`r srvy_cite$CITE[srvy_cite$SRVY == "NBS"]`]
   - Biennial/Annual
   - Fixed stations at center of 20 x 20 nm grid
-
 
 # Metadata
 
