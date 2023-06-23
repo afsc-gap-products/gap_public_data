@@ -1,16 +1,7 @@
 ---
 title: 'GAP FOSS Column Metadata'
-description: 'GAP FOSS Column Metadata'
-site: distill::distill_website
-# output: 
-#   html_document:
-#     toc: true
-#     toc_depth: 3
-#     toc_float: true
-#   md_document:
-#     variant: gfm
-csl: "https://raw.githubusercontent.com/citation-style-language/styles/master/apa-no-ampersand.csl"
-bibliography: "https://raw.githubusercontent.com/afsc-gap-products/citations/main/cite/bibliography.bib"
+description: |
+ GAP FOSS Column Metadata
 ---
 
 ```{r setup, include=FALSE}
@@ -18,8 +9,6 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, message = FAL
 library(dplyr)
 library(magrittr)
 ```
-
-<!-- > [Return to main page](https://afsc-gap-products.github.io/gap_public_data/) -->
 
 # Metadata
 

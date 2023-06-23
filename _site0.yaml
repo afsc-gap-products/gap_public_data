@@ -1,0 +1,51 @@
+name: "gap_public_data"
+title: "GAP Public Data"
+description: |
+  Groundfish Assessment Program Public-Facing Data Products
+lang: en
+output_dir: "docs"
+navbar:
+  title: "GAP Public Data"
+  logo:
+    image: img/Fish Icon PacCod_alpha background3.png
+    href: index.html
+  search: true
+  repository_url: https://github.com/afsc-gap-products/gap_public_data
+  source_url: true
+  right:
+    - text: "FOSS Vignettes"
+      menu: 
+       - text: "General information"
+         href: foss_intro.html
+       - text: "Metadata"
+         href: foss-metadata.html
+       - text: "FOSS Interactive Platform - Quick Start Guide"
+         href: foss-platform.html
+       - text: "Use API with R"
+         href: foss-api-r.html
+       - text: "Use API with Python {afscgap} library"
+         href: foss-api-py.html
+       - text: "Use AFSC Oracle"
+         href: foss-oracle-r.html
+    # - text: "AKFIN Vignettes"
+    #   menu: 
+    #    - text: "Operations"
+    #      href: Survey_Ops_Operations.html
+    #    - text: "Training Resources and Tech Memos"
+    #      href: Survey_Ops_Training_Resources_and_Tech_Memos.html
+    - icon: fab fa-github
+      href: https://github.com/afsc-gap-products/gap_public_data
+favicon: img/Fish Icon PacCod_alpha background3.png
+base_url: https://github.com/afsc-gap-products/gap_public_data
+output:
+  distill::distill_article:
+    css: styles.css
+    toc: true
+    toc_float: true
+    includes:
+      after_body:
+      - footer.html
+editor_options:
+  chunk_output_type: console
+csl: "https://raw.githubusercontent.com/citation-style-language/styles/master/apa-no-ampersand.csl"
+bibliography: "https://raw.githubusercontent.com/afsc-gap-products/citations/main/cite/bibliography.bib"

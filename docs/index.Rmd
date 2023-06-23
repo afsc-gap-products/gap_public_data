@@ -1,31 +1,16 @@
 ---
-title: 'Groundfish Assessment Program Public-Facing Data Products'
-description: 'Groundfish Assessment Program Public-Facing Data Products'
-site: distill::distill_website
-csl: "https://raw.githubusercontent.com/citation-style-language/styles/master/apa-no-ampersand.csl"
-bibliography: "https://raw.githubusercontent.com/afsc-gap-products/citations/main/cite/bibliography.bib"
+title: "Groundfish Assessment Program Public-Facing Data Products"
+description: |
+  Welcome!
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, message = FALSE, eval = FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, error = FALSE, message = FALSE, eval = TRUE)
 ```
-
-:::: {style="display: flex;"}
-
-::: {}
 
 Welcome!
 
-:::
-
-::: {}
-```{r, layout="l-body-outset"}
-knitr::include_graphics("img/survey_plot.png")
+```{r}
+knitr::include_graphics(here::here("img","survey_plot.png"))
 ```
-:::
-
-::::
-
-
-
 

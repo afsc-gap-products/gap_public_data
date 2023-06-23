@@ -1,0 +1,23 @@
+name: "gap_public_data"
+title: "GAP Public Data"
+description: |
+  Groundfish Assessment Program Public-Facing Data Products
+lang: en
+output_dir: "docs"
+navbar:
+  right:
+    - text: "FOSS Vignettes"
+      menu: 
+       - text: "General information"
+         href: foss_intro.html
+       - text: "Metadata"
+         href: foss-metadata.html
+       - text: "FOSS Interactive Platform - Quick Start Guide"
+         href: foss-platform.html
+       - text: "Use API with R"
+         href: foss-api-r.html
+       - text: "Use API with Python {afscgap} library"
+         href: foss-api-py.html
+       - text: "Use AFSC Oracle"
+         href: foss-oracle-r.html
+output: distill::distill_article

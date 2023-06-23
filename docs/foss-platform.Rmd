@@ -1,8 +1,7 @@
 ---
 title: 'Access public data using the FOSS Interactive Platform'
-site: distill::distill_website
-csl: "https://raw.githubusercontent.com/citation-style-language/styles/master/apa-no-ampersand.csl"
-bibliography: "https://raw.githubusercontent.com/afsc-gap-products/citations/main/cite/bibliography.bib"
+description: |
+ Access public data using the FOSS Interactive Platform
 ---
 
 ```{r setup, include=FALSE}
@@ -69,3 +68,4 @@ knitr::include_graphics(path = here::here("img", "foss_5_run_report.png"))
 
 ```{r child-footer, child=here::here("docs","footer.Rmd")}
 ```
+

@@ -1,26 +1,15 @@
 ---
 title: 'Access public data using the API and Python'
-description: 'Access public data using the API and Python'
+description: |
+ Access public data using the API and Python
 author: Sam Pottinger (sam.pottinger@berkeley.edu; GitHub::sampottinger)
 date: May 13, 2023
-site: distill::distill_website
-# output: 
-#   html_document:
-#     toc: true
-#     toc_depth: 3
-#     toc_float: true
-#   md_document:
-#     variant: gfm
-csl: "https://raw.githubusercontent.com/citation-style-language/styles/master/apa-no-ampersand.csl"
-bibliography: "https://raw.githubusercontent.com/afsc-gap-products/citations/main/cite/bibliography.bib"
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, message = FALSE, eval = FALSE)
 library(reticulate)
 ```
-
-<!-- > [Return to main page](https://afsc-gap-products.github.io/gap_public_data/) -->
 
 ### Installation
 
@@ -191,3 +180,4 @@ Please see the [API documentation](https://pyafscgap.org/devdocs/afscgap.html) f
 
 ```{r child-footer, child=here::here("docs","footer.Rmd")}
 ```
+

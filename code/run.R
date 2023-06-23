@@ -84,8 +84,26 @@ rmarkdown::render(input = "./docs/README.Rmd",
                   output_format = 'md_document',
                   output_file = "./README.md")
 
-for (jj in 1:length(comb)) { ## Loop over pages -- start
-  rmarkdown::render(
+# Make README into foss_intro
+get_started <- base::readLines(con = "docs/README.Rmd")
+get_started <- gsub(pattern = "output:", 
+                    replacement = "", 
+                    x = get_started)
+get_started <- gsub(pattern = "  md_document: ", 
+                    replacement = "", 
+                    x = get_started)
+get_started <- gsub(pattern = "    variant: gfm", 
+                    replacement = "", 
+                    x = get_started)
+utils::write.table(x = get_started,
+                   file = "docs/foss_intro.Rmd",
+                   row.names = FALSE,
+                   col.names = FALSE,
+                   quote = FALSE)
+
+tocTF <- FALSE
+for (jj in 1:length(comb[comb != "README"])) { ## Loop over pages -- start
+  rmarkdown::render(output_yaml = here::here("_site.yaml"), 
     input = paste0("docs/", comb[jj], ".Rmd"),
     output_dir = "docs/",
     output_file = paste0(comb[jj], ".html") )
