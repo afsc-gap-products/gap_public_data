@@ -1,5 +1,6 @@
 ---
 title: '`r ifelse(tocTF, "data", "AFSC RACE Groundfish and Shellfish Survey Public Data")`'
+description: '`r ifelse(tocTF, "data", "AFSC RACE Groundfish and Shellfish Survey Public Data")`'
 output: 
   html_document:
     toc: true
@@ -32,15 +33,22 @@ for (p in PKG) {
 
 ## This code is primarily maintained by:
 
-**Emily Markowitz** (Emily.Markowitz AT noaa.gov; [\@EmilyMarkowitz-NOAA](https://github.com/EmilyMarkowitz-NOAA))  
+```{r} 
+str0 <- ifelse(tocTF, 
+paste0("**Emily Markowitz** (Emily.Markowitz AT noaa.gov; [EmilyMarkowitz-NOAA](https://github.com/EmilyMarkowitz-NOAA))  
 Research Fisheries Biologist  
-*Bering Sea Groundfish Survey Team*
+*Bering Sea Groundfish Survey Team*"), 
+"")
+```
 
-Alaska Fisheries Science Center,  
-National Marine Fisheries Service,  
-National Oceanic and Atmospheric Administration,  
-Seattle, WA 98195
+`r str0`
 
+Alaska Fisheries Science Center (AFSC)
+National Oceanic and Atmospheric Administration (NOAA)  
+Resource Assessment and Conservation Engineering Division (RACE)  
+Groundfish Assessment Program (GAP) 
+7600 Sand Point Way, N.E. bldg. 4  
+Seattle, WA 98115 USA
 
 ```{r badge, echo = FALSE, results='asis', message=FALSE}
 cat(
@@ -49,6 +57,7 @@ cat(
   badge_last_commit("afsc-gap-products/gap_public_data")
 )
 ```
+
 ```{r date-version, echo = FALSE}
 date0 <- strsplit(x = dir_out, split = '/', fixed = TRUE)[[1]]
 date0 <- date0[length(date0)]
@@ -86,16 +95,9 @@ cat(readLines(con = here::here("CITATION.bib")), sep = "\n")
  # NOAA Fisheries Alaska Fisheries Science Center. RACE Division Bottom Trawl Survey Data Query, Available at: www.fisheries.noaa.gov/foss, Accessed mm/dd/yyyy
 ```
 
-
 # Access the data
 
-Here are a few resources made by our scientists in house and keen contributors:
-
- - [General information](https://afsc-gap-products.github.io/gap_public_data/)
- - [Access data via the FOSS Interactive Platform](https://afsc-gap-products.github.io/gap_public_data/access-foss.html)
- - [Access data via the API in R](https://afsc-gap-products.github.io/gap_public_data/access-api-r.html)
- - [Access data via the API in Python with the {afscgap} library](https://afsc-gap-products.github.io/gap_public_data/access-api-py.html); by Sam Pottinger (sam.pottinger@berkeley.edu)
- - [Access data via the AFSC Oracle Database (AFSC only)](https://afsc-gap-products.github.io/gap_public_data/access-afsc-oracle-r.html)
+Learn about the different ways to access our data by visiting this [repository's website](https://afsc-gap-products.github.io/gap_public_data/). 
 
 # Collabrators and data users
 
@@ -144,8 +146,6 @@ library(purrr)
   cols_align(align = c("left"), columns = everything())
 df
 }
-
-
 ```
 
 `r str0`
@@ -209,39 +209,36 @@ gg <- ggplot() +
     panel.background = element_rect(fill = "transparent"), #grey95
     plot.title = element_text(size = 20, face = "bold"), 
     plot.subtitle = element_text(size=14), 
-    legend.text=element_text(size=12), 
+    legend.text=element_text(size=8), 
     legend.position="right",
     legend.direction="vertical",
     legend.justification="left",
     legend.background = element_blank(),
     legend.title=element_text(size=14),
-    axis.text = element_text(size=14), 
+    axis.text = element_text(size=10), 
     legend.box.background = element_blank(),
     legend.key = element_blank(), 
     legend.key.size=(unit(.3,"cm")), 
-    axis.title=element_text(size=14) ) +
+    axis.title=element_text(size=14), 
+    plot.margin = margin(0,0,0,0,unit = "cm")) +
   ggplot2::geom_sf(data = shp, 
                    mapping = aes(fill = Survey),
                    color = "grey20", 
                    show.legend = TRUE) +
-  ggplot2::scale_fill_viridis_d(option = "G", end = 0.9) +
+  ggplot2::scale_fill_viridis_d(option = "G", end = 0.9, begin = 0.1) +
   ggplot2::coord_sf(xlim = c(-1394658,  2566293), # range(shp_ai$plot.boundary$x, shp_bs$plot.boundary$x, shp_goa$plot.boundary$x, shp_bss$plot.boundary$x),
                     ylim = c(-1028565.1,  1125549.7)) # range(shp_ai$plot.boundary$y, shp_bs$plot.boundary$y, shp_goa$plot.boundary$y, shp_bss$plot.boundary$y))
 
 ggsave(filename = "survey_plot.png", 
        plot = gg,
-       path = here::here("img"), 
+       path = here::here("docs"), 
        width = 7, 
        height = 3)
+
+knitr::include_graphics(path = here::here("docs", "survey_plot.png"))
 ```
 
-```{r}
-source("https://raw.githubusercontent.com/afsc-gap-products/citations/main/cite/current_data_tm.r")
-```
-
-![](`r here::here("img", "survey_plot.png")`)
-
-```{r source-current-tm}
+```{r source-current-tm, echo=FALSE}
 source("https://raw.githubusercontent.com/afsc-gap-products/citations/main/cite/current_data_tm.r")
 ```
 
@@ -261,35 +258,18 @@ source("https://raw.githubusercontent.com/afsc-gap-products/citations/main/cite/
   - Biennial/Annual
   - Fixed stations at center of 20 x 20 nm grid
 
-# Metadata
-
-## Data description (short)
-
-`r readLines(con = paste0(dir_out, "FOSS_CPUE_ZEROFILLED_metadata_table.txt")) `
-
-## Data description (long)
-
-The Resource Assessment and Conservation Engineering Division (RACE) Groundfish Assessment Program (GAP) of the Alaska Fisheries Science Center (AFSC) conducts fisheries-independent bottom trawl surveys to monitor the condition of the demersal fish and crab stocks of Alaska. These data are developed to describe the temporal distribution and abundance of commercially and ecologically important groundfish species, examine the changes in the species composition of the fauna over time and space, and describe the physical environment of the groundfish habitat.
-
-There are no legal restrictions on access to the data. They reside in the public domain and can be freely distributed. Users must read and fully comprehend the metadata prior to use. Data should not be used beyond the limits of the source scale. Acknowledgement of NOAA, as the source from which these data were obtained, in any publications and/or other representations of these data, is suggested. These data are compiled and approved annually after each summer survey season. The data from previous years are unlikely to change substantially once published.
-
-These data are zero-filled (presence and absence) observations from surveys conducted on fishing vessels. These surveys monitor trends in distribution and abundance of groundfish, crab, and bottom-dwelling species in Alaska’s marine ecosystems. These data include estimates of catch-per-unit-effort (CPUE) for all identified species for index stations. Some survey data are excluded, such as non-standard stations, surveys completed in earlier years using different/non-standard gear, and special tows and non-standard data collections.
-
-Though not included in the public data, these surveys also collect oceanographic and environmental data, and biological data such as length, weight, stomach contents (to learn more about diet), otoliths (fish ear bones to learn about age), and tissue samples for genetic analysis, all of which can be shared upon special request. Also not included in the public data are estimated biomass (average total weight of all fish and crabs sampled) of crabs and groundfish that support the creation of annual stock assessments.
-
-
 ## Relevant technical memorandums
 
 <div id="refs"></div>
 
 ## User resources
 
--   [AFSC RACE Groundfish Assessment Program (GAP)](https://www.fisheries.noaa.gov/contact/groundfish-assessment-program).
--   [AFSC Resource Assessment and Conservation Engineering Division (RACE)](https://www.fisheries.noaa.gov/about/resource-assessment-and-conservation-engineering-division).
--   For more information about codes used in the tables, please refer to the [survey code books](`r link_code_books `) [@cb2021].
--   Find [past reports](https://www.fisheries.noaa.gov/resource/publication-database/noaa-institutional-repository) about these surveys.
--   [GitHub repository](`r link_repo`).
--   Learn more about other [research surveys conducted at AFSC](https://www.fisheries.noaa.gov/alaska/ecosystems/alaska-fish-research-surveys).
+-   [Groundfish Assessment Program Bottom Trawl Surveys](https://www.fisheries.noaa.gov/alaska/science-data/groundfish-assessment-program-bottom-trawl-surveys)
+-   [AFSC’s Resource Assessment and Conservation Engineering Division](https://www.fisheries.noaa.gov/about/resource-assessment-and-conservation-engineering-division).
+-   For more information about codes used in the tables, please refer to the [survey code books](`r link_code_books `).
+-   Access public data via the [Interactive Fisheries One Stop Shop (FOSS) Platform](https://afsc-gap-products.github.io/gap_public_data/access-foss.html) and [documentation](https://afsc-gap-products.github.io/gap_public_data/)
+-   [Find past reports in the NOAA Institutional Repository](https://www.fisheries.noaa.gov/resource/publication-database/noaa-institutional-repository).
+-   Learn more about other [Research Surveys conducted at AFSC](https://www.fisheries.noaa.gov/alaska/ecosystems/alaska-fish-research-surveys).
 
 ## Access constraints
 
@@ -297,31 +277,7 @@ Though not included in the public data, these surveys also collect oceanographic
 
 **User Constraints:** Users must read and fully comprehend the metadata prior to use. Data should not be used beyond the limits of the source scale. Acknowledgement of AFSC Groundfish Assessment Program, as the source from which these data were obtained, in any publications and/or other representations of these data, is suggested.
 
-**Address:** 
-Alaska Fisheries Science Center (AFSC)
-National Oceanic and Atmospheric Administration (NOAA)  
-Resource Assessment and Conservation Engineering Division (RACE)  
-Groundfish Assessment Program (GAP) 7600 Sand Point Way, N.E. bldg. 4  
-Seattle, WA 98115 USA
-
 **General questions and more specific data requests** can be sent to [afsc.gap.metadata\@noaa.gov](mailto:afsc.gap.metadata@noaa.gov) or submitted as an [issue on our GitHub Organization](https://github.com/afsc-gap-products/data-requests). The version of this data used for stock assessments can be found through the Alaska Fisheries Information Network (AKFIN). For questions about the eastern Bering Sea surveys, contact Duane Stevenson ([Duane.Stevenson\@noaa.gov](mailto:Duane.Stevenson@noaa.gov)). For questions about the Gulf of Alaska or Aleutian Islands surveys, contact Ned Laman ([Ned.Laman\@noaa.gov](mailto:Ned.Laman@noaa.gov)). For questions specifically about crab data in any region, contact Mike Litzow ([Mike.Litzow\@noaa.gov](mailto:Mike.Litzow@noaa.gov)), the Shellfish Assessment Program lead.
 
 For questions, comments, and concerns specifically about the [Fisheries One Stop Shop (FOSS)](`r link_foss `) platform, please contact us using the Comments page on the [FOSS](`r link_foss `) webpage.
-
-## Column-level metadata
-
-```{r column-metadata, echo = FALSE}
-metadata_column %>% 
-  janitor::clean_names() %>%
-  dplyr::mutate(metadata_colname = tolower(metadata_colname)) %>% 
-  dplyr::filter(metadata_colname %in% tolower(names(FOSS_CPUE_PRESONLY))) %>% 
-  dplyr::arrange(match(metadata_colname, tolower(names(FOSS_CPUE_PRESONLY)))) %>% 
-  dplyr::select(
-    "Column name" = metadata_colname, 
-    "Column name (long) " = metadata_colname_long, 
-    "Units" = metadata_units, 
-    # "Oracle data type" = metadata_datatype, 
-    "Description" = metadata_colname_desc) %>%
-  knitr::kable(x = ., row.names = FALSE) 
-```
 

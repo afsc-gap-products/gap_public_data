@@ -44,6 +44,7 @@ rmarkdown::render(input = here::here("code", "calc_cpue_check.rmd"),
 
 # Update README ----------------------------------------------------------------
 
+
 source('./code/functions.R')
 dir_out <- paste0(getwd(), "/output/2023-06-01/")
 
@@ -59,29 +60,36 @@ link_code_books <- link_code_books[grep(pattern = "manual-and-data", x = link_co
 comb <- list.files(path = "docs/", pattern = ".Rmd", ignore.case = TRUE)
 comb <- comb[comb != "footer.Rmd"]
 comb <- gsub(pattern = ".Rmd", replacement = "", x = comb, ignore.case = TRUE)
-for (i in 1:length(comb)) {
-  tocTF <- FALSE
-  file_in <- here::here("docs", paste0(comb[i],".Rmd"))
-  file_out <- here::here("docs", 
-                         ifelse(comb[i] == "README", "index.html", paste0(comb[i], ".html")))
-  file_out_main <- here::here(ifelse(comb[i] == "README", "index.html", paste0(comb[i], ".html")))
-  
-  rmarkdown::render(input = file_in,
-                    output_dir = "./", 
-                    output_format = 'html_document', 
-                    output_file = file_out)
-  file.copy(from = file_out_main, 
-            to = file_out, 
-            overwrite = TRUE)
-  file.remove(file_out_main)
-  
-}
+# for (i in 1:length(comb)) {
+#   tocTF <- FALSE
+#   file_in <- here::here("docs", paste0(comb[i],".Rmd"))
+#   file_out <- here::here("docs", 
+#                          ifelse(comb[i] == "README", "index.html", paste0(comb[i], ".html")))
+#   file_out_main <- here::here(ifelse(comb[i] == "README", "index.html", paste0(comb[i], ".html")))
+#   
+#   rmarkdown::render(input = file_in,
+#                     output_dir = "./", 
+#                     output_format = 'html_document', 
+#                     output_file = file_out)
+#   file.copy(from = file_out_main, 
+#             to = file_out, 
+#             overwrite = TRUE)
+#   file.remove(file_out_main)
+# }
+# 
 
 tocTF <- TRUE
 rmarkdown::render(input = "./docs/README.Rmd",
-                  output_dir = "./", 
-                  output_format = 'md_document', 
+                  output_dir = "./",
+                  output_format = 'md_document',
                   output_file = "./README.md")
+
+for (jj in 1:length(comb)) { ## Loop over pages -- start
+  rmarkdown::render(
+    input = paste0("docs/", comb[jj], ".Rmd"),
+    output_dir = "docs/",
+    output_file = paste0(comb[jj], ".html") )
+}
 
 # Share table to oracle --------------------------------------------------------
 
