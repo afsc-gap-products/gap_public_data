@@ -4,14 +4,6 @@
 
 ## This code is primarily maintained by:
 
-``` r
-str0 <- ifelse(tocTF, 
-paste0("**Emily Markowitz** (Emily.Markowitz AT noaa.gov; [EmilyMarkowitz-NOAA](https://github.com/EmilyMarkowitz-NOAA))  
-Research Fisheries Biologist  
-*Bering Sea Groundfish Survey Team*"), 
-"")
-```
-
 **Emily Markowitz** (Emily.Markowitz AT noaa.gov;
 [EmilyMarkowitz-NOAA](https://github.com/EmilyMarkowitz-NOAA))  
 Research Fisheries Biologist  
