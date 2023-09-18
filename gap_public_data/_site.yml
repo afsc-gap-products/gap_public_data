@@ -2,6 +2,7 @@ name: "gap_public_data"
 title: "GAP Public Data"
 description: |
   Groundfish Assessment Program Public-Facing Data Products
+lang: en
 output_dir: "docs"
 navbar:
   right:
