@@ -2,7 +2,11 @@
 
 # [AFSC RACE Groundfish and Shellfish Survey Public Data](https://github.com/afsc-gap-products/gap_public_data/) <img src="https://avatars.githubusercontent.com/u/91760178?s=96&amp;v=4" alt="Logo." align="right" width="139" height="139"/>
 
-## This code is primarily maintained by:
+## ❗ <span style="color:red">This repository is NO LONGER BEING MAINTAINED AND HAS BEEN ARCHIVED. This code and effort has been moved to https://github.com/afsc-gap-products/gap_products. For New FOSS documentation, see https://afsc-gap-products.github.io/gap_products/content/foss-intro.html. </span>.
+
+The gap_products repository supports code used to create tables in the GAP_PRODUCTS Oracle schema. These tables include the master production tables, tables shared with AKFIN, and tables publicly shared on FOSS. 
+
+## This code was previously maintained by:
 
 **Emily Markowitz** (Emily.Markowitz AT noaa.gov;
 [EmilyMarkowitz-NOAA](https://github.com/EmilyMarkowitz-NOAA))  
